@@ -1,0 +1,7 @@
+model,condition,split_b_test_acc,split_c_acc
+model1_classical,baseline,0.8378378378378378,0.0
+model1_classical,three_way_norm,0.5405405405405406,0.0
+model2_smallcnn,baseline,0.8648648648648649,0.0
+model2_smallcnn,three_way_norm,0.8378378378378378,0.9133333333333333
+model3_mobilenet,baseline,0.9324324324324325,0.7533333333333333
+model3_mobilenet,three_way_norm,0.9459459459459459,0.8133333333333334

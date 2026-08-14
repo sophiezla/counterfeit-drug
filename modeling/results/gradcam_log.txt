@@ -1,0 +1,72 @@
+Rebuilding Split B final-fit Model 4...
+  LR search (5 epochs each): [0.001, 0.0003, 0.0001]
+  epoch  0  train_loss=0.3860 train_acc=0.872  val_loss=0.2749 val_acc=0.873
+  epoch  1  train_loss=0.1504 train_acc=0.975  val_loss=0.1858 val_acc=0.937
+  epoch  2  train_loss=0.1030 train_acc=0.982  val_loss=0.1490 val_acc=0.949
+  epoch  3  train_loss=0.0763 train_acc=0.991  val_loss=0.1237 val_acc=0.962
+  epoch  4  train_loss=0.0613 train_acc=0.994  val_loss=0.1062 val_acc=0.962
+    lr=0.001: val_loss@epoch4=0.1062
+  epoch  0  train_loss=0.5804 train_acc=0.712  val_loss=0.4563 val_acc=0.911
+  epoch  1  train_loss=0.3625 train_acc=0.937  val_loss=0.3477 val_acc=0.886
+  epoch  2  train_loss=0.2659 train_acc=0.957  val_loss=0.2840 val_acc=0.911
+  epoch  3  train_loss=0.2086 train_acc=0.969  val_loss=0.2452 val_acc=0.924
+  epoch  4  train_loss=0.1760 train_acc=0.977  val_loss=0.2182 val_acc=0.924
+    lr=0.0003: val_loss@epoch4=0.2182
+  epoch  0  train_loss=0.6800 train_acc=0.561  val_loss=0.6119 val_acc=0.835
+  epoch  1  train_loss=0.5629 train_acc=0.801  val_loss=0.5270 val_acc=0.911
+  epoch  2  train_loss=0.4781 train_acc=0.894  val_loss=0.4660 val_acc=0.937
+  epoch  3  train_loss=0.4153 train_acc=0.937  val_loss=0.4183 val_acc=0.911
+  epoch  4  train_loss=0.3698 train_acc=0.939  val_loss=0.3798 val_acc=0.911
+    lr=0.0001: val_loss@epoch4=0.3798
+  selected lr=0.001
+  epoch  0  train_loss=0.3860 train_acc=0.872  val_loss=0.2749 val_acc=0.873
+  epoch  1  train_loss=0.1504 train_acc=0.975  val_loss=0.1858 val_acc=0.937
+  epoch  2  train_loss=0.1030 train_acc=0.982  val_loss=0.1490 val_acc=0.949
+  epoch  3  train_loss=0.0763 train_acc=0.991  val_loss=0.1237 val_acc=0.962
+  epoch  4  train_loss=0.0613 train_acc=0.994  val_loss=0.1062 val_acc=0.962
+  epoch  5  train_loss=0.0523 train_acc=0.997  val_loss=0.0964 val_acc=0.962
+  epoch  6  train_loss=0.0427 train_acc=0.999  val_loss=0.0926 val_acc=0.962
+  epoch  7  train_loss=0.0399 train_acc=0.996  val_loss=0.0838 val_acc=0.962
+  epoch  8  train_loss=0.0366 train_acc=0.994  val_loss=0.0807 val_acc=0.962
+  epoch  9  train_loss=0.0316 train_acc=0.996  val_loss=0.0738 val_acc=0.962
+  epoch 10  train_loss=0.0275 train_acc=0.998  val_loss=0.0718 val_acc=0.962
+  epoch 11  train_loss=0.0265 train_acc=0.996  val_loss=0.0704 val_acc=0.962
+  epoch 12  train_loss=0.0225 train_acc=0.998  val_loss=0.0668 val_acc=0.962
+  epoch 13  train_loss=0.0204 train_acc=1.000  val_loss=0.0639 val_acc=0.962
+  epoch 14  train_loss=0.0215 train_acc=0.998  val_loss=0.0624 val_acc=0.962
+  epoch 15  train_loss=0.0178 train_acc=0.999  val_loss=0.0626 val_acc=0.962
+  epoch 16  train_loss=0.0172 train_acc=0.999  val_loss=0.0615 val_acc=0.975
+  epoch 17  train_loss=0.0153 train_acc=1.000  val_loss=0.0596 val_acc=0.975
+  epoch 18  train_loss=0.0152 train_acc=1.000  val_loss=0.0534 val_acc=0.975
+  epoch 19  train_loss=0.0135 train_acc=0.998  val_loss=0.0545 val_acc=0.975
+  epoch 20  train_loss=0.0144 train_acc=0.998  val_loss=0.0551 val_acc=0.975
+  epoch 21  train_loss=0.0111 train_acc=1.000  val_loss=0.0535 val_acc=0.975
+  epoch 22  train_loss=0.0115 train_acc=1.000  val_loss=0.0564 val_acc=0.975
+  early stopping at epoch 22 (patience=4)
+Errors available: 9 (using all). Correct pool: 144.
+  saved incorrect__kaggle_fake_real_medicine_25654c7f24.png
+  saved incorrect__kaggle_fake_real_medicine_077563b376.png
+  saved incorrect__kaggle_fake_real_medicine_82c705d9a3.png
+  saved incorrect__kaggle_fake_real_medicine_6a0d82961a.png
+  saved incorrect__kaggle_fake_real_medicine_02169db735.png
+  saved incorrect__kaggle_fake_real_medicine_23f9ab233c.png
+  saved incorrect__kaggle_fake_real_medicine_6b129e49a0.png
+  saved incorrect__kaggle_fake_real_medicine_85c7cfa357.png
+  saved incorrect__kaggle_fake_real_medicine_378059a366.png
+  saved correct__kaggle_fake_real_medicine_5d72b67a63.png
+  saved correct__kaggle_fake_real_medicine_5ee8edd1a9.png
+  saved correct__kaggle_fake_real_medicine_5f48d16d3e.png
+  saved correct__kaggle_fake_real_medicine_70c0c79496.png
+  saved correct__kaggle_fake_real_medicine_1c2176cbfd.png
+  saved correct__kaggle_fake_real_medicine_bc3f3f4d6a.png
+  saved correct__kaggle_fake_real_medicine_61643b3aef.png
+  saved correct__kaggle_fake_real_medicine_723bdb51d5.png
+  saved correct__kaggle_fake_real_medicine_0876d989f5.png
+  saved correct__kaggle_fake_real_medicine_da9f2b55ac.png
+  saved correct__kaggle_fake_real_medicine_1f8b2ac73f.png
+  saved correct__kaggle_fake_real_medicine_5469052ee7.png
+  saved correct__kaggle_fake_real_medicine_b1b14a8a60.png
+  saved correct__kaggle_fake_real_medicine_cd5e5e7124.png
+  saved correct__kaggle_fake_real_medicine_713faf6038.png
+
+Wrote C:\Users\sophi\Documents\Projects\pharmavision\modeling\results\gradcam\manifest.csv (24 images)

@@ -1,0 +1,10 @@
+model,split,n,accuracy,ci_lo,ci_hi
+"capture pattern (file extension), deterministic rule",whole pool,510,1.0,0.9925240387739438,0.9999999999999998
+"metadata LR (brightness, 1 feature)",Split A test,76,0.8289473684210527,0.7290212529833467,0.8972198094596583
+"metadata LR (resolution, 1 feature)",Split A test,76,0.9473684210526315,0.8723432742176017,0.9793445707048848
+"metadata LR (file size, 1 feature)",Split A test,76,0.9736842105263158,0.909033788991115,0.9927533409268122
+"metadata LR (all three, 3 features)",Split A test,76,0.9736842105263158,0.909033788991115,0.9927533409268122
+"metadata LR (brightness, 1 feature)",Split B test,74,0.7162162162162162,0.6048274583407924,0.8062645289377353
+"metadata LR (resolution, 1 feature)",Split B test,74,0.9459459459459459,0.8690962359304523,0.9787809878315109
+"metadata LR (file size, 1 feature)",Split B test,74,1.0,0.950650220581595,1.0
+"metadata LR (all three, 3 features)",Split B test,74,1.0,0.950650220581595,1.0

@@ -1,0 +1,9 @@
+experiment,source,model,baseline_split_b,baseline_split_c,normalised_split_b,normalised_split_c,delta_split_c
+2-way (res+bright),normalization_all_models_experiment.csv,M1,0.8378378378378378,0.0,0.5405405405405406,0.0,0.0
+2-way (res+bright),normalization_all_models_experiment.csv,M2,0.8648648648648649,0.0,0.8243243243243243,0.8466666666666667,0.8466666666666667
+2-way (res+bright),normalization_all_models_experiment.csv,M3,0.9459459459459459,0.7333333333333333,0.9459459459459459,0.52,-0.21333333333333326
+2-way (res+bright),normalization_all_models_experiment.csv,M4,0.919,0.087,0.959,0.627,0.54
+3-way (res+bright+comp),compression_all_models_experiment.csv,M1,0.8378378378378378,0.0,0.5405405405405406,0.0,0.0
+3-way (res+bright+comp),compression_all_models_experiment.csv,M2,0.8648648648648649,0.0,0.8378378378378378,0.9133333333333333,0.9133333333333333
+3-way (res+bright+comp),compression_all_models_experiment.csv,M3,0.9324324324324325,0.7533333333333333,0.9459459459459459,0.8133333333333334,0.06000000000000005
+3-way (res+bright+comp),compression_norm_experiment.csv,M4,0.918918918918919,0.05333333333333334,0.9324324324324325,0.78,0.7266666666666667

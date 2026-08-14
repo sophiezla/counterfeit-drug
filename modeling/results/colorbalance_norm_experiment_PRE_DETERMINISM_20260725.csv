@@ -1,0 +1,4 @@
+condition,resolution_normalized,brightness_normalized,color_balance_normalized,split_b_test_acc,split_c_acc
+both_combined_rerun,True,True,False,0.9594594594594594,0.4533333333333333
+color_balance_only,False,False,True,0.9324324324324325,0.10666666666666667
+all_three_combined,True,True,True,0.9594594594594594,0.42

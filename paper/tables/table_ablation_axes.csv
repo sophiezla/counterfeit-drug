@@ -1,0 +1,16 @@
+source,model,condition,resolution,brightness,compression,colour_balance,split_b_acc,split_c_acc
+resolution_norm_experiment.csv,M4,baseline_no_norm,False,False,False,False,0.918918918918919,0.08666666666666667
+resolution_norm_experiment.csv,M4,resolution_norm_only,True,False,False,False,0.9324324324324325,0.22
+resolution_norm_experiment.csv,M4,brightness_norm_only,False,True,False,False,0.918918918918919,0.2733333333333333
+resolution_norm_experiment.csv,M4,both_combined,True,True,False,False,0.9594594594594594,0.6266666666666667
+colorbalance_norm_experiment.csv,M4,both_combined_rerun,True,True,False,False,0.9594594594594594,0.4533333333333333
+colorbalance_norm_experiment.csv,M4,color_balance_only,False,False,False,True,0.9324324324324325,0.10666666666666667
+colorbalance_norm_experiment.csv,M4,all_three_combined,True,True,False,True,0.9594594594594594,0.42
+compression_norm_experiment.csv,M4,baseline_no_norm_rerun,False,False,False,False,0.918918918918919,0.05333333333333334
+compression_norm_experiment.csv,M4,compression_norm_only,False,False,True,False,0.9054054054054054,0.12666666666666668
+compression_norm_experiment.csv,M4,resolution_brightness_combined_rerun,True,True,False,False,0.9324324324324325,0.5066666666666667
+compression_norm_experiment.csv,M4,all_three_combined,True,True,True,False,0.9324324324324325,0.78
+model3_decompose_experiment.csv,M3,baseline_no_norm,False,False,False,False,0.9459459459459459,0.8
+model3_decompose_experiment.csv,M3,resolution_norm_only,True,False,False,False,0.9459459459459459,0.8466666666666667
+model3_decompose_experiment.csv,M3,brightness_norm_only,False,True,False,False,0.9324324324324325,0.56
+model3_decompose_experiment.csv,M3,both_combined,True,True,False,False,0.9594594594594594,0.4

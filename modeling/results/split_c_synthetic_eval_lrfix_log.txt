@@ -1,0 +1,26 @@
+﻿=== Synthetic-counterfeit Split C evaluation (proxy stress-test, NOT real counterfeit recall) ===
+
+--- Model 1 (classical): already done, skipping (delete split_c_synthetic_eval.csv row to redo) ---
+
+--- Model 2 (small CNN) ---
+  epoch  0  train_loss=0.5904 train_acc=0.703  val_loss=0.6366 val_acc=0.633
+  epoch  1  train_loss=0.5406 train_acc=0.739  val_loss=0.6792 val_acc=0.633
+  epoch  2  train_loss=0.4924 train_acc=0.765  val_loss=0.4954 val_acc=0.722
+  epoch  3  train_loss=0.4835 train_acc=0.782  val_loss=0.4665 val_acc=0.759
+  epoch  4  train_loss=0.4663 train_acc=0.770  val_loss=0.3319 val_acc=0.861
+  epoch  5  train_loss=0.4237 train_acc=0.829  val_loss=0.3533 val_acc=0.810
+  epoch  6  train_loss=0.3994 train_acc=0.829  val_loss=0.3629 val_acc=0.810
+  epoch  7  train_loss=0.4409 train_acc=0.807  val_loss=0.3015 val_acc=0.873
+  epoch  8  train_loss=0.3974 train_acc=0.807  val_loss=0.2586 val_acc=0.924
+  epoch  9  train_loss=0.4438 train_acc=0.790  val_loss=0.2793 val_acc=0.911
+  epoch 10  train_loss=0.3840 train_acc=0.840  val_loss=0.3139 val_acc=0.861
+  epoch 11  train_loss=0.4384 train_acc=0.796  val_loss=0.2857 val_acc=0.899
+  epoch 12  train_loss=0.4654 train_acc=0.770  val_loss=0.3954 val_acc=0.797
+  early stopping at epoch 12 (patience=4)
+acc=0.633 prec=0.744 recall=0.407 f1=0.526 roc_auc=0.794 (n=300)
+
+--- Model 3 (MobileNetV3-Small): already done, skipping (delete split_c_synthetic_eval.csv row to redo) ---
+
+--- Model 4 (EfficientNet-B0): already done, skipping (delete split_c_synthetic_eval.csv row to redo) ---
+
+Done. Results in C:\Users\sophi\Documents\Projects\pharmavision\modeling\results\split_c_synthetic_eval.csv

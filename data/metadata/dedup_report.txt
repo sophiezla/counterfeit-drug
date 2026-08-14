@@ -1,0 +1,13 @@
+pHash rotation-canonical dedup report
+Retained images hashed: 4632
+Hamming threshold (near-duplicate): 8 / 64 bits
+Exact duplicates (distance 0) found: 1425
+Total product_identity clusters: 743
+  singleton clusters (no duplicate found): 349
+  multi-image clusters (near/exact dup groups): 394
+Largest cluster size: 56
+Clusters mixing authentic+counterfeit labels: 0
+
+Per-source cluster count (how many distinct product_identity groups per source):
+  roboflow_counterfeit_med_detection: 417 distinct groups from 4027 images
+  kaggle_fake_real_medicine: 528 distinct groups from 605 images

@@ -1,0 +1,18 @@
+# Data-pipeline dependencies (scripts/01-05).
+# Pinned to the versions used to generate the committed outputs under
+# data/metadata/, data/processed/, and splits/. numpy>=2.0 is required
+# (scripts/03_dedup.py uses np.bitwise_count, added in NumPy 2.0).
+Pillow==11.3.0
+imagehash==4.3.2
+numpy==2.3.2
+pandas==3.0.3
+scikit-learn==1.9.0
+
+# Modeling dependencies (modeling/train_model*.py, modeling/aggregate_results.py).
+# torch/torchvision are CPU builds (no CUDA available in the environment
+# this was built on); modeling/train_model3/4 download ImageNet-pretrained
+# MobileNetV3-Small / EfficientNet-B0 weights on first run (~10MB, ~20MB)
+# via torch.hub, cached under ~/.cache/torch/hub/checkpoints/.
+torch==2.7.1
+torchvision==0.22.1
+scipy==1.18.0

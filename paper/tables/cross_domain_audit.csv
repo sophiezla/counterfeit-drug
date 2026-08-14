@@ -1,0 +1,8 @@
+dataset,area,status,n_images,n_authentic,n_inauthentic,formats,audit_format,audit_size,audit_both,ext_rule_accuracy
+rhythmghai/ai-vs-real-images-dataset,Generated images,audited,995,745,250,.jpg|.png,1.0,0.812,1.0,1.0
+kshitizbhargava/deepfake-face-images,Deepfake faces,not auditable,2400,,,,,,,
+shahzaibshazoo/detect-ai-generated-faces-high-quality-dataset,Generated faces,not auditable,1001,,,,,,,
+cashbowman/ai-generated-images-vs-real-images,Generated images,audited,974,435,539,.gif|.jpeg|.jpg|.png|.webp,0.577,0.553,0.562,0.554
+prosperchuks/fakereal-logo-detection-dataset,Brand logos,not auditable,550,,,,,,,
+ishanikathuria/handwritten-signature-datasets,Signatures (control),audited,2400,1056,1344,.tif,0.5,0.843,0.845,0.56
+surajkumarjha1/fake-vs-real-medicine-datasets-images,Medicines,audited,2224,1415,809,.jpg|.png,1.0,0.999,1.0,1.0

@@ -1,1 +1,396 @@
-# counterfeit-drug
+# Provenance confounds in authenticity-classification image datasets
+
+Code, data pipeline and manuscript sources for a study of **class-conditional
+provenance confounding**: when the two classes of a "is this genuine?" image
+dataset are sourced by different procedures, the label predicts the
+acquisition process rather than the property being labeled, and no
+in-distribution evaluation can detect it.
+
+The case study is a public counterfeit-medicine dataset. The manuscript is
+built from `paper/paper.md`; see `paper/` and Appendix C for reproduction.
+
+## Status (2026-07-28)
+
+Part 2 (Data), Part 3 (Modeling), Grad-CAM (Part 4.5), error analysis
+(Part 4.6), an external generalization check (Part 4.3), and a complete
+(100% human-reviewed, not sampled) manual quality/modality review of the
+modeling pool (Part 2.2) are all done, the 4 models have been retrained on
+the fully cleaned data, **the root cause of the Split C external-
+generalization failure has now been identified and visually confirmed, and
+a 3-way normalization fix for it is now the production default** (Models
+2/4 confirmed working in production; Model 3's result is unresolved/
+high-variance — see below). No genuine independent counterfeit-labeled
+Split C source exists (search came up empty), so a **synthetic
+counterfeit-proxy Split C** was built and evaluated instead (150 approved
+perturbed images paired with the 150 real authentic photos — see
+`data/metadata/synthetic_counterfeit_findings.md` and
+`modeling/results/split_c_synthetic_eval.csv`): all 4 models show weak or
+miscalibrated counterfeit-recall against this proxy (best AUC 0.895 for
+Model 1, but at a badly miscalibrated threshold; Model 3 at chance,
+consistent with its background-shortcut Grad-CAM finding). Explicitly a
+robustness stress-test proxy, not a measurement of true counterfeit
+recall.
+
+## The headline finding
+
+**Kaggle's "Fake vs Real Medicine" dataset has a near-total, dataset-wide
+confound: 100% of its
+counterfeit-labeled images are `Screenshot*.png` files and 100% of its
+authentic-labeled images are `images*.jpg` files.** These two capture
+pipelines differ enormously in brightness (mean 0.77 vs. 0.56 on a 0-1
+scale, t=17.0, p≈0), resolution (median 225×225 vs. 454×550), and file
+size (mean 6KB vs. 339KB) — none of it related to packaging content. Any
+model, including a 96-dim color-histogram baseline, has direct,
+undisguised access to this shortcut without learning anything about
+counterfeit packaging.
+
+This explains the Split C collapse completely: the external Mendeley
+photos are ~10x higher resolution and far darker (mean brightness 0.16)
+than even Kaggle's *counterfeit* class, so a model that has learned
+"darker/bigger → not authentic" will call nearly every external image
+counterfeit — which is close to what all 4 models actually do (Models 1/2:
+0% correct; Model 3: 69.3%; Model 4: 3.3%). **Direct Grad-CAM on the actual
+Split C images confirms this is a confident, spatially sensible decision
+— attention lands on the product's printed text, not on noise — calibrated
+to the wrong cue, not a random failure.** Full writeup:
+`data/metadata/capture_method_confound_findings.md`.
+
+This also means the earlier 47-image watermark cleanup, while a real and
+worthwhile fix (it shrank leakage deltas, eliminated every statistically-
+significant model-vs-model difference, and visibly improved Grad-CAM
+attention — see `modeling/README.md` "What changed after cleanup"), was
+never going to close this gap, because the dominant confound was never the
+watermarks — it was this dataset-wide capture-method split. No amount of
+single-image filtering can fix a pattern that applies to 100% of both
+classes; it would need a differently-sourced or explicitly rebalanced
+dataset.
+
+**Causally confirmed, and mostly fixable.** Two controlled follow-up
+experiments normalized brightness and/or resolution identically across
+train/test/Split C, using no label information — real, deployable
+preprocessing steps, not something that peeks at the answer:
+
+| Condition (Model 4, EfficientNet-B0) | Split B test acc | Split C acc |
+|---|---|---|
+| Baseline (no normalization) | 91.9% | 8.7% |
+| Resolution normalization only | 93.2% | 22.0% |
+| Brightness normalization only | 91.9% | 27.3% |
+| **Both combined** | **95.9%** | **62.7%** |
+
+Combining both interventions took Split C accuracy from 8.7% to **62.7%**
+(~7x) while simultaneously producing the *best* in-distribution accuracy
+of any condition tested (95.9%) for Model 4 — correcting the shortcuts
+didn't trade off accuracy for robustness there, it improved both together.
+(Caveat: this specific combined-condition Split C number is not fully
+stable run-to-run — later reruns landed at 45.3% and 50.7% instead of
+62.7% — due to `k_augment=3` feature-extraction not using a fixed
+cross-script seed, a known, documented reproducibility gap. The
+*qualitative* result, "combining both is clearly better than either alone
+or baseline," held in every run. A third axis, JPEG compression, was found
+afterward to add further, largely independent gains on top of this
+two-way combination — see "Next steps" below.)
+
+**But extending this to all 4 models revealed the fix is architecture-
+dependent, not universal — and it actively hurts one model:**
+
+| Model | Baseline Split C | Normalized Split C | Δ |
+|---|---|---|---|
+| 1. Color hist + LogReg | 0.0% | 0.0% | — |
+| 2. Small CNN (GAP) | 0.0% | **84.7%** | **+84.7** (biggest win in the project) |
+| 3. MobileNetV3-Small | **73.3%** (best baseline) | 52.0% | **−21.3** (normalization hurts it) |
+| 4. EfficientNet-B0 | 8.7% | 62.7% | +54.0 |
+
+Model 3 already generalized far better than any other model *without* any
+normalization (73-80% baseline across runs), and imposing normalization
+made it worse. So the honest, non-oversimplified conclusion is: **"these
+models don't generalize because of two specific, identified,
+mostly-correctable confounds" is true for Models 2 and 4, irrelevant for
+Model 1, and backwards for Model 3.** Any paper claim needs to be
+architecture-specific, not a blanket "normalization fixes it."
+
+**Two more follow-up experiments dug into *why* Model 3 is different, and
+the answer is not flattering to it.** Decomposing the two normalizations
+separately for Model 3 (`modeling/experiment_model3_decompose.py`) found
+**brightness normalization specifically is what hurts it** (80.0% → 56.0%)
+— resolution normalization alone is neutral-to-slightly-positive (80.0% →
+84.7%). And running Grad-CAM directly on Model 3's un-normalized Split C
+predictions (`modeling/gradcam_split_c_model3.py`) found its attention
+pattern is, if anything, the *opposite* of what "genuinely reading
+packaging" would predict: correct predictions concentrate attention on
+the **dark background**, not the product, while two reviewed *incorrect*
+predictions had attention on the product itself. The most likely
+explanation: Model 3 has learned something like "this consistent
+dark-navy backdrop → authentic," which happens to score well on Split C
+specifically because Split C is 100% authentic and 100% sharing the same
+photography background — a lucky-fit confound for this particular
+external set, not evidence of more genuine packaging understanding. Full
+writeup: `data/metadata/capture_method_confound_findings.md`
+(Findings 4-8).
+
+**A third normalization axis reverses the Model 3 verdict.** Color/white-
+balance normalization was tested next and ruled out (no help alone, mildly
+negative combined — Finding 9). JPEG compression normalization was not:
+motivated by Kaggle's ~56x file-size gap between its two classes (Finding
+1, a compression-artifact confound as strong as the resolution one),
+re-encoding every image through a fixed JPEG quality bottleneck and adding
+it to the resolution+brightness combination pushed Model 4's Split C
+accuracy from 50.7% to **78.0%** in a same-run comparison (Finding 10).
+Extending this 3-way combination to all 4 models (Finding 11) changed the
+table above:
+
+| Model | Baseline Split C | 3-way normalized Split C | Δ |
+|---|---|---|---|
+| 1. Color hist + LogReg | 0.0% | 0.0% | — |
+| 2. Small CNN (GAP) | 0.0% | **91.3%** | **+91.3** (best win in the project; standalone experiment, trained at the stale 0.0003 LR — see "Known issues") |
+| 3. MobileNetV3-Small | 75.3% | **81.3%** | **+6.0** (improved, not hurt) |
+| 4. EfficientNet-B0 | 5.3% | 78.0% | +72.7 |
+
+Adding compression normalization **reverses Model 3's regression** — the
+2-way combination hurt it (73.3%→52.0%), but the 3-way combination helps
+it, on both Split B (93.2%→94.6%) and Split C (75.3%→81.3%) at once. This
+substantially strengthens the project's headline claim: 3-way normalization
+(resolution + brightness + compression) now helps 3 of 4 models, including
+the one model a smaller version of the same idea used to hurt, and is
+irrelevant (not harmful) to the 4th (Model 1, which has no signal beyond
+the shortcuts to begin with — its in-distribution accuracy collapses under
+any normalization, 83.8%→54.1%). This is now the strongest, least-caveated
+version of the "mostly fixable" conclusion in the project. Model 3's
+Grad-CAM "background shortcut" explanation (Finding 8) was derived from the
+*un-normalized* model and isn't contradicted by this — it just means a
+model relying partly on that shortcut can still improve when a different,
+now-removed confound (compression) was also contributing to its errors.
+Full writeup: `data/metadata/capture_method_confound_findings.md`
+(Findings 9-11).
+
+**3-way normalization is now the production default, and the real
+(checkpoint-free) retrain mostly confirms the experiments — but not for
+Model 3.** `modeling/normalization.py` factors the resolution + brightness
++ compression pipeline out of the experiment scripts; `common.py`'s
+`PharmaImageDataset` now applies it by default, so it flows through to
+every model except Model 1 (which bypasses that class by design — Finding
+11 already showed normalization only hurts it). All 3 affected models were
+retrained from scratch and Split C re-evaluated end-to-end:
+
+| Model | Split C authentic acc (pre-norm → normalized, production) | Gap |
+|---|---|---|
+| 1. Classical | 0.0% → 0.0% (unaffected by design) | 69.2 |
+| 2. Small CNN | 0.0% → **86.0%** | **−1.4 (negative gap)** |
+| 3. MobileNetV3-Small | 69.3% → 68.0% (flat — does **not** reproduce Finding 11's 75.3%→81.3%) | 26.9 |
+| 4. EfficientNet-B0 | 3.3% → 80.7% | 16.8 |
+
+Models 2 and 4 confirm and strengthen the experimental findings in a real
+production run — Model 2 in particular now generalizes to Split C *better*
+than to its own in-distribution test set, the first negative gap anywhere
+in this project.
+
+**Model 3's discrepancy is now resolved, not just disclosed.** The root
+cause of its run-to-run variance (Findings 6/9/10/11/12: "does
+normalization help Model 3" answered positive, negative, and flat across
+different runs) was found: `modeling/feature_cache.py`'s feature extraction
+never seeded its `k_augment=3` augmented passes, so results depended on
+unrelated prior RNG usage in the same process. Fixed by seeding each pass
+(`set_seed(SEED + pass_idx)`) — verified deterministic by running Model 3's
+full training twice and diffing the output (byte-identical). With the fix,
+Model 3's Split C accuracy resolves to **77.3%** (up from 69.3%
+pre-normalization), the same positive direction as every other affected
+model, not the flat/negative readings that turned out to be seeding-bug
+artifacts:
+
+| Model | Split C authentic acc (pre-norm → normalized, deterministic) | Gap |
+|---|---|---|
+| 1. Classical | 0.0% → 0.0% (unaffected by design) | 69.2 |
+| 2. Small CNN | 0.0% → **86.0%** | **−1.4 (negative gap)** |
+| 3. MobileNetV3-Small | 69.3% → **77.3%** | 20.1 |
+| 4. EfficientNet-B0 | 3.3% → 80.7% | 16.8 |
+
+3-way normalization (resolution + brightness + compression) improves
+external generalization on Split C for every model with usable signal
+(2/3/4), reproducibly, and is a clean non-event (not harmful) for the one
+model with no signal beyond the shortcuts (1). Full writeup:
+`data/metadata/capture_method_confound_findings.md` Finding 13.
+
+### Split D — a second external distribution (2026-07-30)
+
+**This qualifies the result above and it should not be quoted without it.**
+Split C is one camera against one backdrop, so it cannot distinguish a
+general repair from one that happens to fit Split C. Split D tests exactly
+that: the same Mendeley archive's `iphone 11 pro` subset, 149 unique
+images, the **same 150 products** photographed on different hardware under
+a different lighting protocol (brightness 0.389 vs Split C's 0.162 vs the
+Kaggle pool's 0.668; only 1/149 within pHash near-duplicate distance of any
+Split C image). Content fixed, acquisition varied — a paired capture-shift
+test, not an independent product sample.
+
+| Model | Split C | Split D | Change |
+|---|---|---|---|
+| 1. Classical | 0.0% | 0.0% | 0.0 |
+| 2. Small CNN | **86.0%** | **46.3%** | **−39.7** |
+| 3. MobileNetV3-Small | 77.3% | 72.5% | −4.9 |
+| 4. EfficientNet-B0 | 80.7% | **83.2%** | +2.6 |
+
+**Model 2's Split C lead was specific to that capture condition.** The two
+frozen pretrained backbones transfer across the shift (both changes inside
+sampling noise); the from-scratch CNN loses 40 points. So the defensible
+claim is narrower than "normalization repairs external generalization": it
+repairs it **for frozen pretrained backbones across two capture shifts**,
+and does not for a small from-scratch CNN on the second. Model 2 is no
+longer described anywhere as the best-generalizing model.
+
+Produced by `scripts/19_download_split_d.py`,
+`scripts/20_characterise_split_d.py` and
+`modeling/eval_external_from_checkpoints.py` — the last of which loads
+persisted checkpoints instead of retraining, and reproduced Models 2 and 3
+Split C accuracies exactly, which independently validates the checkpoints.
+
+## Directory guide
+
+- `data/` — raw sources, extraction, filtering, dedup, provenance, and the
+  Split A/Split B/C protocol. **Read [`data/README.md`](data/README.md)
+  first.**
+- `scripts/` — the data pipeline (`run_all.py` runs steps 01-05; 06-07 are
+  the Split C download + independence check; 08-12 are the manual-review
+  tools, see `data/README.md` "Manual review workflow").
+- `splits/` — `split_a.csv` (naive), `split_b.csv` (product-grouped,
+  leakage-free, 5-fold CV), and `split_report.txt` (a passing leakage
+  self-check on the final 510-image pool).
+- `modeling/` — all 4 models trained/evaluated under Split A, Split B, and
+  Split C, McNemar's tests, and Grad-CAM (Model 4, both on Split B test
+  data and directly on Split C external images —
+  `modeling/gradcam_split_c.py`). **Read
+  [`modeling/README.md`](modeling/README.md)**, which leads with a "What
+  changed after cleanup" table and the capture-method-confound finding.
+
+## Manual review — what was found and fixed
+
+A complete (not sampled) review of the 564-image Kaggle pool, done via two
+local browser-based tagging tools built for this project
+(`data/metadata/manual_review_tool.html`,
+`data/metadata/modality_tagging_tool.html` — see `data/README.md` "Manual
+review workflow" to reuse them), found and removed 56 images: 47 with a
+watermark/stock-photo overlay (100% authentic-labeled), 1 browser
+screenshot, 3 stock/marketing-render images, 1 loose-pills photo, and 4
+syrup-bottle photos with no packaging in frame. Final pool: **510 images**
+(a 9.6% reduction), with a complete modality census: 43.7% blister pack,
+30.4% outer packaging box, 25.9% other/combo — confirming the dataset is
+not "outer packaging only" as originally scoped. Full findings:
+`data/metadata/modality_review_findings.md`.
+
+**Scope claim decision (2026-07-28)**: the paper will state its scope as
+"packaging and immediate containers" rather than "outer packaging only,"
+rather than filtering the pool to outer-packaging-only and rebuilding
+splits/models. Rationale: ~57% of the pool is not outer packaging (blister
+packs, loose pills, syrup bottles), so an actual filter would shrink the
+modeling pool substantially and require a full retrain/re-evaluation of
+every result in this README for what is fundamentally a wording
+correction, not a new finding — the capture-method-confound headline
+result does not depend on modality composition.
+
+Also fixed along the way: `image_id` used to be a sequential counter, so
+every exclusion silently renumbered every image after it — any `image_id`
+cited in documentation written before this fix may point at a different
+file. Now a stable content hash of `(source, orig_relpath)`, and
+`04_provenance.py` preserves manually-set modality tags across reruns
+instead of silently wiping them.
+
+## Known issues — rebuild determinism (root cause fixed 2026-07-28)
+
+`modeling/gradcam_split_c.py` rebuilt Model 4's Split B head independently of
+`eval_split_c.py` (no checkpoint is ever persisted) and got a different
+result — 16/150 vs. 5/150 Split C images called authentic — despite the same
+nominal seed and LR. **Cause found and fixed**: `gradcam.py`'s rebuild path
+ran its own LR search first, and those three extra training trials advanced
+the RNG before the final training call. Every rebuild path now reads the LR
+the real training run recorded (`modeling/results/chosen_lrs.json`, written by
+`result_io.save_chosen_lr`) and runs no search, so all rebuilds train
+identically.
+
+The same mechanism, in a more damaging form, had also left **Model 2's Split C
+number built at a different learning rate than its in-distribution numbers**
+(training selected 0.001 under the normalized pipeline; the eval script still
+hard-coded 0.0003 from an earlier fix). That row has been re-measured — see
+`modeling/README.md` "Known caveats" for the full history and the preserved
+pre-fix values.
+
+Still open: the committed Grad-CAM heatmaps predate both this fix and the
+normalization retrain, so they characterise the pre-normalization models (the
+paper says so explicitly). Regenerating them is a re-run of the three
+`gradcam*.py` scripts. The deeper fix — persisting a checkpoint from the one
+authoritative training run rather than re-deriving it in every consumer — is
+still worth doing.
+
+## Next steps
+
+1. **Partially resolved.** No independent *counterfeit*-labeled source was
+   found despite a real search (see `data/README.md` "Sources"), so a
+   synthetic counterfeit-proxy Split C was built instead (perturbed
+   versions of the same 150 authentic photos — print/color/text defects,
+   explicitly analogous to ImageNet-C corruption benchmarks, NOT a claim of
+   true counterfeit-detection recall). Evaluated end-to-end
+   (`modeling/eval_split_c_synthetic.py`,
+   `data/metadata/synthetic_counterfeit_findings.md`): all 4 models show
+   weak-to-chance discriminative power against this specific perturbation
+   style. A genuine counterfeit-labeled external source, if one is ever
+   found, would still be a strictly stronger test than this proxy.
+2. **Resolved, and re-verified 2026-08-13.** Color/white-balance
+   normalization is **ruled out** (`modeling/experiment_colorbalance_norm.py`,
+   Findings 9 and 16). The original rejection (Finding 9) was unsound — it
+   ran the day before the `k_augment` seeding fix, on a harness whose spread
+   was 17 points, to reject an axis on a 3.3-point difference, and it
+   compared against a two-way pipeline that compression had not yet joined.
+   Rerun deterministically against the pipeline that ships, the conclusion
+   holds and hardens: no help alone (Split C 0.067), −4.0 points added to
+   the production three-way (0.820 → 0.780), −15.3 points added to the
+   two-way (0.500 → 0.347). JPEG compression normalization was not —
+   added to resolution+brightness it pushed Model 4's Split C accuracy up
+   substantially in both the standalone experiment (Finding 10) and the
+   production retrain (Finding 12). Remaining untested candidates if
+   pursued further: aspect ratio, or the two capture pipelines'
+   backgrounds/staging more generally (not just pixel statistics).
+3. **Resolved.** 3-way normalization (resolution + brightness + compression,
+   `modeling/normalization.py`) is now the production default —
+   `common.py`'s `PharmaImageDataset` applies it automatically, so it flows
+   through every model except Model 1 by design. All 3 affected models were
+   retrained and Split C re-evaluated, and the `k_augment=3`
+   non-determinism that had made Model 3's result look inconsistent across
+   runs was found and fixed (`modeling/feature_cache.py`, verified
+   deterministic by diffing two independent reruns). Final result: every
+   model with usable signal (2/3/4) improves, reproducibly (Finding 13).
+4. **Resolved (2026-07-28).** Paper's scope claim will say "packaging and
+   immediate containers" rather than "outer packaging only" — see "Manual
+   review" above for rationale. No pipeline rebuild.
+5. Related Work / citation gathering and paper writing (plan Part 5) — the
+   paper's framing should center the capture-method-confound finding AND
+   its successful, reproducible correction: "the standard dataset this
+   literature relies on has a near-total, previously-unreported confound,
+   and we show it is largely (not fully) correctable with simple,
+   label-free preprocessing." That is a constructive, actionable claim,
+   stronger than either the originally-planned benchmark or a purely
+   negative result. **In progress as of 2026-07-28**: citation gathering
+   done (`paper/related_work.md`), covering both prior counterfeit-pharma
+   CV work and the shortcut-learning/hidden-stratification/leakage
+   literature (Geirhos et al. 2020; Zech et al. 2020;
+   Hendrycks & Dietterich 2019 for the synthetic-Split-C framing;
+   architecture citations for Grad-CAM/MobileNetV3/EfficientNet). Two
+   counterfeit-detection sources (CED-GNN, GAN+CNN+blockchain) are flagged
+   unverified — no primary source found, do not cite without one. Draft
+   Related Work section prose now written (`paper/section_related_work.md`,
+   IEEE numbered style) with 8 of 13 references fully author-verified from
+   primary sources (a mid-draft error was caught and fixed: the
+   hospital-confound shortcut-learning citation was initially misattributed
+   to the wrong Zech et al. paper — corrected to the right one, PLOS
+   Medicine 2018). 4 references still need author-list verification before
+   submission (findings verified, bibliographic records not yet). Next:
+   draft remaining manuscript sections (Intro, Methods, Results,
+   Discussion) around the existing modeling/data READMEs' findings.
+6. **Resolved (2026-07-28).** Model 1 (classical baseline) is reported as a
+   clean negative result — "structurally incapable of this task without the
+   confound" — not investigated further with a bigger feature set. It shows
+   zero signal beyond shortcuts consistently across every condition tested
+   (Split A/B, all normalization variants, both the authentic-only and
+   synthetic-counterfeit Split C evals), which is already a strong,
+   consistent pattern that a larger feature set is unlikely to overturn.
+7. Findings 6's 2-way-only (resolution+brightness, no compression)
+   experiment for Model 3 (`experiment_normalization_all_models.py`,
+   52.0%) was never rerun with the `k_augment` seeding fix — its number
+   should be treated as unverified/possibly noisy, unlike the 3-way
+   production result, if it's ever cited again.

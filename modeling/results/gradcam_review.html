@@ -1,0 +1,711 @@
+<meta charset="utf-8">
+<title>Grad-CAM attention review</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 15px/1.45 "Segoe UI", system-ui, sans-serif; margin: 0;
+         display: grid; grid-template-columns: 1fr 340px; height: 100vh; }
+  #stage { display: flex; flex-direction: column; align-items: center;
+           justify-content: center; background: #111; padding: 12px; }
+  #stage img { max-width: 100%; max-height: calc(100vh - 90px);
+               image-rendering: pixelated; border-radius: 6px; }
+  #caption { color: #ddd; font-size: 13px; margin-top: 10px; text-align: center; }
+  #side { padding: 18px 20px; overflow-y: auto; border-left: 1px solid #8884; }
+  h1 { font-size: 17px; margin: 0 0 4px; }
+  .sub { color: #7a7a7a; font-size: 13px; margin-bottom: 14px; }
+  .key { display: inline-block; min-width: 20px; padding: 2px 7px; margin-right: 8px;
+         border: 1px solid #8886; border-radius: 4px; font-weight: 600;
+         font-family: ui-monospace, monospace; }
+  .opt { padding: 7px 4px; border-radius: 5px; cursor: pointer; }
+  .opt:hover { background: #8882; }
+  .opt.sel { background: #2a78d633; outline: 1px solid #2a78d6; }
+  #prog { margin: 16px 0 8px; font-variant-numeric: tabular-nums; }
+  #bar { height: 6px; background: #8883; border-radius: 3px; overflow: hidden; }
+  #bar div { height: 100%; background: #1baf7a; width: 0; }
+  button { font: inherit; padding: 7px 12px; margin: 4px 6px 4px 0;
+           border-radius: 5px; border: 1px solid #8886; background: transparent;
+           color: inherit; cursor: pointer; }
+  button:hover { background: #8882; }
+  textarea { width: 100%; box-sizing: border-box; font: inherit; margin-top: 6px; }
+  .warn { background: #eb683422; border: 1px solid #eb6834; padding: 9px 11px;
+          border-radius: 5px; font-size: 13px; margin-bottom: 14px; }
+</style>
+
+<div id="stage">
+  <img id="img" alt="">
+  <div id="caption"></div>
+</div>
+
+<div id="side">
+  <h1>Grad-CAM attention review</h1>
+  <div class="sub" id="setname"></div>
+
+  <div class="warn">
+    These heatmaps were regenerated after the batch-norm fix of 2026-07-30.
+    The previous categorisation described a mis-configured model and is
+    superseded — judge these fresh, don't reconcile them with the old notes.
+  </div>
+
+  <div><strong>Where is the attention?</strong></div>
+  <div class="opt" data-v="packaging_relevant"><span class="key">1</span>On the product — logo, brand text, printed label</div>
+  <div class="opt" data-v="incidental"><span class="key">2</span>Incidental — background, backdrop, corners, margins</div>
+  <div class="opt" data-v="mixed"><span class="key">3</span>Mixed / genuinely ambiguous</div>
+  <div class="opt" data-v="diffuse"><span class="key">4</span>Diffuse — no clear focus anywhere</div>
+  <div class="opt" data-v=""><span class="key">0</span>Clear this one</div>
+
+  <textarea id="note" rows="3" placeholder="Optional note (press Enter to save and advance)"></textarea>
+
+  <div id="prog"></div>
+  <div id="bar"><div></div></div>
+
+  <div style="margin-top:14px">
+    <button onclick="prev()">&larr; Back</button>
+    <button onclick="next()">Skip &rarr;</button>
+    <button onclick="exportCsv()">Export CSV</button>
+  </div>
+  <div class="sub" style="margin-top:12px">
+    <b>&larr; &rarr;</b> navigate &middot; <b>1&ndash;4</b> tag and advance &middot;
+    Progress saves automatically in this browser.
+  </div>
+</div>
+
+<script>
+// Populated by build_gradcam_review.py — one entry per heatmap across all three sets.
+const ITEMS = [
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "incorrect",
+  "image_id": "kaggle_fake_real_medicine_077563b376",
+  "file": "incorrect__kaggle_fake_real_medicine_077563b376.png",
+  "path": "gradcam/incorrect__kaggle_fake_real_medicine_077563b376.png",
+  "detail": "true authentic, predicted counterfeit, P(counterfeit) = 0.561",
+  "key": "gradcam::incorrect__kaggle_fake_real_medicine_077563b376.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "incorrect",
+  "image_id": "kaggle_fake_real_medicine_82c705d9a3",
+  "file": "incorrect__kaggle_fake_real_medicine_82c705d9a3.png",
+  "path": "gradcam/incorrect__kaggle_fake_real_medicine_82c705d9a3.png",
+  "detail": "true counterfeit, predicted authentic, P(counterfeit) = 0.192",
+  "key": "gradcam::incorrect__kaggle_fake_real_medicine_82c705d9a3.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "incorrect",
+  "image_id": "kaggle_fake_real_medicine_c8e1ccb599",
+  "file": "incorrect__kaggle_fake_real_medicine_c8e1ccb599.png",
+  "path": "gradcam/incorrect__kaggle_fake_real_medicine_c8e1ccb599.png",
+  "detail": "true counterfeit, predicted authentic, P(counterfeit) = 0.314",
+  "key": "gradcam::incorrect__kaggle_fake_real_medicine_c8e1ccb599.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "incorrect",
+  "image_id": "kaggle_fake_real_medicine_6a0d82961a",
+  "file": "incorrect__kaggle_fake_real_medicine_6a0d82961a.png",
+  "path": "gradcam/incorrect__kaggle_fake_real_medicine_6a0d82961a.png",
+  "detail": "true counterfeit, predicted authentic, P(counterfeit) = 0.132",
+  "key": "gradcam::incorrect__kaggle_fake_real_medicine_6a0d82961a.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "incorrect",
+  "image_id": "kaggle_fake_real_medicine_78e572ee28",
+  "file": "incorrect__kaggle_fake_real_medicine_78e572ee28.png",
+  "path": "gradcam/incorrect__kaggle_fake_real_medicine_78e572ee28.png",
+  "detail": "true counterfeit, predicted authentic, P(counterfeit) = 0.470",
+  "key": "gradcam::incorrect__kaggle_fake_real_medicine_78e572ee28.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "incorrect",
+  "image_id": "kaggle_fake_real_medicine_02169db735",
+  "file": "incorrect__kaggle_fake_real_medicine_02169db735.png",
+  "path": "gradcam/incorrect__kaggle_fake_real_medicine_02169db735.png",
+  "detail": "true counterfeit, predicted authentic, P(counterfeit) = 0.253",
+  "key": "gradcam::incorrect__kaggle_fake_real_medicine_02169db735.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "incorrect",
+  "image_id": "kaggle_fake_real_medicine_41d91fd70e",
+  "file": "incorrect__kaggle_fake_real_medicine_41d91fd70e.png",
+  "path": "gradcam/incorrect__kaggle_fake_real_medicine_41d91fd70e.png",
+  "detail": "true authentic, predicted counterfeit, P(counterfeit) = 0.964",
+  "key": "gradcam::incorrect__kaggle_fake_real_medicine_41d91fd70e.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "correct",
+  "image_id": "kaggle_fake_real_medicine_5d72b67a63",
+  "file": "correct__kaggle_fake_real_medicine_5d72b67a63.png",
+  "path": "gradcam/correct__kaggle_fake_real_medicine_5d72b67a63.png",
+  "detail": "true counterfeit, predicted counterfeit, P(counterfeit) = 0.880",
+  "key": "gradcam::correct__kaggle_fake_real_medicine_5d72b67a63.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "correct",
+  "image_id": "kaggle_fake_real_medicine_5ee8edd1a9",
+  "file": "correct__kaggle_fake_real_medicine_5ee8edd1a9.png",
+  "path": "gradcam/correct__kaggle_fake_real_medicine_5ee8edd1a9.png",
+  "detail": "true counterfeit, predicted counterfeit, P(counterfeit) = 0.978",
+  "key": "gradcam::correct__kaggle_fake_real_medicine_5ee8edd1a9.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "correct",
+  "image_id": "kaggle_fake_real_medicine_a92fedd746",
+  "file": "correct__kaggle_fake_real_medicine_a92fedd746.png",
+  "path": "gradcam/correct__kaggle_fake_real_medicine_a92fedd746.png",
+  "detail": "true authentic, predicted authentic, P(counterfeit) = 0.001",
+  "key": "gradcam::correct__kaggle_fake_real_medicine_a92fedd746.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "correct",
+  "image_id": "kaggle_fake_real_medicine_97b7ba7093",
+  "file": "correct__kaggle_fake_real_medicine_97b7ba7093.png",
+  "path": "gradcam/correct__kaggle_fake_real_medicine_97b7ba7093.png",
+  "detail": "true authentic, predicted authentic, P(counterfeit) = 0.005",
+  "key": "gradcam::correct__kaggle_fake_real_medicine_97b7ba7093.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "correct",
+  "image_id": "kaggle_fake_real_medicine_d850d8b22d",
+  "file": "correct__kaggle_fake_real_medicine_d850d8b22d.png",
+  "path": "gradcam/correct__kaggle_fake_real_medicine_d850d8b22d.png",
+  "detail": "true authentic, predicted authentic, P(counterfeit) = 0.001",
+  "key": "gradcam::correct__kaggle_fake_real_medicine_d850d8b22d.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "correct",
+  "image_id": "kaggle_fake_real_medicine_fd039f994c",
+  "file": "correct__kaggle_fake_real_medicine_fd039f994c.png",
+  "path": "gradcam/correct__kaggle_fake_real_medicine_fd039f994c.png",
+  "detail": "true authentic, predicted authentic, P(counterfeit) = 0.000",
+  "key": "gradcam::correct__kaggle_fake_real_medicine_fd039f994c.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "correct",
+  "image_id": "kaggle_fake_real_medicine_61643b3aef",
+  "file": "correct__kaggle_fake_real_medicine_61643b3aef.png",
+  "path": "gradcam/correct__kaggle_fake_real_medicine_61643b3aef.png",
+  "detail": "true counterfeit, predicted counterfeit, P(counterfeit) = 0.724",
+  "key": "gradcam::correct__kaggle_fake_real_medicine_61643b3aef.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "correct",
+  "image_id": "kaggle_fake_real_medicine_723bdb51d5",
+  "file": "correct__kaggle_fake_real_medicine_723bdb51d5.png",
+  "path": "gradcam/correct__kaggle_fake_real_medicine_723bdb51d5.png",
+  "detail": "true authentic, predicted authentic, P(counterfeit) = 0.000",
+  "key": "gradcam::correct__kaggle_fake_real_medicine_723bdb51d5.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "correct",
+  "image_id": "kaggle_fake_real_medicine_0876d989f5",
+  "file": "correct__kaggle_fake_real_medicine_0876d989f5.png",
+  "path": "gradcam/correct__kaggle_fake_real_medicine_0876d989f5.png",
+  "detail": "true counterfeit, predicted counterfeit, P(counterfeit) = 0.983",
+  "key": "gradcam::correct__kaggle_fake_real_medicine_0876d989f5.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "correct",
+  "image_id": "kaggle_fake_real_medicine_2132e7ceb4",
+  "file": "correct__kaggle_fake_real_medicine_2132e7ceb4.png",
+  "path": "gradcam/correct__kaggle_fake_real_medicine_2132e7ceb4.png",
+  "detail": "true authentic, predicted authentic, P(counterfeit) = 0.001",
+  "key": "gradcam::correct__kaggle_fake_real_medicine_2132e7ceb4.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "correct",
+  "image_id": "kaggle_fake_real_medicine_1f8b2ac73f",
+  "file": "correct__kaggle_fake_real_medicine_1f8b2ac73f.png",
+  "path": "gradcam/correct__kaggle_fake_real_medicine_1f8b2ac73f.png",
+  "detail": "true counterfeit, predicted counterfeit, P(counterfeit) = 0.998",
+  "key": "gradcam::correct__kaggle_fake_real_medicine_1f8b2ac73f.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "correct",
+  "image_id": "kaggle_fake_real_medicine_5469052ee7",
+  "file": "correct__kaggle_fake_real_medicine_5469052ee7.png",
+  "path": "gradcam/correct__kaggle_fake_real_medicine_5469052ee7.png",
+  "detail": "true counterfeit, predicted counterfeit, P(counterfeit) = 0.997",
+  "key": "gradcam::correct__kaggle_fake_real_medicine_5469052ee7.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "correct",
+  "image_id": "kaggle_fake_real_medicine_b1b14a8a60",
+  "file": "correct__kaggle_fake_real_medicine_b1b14a8a60.png",
+  "path": "gradcam/correct__kaggle_fake_real_medicine_b1b14a8a60.png",
+  "detail": "true counterfeit, predicted counterfeit, P(counterfeit) = 0.920",
+  "key": "gradcam::correct__kaggle_fake_real_medicine_b1b14a8a60.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "correct",
+  "image_id": "kaggle_fake_real_medicine_8b91640ed8",
+  "file": "correct__kaggle_fake_real_medicine_8b91640ed8.png",
+  "path": "gradcam/correct__kaggle_fake_real_medicine_8b91640ed8.png",
+  "detail": "true authentic, predicted authentic, P(counterfeit) = 0.001",
+  "key": "gradcam::correct__kaggle_fake_real_medicine_8b91640ed8.png"
+ },
+ {
+  "set": "M4 in-distribution (Split B)",
+  "group": "correct",
+  "image_id": "kaggle_fake_real_medicine_e390352f04",
+  "file": "correct__kaggle_fake_real_medicine_e390352f04.png",
+  "path": "gradcam/correct__kaggle_fake_real_medicine_e390352f04.png",
+  "detail": "true authentic, predicted authentic, P(counterfeit) = 0.008",
+  "key": "gradcam::correct__kaggle_fake_real_medicine_e390352f04.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00097",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00097.png",
+  "path": "gradcam_split_c/wrong_called_counterfeit__mendeley_split_c_00097.png",
+  "detail": "P(counterfeit) = 0.794 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c::wrong_called_counterfeit__mendeley_split_c_00097.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00033",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00033.png",
+  "path": "gradcam_split_c/wrong_called_counterfeit__mendeley_split_c_00033.png",
+  "detail": "P(counterfeit) = 0.903 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c::wrong_called_counterfeit__mendeley_split_c_00033.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00002",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00002.png",
+  "path": "gradcam_split_c/wrong_called_counterfeit__mendeley_split_c_00002.png",
+  "detail": "P(counterfeit) = 0.565 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c::wrong_called_counterfeit__mendeley_split_c_00002.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00110",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00110.png",
+  "path": "gradcam_split_c/wrong_called_counterfeit__mendeley_split_c_00110.png",
+  "detail": "P(counterfeit) = 0.656 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c::wrong_called_counterfeit__mendeley_split_c_00110.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00045",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00045.png",
+  "path": "gradcam_split_c/wrong_called_counterfeit__mendeley_split_c_00045.png",
+  "detail": "P(counterfeit) = 0.753 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c::wrong_called_counterfeit__mendeley_split_c_00045.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00040",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00040.png",
+  "path": "gradcam_split_c/wrong_called_counterfeit__mendeley_split_c_00040.png",
+  "detail": "P(counterfeit) = 0.774 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c::wrong_called_counterfeit__mendeley_split_c_00040.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00130",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00130.png",
+  "path": "gradcam_split_c/wrong_called_counterfeit__mendeley_split_c_00130.png",
+  "detail": "P(counterfeit) = 0.516 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c::wrong_called_counterfeit__mendeley_split_c_00130.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00035",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00035.png",
+  "path": "gradcam_split_c/wrong_called_counterfeit__mendeley_split_c_00035.png",
+  "detail": "P(counterfeit) = 0.770 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c::wrong_called_counterfeit__mendeley_split_c_00035.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00138",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00138.png",
+  "path": "gradcam_split_c/wrong_called_counterfeit__mendeley_split_c_00138.png",
+  "detail": "P(counterfeit) = 0.809 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c::wrong_called_counterfeit__mendeley_split_c_00138.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00078",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00078.png",
+  "path": "gradcam_split_c/wrong_called_counterfeit__mendeley_split_c_00078.png",
+  "detail": "P(counterfeit) = 0.536 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c::wrong_called_counterfeit__mendeley_split_c_00078.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00013",
+  "file": "correct_called_authentic__mendeley_split_c_00013.png",
+  "path": "gradcam_split_c/correct_called_authentic__mendeley_split_c_00013.png",
+  "detail": "P(counterfeit) = 0.282 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c::correct_called_authentic__mendeley_split_c_00013.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00095",
+  "file": "correct_called_authentic__mendeley_split_c_00095.png",
+  "path": "gradcam_split_c/correct_called_authentic__mendeley_split_c_00095.png",
+  "detail": "P(counterfeit) = 0.111 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c::correct_called_authentic__mendeley_split_c_00095.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00068",
+  "file": "correct_called_authentic__mendeley_split_c_00068.png",
+  "path": "gradcam_split_c/correct_called_authentic__mendeley_split_c_00068.png",
+  "detail": "P(counterfeit) = 0.065 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c::correct_called_authentic__mendeley_split_c_00068.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00005",
+  "file": "correct_called_authentic__mendeley_split_c_00005.png",
+  "path": "gradcam_split_c/correct_called_authentic__mendeley_split_c_00005.png",
+  "detail": "P(counterfeit) = 0.473 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c::correct_called_authentic__mendeley_split_c_00005.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00004",
+  "file": "correct_called_authentic__mendeley_split_c_00004.png",
+  "path": "gradcam_split_c/correct_called_authentic__mendeley_split_c_00004.png",
+  "detail": "P(counterfeit) = 0.197 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c::correct_called_authentic__mendeley_split_c_00004.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00029",
+  "file": "correct_called_authentic__mendeley_split_c_00029.png",
+  "path": "gradcam_split_c/correct_called_authentic__mendeley_split_c_00029.png",
+  "detail": "P(counterfeit) = 0.481 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c::correct_called_authentic__mendeley_split_c_00029.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00031",
+  "file": "correct_called_authentic__mendeley_split_c_00031.png",
+  "path": "gradcam_split_c/correct_called_authentic__mendeley_split_c_00031.png",
+  "detail": "P(counterfeit) = 0.072 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c::correct_called_authentic__mendeley_split_c_00031.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00084",
+  "file": "correct_called_authentic__mendeley_split_c_00084.png",
+  "path": "gradcam_split_c/correct_called_authentic__mendeley_split_c_00084.png",
+  "detail": "P(counterfeit) = 0.146 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c::correct_called_authentic__mendeley_split_c_00084.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00098",
+  "file": "correct_called_authentic__mendeley_split_c_00098.png",
+  "path": "gradcam_split_c/correct_called_authentic__mendeley_split_c_00098.png",
+  "detail": "P(counterfeit) = 0.132 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c::correct_called_authentic__mendeley_split_c_00098.png"
+ },
+ {
+  "set": "M4 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00091",
+  "file": "correct_called_authentic__mendeley_split_c_00091.png",
+  "path": "gradcam_split_c/correct_called_authentic__mendeley_split_c_00091.png",
+  "detail": "P(counterfeit) = 0.426 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c::correct_called_authentic__mendeley_split_c_00091.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00033",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00033.png",
+  "path": "gradcam_split_c_model3/wrong_called_counterfeit__mendeley_split_c_00033.png",
+  "detail": "P(counterfeit) = 0.929 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c_model3::wrong_called_counterfeit__mendeley_split_c_00033.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00020",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00020.png",
+  "path": "gradcam_split_c_model3/wrong_called_counterfeit__mendeley_split_c_00020.png",
+  "detail": "P(counterfeit) = 0.648 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c_model3::wrong_called_counterfeit__mendeley_split_c_00020.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00077",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00077.png",
+  "path": "gradcam_split_c_model3/wrong_called_counterfeit__mendeley_split_c_00077.png",
+  "detail": "P(counterfeit) = 0.763 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c_model3::wrong_called_counterfeit__mendeley_split_c_00077.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00146",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00146.png",
+  "path": "gradcam_split_c_model3/wrong_called_counterfeit__mendeley_split_c_00146.png",
+  "detail": "P(counterfeit) = 0.611 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c_model3::wrong_called_counterfeit__mendeley_split_c_00146.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00132",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00132.png",
+  "path": "gradcam_split_c_model3/wrong_called_counterfeit__mendeley_split_c_00132.png",
+  "detail": "P(counterfeit) = 0.762 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c_model3::wrong_called_counterfeit__mendeley_split_c_00132.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00026",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00026.png",
+  "path": "gradcam_split_c_model3/wrong_called_counterfeit__mendeley_split_c_00026.png",
+  "detail": "P(counterfeit) = 0.501 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c_model3::wrong_called_counterfeit__mendeley_split_c_00026.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00100",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00100.png",
+  "path": "gradcam_split_c_model3/wrong_called_counterfeit__mendeley_split_c_00100.png",
+  "detail": "P(counterfeit) = 0.575 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c_model3::wrong_called_counterfeit__mendeley_split_c_00100.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00023",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00023.png",
+  "path": "gradcam_split_c_model3/wrong_called_counterfeit__mendeley_split_c_00023.png",
+  "detail": "P(counterfeit) = 0.698 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c_model3::wrong_called_counterfeit__mendeley_split_c_00023.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00096",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00096.png",
+  "path": "gradcam_split_c_model3/wrong_called_counterfeit__mendeley_split_c_00096.png",
+  "detail": "P(counterfeit) = 0.636 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c_model3::wrong_called_counterfeit__mendeley_split_c_00096.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "wrong_called_counterfeit",
+  "image_id": "mendeley_split_c_00110",
+  "file": "wrong_called_counterfeit__mendeley_split_c_00110.png",
+  "path": "gradcam_split_c_model3/wrong_called_counterfeit__mendeley_split_c_00110.png",
+  "detail": "P(counterfeit) = 0.603 \u2014 model called it counterfeit; ground truth authentic",
+  "key": "gradcam_split_c_model3::wrong_called_counterfeit__mendeley_split_c_00110.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00148",
+  "file": "correct_called_authentic__mendeley_split_c_00148.png",
+  "path": "gradcam_split_c_model3/correct_called_authentic__mendeley_split_c_00148.png",
+  "detail": "P(counterfeit) = 0.002 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c_model3::correct_called_authentic__mendeley_split_c_00148.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00090",
+  "file": "correct_called_authentic__mendeley_split_c_00090.png",
+  "path": "gradcam_split_c_model3/correct_called_authentic__mendeley_split_c_00090.png",
+  "detail": "P(counterfeit) = 0.015 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c_model3::correct_called_authentic__mendeley_split_c_00090.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00012",
+  "file": "correct_called_authentic__mendeley_split_c_00012.png",
+  "path": "gradcam_split_c_model3/correct_called_authentic__mendeley_split_c_00012.png",
+  "detail": "P(counterfeit) = 0.005 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c_model3::correct_called_authentic__mendeley_split_c_00012.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00097",
+  "file": "correct_called_authentic__mendeley_split_c_00097.png",
+  "path": "gradcam_split_c_model3/correct_called_authentic__mendeley_split_c_00097.png",
+  "detail": "P(counterfeit) = 0.339 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c_model3::correct_called_authentic__mendeley_split_c_00097.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00071",
+  "file": "correct_called_authentic__mendeley_split_c_00071.png",
+  "path": "gradcam_split_c_model3/correct_called_authentic__mendeley_split_c_00071.png",
+  "detail": "P(counterfeit) = 0.200 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c_model3::correct_called_authentic__mendeley_split_c_00071.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00005",
+  "file": "correct_called_authentic__mendeley_split_c_00005.png",
+  "path": "gradcam_split_c_model3/correct_called_authentic__mendeley_split_c_00005.png",
+  "detail": "P(counterfeit) = 0.200 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c_model3::correct_called_authentic__mendeley_split_c_00005.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00004",
+  "file": "correct_called_authentic__mendeley_split_c_00004.png",
+  "path": "gradcam_split_c_model3/correct_called_authentic__mendeley_split_c_00004.png",
+  "detail": "P(counterfeit) = 0.318 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c_model3::correct_called_authentic__mendeley_split_c_00004.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00035",
+  "file": "correct_called_authentic__mendeley_split_c_00035.png",
+  "path": "gradcam_split_c_model3/correct_called_authentic__mendeley_split_c_00035.png",
+  "detail": "P(counterfeit) = 0.148 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c_model3::correct_called_authentic__mendeley_split_c_00035.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00037",
+  "file": "correct_called_authentic__mendeley_split_c_00037.png",
+  "path": "gradcam_split_c_model3/correct_called_authentic__mendeley_split_c_00037.png",
+  "detail": "P(counterfeit) = 0.005 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c_model3::correct_called_authentic__mendeley_split_c_00037.png"
+ },
+ {
+  "set": "M3 external (Split C)",
+  "group": "correct_called_authentic",
+  "image_id": "mendeley_split_c_00084",
+  "file": "correct_called_authentic__mendeley_split_c_00084.png",
+  "path": "gradcam_split_c_model3/correct_called_authentic__mendeley_split_c_00084.png",
+  "detail": "P(counterfeit) = 0.471 \u2014 model called it authentic; ground truth authentic",
+  "key": "gradcam_split_c_model3::correct_called_authentic__mendeley_split_c_00084.png"
+ }
+];
+const STORAGE_KEY = "pharmavision_gradcam_review_v2";
+
+let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+let i = 0;
+
+function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+function render() {
+  const it = ITEMS[i];
+  document.getElementById("img").src = it.path;
+  document.getElementById("setname").textContent =
+    it.set + "  ·  " + it.group;
+  document.getElementById("caption").textContent =
+    it.image_id + "   —   " + it.detail;
+  const rec = state[it.key] || {};
+  document.querySelectorAll(".opt").forEach(o =>
+    o.classList.toggle("sel", (rec.tag || "") === o.dataset.v));
+  document.getElementById("note").value = rec.note || "";
+  const done = Object.values(state).filter(r => r && r.tag).length;
+  document.getElementById("prog").textContent =
+    `${i + 1} / ${ITEMS.length}   ·   ${done} tagged`;
+  document.querySelector("#bar div").style.width =
+    (100 * done / ITEMS.length) + "%";
+}
+
+function setTag(v) {
+  const it = ITEMS[i];
+  state[it.key] = Object.assign({}, state[it.key], { tag: v });
+  save();
+  if (v) next(); else render();
+}
+
+function next() { if (i < ITEMS.length - 1) i++; render(); }
+function prev() { if (i > 0) i--; render(); }
+
+document.querySelectorAll(".opt").forEach(o =>
+  o.addEventListener("click", () => setTag(o.dataset.v)));
+
+document.getElementById("note").addEventListener("keydown", e => {
+  e.stopPropagation();
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    const it = ITEMS[i];
+    state[it.key] = Object.assign({}, state[it.key],
+                                  { note: e.target.value });
+    save(); next();
+  }
+});
+document.getElementById("note").addEventListener("blur", e => {
+  const it = ITEMS[i];
+  state[it.key] = Object.assign({}, state[it.key], { note: e.target.value });
+  save();
+});
+
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "TEXTAREA") return;
+  const map = { "1": "packaging_relevant", "2": "incidental",
+                "3": "mixed", "4": "diffuse", "0": "" };
+  if (e.key in map) { setTag(map[e.key]); e.preventDefault(); }
+  else if (e.key === "ArrowRight") { next(); e.preventDefault(); }
+  else if (e.key === "ArrowLeft") { prev(); e.preventDefault(); }
+});
+
+function exportCsv() {
+  const rows = [["set", "group", "image_id", "file", "attention_tag", "note"]];
+  for (const it of ITEMS) {
+    const r = state[it.key] || {};
+    rows.push([it.set, it.group, it.image_id, it.file,
+               r.tag || "", (r.note || "").replace(/"/g, '""')]);
+  }
+  const csv = rows.map(r => r.map(c => `"${c}"`).join(",")).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+  a.download = "gradcam_review_completed.csv";
+  a.click();
+}
+
+render();
+</script>

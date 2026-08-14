@@ -1,0 +1,9 @@
+model,split,n,correct,accuracy,ci_lo,ci_hi
+model1_classical_colorhist_logreg,split_c,150,0,0.0,0.0,0.025
+model1_classical_colorhist_logreg,split_d,149,0,0.0,0.0,0.0251
+model2_smallcnn_gap,split_c,150,129,0.86,0.7954,0.9066
+model2_smallcnn_gap,split_d,149,69,0.4631,0.385,0.5431
+model3_mobilenetv3small_frozen,split_c,150,116,0.7733,0.7,0.833
+model3_mobilenetv3small_frozen,split_d,149,108,0.7248,0.6482,0.7902
+model4_efficientnetb0_frozen,split_c,150,121,0.8067,0.7361,0.8619
+model4_efficientnetb0_frozen,split_d,149,124,0.8322,0.764,0.8837

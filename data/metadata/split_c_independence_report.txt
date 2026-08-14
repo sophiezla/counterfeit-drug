@@ -1,0 +1,11 @@
+Split C independence check (Mendeley 'Mobile-Captured Pharmaceutical
+Medication Packages', huawei-cn subset, 150 images) vs. existing
+Roboflow+Kaggle dedup pool (4688 images)
+
+Hamming threshold (same as main dedup pass): 8/64 bits
+Candidate images flagged as likely duplicates: 0/150
+Nearest-neighbor distance distribution: min=10, median=18, max=20
+
+No candidate image matched any existing pool image within threshold.
+VERDICT: independent source, confirmed programmatically (not just by
+description) -- safe to use as Split C / external generalization pool.

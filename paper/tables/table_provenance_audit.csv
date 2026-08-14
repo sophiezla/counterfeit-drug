@@ -1,0 +1,11 @@
+dataset,n_images,n_authentic,n_counterfeit,n_groups,features,grouped_cv_balanced_accuracy
+Kaggle Fake vs Real Medicine,661,421,240,584,file format only,1.0
+Kaggle Fake vs Real Medicine,661,421,240,584,encoded file size,0.9937
+Kaggle Fake vs Real Medicine,661,421,240,584,short-side resolution,0.9542
+Kaggle Fake vs Real Medicine,661,421,240,584,aspect ratio,0.8025
+Kaggle Fake vs Real Medicine,661,421,240,584,all metadata,1.0
+Roboflow Counterfeit_med_detection v4,4207,4070,137,597,file format only,0.5
+Roboflow Counterfeit_med_detection v4,4207,4070,137,597,encoded file size,0.7167
+Roboflow Counterfeit_med_detection v4,4207,4070,137,597,short-side resolution,0.5
+Roboflow Counterfeit_med_detection v4,4207,4070,137,597,aspect ratio,0.5
+Roboflow Counterfeit_med_detection v4,4207,4070,137,597,all metadata,0.7167

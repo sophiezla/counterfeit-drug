@@ -1,0 +1,8 @@
+condition,metric,n,mean,ci_lo,ci_hi
+baseline,border_mass_fraction,150,0.182,0.1548,0.2092
+baseline,centre_mass_fraction,150,0.5633,0.5368,0.5899
+baseline,split_c_accuracy,150,0.06,,
+normalised,border_mass_fraction,150,0.655,0.6125,0.6974
+normalised,centre_mass_fraction,150,0.1647,0.1285,0.2009
+normalised,split_c_accuracy,150,0.8067,,
+paired delta,border_mass_fraction,150,0.473,0.4223,0.5236

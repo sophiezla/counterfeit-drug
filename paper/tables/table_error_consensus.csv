@@ -1,0 +1,7 @@
+image_id,n_model_split_combinations_wrong,wrong_in
+kaggle_fake_real_medicine_2132e7ceb4,4,M1/A M1/B M2/A M2/B
+kaggle_fake_real_medicine_41d91fd70e,4,M1/B M2/B M3/B M4/B
+kaggle_fake_real_medicine_02169db735,4,M3/A M3/B M4/A M4/B
+kaggle_fake_real_medicine_396d1f8c90,3,M1/A M2/A M3/A
+kaggle_fake_real_medicine_378059a366,3,M2/A M2/B M3/A
+kaggle_fake_real_medicine_6a0d82961a,3,M2/B M3/B M4/B

@@ -1,0 +1,133 @@
+=== Model 2: Small CNN with GAP head ===
+  LR search (5 epochs each): [0.001, 0.0003, 0.0001]
+  epoch  0  train_loss=0.6321 train_acc=0.636  val_loss=0.6498 val_acc=0.649
+  epoch  1  train_loss=0.5385 train_acc=0.731  val_loss=0.6366 val_acc=0.662
+  epoch  2  train_loss=0.5136 train_acc=0.759  val_loss=0.5537 val_acc=0.688
+  epoch  3  train_loss=0.4847 train_acc=0.776  val_loss=0.3902 val_acc=0.857
+  epoch  4  train_loss=0.4716 train_acc=0.779  val_loss=0.3658 val_acc=0.766
+    lr=0.001: val_loss@epoch4=0.3658
+  epoch  0  train_loss=0.6733 train_acc=0.555  val_loss=0.6580 val_acc=0.675
+  epoch  1  train_loss=0.5964 train_acc=0.683  val_loss=0.5854 val_acc=0.649
+  epoch  2  train_loss=0.5707 train_acc=0.695  val_loss=0.5475 val_acc=0.649
+  epoch  3  train_loss=0.5446 train_acc=0.723  val_loss=0.4843 val_acc=0.740
+  epoch  4  train_loss=0.5284 train_acc=0.737  val_loss=0.4448 val_acc=0.766
+    lr=0.0003: val_loss@epoch4=0.4448
+  epoch  0  train_loss=0.7306 train_acc=0.535  val_loss=0.6901 val_acc=0.584
+  epoch  1  train_loss=0.6616 train_acc=0.577  val_loss=0.6334 val_acc=0.649
+  epoch  2  train_loss=0.6221 train_acc=0.647  val_loss=0.5666 val_acc=0.688
+  epoch  3  train_loss=0.5926 train_acc=0.672  val_loss=0.5270 val_acc=0.714
+  epoch  4  train_loss=0.5937 train_acc=0.692  val_loss=0.5137 val_acc=0.727
+    lr=0.0001: val_loss@epoch4=0.5137
+  selected lr=0.001
+--- Split A ---
+  epoch  0  train_loss=0.6321 train_acc=0.636  val_loss=0.6498 val_acc=0.649
+  epoch  1  train_loss=0.5385 train_acc=0.731  val_loss=0.6366 val_acc=0.662
+  epoch  2  train_loss=0.5136 train_acc=0.759  val_loss=0.5537 val_acc=0.688
+  epoch  3  train_loss=0.4847 train_acc=0.776  val_loss=0.3902 val_acc=0.857
+  epoch  4  train_loss=0.4716 train_acc=0.779  val_loss=0.3658 val_acc=0.766
+  epoch  5  train_loss=0.4302 train_acc=0.810  val_loss=0.3360 val_acc=0.870
+  epoch  6  train_loss=0.4360 train_acc=0.810  val_loss=0.4167 val_acc=0.857
+  epoch  7  train_loss=0.4430 train_acc=0.810  val_loss=0.4475 val_acc=0.727
+  epoch  8  train_loss=0.4141 train_acc=0.821  val_loss=0.3481 val_acc=0.857
+  epoch  9  train_loss=0.4292 train_acc=0.826  val_loss=0.3398 val_acc=0.857
+  early stopping at epoch 9 (patience=4)
+[Split A] val: acc=0.870 f1=0.868 auc=0.934
+[Split A] test: acc=0.868 f1=0.853 auc=0.951
+--- Split B ---
+  epoch  0  train_loss=0.6038 train_acc=0.635  val_loss=0.6172 val_acc=0.667
+  epoch  1  train_loss=0.5605 train_acc=0.730  val_loss=0.6275 val_acc=0.667
+  epoch  2  train_loss=0.5149 train_acc=0.758  val_loss=0.6286 val_acc=0.694
+  epoch  3  train_loss=0.4724 train_acc=0.779  val_loss=0.5048 val_acc=0.750
+  epoch  4  train_loss=0.4871 train_acc=0.804  val_loss=0.4654 val_acc=0.750
+  epoch  5  train_loss=0.4907 train_acc=0.796  val_loss=0.3642 val_acc=0.792
+  epoch  6  train_loss=0.4260 train_acc=0.814  val_loss=0.3384 val_acc=0.889
+  epoch  7  train_loss=0.4487 train_acc=0.796  val_loss=0.3817 val_acc=0.792
+  epoch  8  train_loss=0.4421 train_acc=0.821  val_loss=0.3253 val_acc=0.889
+  epoch  9  train_loss=0.4053 train_acc=0.832  val_loss=0.3058 val_acc=0.847
+  epoch 10  train_loss=0.3711 train_acc=0.832  val_loss=0.2962 val_acc=0.861
+  epoch 11  train_loss=0.3965 train_acc=0.825  val_loss=0.3478 val_acc=0.778
+  epoch 12  train_loss=0.3795 train_acc=0.856  val_loss=0.3013 val_acc=0.833
+  epoch 13  train_loss=0.3818 train_acc=0.835  val_loss=0.2784 val_acc=0.903
+  epoch 14  train_loss=0.3573 train_acc=0.867  val_loss=0.3002 val_acc=0.847
+  epoch 15  train_loss=0.4003 train_acc=0.832  val_loss=0.4307 val_acc=0.750
+  epoch 16  train_loss=0.3749 train_acc=0.853  val_loss=0.2920 val_acc=0.861
+  epoch 17  train_loss=0.4144 train_acc=0.842  val_loss=0.2920 val_acc=0.875
+  early stopping at epoch 17 (patience=4)
+[Split B] fold 0: acc=0.903 f1=0.892
+  epoch  0  train_loss=0.6408 train_acc=0.649  val_loss=0.6464 val_acc=0.611
+  epoch  1  train_loss=0.5596 train_acc=0.705  val_loss=0.6267 val_acc=0.611
+  epoch  2  train_loss=0.5359 train_acc=0.712  val_loss=0.4893 val_acc=0.778
+  epoch  3  train_loss=0.4682 train_acc=0.768  val_loss=0.4063 val_acc=0.806
+  epoch  4  train_loss=0.5246 train_acc=0.740  val_loss=0.4169 val_acc=0.806
+  epoch  5  train_loss=0.4748 train_acc=0.793  val_loss=0.3531 val_acc=0.875
+  epoch  6  train_loss=0.4655 train_acc=0.786  val_loss=0.3625 val_acc=0.806
+  epoch  7  train_loss=0.4550 train_acc=0.811  val_loss=0.3766 val_acc=0.903
+  epoch  8  train_loss=0.4495 train_acc=0.786  val_loss=0.3460 val_acc=0.833
+  epoch  9  train_loss=0.4282 train_acc=0.800  val_loss=0.3334 val_acc=0.861
+  epoch 10  train_loss=0.4223 train_acc=0.800  val_loss=0.3176 val_acc=0.861
+  epoch 11  train_loss=0.3972 train_acc=0.814  val_loss=0.3019 val_acc=0.903
+  epoch 12  train_loss=0.4033 train_acc=0.800  val_loss=0.2923 val_acc=0.903
+  epoch 13  train_loss=0.3952 train_acc=0.818  val_loss=0.3087 val_acc=0.903
+  epoch 14  train_loss=0.3585 train_acc=0.835  val_loss=0.3475 val_acc=0.889
+  epoch 15  train_loss=0.4561 train_acc=0.789  val_loss=0.4005 val_acc=0.806
+  epoch 16  train_loss=0.3667 train_acc=0.842  val_loss=0.3004 val_acc=0.903
+  early stopping at epoch 16 (patience=4)
+[Split B] fold 1: acc=0.903 f1=0.892
+  epoch  0  train_loss=0.6184 train_acc=0.671  val_loss=0.6384 val_acc=0.634
+  epoch  1  train_loss=0.5389 train_acc=0.727  val_loss=0.6395 val_acc=0.620
+  epoch  2  train_loss=0.4771 train_acc=0.783  val_loss=0.5699 val_acc=0.676
+  epoch  3  train_loss=0.4710 train_acc=0.811  val_loss=0.4082 val_acc=0.761
+  epoch  4  train_loss=0.4642 train_acc=0.787  val_loss=0.3875 val_acc=0.803
+  epoch  5  train_loss=0.4132 train_acc=0.811  val_loss=0.3472 val_acc=0.873
+  epoch  6  train_loss=0.4585 train_acc=0.783  val_loss=0.3364 val_acc=0.873
+  epoch  7  train_loss=0.4163 train_acc=0.825  val_loss=0.3463 val_acc=0.873
+  epoch  8  train_loss=0.4445 train_acc=0.815  val_loss=0.3486 val_acc=0.873
+  epoch  9  train_loss=0.4762 train_acc=0.794  val_loss=0.3475 val_acc=0.873
+  epoch 10  train_loss=0.4395 train_acc=0.790  val_loss=0.3420 val_acc=0.887
+  early stopping at epoch 10 (patience=4)
+[Split B] fold 2: acc=0.873 f1=0.870
+  epoch  0  train_loss=0.6358 train_acc=0.654  val_loss=0.6619 val_acc=0.549
+  epoch  1  train_loss=0.4870 train_acc=0.759  val_loss=0.6536 val_acc=0.563
+  epoch  2  train_loss=0.4721 train_acc=0.773  val_loss=0.6553 val_acc=0.577
+  epoch  3  train_loss=0.4406 train_acc=0.829  val_loss=0.4545 val_acc=0.817
+  epoch  4  train_loss=0.4473 train_acc=0.811  val_loss=0.4718 val_acc=0.775
+  epoch  5  train_loss=0.4430 train_acc=0.783  val_loss=0.4977 val_acc=0.662
+  epoch  6  train_loss=0.4435 train_acc=0.818  val_loss=0.4539 val_acc=0.817
+  epoch  7  train_loss=0.3900 train_acc=0.843  val_loss=0.4587 val_acc=0.817
+  early stopping at epoch 7 (patience=4)
+[Split B] fold 3: acc=0.817 f1=0.812
+  epoch  0  train_loss=0.6268 train_acc=0.664  val_loss=0.6127 val_acc=0.704
+  epoch  1  train_loss=0.5174 train_acc=0.738  val_loss=0.6002 val_acc=0.718
+  epoch  2  train_loss=0.4809 train_acc=0.762  val_loss=0.5792 val_acc=0.704
+  epoch  3  train_loss=0.4717 train_acc=0.797  val_loss=0.4967 val_acc=0.746
+  epoch  4  train_loss=0.4862 train_acc=0.769  val_loss=0.4613 val_acc=0.775
+  epoch  5  train_loss=0.4322 train_acc=0.811  val_loss=0.4340 val_acc=0.775
+  epoch  6  train_loss=0.4287 train_acc=0.822  val_loss=0.3844 val_acc=0.789
+  epoch  7  train_loss=0.3943 train_acc=0.825  val_loss=0.3854 val_acc=0.789
+  epoch  8  train_loss=0.4285 train_acc=0.815  val_loss=0.3636 val_acc=0.803
+  epoch  9  train_loss=0.4508 train_acc=0.804  val_loss=0.3934 val_acc=0.817
+  epoch 10  train_loss=0.4179 train_acc=0.818  val_loss=0.3164 val_acc=0.831
+  epoch 11  train_loss=0.4122 train_acc=0.822  val_loss=0.3448 val_acc=0.817
+  epoch 12  train_loss=0.4061 train_acc=0.818  val_loss=0.3497 val_acc=0.803
+  epoch 13  train_loss=0.4010 train_acc=0.843  val_loss=0.3157 val_acc=0.817
+  epoch 14  train_loss=0.3948 train_acc=0.850  val_loss=0.3655 val_acc=0.817
+  early stopping at epoch 14 (patience=4)
+[Split B] fold 4: acc=0.831 f1=0.800
+[Split B] 5-fold CV: acc=0.865+/-0.036
+  epoch  0  train_loss=0.5904 train_acc=0.703  val_loss=0.6366 val_acc=0.633
+  epoch  1  train_loss=0.5406 train_acc=0.739  val_loss=0.6792 val_acc=0.633
+  epoch  2  train_loss=0.4924 train_acc=0.765  val_loss=0.4954 val_acc=0.722
+  epoch  3  train_loss=0.4835 train_acc=0.782  val_loss=0.4665 val_acc=0.759
+  epoch  4  train_loss=0.4663 train_acc=0.770  val_loss=0.3319 val_acc=0.861
+  epoch  5  train_loss=0.4237 train_acc=0.829  val_loss=0.3533 val_acc=0.810
+  epoch  6  train_loss=0.3994 train_acc=0.829  val_loss=0.3629 val_acc=0.810
+  epoch  7  train_loss=0.4409 train_acc=0.807  val_loss=0.3015 val_acc=0.873
+  epoch  8  train_loss=0.3974 train_acc=0.807  val_loss=0.2586 val_acc=0.924
+  epoch  9  train_loss=0.4438 train_acc=0.790  val_loss=0.2793 val_acc=0.911
+  epoch 10  train_loss=0.3840 train_acc=0.840  val_loss=0.3139 val_acc=0.861
+  epoch 11  train_loss=0.4384 train_acc=0.796  val_loss=0.2857 val_acc=0.899
+  epoch 12  train_loss=0.4654 train_acc=0.770  val_loss=0.3954 val_acc=0.797
+  early stopping at epoch 12 (patience=4)
+[Split B] val: acc=0.924 f1=0.909 auc=0.968
+[Split B] test: acc=0.865 f1=0.861 auc=0.916
+Wrote C:\Users\sophi\Documents\Projects\pharmavision\modeling\results\metrics_model2_smallcnn_gap.csv

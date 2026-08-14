@@ -1,0 +1,7 @@
+model_a,model_b,statistic,p_value,significant_at_0.05
+model1_classical_colorhist_logreg,model2_smallcnn_gap,12.0,0.7744140625,False
+model1_classical_colorhist_logreg,model3_mobilenetv3small_frozen,15.0,0.11846923828124999,False
+model1_classical_colorhist_logreg,model4_efficientnetb0_frozen,16.0,0.210113525390625,False
+model2_smallcnn_gap,model3_mobilenetv3small_frozen,11.0,0.2265625,False
+model2_smallcnn_gap,model4_efficientnetb0_frozen,12.0,0.3876953125,False
+model3_mobilenetv3small_frozen,model4_efficientnetb0_frozen,3.0,1.0,False

@@ -1,0 +1,9 @@
+model,condition,split_b_test_acc,split_c_acc
+model1_classical,baseline,0.8378378378378378,0.0
+model1_classical,combined_norm,0.5405405405405406,0.0
+model2_smallcnn,baseline,0.8648648648648649,0.0
+model2_smallcnn,combined_norm,0.8243243243243243,0.8466666666666667
+model3_mobilenet,baseline,0.9459459459459459,0.7333333333333333
+model3_mobilenet,combined_norm,0.9459459459459459,0.52
+model4_efficientnet,baseline,0.919,0.087
+model4_efficientnet,combined_norm,0.959,0.627

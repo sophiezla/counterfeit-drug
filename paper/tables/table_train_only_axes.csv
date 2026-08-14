@@ -1,0 +1,8 @@
+statistic,grouped_cv_balanced_accuracy,sd_across_folds,fires_at_threshold,implied_normalisation
+file format (PNG vs JPEG),1.0,0.0,yes,not normalisable by preprocessing — re-encode all inputs (implies the compression axis)
+encoded file size,0.985,0.019,yes,fixed-quality re-encode  ->  COMPRESSION axis
+short-side resolution,0.9585,0.0175,yes,short-side cap  ->  RESOLUTION axis
+aspect ratio,0.8092,0.0189,yes,already removed by the square 224x224 input resize
+mean brightness,0.7772,0.0666,yes,rescale to fixed target mean  ->  BRIGHTNESS axis
+colour balance (R:G ratio),0.6095,0.0442,no,gray-world white balance
+colour balance (R:B ratio),0.6843,0.0507,yes,gray-world white balance

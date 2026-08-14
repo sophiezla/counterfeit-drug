@@ -1,0 +1,23 @@
+Split construction report
+Modeling pool: Kaggle - Fake vs Real Medicine only (510 images, 480 product_identity groups)
+Roboflow supplementary pool written separately: 2697 images -> data\processed\roboflow_supplementary_authentic_pool.csv
+
+=== Split A (naive, image-level, seed=42) ===
+  train=357 val=77 test=76
+  train class balance: {'counterfeit': 167, 'authentic': 190}
+  val class balance: {'counterfeit': 36, 'authentic': 41}
+  test class balance: {'counterfeit': 35, 'authentic': 41}
+
+=== Split B (product-level grouped, seed=42) ===
+  images: train=357 val=79 test=74
+  product_identity groups: train=336 val=72 test=72
+  train class balance: {'counterfeit': 169, 'authentic': 188}
+  val class balance: {'counterfeit': 34, 'authentic': 45}
+  test class balance: {'counterfeit': 35, 'authentic': 39}
+  CV fold sizes (train partition only): {0: 72, 1: 72, 2: 71, 3: 71, 4: 71}
+  LEAKAGE CHECK: train&val group overlap=0, train&test group overlap=0, val&test group overlap=0
+  PASS: zero product_identity overlap across train/val/test.
+
+=== Split A vs Split B assignment disagreement ===
+  230/510 images assigned to a different partition under A vs B (45.1%)
+  Under naive Split A, 9/480 product_identity groups have members in more than one partition (this IS the leakage Split B eliminates).

@@ -1,0 +1,7 @@
+order,order_long,is_production,split_b_test_acc,split_c_acc
+RBC,resolution -> brightness -> compression,True,0.9189,0.82
+RCB,resolution -> compression -> brightness,False,0.9324,0.88
+BRC,brightness -> resolution -> compression,False,0.9189,0.8467
+BCR,brightness -> compression -> resolution,False,0.9459,0.38
+CRB,compression -> resolution -> brightness,False,0.9324,0.54
+CBR,compression -> brightness -> resolution,False,0.9324,0.4667

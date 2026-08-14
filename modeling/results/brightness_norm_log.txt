@@ -1,0 +1,60 @@
+=== Model 1 (classical), WITHOUT brightness normalization (baseline) ===
+  Split B test acc=0.838  Split C acc=0.000
+=== Model 1 (classical), WITH brightness normalization ===
+  Split B test acc=0.541  Split C acc=0.000
+=== Model 4 (EfficientNet-B0), WITHOUT brightness normalization (baseline) ===
+  epoch  0  train_loss=0.3835 train_acc=0.876  val_loss=0.2714 val_acc=0.861
+  epoch  1  train_loss=0.1509 train_acc=0.977  val_loss=0.1810 val_acc=0.937
+  epoch  2  train_loss=0.1011 train_acc=0.980  val_loss=0.1436 val_acc=0.949
+  epoch  3  train_loss=0.0743 train_acc=0.992  val_loss=0.1267 val_acc=0.962
+  epoch  4  train_loss=0.0626 train_acc=0.995  val_loss=0.1115 val_acc=0.962
+  epoch  5  train_loss=0.0527 train_acc=0.995  val_loss=0.0987 val_acc=0.962
+  epoch  6  train_loss=0.0418 train_acc=0.998  val_loss=0.0936 val_acc=0.962
+  epoch  7  train_loss=0.0382 train_acc=0.996  val_loss=0.0867 val_acc=0.962
+  epoch  8  train_loss=0.0360 train_acc=0.996  val_loss=0.0811 val_acc=0.962
+  epoch  9  train_loss=0.0330 train_acc=0.995  val_loss=0.0769 val_acc=0.962
+  epoch 10  train_loss=0.0248 train_acc=1.000  val_loss=0.0745 val_acc=0.962
+  epoch 11  train_loss=0.0257 train_acc=0.999  val_loss=0.0705 val_acc=0.962
+  epoch 12  train_loss=0.0233 train_acc=0.998  val_loss=0.0692 val_acc=0.962
+  epoch 13  train_loss=0.0213 train_acc=1.000  val_loss=0.0648 val_acc=0.975
+  epoch 14  train_loss=0.0205 train_acc=1.000  val_loss=0.0639 val_acc=0.975
+  epoch 15  train_loss=0.0158 train_acc=1.000  val_loss=0.0657 val_acc=0.962
+  epoch 16  train_loss=0.0172 train_acc=1.000  val_loss=0.0626 val_acc=0.975
+  epoch 17  train_loss=0.0143 train_acc=0.999  val_loss=0.0619 val_acc=0.975
+  epoch 18  train_loss=0.0155 train_acc=0.998  val_loss=0.0568 val_acc=0.975
+  epoch 19  train_loss=0.0135 train_acc=1.000  val_loss=0.0549 val_acc=0.975
+  epoch 20  train_loss=0.0141 train_acc=0.999  val_loss=0.0579 val_acc=0.975
+  epoch 21  train_loss=0.0126 train_acc=1.000  val_loss=0.0582 val_acc=0.975
+  epoch 22  train_loss=0.0107 train_acc=1.000  val_loss=0.0582 val_acc=0.975
+  epoch 23  train_loss=0.0103 train_acc=1.000  val_loss=0.0557 val_acc=0.975
+  early stopping at epoch 23 (patience=4)
+  Split B test acc=0.919  Split C acc=0.067
+=== Model 4 (EfficientNet-B0), WITH brightness normalization ===
+  epoch  0  train_loss=0.3898 train_acc=0.873  val_loss=0.2892 val_acc=0.861
+  epoch  1  train_loss=0.1536 train_acc=0.971  val_loss=0.1955 val_acc=0.911
+  epoch  2  train_loss=0.1039 train_acc=0.988  val_loss=0.1612 val_acc=0.949
+  epoch  3  train_loss=0.0753 train_acc=0.994  val_loss=0.1445 val_acc=0.949
+  epoch  4  train_loss=0.0642 train_acc=0.993  val_loss=0.1249 val_acc=0.937
+  epoch  5  train_loss=0.0522 train_acc=0.999  val_loss=0.1192 val_acc=0.949
+  epoch  6  train_loss=0.0426 train_acc=0.998  val_loss=0.1125 val_acc=0.949
+  epoch  7  train_loss=0.0381 train_acc=0.998  val_loss=0.1053 val_acc=0.962
+  epoch  8  train_loss=0.0356 train_acc=0.995  val_loss=0.1011 val_acc=0.962
+  epoch  9  train_loss=0.0337 train_acc=0.996  val_loss=0.0971 val_acc=0.962
+  epoch 10  train_loss=0.0249 train_acc=0.999  val_loss=0.0954 val_acc=0.962
+  epoch 11  train_loss=0.0268 train_acc=0.999  val_loss=0.0945 val_acc=0.962
+  epoch 12  train_loss=0.0241 train_acc=0.998  val_loss=0.0908 val_acc=0.962
+  epoch 13  train_loss=0.0212 train_acc=0.998  val_loss=0.0950 val_acc=0.962
+  epoch 14  train_loss=0.0220 train_acc=0.999  val_loss=0.0852 val_acc=0.962
+  epoch 15  train_loss=0.0188 train_acc=0.999  val_loss=0.0916 val_acc=0.962
+  epoch 16  train_loss=0.0177 train_acc=0.999  val_loss=0.0874 val_acc=0.962
+  epoch 17  train_loss=0.0137 train_acc=1.000  val_loss=0.0899 val_acc=0.962
+  epoch 18  train_loss=0.0161 train_acc=0.999  val_loss=0.0842 val_acc=0.962
+  epoch 19  train_loss=0.0132 train_acc=0.999  val_loss=0.0818 val_acc=0.962
+  epoch 20  train_loss=0.0139 train_acc=1.000  val_loss=0.0864 val_acc=0.962
+  epoch 21  train_loss=0.0127 train_acc=0.999  val_loss=0.0865 val_acc=0.962
+  epoch 22  train_loss=0.0109 train_acc=1.000  val_loss=0.0871 val_acc=0.962
+  epoch 23  train_loss=0.0117 train_acc=1.000  val_loss=0.0838 val_acc=0.962
+  early stopping at epoch 23 (patience=4)
+  Split B test acc=0.932  Split C acc=0.313
+
+Wrote C:\Users\sophi\Documents\Projects\pharmavision\modeling\results\brightness_norm_experiment.csv

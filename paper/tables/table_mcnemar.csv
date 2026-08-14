@@ -1,0 +1,7 @@
+model_a,model_b,n01_a_right_b_wrong,n10_a_wrong_b_right,n_discordant,statistic,p_value,significant_005
+M1,M2,5,7,12,12.0,0.7744140625,False
+M1,M3,4,11,15,15.0,0.11846923828124999,False
+M1,M4,5,11,16,16.0,0.210113525390625,False
+M2,M3,3,8,11,11.0,0.2265625,False
+M2,M4,4,8,12,12.0,0.3876953125,False
+M3,M4,2,1,3,3.0,1.0,False

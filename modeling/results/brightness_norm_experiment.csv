@@ -1,0 +1,5 @@
+model,normalized,split_b_test_acc,split_c_acc
+model1_classical,False,0.8378378378378378,0.0
+model1_classical,True,0.5405405405405406,0.0
+model4_efficientnet,False,0.918918918918919,0.06666666666666667
+model4_efficientnet,True,0.9324324324324325,0.31333333333333335

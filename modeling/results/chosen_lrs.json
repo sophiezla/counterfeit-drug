@@ -1,0 +1,5 @@
+{
+  "model2_smallcnn_gap": 0.001,
+  "model3_mobilenetv3small_frozen": 0.001,
+  "model4_efficientnetb0_frozen": 0.001
+}

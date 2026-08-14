@@ -1,0 +1,69 @@
+Rebuilding Split B final-fit Model 3...
+  LR search (5 epochs each): [0.001, 0.0003, 0.0001]
+  epoch  0  train_loss=0.4643 train_acc=0.832  val_loss=0.3085 val_acc=0.924
+  epoch  1  train_loss=0.2274 train_acc=0.949  val_loss=0.2328 val_acc=0.937
+  epoch  2  train_loss=0.1672 train_acc=0.960  val_loss=0.1925 val_acc=0.949
+  epoch  3  train_loss=0.1321 train_acc=0.970  val_loss=0.1765 val_acc=0.937
+  epoch  4  train_loss=0.1086 train_acc=0.979  val_loss=0.1526 val_acc=0.937
+    lr=0.001: val_loss@epoch4=0.1526
+  epoch  0  train_loss=0.6301 train_acc=0.658  val_loss=0.5108 val_acc=0.924
+  epoch  1  train_loss=0.4601 train_acc=0.881  val_loss=0.4025 val_acc=0.937
+  epoch  2  train_loss=0.3668 train_acc=0.924  val_loss=0.3364 val_acc=0.937
+  epoch  3  train_loss=0.2947 train_acc=0.937  val_loss=0.2936 val_acc=0.924
+  epoch  4  train_loss=0.2544 train_acc=0.952  val_loss=0.2625 val_acc=0.924
+    lr=0.0003: val_loss@epoch4=0.2625
+  epoch  0  train_loss=0.7022 train_acc=0.528  val_loss=0.6390 val_acc=0.709
+  epoch  1  train_loss=0.6337 train_acc=0.669  val_loss=0.5731 val_acc=0.873
+  epoch  2  train_loss=0.5750 train_acc=0.766  val_loss=0.5212 val_acc=0.873
+  epoch  3  train_loss=0.5058 train_acc=0.840  val_loss=0.4757 val_acc=0.924
+  epoch  4  train_loss=0.4652 train_acc=0.885  val_loss=0.4392 val_acc=0.937
+    lr=0.0001: val_loss@epoch4=0.4392
+  selected lr=0.001
+  epoch  0  train_loss=0.4643 train_acc=0.832  val_loss=0.3085 val_acc=0.924
+  epoch  1  train_loss=0.2274 train_acc=0.949  val_loss=0.2328 val_acc=0.937
+  epoch  2  train_loss=0.1672 train_acc=0.960  val_loss=0.1925 val_acc=0.949
+  epoch  3  train_loss=0.1321 train_acc=0.970  val_loss=0.1765 val_acc=0.937
+  epoch  4  train_loss=0.1086 train_acc=0.979  val_loss=0.1526 val_acc=0.937
+  epoch  5  train_loss=0.0947 train_acc=0.979  val_loss=0.1472 val_acc=0.937
+  epoch  6  train_loss=0.0838 train_acc=0.982  val_loss=0.1392 val_acc=0.937
+  epoch  7  train_loss=0.0738 train_acc=0.991  val_loss=0.1490 val_acc=0.937
+  epoch  8  train_loss=0.0709 train_acc=0.982  val_loss=0.1299 val_acc=0.949
+  epoch  9  train_loss=0.0652 train_acc=0.989  val_loss=0.1226 val_acc=0.962
+  epoch 10  train_loss=0.0565 train_acc=0.990  val_loss=0.1212 val_acc=0.949
+  epoch 11  train_loss=0.0535 train_acc=0.991  val_loss=0.1210 val_acc=0.949
+  epoch 12  train_loss=0.0495 train_acc=0.993  val_loss=0.1201 val_acc=0.949
+  epoch 13  train_loss=0.0486 train_acc=0.993  val_loss=0.1143 val_acc=0.962
+  epoch 14  train_loss=0.0471 train_acc=0.991  val_loss=0.1099 val_acc=0.962
+  epoch 15  train_loss=0.0403 train_acc=0.995  val_loss=0.1149 val_acc=0.949
+  epoch 16  train_loss=0.0412 train_acc=0.994  val_loss=0.1086 val_acc=0.962
+  epoch 17  train_loss=0.0412 train_acc=0.991  val_loss=0.1068 val_acc=0.962
+  epoch 18  train_loss=0.0420 train_acc=0.994  val_loss=0.1112 val_acc=0.949
+  epoch 19  train_loss=0.0345 train_acc=0.998  val_loss=0.1161 val_acc=0.949
+  epoch 20  train_loss=0.0307 train_acc=0.997  val_loss=0.1129 val_acc=0.949
+  epoch 21  train_loss=0.0332 train_acc=0.994  val_loss=0.1203 val_acc=0.949
+  early stopping at epoch 21 (patience=4)
+Scoring all 150 Split C images...
+Predicted counterfeit (wrong): 41 / 150
+Predicted authentic (correct): 109 / 150
+  saved wrong_called_counterfeit__mendeley_split_c_00146.png (p_counterfeit=0.809)
+  saved wrong_called_counterfeit__mendeley_split_c_00041.png (p_counterfeit=0.844)
+  saved wrong_called_counterfeit__mendeley_split_c_00003.png (p_counterfeit=0.859)
+  saved wrong_called_counterfeit__mendeley_split_c_00079.png (p_counterfeit=0.559)
+  saved wrong_called_counterfeit__mendeley_split_c_00071.png (p_counterfeit=0.548)
+  saved wrong_called_counterfeit__mendeley_split_c_00066.png (p_counterfeit=0.745)
+  saved wrong_called_counterfeit__mendeley_split_c_00042.png (p_counterfeit=0.793)
+  saved wrong_called_counterfeit__mendeley_split_c_00040.png (p_counterfeit=0.688)
+  saved wrong_called_counterfeit__mendeley_split_c_00033.png (p_counterfeit=0.801)
+  saved wrong_called_counterfeit__mendeley_split_c_00106.png (p_counterfeit=0.635)
+  saved correct_called_authentic__mendeley_split_c_00007.png (p_counterfeit=0.086)
+  saved correct_called_authentic__mendeley_split_c_00005.png (p_counterfeit=0.356)
+  saved correct_called_authentic__mendeley_split_c_00015.png (p_counterfeit=0.111)
+  saved correct_called_authentic__mendeley_split_c_00032.png (p_counterfeit=0.250)
+  saved correct_called_authentic__mendeley_split_c_00035.png (p_counterfeit=0.100)
+  saved correct_called_authentic__mendeley_split_c_00084.png (p_counterfeit=0.402)
+  saved correct_called_authentic__mendeley_split_c_00104.png (p_counterfeit=0.332)
+  saved correct_called_authentic__mendeley_split_c_00094.png (p_counterfeit=0.357)
+  saved correct_called_authentic__mendeley_split_c_00030.png (p_counterfeit=0.253)
+  saved correct_called_authentic__mendeley_split_c_00123.png (p_counterfeit=0.112)
+
+Wrote C:\Users\sophi\Documents\Projects\pharmavision\modeling\results\gradcam_split_c_model3\manifest.csv (20 images)

@@ -1,0 +1,55 @@
+# ---------------------------------------------------------------- image data
+# The manuscript states that this study redistributes no image from the Kaggle
+# source, which carries no licence grant -- only derived per-image statistics,
+# split assignments and filenames. That statement is enforced here rather than
+# merely asserted, so everything below is excluded: the archives themselves,
+# and every artefact that reproduces image content rather than describing it.
+#
+# All of it is regenerable by the committed scripts from your own copy of the
+# archives; see README.md and Appendix C of the manuscript.
+data/raw/
+data/raw_zips/
+data/processed/
+data/metadata/modality_review_sheets/
+data/metadata/synthetic_counterfeit_preview/
+data/metadata/split_c/
+data/metadata/split_d/
+
+# Grad-CAM overlays are rendered on top of the source photographs, so they
+# carry image content. Regenerate with modeling/gradcam*.py.
+modeling/results/gradcam/
+modeling/results/gradcam_split_c/
+modeling/results/gradcam_split_c_model3/
+paper/figures/fig14_gradcam.*
+paper/latex/figures/fig14_gradcam.*
+
+# ------------------------------------------------------- built manuscript
+# Regenerate with paper/scripts/build_docx.py, build_tex.py, build_poster.py.
+# Excluded because they embed the figures above and because binary rebuilds
+# make for unreadable diffs.
+paper/PharmaChecked_v2_manuscript.docx
+paper/PharmaChecked_v2_poster.pptx
+paper/PharmaChecked_v2_poster.pdf
+paper/_pre_ieee_backup_*/
+~$*
+
+# ------------------------------------------------------------------ python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# ------------------------------------------------------------------ system
+Thumbs.db
+.DS_Store
+
+# ------------------------------------------------- superseded v1 artefacts
+# The earlier manuscript was never published and is not mentioned in this
+# study. Neither it nor the internal rewrite plan belongs in a public repo.
+PharmaChecked_pdf_ver2*.pdf
+PharmaChecked v2 Rewrite Plan.docx
+
+# Superseded working drafts; the prose of record is paper/paper.md section II.
+paper/related_work.md
+paper/section_related_work.md

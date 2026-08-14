@@ -1,0 +1,6 @@
+condition,operators,split_b_test_acc,split_c_acc
+production 3-way (R->B->C),RBC,0.9189,0.82
+white balance only (W),W,0.9054,0.0667
+production 3-way + WB (R->B->W->C),RBWC,0.9324,0.78
+two-way (R->B),RB,0.9189,0.5
+two-way + WB (R->B->W),RBW,0.9595,0.3467

@@ -1,0 +1,6 @@
+model,model_full,predictions,errors,error_rate
+M1,Colour histogram + LogReg,150,24,0.16
+M2,Small CNN (GAP head),150,20,0.13333333333333333
+M3,MobileNetV3-Small (frozen),150,10,0.06666666666666667
+M4,EfficientNet-B0 (frozen),150,7,0.04666666666666667
+ALL,pooled across 4 models x 2 splits,600,61,0.10166666666666667

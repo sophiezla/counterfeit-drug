@@ -1,0 +1,81 @@
+=== Split C (external, authentic-only) evaluation ===
+
+--- Model 1 (classical) ---
+Split C authentic acc: 0.000 (n=150); Split B test authentic acc: 0.692 (n=39)
+
+--- Model 2 (small CNN) ---
+  epoch  0  train_loss=0.6157 train_acc=0.675  val_loss=0.5878 val_acc=0.734
+  epoch  1  train_loss=0.5720 train_acc=0.717  val_loss=0.5052 val_acc=0.734
+  epoch  2  train_loss=0.5100 train_acc=0.793  val_loss=0.4507 val_acc=0.747
+  epoch  3  train_loss=0.4804 train_acc=0.768  val_loss=0.4031 val_acc=0.823
+  epoch  4  train_loss=0.4763 train_acc=0.798  val_loss=0.3797 val_acc=0.835
+  epoch  5  train_loss=0.4854 train_acc=0.762  val_loss=0.3832 val_acc=0.823
+  epoch  6  train_loss=0.4507 train_acc=0.768  val_loss=0.4243 val_acc=0.747
+  epoch  7  train_loss=0.4528 train_acc=0.787  val_loss=0.3608 val_acc=0.797
+  epoch  8  train_loss=0.4407 train_acc=0.779  val_loss=0.3596 val_acc=0.810
+  epoch  9  train_loss=0.4682 train_acc=0.773  val_loss=0.3394 val_acc=0.848
+  epoch 10  train_loss=0.4428 train_acc=0.815  val_loss=0.3407 val_acc=0.823
+  epoch 11  train_loss=0.4908 train_acc=0.784  val_loss=0.3494 val_acc=0.810
+  epoch 12  train_loss=0.4899 train_acc=0.768  val_loss=0.3218 val_acc=0.861
+  epoch 13  train_loss=0.4393 train_acc=0.801  val_loss=0.3199 val_acc=0.861
+  epoch 14  train_loss=0.4010 train_acc=0.810  val_loss=0.3181 val_acc=0.873
+  epoch 15  train_loss=0.4009 train_acc=0.821  val_loss=0.3091 val_acc=0.873
+  epoch 16  train_loss=0.4219 train_acc=0.801  val_loss=0.2839 val_acc=0.861
+  epoch 17  train_loss=0.4118 train_acc=0.804  val_loss=0.2861 val_acc=0.861
+  epoch 18  train_loss=0.3892 train_acc=0.798  val_loss=0.3692 val_acc=0.873
+  epoch 19  train_loss=0.4117 train_acc=0.812  val_loss=0.4070 val_acc=0.797
+  epoch 20  train_loss=0.3906 train_acc=0.812  val_loss=0.2830 val_acc=0.886
+  early stopping at epoch 20 (patience=4)
+Split C authentic acc: 0.000 (n=150); Split B test authentic acc: 0.872 (n=39)
+
+--- Model 3 (MobileNetV3-Small) ---
+  epoch  0  train_loss=0.4661 train_acc=0.836  val_loss=0.3072 val_acc=0.924
+  epoch  1  train_loss=0.2242 train_acc=0.957  val_loss=0.2262 val_acc=0.937
+  epoch  2  train_loss=0.1630 train_acc=0.967  val_loss=0.1824 val_acc=0.949
+  epoch  3  train_loss=0.1301 train_acc=0.975  val_loss=0.1673 val_acc=0.949
+  epoch  4  train_loss=0.1062 train_acc=0.974  val_loss=0.1478 val_acc=0.937
+  epoch  5  train_loss=0.0906 train_acc=0.978  val_loss=0.1443 val_acc=0.949
+  epoch  6  train_loss=0.0807 train_acc=0.986  val_loss=0.1387 val_acc=0.937
+  epoch  7  train_loss=0.0702 train_acc=0.990  val_loss=0.1395 val_acc=0.937
+  epoch  8  train_loss=0.0668 train_acc=0.986  val_loss=0.1223 val_acc=0.949
+  epoch  9  train_loss=0.0629 train_acc=0.991  val_loss=0.1183 val_acc=0.949
+  epoch 10  train_loss=0.0550 train_acc=0.991  val_loss=0.1188 val_acc=0.949
+  epoch 11  train_loss=0.0537 train_acc=0.988  val_loss=0.1147 val_acc=0.949
+  epoch 12  train_loss=0.0487 train_acc=0.994  val_loss=0.1175 val_acc=0.949
+  epoch 13  train_loss=0.0461 train_acc=0.992  val_loss=0.1128 val_acc=0.949
+  epoch 14  train_loss=0.0439 train_acc=0.992  val_loss=0.1072 val_acc=0.949
+  epoch 15  train_loss=0.0374 train_acc=0.996  val_loss=0.1095 val_acc=0.949
+  epoch 16  train_loss=0.0413 train_acc=0.993  val_loss=0.1086 val_acc=0.949
+  epoch 17  train_loss=0.0406 train_acc=0.990  val_loss=0.1062 val_acc=0.949
+  epoch 18  train_loss=0.0390 train_acc=0.990  val_loss=0.1079 val_acc=0.937
+  early stopping at epoch 18 (patience=4)
+Split C authentic acc: 0.693 (n=150); Split B test authentic acc: 0.974 (n=39)
+
+--- Model 4 (EfficientNet-B0) ---
+  epoch  0  train_loss=0.3821 train_acc=0.871  val_loss=0.2706 val_acc=0.886
+  epoch  1  train_loss=0.1492 train_acc=0.977  val_loss=0.1861 val_acc=0.924
+  epoch  2  train_loss=0.1019 train_acc=0.986  val_loss=0.1500 val_acc=0.937
+  epoch  3  train_loss=0.0749 train_acc=0.993  val_loss=0.1290 val_acc=0.962
+  epoch  4  train_loss=0.0619 train_acc=0.993  val_loss=0.1142 val_acc=0.962
+  epoch  5  train_loss=0.0520 train_acc=0.997  val_loss=0.1016 val_acc=0.962
+  epoch  6  train_loss=0.0422 train_acc=0.998  val_loss=0.0986 val_acc=0.962
+  epoch  7  train_loss=0.0393 train_acc=0.996  val_loss=0.0894 val_acc=0.962
+  epoch  8  train_loss=0.0347 train_acc=0.995  val_loss=0.0868 val_acc=0.962
+  epoch  9  train_loss=0.0327 train_acc=0.998  val_loss=0.0825 val_acc=0.962
+  epoch 10  train_loss=0.0253 train_acc=0.999  val_loss=0.0789 val_acc=0.962
+  epoch 11  train_loss=0.0262 train_acc=0.997  val_loss=0.0775 val_acc=0.962
+  epoch 12  train_loss=0.0246 train_acc=0.998  val_loss=0.0754 val_acc=0.962
+  epoch 13  train_loss=0.0203 train_acc=1.000  val_loss=0.0712 val_acc=0.962
+  epoch 14  train_loss=0.0200 train_acc=0.999  val_loss=0.0680 val_acc=0.962
+  epoch 15  train_loss=0.0182 train_acc=0.999  val_loss=0.0690 val_acc=0.962
+  epoch 16  train_loss=0.0167 train_acc=1.000  val_loss=0.0675 val_acc=0.962
+  epoch 17  train_loss=0.0151 train_acc=0.999  val_loss=0.0655 val_acc=0.962
+  epoch 18  train_loss=0.0144 train_acc=1.000  val_loss=0.0600 val_acc=0.962
+  epoch 19  train_loss=0.0145 train_acc=0.999  val_loss=0.0599 val_acc=0.962
+  epoch 20  train_loss=0.0133 train_acc=1.000  val_loss=0.0593 val_acc=0.962
+  epoch 21  train_loss=0.0121 train_acc=0.999  val_loss=0.0609 val_acc=0.962
+  epoch 22  train_loss=0.0107 train_acc=1.000  val_loss=0.0613 val_acc=0.962
+  early stopping at epoch 22 (patience=4)
+Split C authentic acc: 0.033 (n=150); Split B test authentic acc: 0.923 (n=39)
+
+Done. Results in C:\Users\sophi\Documents\Projects\pharmavision\modeling\results\split_c_eval.csv

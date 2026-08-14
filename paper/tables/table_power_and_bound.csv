@@ -1,0 +1,12 @@
+quantity,value,detail
+"min detectable p, M1 vs M2",0.0005,"discordant D=12; most lopsided split (0, 12); could reach p<0.05 at any split"
+"min detectable p, M1 vs M3",0.0001,"discordant D=15; most lopsided split (0, 15); could reach p<0.05 at any split"
+"min detectable p, M1 vs M4",0.0,"discordant D=16; most lopsided split (0, 16); could reach p<0.05 at any split"
+"min detectable p, M2 vs M3",0.001,"discordant D=11; most lopsided split (0, 11); could reach p<0.05 at any split"
+"min detectable p, M2 vs M4",0.0005,"discordant D=12; most lopsided split (0, 12); could reach p<0.05 at any split"
+"min detectable p, M3 vs M4",0.25,"discordant D=3; most lopsided split (0, 3); could NOT reach p<0.05 at any split"
+"min detectable accuracy gap at D=10, n=74",0.1351,net 10 of 74 test images
+"min detectable accuracy gap at D=14, n=74",0.1892,net 14 of 74 test images
+"min detectable accuracy gap at D=20, n=74",0.2703,net 20 of 74 test images
+leaked test images under Split A,7/76,test images sharing a product-identity group with the training partition
+hard ceiling on leakage inflation,0.0921,7/76; model-independent upper bound derived from the split alone

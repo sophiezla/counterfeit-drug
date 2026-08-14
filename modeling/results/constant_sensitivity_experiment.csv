@@ -1,0 +1,10 @@
+condition,short_side,brightness_target,jpeg_quality,split_b_test_acc,split_c_acc
+"production (128, 0.5, 40)",128,0.5,40,0.9189,0.82
+resolution 96,96,0.5,40,0.9054,0.8733
+resolution 192,192,0.5,40,0.9324,0.62
+resolution 256,256,0.5,40,0.9054,0.48
+brightness target 0.4,128,0.4,40,0.9324,0.7267
+brightness target 0.6,128,0.6,40,0.9324,0.7733
+JPEG quality 25,128,0.5,25,0.9459,0.8067
+JPEG quality 60,128,0.5,60,0.9324,0.7467
+JPEG quality 85,128,0.5,85,0.9324,0.66
