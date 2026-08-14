@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "If you use this software or its derived artifacts, please cite it as below."
+title: >-
+  Asymmetric Class Sourcing Creates Provenance Confounds in
+  Authenticity-Classification Image Datasets: code and analysis pipeline
+abstract: >-
+  Code, data pipeline and manuscript sources for a study of class-conditional
+  provenance confounding: when the two classes of an authenticity-classification
+  image dataset are sourced by different procedures, the label predicts the
+  acquisition process rather than the property being labeled, and no
+  in-distribution evaluation can detect it. Contains the data pipeline, four
+  model families, external evaluation on two independently captured
+  distributions, a label-free normalization operator with per-axis, per-constant
+  and per-order ablations, calibration and attention audits, and a provenance
+  audit run across four application areas. Contains no images.
+type: software
+authors:
+  - family-names: Zhu
+    given-names: Sophie
+    affiliation: "Mira Costa High School, Manhattan Beach, CA, USA"
+    email: sophiezhu2028@gmail.com
+repository-code: "https://github.com/sophiezla/counterfeit-drug"
+license: MIT
+version: "1.0.0"
+date-released: "2026-08-14"
+keywords:
+  - dataset bias
+  - shortcut learning
+  - provenance confounding
+  - hidden stratification
+  - data leakage
+  - external validation
+  - domain generalization
+  - image classification
+  - reproducibility
+  - dataset auditing
