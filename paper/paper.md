@@ -32,7 +32,7 @@ Three properties make it damaging. It is **maximally learnable**: low-level glob
 
 The status of the general claim should be stated exactly. We demonstrate a mechanism and a case, not a rate. Establishing that provenance confounding is the *default* rather than a recurring hazard would require auditing a representative sample of such datasets and reporting how many fail; neither this paper nor, as far as we can determine, any other has done that. Section VI-C takes a step by auditing seven datasets across four application areas, finding both a totally confounded case and a clean one — enough to show the audit discriminates, far short of a prevalence estimate. The claim is a hypothesis with converging support and a stated test; Section VIII-G says what would falsify it.
 
-Part of that support comes from an unrelated field. In generated-image detection, real images are harvested from web corpora as lossy JPEGs at modest resolution while generated images are saved as lossless PNGs at native size; Grommelt *et al.* [30] show that on the standard GenImage benchmark this makes format, compression and size predictive of the label, that detectors partly become JPEG detectors, and that equalizing those factors shifts cross-generator performance by more than 11 points. That work and this share no data, no application area and no method of discovery, and arrive at the same confound — which is what a structural cause predicts and a coincidence does not.
+Part of that support comes from an unrelated field. In generated-image detection, real images are harvested from web corpora as lossy Joint Photographic Experts Group (JPEG) files at modest resolution while generated images are saved as lossless PNGs at native size; Grommelt *et al.* [30] show that on the standard GenImage benchmark this makes format, compression and size predictive of the label, that detectors partly become JPEG detectors, and that equalizing those factors shifts cross-generator performance by more than 11 points. That work and this share no data, no application area and no method of discovery, and arrive at the same confound — which is what a structural cause predicts and a coincidence does not.
 
 ### B. This paper
 
@@ -60,7 +60,7 @@ We deliberately propose no new architecture. The most useful thing to be said ab
 
 ### A. Image-based pharmaceutical authentication and identification
 
-Image classification has been applied to pharmaceutical products both for *identification* (which drug is this?) and for *authentication* (is this drug genuine?). Ramos, Samonte and Manlises [3] proposed a CNN-based authentication system directly comparable in task framing to this work. Adjacent work concentrates on identification: Ting et al. [4] address look-alike/sound-alike medication errors across 250 blister-packaged drug types, and Al-Hussaeni et al. [5] apply CNNs to pill-image retrieval. This literature establishes that packaging and pill imagery carries usable discriminative signal. As far as this review found, none of it examines *why* reported accuracies are as high as they are, or audits its datasets for confounds between acquisition and label. The present work is orthogonal to it: rather than proposing an architecture, it audits the acquisition process, the evaluation protocol and the datasets such results rest on.
+Image classification has been applied to pharmaceutical products both for *identification* (which drug is this?) and for *authentication* (is this drug genuine?). Ramos, Samonte and Manlises [3] proposed a convolutional neural network (CNN) based authentication system directly comparable in task framing to this work. Adjacent work concentrates on identification: Ting et al. [4] address look-alike/sound-alike medication errors across 250 blister-packaged drug types, and Al-Hussaeni et al. [5] apply CNNs to pill-image retrieval. This literature establishes that packaging and pill imagery carries usable discriminative signal. As far as this review found, none of it examines *why* reported accuracies are as high as they are, or audits its datasets for confounds between acquisition and label. The present work is orthogonal to it: rather than proposing an architecture, it audits the acquisition process, the evaluation protocol and the datasets such results rest on.
 
 ### B. Shortcut learning and hidden stratification
 
@@ -82,7 +82,7 @@ Hendrycks and Dietterich [12] introduced ImageNet-C, applying standardized corru
 
 ### E. Architectures and interpretability methods
 
-The four model families span a classical color-histogram baseline through MobileNetV3 [13] and EfficientNet-B0 [14], both used as frozen ImageNet-pretrained feature extractors with a linear head. Attention is inspected with Grad-CAM [15]; attribution for the linear baseline uses Shapley values [16], which have a closed form for a linear model with an independent-feature background and need no sampling. Domain-generalization surveys [23] situate the normalization of Section V-D in a broader toolkit; it is closer to hand-designed covariate-shift alignment than to the representation-learning methods that literature mostly covers.
+The four model families span a classical color-histogram baseline through MobileNetV3 [13] and EfficientNet-B0 [14], both used as frozen ImageNet-pretrained feature extractors with a linear head. Attention is inspected with gradient-weighted class activation mapping (Grad-CAM) [15]; attribution for the linear baseline uses Shapley values [16], which have a closed form for a linear model with an independent-feature background and need no sampling. Domain-generalization surveys [23] situate the normalization of Section V-D in a broader toolkit; it is closer to hand-designed covariate-shift alignment than to the representation-learning methods that literature mostly covers.
 
 ### F. What datasets this sub-field actually uses
 
@@ -94,7 +94,7 @@ Because this paper's contribution is a dataset audit, the datasets neighbouring 
 |---|---|---|---|---|
 | Ramos *et al.* [3] | Self-captured, Raspberry Pi camera; one brand (Biogesic paracetamol) | Physical authentic and counterfeit samples, same rig | 88.75% | none reported |
 | Motwani *et al.* [26] | Web-scraped packaging images, 10 manufacturers | Counterfeit class **created by the authors** by altering logo and text on authentic images | not reported per-class | none reported |
-| Thomson and Varuna [27] | A Kaggle *pill and vitamin* dataset for training; DrugBank and drugs.com images for testing | Counterfeit class **generated by GAN/cGAN synthesis** | not comparably reported | none reported |
+| Thomson and Varuna [27] | A Kaggle *pill and vitamin* dataset for training; DrugBank and drugs.com images for testing | Counterfeit class **generated by generative adversarial network (GAN) synthesis** | not comparably reported | none reported |
 | Thomson and Varuna [28] | drugs.com product images | not specified | 92% | none reported |
 | Roboflow *Counterfeit med detection* [21] | Regulator advisory bulletins plus product photographs | Class correlates with document type, not authenticity (Section III-B) | — | — |
 
@@ -197,13 +197,13 @@ The three-stage normalization that Sections V-D and VIII evaluate is applied *in
 
 ### A. Task and label convention
 
-The task is binary image classification. Throughout, authentic = 0 and **counterfeit is the positive class**, so precision, recall, F1, ROC-AUC and PR-AUC are all reported with respect to counterfeit detection. This matches the deployment framing (the cost of interest is a missed counterfeit) and is fixed project-wide in code to prevent accidental polarity inversion between scripts.
+The task is binary image classification. Throughout, authentic = 0 and **counterfeit is the positive class**, so precision, recall, F1 score, area under the receiver operating characteristic curve (ROC-AUC) and area under the precision–recall curve (PR-AUC) are all reported with respect to counterfeit detection. This matches the deployment framing, in which the costly error is calling a falsified product genuine.
 
 ### B. Models
 
-Four model families are evaluated (Fig. S2). The roster is deliberately spread across capacity scales so that "does capacity explain the reported accuracy?" is answerable.
+Four model families are evaluated (Fig. S2), deliberately spread across capacity scales so that "does capacity explain the reported accuracy?" is answerable.
 
-**M1 — Color histogram + logistic regression (97 learned parameters).** Each image is resized to 224×224 and a 32-bin-per-channel RGB intensity histogram computed, giving a 96-dimensional feature vector:
+**M1 — Color histogram + logistic regression (97 learned parameters).** Each image is resized to 224×224 and a 32-bin-per-channel red-green-blue (RGB) intensity histogram computed, giving a 96-dimensional feature vector:
 
 $$\phi(x) = \big[\,\mathbf{h}_R(x) \,\|\, \mathbf{h}_G(x) \,\|\, \mathbf{h}_B(x)\,\big] \in \mathbb{R}^{96}, \qquad \mathbf{h}_{c,b}(x) = \frac{1}{HW}\sum_{i,j} \mathbb{1}\!\left[ x_{ij}^{(c)} \in B_b \right] \tag{2}$$
 
@@ -211,31 +211,31 @@ with the 32 bins $B_b$ uniformly partitioning [0, 256). A logistic regression is
 
 $$P(y = 1 \mid x) = \sigma\big(\mathbf{w}^\top \phi(x) + b\big), \qquad \sigma(z) = \frac{1}{1 + e^{-z}} \tag{3}$$
 
-with `class_weight="balanced"` and L2 regularization at scikit-learn's default strength. This model exists to answer one question: how much of the reported accuracy on this benchmark is available to a classifier that cannot see spatial structure at all? It is intentionally excluded from the augmentation policy (Section V-C) and from the normalization pipeline (Section V-D) for reasons given in each.
+with `class_weight="balanced"` and L2 regularization at scikit-learn's default strength. This model answers one question: how much of the reported accuracy is available to a classifier that cannot see spatial structure at all?
 
-**M2 — Small CNN with a global-average-pooling head (23,938 trainable parameters).** Three convolutional blocks with a conventional channel progression (16 → 32 → 64; each block Conv3×3 → BatchNorm → ReLU → MaxPool2×2), with a global-average-pooling head rather than the `flatten → dense` head that small-dataset CNN work commonly uses:
+**M2 — Small CNN with a global-average-pooling (GAP) head (23,938 trainable parameters).** Three convolutional blocks with a conventional channel progression (16 → 32 → 64; each block Conv3×3 → BatchNorm → ReLU → MaxPool2×2), with a GAP head rather than the flatten-then-dense head small-dataset CNN work commonly uses:
 
 $$g_k = \frac{1}{H'W'}\sum_{i=1}^{H'}\sum_{j=1}^{W'} a_{ijk}, \qquad \hat{y} = \mathrm{softmax}\big(W_{\!f}\,\mathrm{drop}_{0.5}(\mathbf{g}) + \mathbf{b}_{\!f}\big) \tag{4}$$
 
-The head choice is the point of this model. On a 224 × 224 input this trunk emits a 28 × 28 × 64 feature map, so flattening it into a 128-unit dense layer costs roughly 6.4 M parameters — some 99.7% of such a network's total — on 357 training images. Global average pooling replaces that with 130 parameters and brings the whole network to 23,938, while preserving the trunk exactly. M2 therefore measures what a from-scratch convolutional model achieves on this pool when its capacity is not dominated by a classifier head that the data cannot support.
+The head is the point of this model. On a 224 × 224 input the trunk emits a 28 × 28 × 64 feature map, so flattening it into a 128-unit dense layer would cost roughly 6.4 M parameters — about 99.7% of such a network — on 357 training images. GAP replaces that with 130 parameters while preserving the trunk exactly, so M2 measures what a from-scratch CNN achieves when its capacity is not dominated by a head the data cannot support.
 
 **M3 — MobileNetV3-Small, frozen (1,154 trainable / 927,008 frozen).** The ImageNet-pretrained feature extractor [13] is frozen; a `Dropout(0.3) → Linear(576, 2)` head is trained on its globally pooled 576-dimensional output.
 
-**M4 — EfficientNet-B0, frozen (2,562 trainable / 4,007,548 frozen).** As M3, with the EfficientNet-B0 feature extractor [14] and a `Dropout(0.3) → Linear(1280, 2)` head.
+**M4 — EfficientNet-B0, frozen (2,562 trainable / 4,007,548 frozen).** As M3, with the EfficientNet-B0 extractor [14] and a `Dropout(0.3) → Linear(1280, 2)` head.
 
-Freezing both backbones keeps the comparison balanced (both transfer models train exactly one linear layer) and the compute budget bounded on CPU-only hardware. Fine-tuning either backbone is a documented, deliberate omission rather than an oversight; Section IX returns to it.
+Freezing both backbones keeps the comparison balanced — both transfer models train exactly one linear layer — and the compute budget bounded on central-processing-unit (CPU) only hardware. Fine-tuning is a documented, deliberate omission rather than an oversight; Section X returns to it.
 
 ### C. Augmentation
 
-Training-partition augmentation for M2–M4 is: rotation ±12°, brightness and contrast jitter (±0.25), mild `RandomResizedCrop` (scale 0.85–1.0), and slight Gaussian blur (kernel 3, σ ∈ [0.1, 0.8]). **No horizontal or vertical flip** is used, because mirroring printed packaging text produces images that cannot occur in deployment.
+Training-partition augmentation for M2–M4 is: rotation ±12°, brightness and contrast jitter (±0.25), mild `RandomResizedCrop` (scale 0.85–1.0), and slight Gaussian blur (kernel 3, σ ∈ [0.1, 0.8]). **No horizontal or vertical flip** is used, because mirroring produces printed packaging text that cannot occur in deployment.
 
-M1 is excluded from augmentation, and this is a considered choice rather than an inconsistency. Rotation and cropping are near-invariances of a color histogram and would contribute nothing; brightness and contrast jitter would directly perturb the only feature this model observes, acting as label noise rather than as the spatial-filter regulariser it is for a CNN. Applying identical augmentation "for fairness" would mechanically handicap this baseline through a mechanism with no counterpart benefit. We note the asymmetry rather than hide it. Section S-I-N shows that this decision does not soften the paper's conclusion about M1 — if anything the opposite.
+M1 is excluded from augmentation by design: rotation and cropping are near-invariances of a color histogram and would contribute nothing, while brightness and contrast jitter would perturb the only feature this model observes, acting as label noise rather than as the spatial-filter regularizer they are for a CNN. We note the asymmetry rather than hide it; Section VII-A shows it does not soften the paper's conclusion about M1.
 
 ### D. Capture-method normalization
 
 Three label-free operators are composed in a fixed order. Let $x$ be a decoded RGB image with dimensions $W \times H$.
 
-**Resolution bottleneck.** Cap the short side at $s = 128$ px, chosen to sit below the 10th percentile of the Kaggle pool's own short-side distribution so that the bottleneck binds for nearly every image in both sources rather than only for the high-resolution external set:
+**Resolution bottleneck.** Cap the short side at $s = 128$ px, chosen to sit below the 10th percentile of the Kaggle pool's own short-side distribution so the bottleneck binds for nearly every image in both sources rather than only for the high-resolution external set:
 
 $$T_{\mathrm{res}}(x) = \begin{cases} x & \text{if } \min(W, H) \le s \\ \mathrm{resize}\big(x,\; \lambda W,\; \lambda H\big), \;\; \lambda = \dfrac{s}{\min(W,H)} & \text{otherwise} \end{cases} \tag{5}$$
 
@@ -243,7 +243,7 @@ $$T_{\mathrm{res}}(x) = \begin{cases} x & \text{if } \min(W, H) \le s \\ \mathrm
 
 $$T_{\mathrm{bright}}(x) = \mathrm{clip}\!\left( x \cdot \frac{\mu^\star}{\bar{x}},\; 0,\; 1 \right), \qquad \bar{x} = \frac{1}{3HW}\sum_{c,i,j} x^{(c)}_{ij} \tag{6}$$
 
-**Compression bottleneck.** Re-encode through JPEG at a fixed quality $q = 40$ and decode back, imposing a common quantization-artifact floor:
+**Compression bottleneck.** Re-encode through JPEG compression at fixed quality $q = 40$ and decode back, imposing a common quantization-artifact floor:
 
 $$T_{\mathrm{comp}}(x) = \mathrm{decode}_{\mathrm{JPEG}}\big(\mathrm{encode}_{\mathrm{JPEG}}(x,\, q)\big) \tag{7}$$
 
@@ -251,11 +251,9 @@ The composed operator is
 
 $$T(x) = T_{\mathrm{comp}} \circ T_{\mathrm{bright}} \circ T_{\mathrm{res}}\,(x) \tag{8}$$
 
-and is applied identically to every partition. Three properties matter for the interpretation of Section VII. First, $T$ is label-free — nothing in (5)–(7) references $y$ — so applying it to the external set is not an oracle. Second, $T$ is deployable: it is a fixed preprocessing function, not a train-time-only trick. Third, $T$ is *destructive* by design; it removes information, including information a model might legitimately use, which is why its effect must be measured per architecture rather than assumed (Section S-I-M).
+and is applied identically to every partition. Three properties matter. $T$ is **label-free** — nothing in (5)–(7) references $y$ — so applying it to the external set is not an oracle. It is **deployable**: a fixed preprocessing function, not a train-time-only trick. And it is **destructive** by design, removing information a model might legitimately use, which is why its effect must be measured per architecture rather than assumed (Section VII-A). The composition order in (8) is itself a free choice, and because two of the three operators destroy information they do not commute; Section VII-B measures all six orderings.
 
-The composition order in (8) is itself a choice, and because two of the three operators destroy information they do not commute: the same three operators reordered move external accuracy by 50 points while moving in-distribution accuracy by under 3. Section VII-A measures all six orderings and derives the rule that governs them, which is that the compression bottleneck must be applied after the resolution cap rather than before it. The order in (8) satisfies that rule and was fixed before the sweep existed.
-
-M1 reads images directly and never passes through this operator. That exclusion is empirical: normalization collapses M1's in-distribution accuracy toward chance while recovering nothing externally (Section S-I-N), so including it would only obscure the baseline's diagnostic role.
+M1 reads images directly and never passes through this operator, an exclusion that is empirical: normalization collapses M1's in-distribution accuracy toward chance while recovering nothing externally (Section VII-A).
 
 ### E. Interpretability and attribution
 
@@ -265,11 +263,11 @@ $$\alpha^c_k = \frac{1}{HW}\sum_{i,j} \frac{\partial y^c}{\partial A^k_{ij}}, \q
 
 following [15]. Maps are computed on M4 for the in-distribution audit and directly on the external images for both M3 and M4.
 
-**Exact Shapley values for M1.** For a linear model with an independent-feature background distribution, the Shapley value of feature $i$ for instance $x$ has the closed form [16]
+**Exact Shapley values for M1.** For a linear model with an independent-feature background, the Shapley value of feature $i$ for instance $x$ has the closed form [16]
 
 $$\varphi_i(x) = w_i\big(\phi_i(x) - \mathbb{E}[\phi_i]\big) \tag{10}$$
 
-so no sampling approximation is required. We take $\mathbb{E}[\phi_i]$ over the Split B training partition and report $\overline{|\varphi_i|}$ over the Split B test partition as global importance. This is an exact decomposition of M1's decision function, not an estimate.
+so no sampling approximation is needed. We take $\mathbb{E}[\phi_i]$ over the Split B training partition and report $\overline{|\varphi_i|}$ over its test partition as global importance — an exact decomposition of M1's decision function, not an estimate of it.
 
 ## VI. Results
 
@@ -279,7 +277,7 @@ All results in this section come from the deterministic, three-way-normalized pr
 
 Every one of the 510 pool filenames falls into exactly one of two patterns, and **the pattern predicts the class label with no exceptions** (Table 4): 272/272 authentic files are `images*.jpg`, 238/238 counterfeit files are `Screenshot*.png`. We recomputed this cross-tabulation independently for this paper from per-image statistics; it is exact, not approximate.
 
-The separation is not an artifact of our filtering. It holds identically in the archive as distributed: all 240 files in `Fake/` are `Screenshot*.png` and all 421 files in `Real/` are `images*.jpg`. Any study using this dataset in any form, filtered or unfiltered, inherits it in full. The consequence is worth stating in its strongest form: a classifier reading nothing but the file extension achieves **100% accuracy** on this dataset, which places the ceiling attributable to acquisition metadata alone at the maximum possible value and makes any pixel-based accuracy figure on this pool uninterpretable without an external check.
+The separation is not an artifact of our filtering: it holds identically in the archive as distributed, where all 240 files in `Fake/` are `Screenshot*.png` and all 421 in `Real/` are `images*.jpg`. Any study using this dataset, filtered or not, inherits it in full — and a classifier reading nothing but the file extension achieves **100% accuracy** on it.
 
 **TABLE 4.**The two acquisition pipelines in the Kaggle pool, and the external set's position relative to both. Brightness is the mean RGB value at 64 × 64, on a 0–1 scale.
 
@@ -292,17 +290,17 @@ The separation is not an artifact of our filtering. It holds identically in the 
 
 Throughout this paper kB = 1000 bytes.
 
-A two-sample *t*-test on brightness between the two Kaggle classes gives *t* = 17.0, *p* ≈ 0 — not a subtle effect, but one of the strongest and most trivially learnable signals present anywhere in the training data. Fig. 1 shows the full distributions and makes the second, equally important point: the external set does not sit *between* the two training classes on these axes, it sits far outside both. It is roughly 10× higher in linear resolution than the average Kaggle image and substantially *darker* than even the Kaggle counterfeit class. A model that has learned "bright, small, heavily compressed → authentic", even partially, has every statistical reason to label every external photograph counterfeit.
+A two-sample *t*-test on brightness between the two classes gives *t* = 17.0, *p* ≈ 0 — one of the strongest and most trivially learnable signals anywhere in the training data. Fig. 1 makes the second, equally important point: the external set does not sit *between* the two training classes on these axes but far outside both, roughly 10× higher in linear resolution and darker than even the counterfeit class. A model that has learned "bright, small, heavily compressed → authentic", even partially, has every statistical reason to call every external photograph counterfeit.
 
 > **FIGURE 1.** `paper/figures/fig03_capture_confound.pdf` — Distributions of the three confounded statistics. (a) Brightness: violin plots with group means labeled. (b) Short-side resolution, log scale, with medians. (c) File size, log scale, with means. The external set lies outside the range of both training classes on all three axes.
 
-The confound is directly visible in the decision function of the simplest model. Fig. 2(a) plots M1's 96 logistic-regression coefficients: 93 of them lie within ±0.35 of zero, while the top intensity bin (248–255) of each of the three channels carries a large negative weight (β = −2.86, −2.84, −2.95), i.e. "many near-white pixels → authentic". The exact Shapley decomposition of Eq. (10) confirms this is not merely a large coefficient on a rarely varying feature: those same three features have mean |φ| of 0.079–0.082 on the Split B test partition, against ≤ 0.002 for every one of the remaining 93 (Fig. 2(b)). M1's 83.8% in-distribution accuracy is, to a good approximation, a measurement of how much white a photograph contains.
+The confound is visible in the decision function of the simplest model. Fig. 2(a) plots M1's 96 coefficients: 93 lie within ±0.35 of zero, while the top intensity bin (248–255) of each channel carries a large negative weight (β = −2.86, −2.84, −2.95) — "many near-white pixels → authentic". The exact Shapley decomposition of Eq. (10) confirms this is not a large coefficient on a rarely varying feature: those three have mean |φ| of 0.079–0.082 on the Split B test partition against ≤ 0.002 for the remaining 93 (Fig. 2(b)). M1's 83.8% accuracy is, to a good approximation, a measurement of how much white a photograph contains.
 
 > **FIGURE 2.** `paper/figures/fig12_model1_attribution.pdf` — (a) M1's logistic-regression coefficients across the 32 intensity bins of each RGB channel; the near-white bin dominates all three channels. (b) The eight features with the largest mean |Shapley value| on the Split B test partition. Attribution is exact for this model, not sampled.
 
 **A metadata-only oracle bounds the confound directly.** M1 is a useful diagnostic but an imperfect bound, because a 96-bin color histogram does read pixel intensities and could in principle carry some packaging information. We therefore fitted the same logistic regression to the three acquisition statistics of Table 4 and nothing else — mean brightness, log short-side resolution, log encoded file size — with no pixels, no spatial structure and no color information at all. Three scalars per image, 4 learned parameters, trained on each split's own training partition (Table 5).
 
-**TABLE 5.**Metadata-only oracle. Features are per-image acquisition statistics, not image content; resolution and file size enter as log₁₀. The deterministic rule uses only the filename extension and is not fitted. Intervals are 95% Wilson.
+**TABLE 5.**Metadata-only oracle; LR = logistic regression. Features are per-image acquisition statistics, not image content; resolution and file size enter as log₁₀. The deterministic rule uses only the filename extension and is not fitted. Intervals are 95% Wilson.
 
 | Classifier | Features | Split A test (n = 76) | Split B test (n = 74) |
 |---|---|---|---|
@@ -314,11 +312,11 @@ The confound is directly visible in the decision function of the simplest model.
 
 Three things follow, and they are stronger than anything the pixel-based models in this study establish.
 
-First, **a single scalar that is not an image classifies this dataset perfectly.** Encoded file size alone reaches 74/74 on the leakage-free Split B test partition. That is above every trained model in this paper, including M4's 0.946 on the same partition (Table S3), and it uses no pixel at all.
+First, **a single scalar that is not an image classifies this dataset perfectly.** Encoded file size alone reaches 74/74 on the leakage-free partition — above every trained model here, including M4 (Table S3), using no pixel at all.
 
 Second, **the accuracy ceiling attributable to acquisition alone is 1.000.** The deterministic file-extension rule is correct on all 510 pool images by construction. There is therefore no accuracy figure obtainable on this dataset that requires any packaging information to explain, and no in-distribution result on it — ours or anyone's — can be evidence of packaging-authentication ability. This is the sense in which the dataset is not merely confounded but uninformative for its stated task.
 
-Third, **brightness is the weakest of the three axes, not the strongest.** On its own it reaches only 0.716 on Split B, well below resolution (0.946) and file size (1.000), despite giving the largest *t*-statistic. Large mean separation and high discriminability are different properties: the brightness distributions have very different means but substantial overlap, whereas the file-size distributions barely overlap at all. This resolves what would otherwise look like a tension in Section S-I-L, where compression normalization is the axis with the largest marginal contribution when added last, and it is a caution against ranking candidate confounds by *t*-statistic — the audit should fit a classifier to each candidate statistic, which costs no more than computing the *t*-test does.
+Third, **brightness is the weakest of the three axes, not the strongest.** Alone it reaches 0.716 on Split B, below resolution (0.946) and file size (1.000), despite the largest *t*-statistic. Large mean separation and high discriminability are different properties: the brightness distributions have very different means but substantial overlap, whereas the file-size distributions barely overlap. This is a caution against ranking candidate confounds by *t*-statistic — fit a classifier to each candidate instead, which costs no more than the *t*-test.
 
 ### B. The same audit on a second, independently published dataset
 
@@ -417,7 +415,7 @@ Because content is held fixed and only acquisition varies, this is a **paired ca
 | M3 MobileNetV3 | 116/150 = 0.773 [0.700, 0.833] | 108/149 = 0.725 [0.648, 0.790] | −4.9 |
 | M4 EfficientNet-B0 | 121/150 = 0.807 [0.736, 0.862] | 124/149 = 0.832 [0.764, 0.884] | +2.6 |
 
-Two of the three findings here are uncomfortable for the rest of this paper, and we state them before the reassuring one.
+Two of the three findings are uncomfortable for the rest of this paper; we state them before the reassuring one.
 
 **The correction does not transfer uniformly across capture shifts, and the model it fails for is the one we had called the best generaliser.** M2 loses 39.7 points between the two external sets — from 0.860, the highest external accuracy in the study, to 0.463, barely above the rate obtained by calling everything counterfeit. Its two intervals do not come close to overlapping. Whatever M2 learned that let it succeed on Split C after correction did not survive a change of camera, even with the same products, the same normalization and the same authentic label.
 
@@ -425,7 +423,7 @@ Two of the three findings here are uncomfortable for the rest of this paper, and
 
 **The two pretrained backbones hold their accuracy across the shift.** M3 moves −4.9 points and M4 +2.6, both with comfortably overlapping intervals, so neither change is distinguishable from sampling noise at these sample sizes. Across both external distributions M4 is the most stable model (0.807 and 0.832) and M3 the next (0.773 and 0.725).
 
-We deliberately do not describe this as the backbones generalizing. Section S-I-H's attention audit finds that on external images both models take their evidence for "authentic" from the background rather than the product, without exception in 40 heatmaps — and Split C and Split D share the same dark backdrop, differing in device and lighting but not in staging. A model applying a backdrop rule would hold its accuracy across exactly this shift. **Split D tests the capture-pipeline confound and leaves the backdrop cue untouched**, so the right reading of these two rows is that the backbones' accuracy survives a change of camera, not that it rests on packaging content.
+We do not describe this as the backbones generalizing. The attention audit of Section VI-G finds that on external images both take their evidence for "authentic" from the background rather than the product, without exception in 40 maps — and Split C and Split D share the same dark backdrop, differing in device and lighting but not in staging. A model applying a backdrop rule would hold its accuracy across exactly this shift. **Split D tests the capture-pipeline confound and leaves the backdrop cue untouched**, so the right reading of these two rows is that the backbones' accuracy survives a change of camera, not that it rests on packaging content.
 
 The net effect on this paper's claim is a real narrowing. The correction of Section V-D demonstrably repairs external generalization **for frozen pretrained backbones across two capture shifts**, and demonstrably fails to do so for a small from-scratch CNN on the second shift. The earlier framing — that normalization recovers 77–86% externally — was measured on one distribution and does not hold as a general statement. Section S-II records what remains unmeasured: two capture conditions from one archive is still a narrow basis, and nothing here tests generalization across products, sources or countries.
 
@@ -566,7 +564,7 @@ Section S-II states each of these in full, with the evidence for and against; th
 
 **Build a training set with acquisition balanced across classes.** Because the confound cannot be filtered away, the durable fix is at collection time: several independent photography setups, each contributing both classes. Such a pool would also let the leakage question be re-asked where the effect is not swamped by sampling variance.
 
-**Fine-tune the backbones — the highest-priority item for anyone with a GPU.** Both transfer models here train a single linear head on cached features because the hardware available was CPU-only, and that constraint, not a scientific judgement, is why no result here describes a fine-tuned network. **The frozen-backbone numbers are therefore not an upper bound on what transfer learning can do on this task, in either direction.** The two outcomes are equally informative and opposite: adaptable features may discard the confound once the head can no longer profit from it, or the extra capacity may specialize onto residual acquisition artifacts more aggressively than a frozen trunk does — in which case fine-tuning would worsen external generalization while improving every in-distribution number, and Section VII-A's inversion suggests that would be invisible to anyone evaluating in-distribution.
+**Fine-tune the backbones — the highest-priority item for anyone with a graphics processing unit (GPU).** Both transfer models here train a single linear head on cached features because the hardware available was CPU-only, and that constraint, not a scientific judgement, is why no result here describes a fine-tuned network. **The frozen-backbone numbers are therefore not an upper bound on what transfer learning can do on this task, in either direction.** The two outcomes are equally informative and opposite: adaptable features may discard the confound once the head can no longer profit from it, or the extra capacity may specialize onto residual acquisition artifacts more aggressively than a frozen trunk does — in which case fine-tuning would worsen external generalization while improving every in-distribution number, and Section VII-A's inversion suggests that would be invisible to anyone evaluating in-distribution.
 
 **Survey the mechanism across application areas.** The most valuable extension is not another model but a measurement. Section VI-E applies the audit to seven datasets in four areas, enough to show that it discriminates and to expose one false-positive mode, and nothing like enough to estimate how often the confound occurs. A survey designed for that — a defined sampling frame of authenticity datasets, a pre-registered scoring rule, and enumeration rather than listing-order sampling — would convert this paper's central claim from a motivated hypothesis into a measured prevalence, and needs no training runs at all. Section VIII-F states what result would refute it.
 
@@ -602,13 +600,13 @@ This paper is critical of the construction of a dataset whose uploader made it f
 
 ## Ethics, Conflicts of Interest, and Data Provenance
 
-**Human and animal subjects.** This study involves neither. All images are photographs of pharmaceutical packaging and its printed surfaces, obtained from public archives. No image in any partition depicts an identifiable person, and no personal or patient data was accessed, stored or processed at any stage.
+**Human and animal subjects.** This study involves neither. All images are photographs of pharmaceutical packaging obtained from public archives; none depicts an identifiable person, and no personal or patient data was accessed at any stage.
 
-**Data provenance and permissions.** Every image originates from a third-party public archive, used within its stated terms: Mendeley Data and Roboflow under CC BY 4.0 with attribution, and the Kaggle archive under no stated license, from which nothing is redistributed for the reason given above. No data was scraped, purchased, or obtained under any agreement restricting publication, and no counterfeit pharmaceutical product was acquired, handled or imaged by the authors.
+**Data provenance and permissions.** Every image originates from a third-party public archive, used within its stated terms: Mendeley Data and Roboflow under CC BY 4.0 with attribution, and the Kaggle archive under no stated license, from which nothing is redistributed. No data was scraped or purchased, and no counterfeit product was acquired, handled or imaged by the author.
 
-**Intended use and misuse.** The paper reports that no model examined here is fit to authenticate medicine, and it should not be read as validating any of them for that purpose. We state this explicitly because a falsely reassuring authentication tool is more dangerous in this application than no tool: a consumer told a falsified product is genuine is worse off than one who remains uncertain. The paper's own conclusion is that the reported accuracies in this area measure acquisition rather than authenticity, and that the deployment case therefore remains unproven.
+**Intended use and misuse.** No model examined here is fit to authenticate medicine, and this paper should not be read as validating any of them for that purpose. A falsely reassuring authentication tool is more dangerous than no tool: a consumer told a falsified product is genuine is worse off than one who remains uncertain.
 
-**Conflicts of interest.** The author declares no conflict of interest. The author has no affiliation with, and received no consideration from, the maintainers or uploaders of any dataset examined here, and no commercial interest in any pharmaceutical-authentication product or service.
+**Conflicts of interest.** The author declares no conflict of interest, has no affiliation with the maintainers of any dataset examined here, and no commercial interest in any pharmaceutical-authentication product.
 
 **Funding.** This work received no specific grant from any funding agency in the public, commercial, or not-for-profit sectors.
 

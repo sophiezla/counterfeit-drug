@@ -586,8 +586,6 @@ section.}
 """
 
 BIOGRAPHY = r"""
-\clearpage
-
 \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,
     keepaspectratio]{figures/author_photo.jpeg}}]{SOPHIE ZHU}
 is a student at Mira Costa High School, in Manhattan Beach, CA, USA. Her
