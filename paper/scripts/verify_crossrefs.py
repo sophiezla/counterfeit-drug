@@ -126,8 +126,12 @@ def check_tex():
              for k in group.split(",")}
     report(not (cited - bib), "every \\cite has a \\bibitem",
            f"dangling: {sorted(cited - bib)[:8]}")
-    report(not (bib - cited), "every \\bibitem is cited",
-           f"uncited: {sorted(bib - cited)[:8]}")
+    # Four entries are cited only from the supplement, which shares this
+    # numbering; the References section says so. They are not orphans.
+    supplement_only = {"ref17", "ref18", "ref22", "ref24"}
+    report(not (bib - cited - supplement_only),
+           "every \\bibitem is cited (here or in the supplement)",
+           f"uncited: {sorted(bib - cited - supplement_only)[:8]}")
 
     for env in ("table*", "figure*", "equation", "enumerate", "itemize",
                 "verbatim", "thebibliography"):

@@ -632,6 +632,23 @@ tables are identical.
 """
 
 
+def resolve_dangling_eqrefs(tex):
+    r"""Turn \eqref at a label this document does not define into literal text.
+
+    The manuscript and its supplement cite each other's equations. Within a
+    document \eqref is right; across the boundary it cannot resolve, so the
+    reference is printed as a plain number instead of a dangling "??".
+    """
+    labels = set(re.findall(r"\\label\{(eq:\d+)\}", tex))
+
+    def fix(m):
+        key = m.group(1)
+        if key in labels:
+            return m.group(0)
+        return "(" + key.split(":")[1] + ")"
+    return re.sub(r"\\eqref\{(eq:\d+)\}", fix, tex)
+
+
 def main():
     md = SRC.read_text(encoding="utf-8")
     head, _, _ = md.partition("## I. Introduction")
@@ -669,6 +686,7 @@ def main():
 
     tex = (preamble + "\n" + "\n".join(body) + "\n".join(bib) + BIOGRAPHY
            + "\n\\EOD\n\n\\end{document}\n")
+    tex = resolve_dangling_eqrefs(tex)
 
     OUTDIR.mkdir(parents=True, exist_ok=True)
     OUT.write_text(tex, encoding="utf-8")

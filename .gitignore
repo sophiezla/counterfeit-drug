@@ -75,3 +75,10 @@ paper/latex/paper.log
 paper/latex/paper.out
 paper/latex/*.synctex*
 paper/overleaf_upload.zip
+
+paper/latex/supplementary.pdf
+paper/latex/supplementary.aux
+paper/latex/supplementary.log
+paper/latex/supplementary.out
+paper/PharmaChecked_v2_supplementary_IEEEAccess.pdf
+paper/_pre_split_backup/
