@@ -221,6 +221,27 @@ REF_NOTE_RE = re.compile(
 EQ_TAG_RE = re.compile(r"\\tag\{(\d+)\}")
 
 
+def greek_free(text):
+    r"""Spell out Greek letters in captions.
+
+    Captions are set with the class's \tablecapfont / \figcapfont, which
+    select its "medium" math version. That version binds the operators symbol
+    font to T1 Formata, and T1 slot 1 is an acute accent -- so an uppercase
+    Greek letter in a caption silently prints as a stray accent mark. It
+    affected three captions here. Forcing another math version does not
+    recover it, because every math version this class declares uses the same
+    text font, so the caption says the letter's name instead.
+    """
+    for greek, word in (("Δ", "Delta"), ("Σ", "Sigma"),
+                        ("μ", "mu"), ("σ", "sigma"),
+                        ("λ", "lambda"), ("φ", "phi"),
+                        ("α", "alpha"), ("β", "beta"),
+                        ("θ", "theta"), ("τ", "tau"),
+                        ("η", "eta")):
+        text = text.replace(greek, word)
+    return text
+
+
 def render_table(lines, number, caption):
     rows = [r for r in ([c.strip() for c in ln.strip().strip("|").split("|")]
                         for ln in lines)
@@ -230,6 +251,7 @@ def render_table(lines, number, caption):
     ncols = max(len(r) for r in rows)
     rows = [r + [""] * (ncols - len(r)) for r in rows]
     size = r"\scriptsize" if ncols > 7 else r"\footnotesize"
+    caption = greek_free(caption)
 
     # Column types are chosen from the content, because a fixed "lccc..."
     # overflows the text block whenever a cell holds prose. Any column whose
@@ -258,8 +280,12 @@ def render_table(lines, number, caption):
             if wrap[c]:
                 # \hsize multipliers must average 1 across the X columns
                 factor = n_wrap * widest[c] / total
+                # No hyphenation inside a cell: a ragged-right column is
+                # already loose, and a word broken across lines in a narrow
+                # cell reads as a typo ("re-derive" split mid-word).
                 parts.append(r">{\hsize=" + f"{factor:.3f}"
-                             + r"\hsize\raggedright\arraybackslash}X")
+                             + r"\hsize\raggedright\arraybackslash"
+                             + r"\hyphenpenalty=10000\exhyphenpenalty=10000}X")
             else:
                 parts.append("c")
         spec = "".join(parts)
@@ -299,7 +325,9 @@ def render_table(lines, number, caption):
                  r"\else\width\fi}{!}{%"] + grid + ["}"])
     core = [
         size,
-        r"\setlength{\tabcolsep}{4pt}",
+        # Wrapping tables give the saved padding back to the text, which is
+        # what lets them fit without hyphenating inside a cell.
+        r"\setlength{\tabcolsep}{" + ("3pt" if any(wrap) else "4pt") + "}",
         r"\renewcommand{\arraystretch}{1.15}",
         *grid,
     ]
@@ -327,7 +355,7 @@ def render_figure(m):
         r"\begin{figure*}[!t]",
         r"\centerline{\includegraphics[width=\textwidth]{figures/"
         + name + "}}",
-        rf"\caption{{{inline(caption)}}}",
+        rf"\caption{{{inline(greek_free(caption))}}}",
         rf"\label{{fig:{number}}}",
         r"\end{figure*}",
         "",
@@ -558,6 +586,8 @@ section.}
 """
 
 BIOGRAPHY = r"""
+\clearpage
+
 \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,
     keepaspectratio]{figures/author_photo.jpeg}}]{SOPHIE ZHU}
 is a student at Mira Costa High School, in Manhattan Beach, CA, USA. Her

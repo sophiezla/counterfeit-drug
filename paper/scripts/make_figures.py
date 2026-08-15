@@ -213,7 +213,10 @@ def fig_architectures():
           ("GAP\n1280-dim", 12), ("dropout 0.3\nlinear 1280→2", 15)]),
     ]
     for ax, (title, col, blocks) in zip(axes, specs):
-        ax.set_xlim(0, 100)
+        # The boxes run from x=0 to x=100 and their rounded style pads outward
+        # beyond that, so limits of exactly (0, 100) clip the first and last
+        # block's border. Leave room for the pad and the stroke.
+        ax.set_xlim(-1.6, 101.6)
         ax.set_ylim(0, 10)
         ax.axis("off")
         ax.text(0, 9.6, title, fontsize=8.6, fontweight="600", color=INK, va="top")
@@ -517,8 +520,11 @@ def fig_ablation():
     abl = read("table_ablation_axes.csv")
     cross = read("table_ablation_all_models.csv")
 
+    # Panel (b) sat with a wide empty gap to its left. Closing the gap and
+    # giving it a larger share lets its bars fill the space.
     fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.95),
-                             gridspec_kw={"width_ratios": [1.25, 1]})
+                             gridspec_kw={"width_ratios": [1.18, 1],
+                                          "wspace": 0.26})
 
     # panel a: M4, the four-condition within-run comparison (compression run)
     src = [r for r in abl if r["source"] == "compression_norm_experiment.csv"]
@@ -581,7 +587,7 @@ def fig_ablation():
                           "reported as unverified; M1 bypasses the normalized pipeline by design.",
              fontsize=6.6, color=MUTED, ha="left", va="bottom")
 
-    fig.tight_layout(w_pad=1.6)
+    fig.tight_layout(w_pad=0.7)
     save(fig, "fig10_ablation")
 
 
@@ -710,7 +716,11 @@ def fig_leakage():
     ax.set_xticks(x); ax.set_xticklabels([MODEL_TINY[r["model"]] for r in leak])
     ax.set_ylabel("test accuracy")
     ax.set_ylim(0, 1.16)
-    ax.legend(loc="lower left", labelspacing=0.3, ncol=1)
+    # Legend below the axes. Every bar reaches at least 0.83, so an in-axes
+    # legend sat on top of the data wherever it was placed.
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.16), ncol=2,
+              frameon=False, labelspacing=0.3, columnspacing=2.2,
+              handlelength=1.5, fontsize=7.6)
     style_axes(ax)
     fig.suptitle("Leakage quantification: naive vs product-grouped partitioning "
                  "(error bars = 95% bootstrap CI)",
