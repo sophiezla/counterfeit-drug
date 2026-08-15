@@ -53,3 +53,25 @@ PharmaChecked v2 Rewrite Plan.docx
 # Superseded working drafts; the prose of record is paper/paper.md section II.
 paper/related_work.md
 paper/section_related_work.md
+
+# ------------------------------------------- IEEE Access template (3rd party)
+# The official template package and its Formata fonts are IEEE's, licensed
+# for preparing submissions and NOT redistributable. Download them from the
+# IEEE Author Center; they are not part of this repository.
+paper/latex/ACCESS_latex_template_*/
+paper/latex/*.cls
+paper/latex/*.sty
+paper/latex/*.bst
+paper/latex/*.fd
+paper/latex/*.map
+paper/latex/*.pfb
+paper/latex/*.tfm
+paper/latex/logo.png
+paper/latex/notaglinelogo.png
+paper/latex/bullet.png
+paper/latex/paper.pdf
+paper/latex/paper.aux
+paper/latex/paper.log
+paper/latex/paper.out
+paper/latex/*.synctex*
+paper/overleaf_upload.zip

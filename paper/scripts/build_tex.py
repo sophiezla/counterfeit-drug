@@ -66,11 +66,20 @@ UNICODE_MAP = {
     "τ": r"$\tau$", "φ": r"$\varphi$", "χ": r"$\chi$", "ψ": r"$\psi$",
     "ω": r"$\omega$", "η": r"$\eta$",
     "°": r"$^\circ$", "′": r"$'$", "″": r"$''$",
-    "¹": r"$^1$", "²": r"$^2$", "³": r"$^3$", "⁻": r"$^-$",
+    # Superscripts and subscripts must NOT be mapped into their own math
+    # groups. Two adjacent ones (10<super minus><super four>) would emit
+    # "$^-$$^4$", and "$$" is LaTeX's display-math delimiter, so the second
+    # group opens display math and every brace after it is misparsed. The
+    # text-mode commands compose safely instead.
+    "¹": r"\textsuperscript{1}", "²": r"\textsuperscript{2}",
+    "³": r"\textsuperscript{3}", "⁻": r"\textsuperscript{-}",
     "≫": r"$\gg$", "≪": r"$\ll$", "∼": r"$\sim$", "~": r"$\sim$",
     "Ö": r'\"{O}', "Ü": r'\"{U}', "∩": r"$\cap$", "∪": r"$\cup$",
-    "✓": r"$\checkmark$", "⁴": r"$^4$", "⁵": r"$^5$", "⁶": r"$^6$",
-    "₀": r"$_0$", "₁": r"$_1$", "₂": r"$_2$",
+    "✓": r"$\checkmark$",
+    "⁴": r"\textsuperscript{4}", "⁵": r"\textsuperscript{5}",
+    "⁶": r"\textsuperscript{6}", "⁹": r"\textsuperscript{9}",
+    "₀": r"\textsubscript{0}", "₁": r"\textsubscript{1}",
+    "₂": r"\textsubscript{2}",
     "\u00a0": "~", "\u2009": r"\,", "\u200b": "",
 }
 
@@ -93,7 +102,13 @@ def esc(text):
             out.append(ch)
         else:
             out.append(ch)
-    return "".join(out)
+    text = "".join(out)
+    # Safety net for the same hazard in general: two adjacent mapped symbols
+    # emit "...$$...", which LaTeX reads as display math. Merging the two
+    # groups into one is equivalent for the single symbols mapped here.
+    while "$$" in text:
+        text = text.replace("$$", "")
+    return text
 
 
 # ------------------------------------------------------------------- inline
@@ -140,14 +155,26 @@ def crossrefs(s):
 
 def inline(text, do_crossrefs=True):
     """Markdown inline -> LaTeX. Maths and code pass through unescaped."""
+    # Backslash-escaped markdown must not be read as a delimiter. The manuscript
+    # uses "\*" as a literal asterisk for table footnote markers; left alone,
+    # the emphasis regex pairs that asterisk with the next one and emits an
+    # unbalanced group ("Too many }'s").
+    text = text.replace(r"\*", "\x01STAR\x01").replace(r"\_", "\x01US\x01")
     out = []
     for part in INLINE.split(text):
         if not part:
             continue
+        # Font switches, NOT \textbf/\textit. ieeeaccess.cls redefines both as
+        # \def\textbf#1{{\bf #1}} over a \bf that itself takes an argument
+        # (\long\def\bf#1{...}). So \textbf{$-$1.4} expands to {\bf $-$1.4},
+        # \bf grabs the bare "$" as its argument, math mode is left open, and
+        # the error surfaces as "Extra }, or forgotten $" -- anywhere bold or
+        # italic text begins with maths. The switch forms are untouched by the
+        # class and take no argument, so they compose safely.
         if part.startswith("**") and part.endswith("**"):
-            out.append(r"\textbf{" + inline(part[2:-2], do_crossrefs) + "}")
+            out.append(r"{\bfseries " + inline(part[2:-2], do_crossrefs) + "}")
         elif part.startswith("*") and part.endswith("*") and len(part) > 2:
-            out.append(r"\textit{" + inline(part[1:-1], do_crossrefs) + "}")
+            out.append(r"{\itshape " + inline(part[1:-1], do_crossrefs) + "}")
         elif part.startswith("<sup>"):
             out.append(r"\textsuperscript{"
                        + esc(re.sub(r"</?sup>", "", part)) + "}")
@@ -157,7 +184,8 @@ def inline(text, do_crossrefs=True):
             out.append(part)                      # already LaTeX maths
         else:
             out.append(crossrefs(esc(part)) if do_crossrefs else esc(part))
-    return "".join(out)
+    return ("".join(out)
+            .replace("\x01STAR\x01", "*").replace("\x01US\x01", r"\_"))
 
 
 # --------------------------------------------------------------- block parsing
@@ -190,8 +218,8 @@ def render_table(lines, number, caption):
     body = []
     for ri, row in enumerate(rows):
         cells = [inline(c) for c in row]
-        if ri == 0:
-            cells = [r"\textbf{" + c + "}" if c else c for c in cells]
+        if ri == 0:                      # switch form, see inline() above
+            cells = [r"{\bfseries " + c + "}" if c else c for c in cells]
         body.append(" & ".join(cells) + r" \\")
         if ri == 0:
             body.append(r"\midrule")
@@ -464,13 +492,16 @@ def main():
     bib += [rf"\bibitem{{ref{n}}} {entry}" for n, entry in bibitems]
     bib += [r"\end{thebibliography}", ""]
 
+    # \EOD is required by ieeeaccess.cls: it typesets the end-of-document
+    # marker and the class raises "You have not used the command \EOD at the
+    # end of your document" without it.
     tex = (PREAMBLE % {
         "title": inline(title, do_crossrefs=False),
         "authors": authors,
         "abstract": inline(abstract, do_crossrefs=False),
         "keywords": inline(keywords, do_crossrefs=False),
     } + "\n" + "\n".join(body) + "\n".join(bib) + BIOGRAPHY
-        + "\n\\end{document}\n")
+        + "\n\\EOD\n\n\\end{document}\n")
 
     OUTDIR.mkdir(parents=True, exist_ok=True)
     OUT.write_text(tex, encoding="utf-8")
