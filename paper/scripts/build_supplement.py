@@ -149,9 +149,14 @@ def render_body(blocks):
 def main():
     md = SRC.read_text(encoding="utf-8")
     head, _, rest = md.partition("---")
-    intro = " ".join(l for l in head.split("\n")
-                     if l.strip() and not l.startswith("#")
-                     and not l.startswith("**"))
+    # The abstract is the descriptive paragraph only. Filtering by "starts
+    # with #" and "starts with **" is not enough: the title spans several
+    # lines, so its continuation and the author name leaked into the abstract.
+    start = head.find("This document holds")
+    if start < 0:
+        raise SystemExit("supplementary.md: expected an opening paragraph "
+                         "beginning 'This document holds'")
+    intro = " ".join(l.strip() for l in head[start:].split("\n") if l.strip())
 
     blocks = bt.parse_blocks(rest)
     body = render_body(blocks)
