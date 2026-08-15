@@ -1,6 +1,6 @@
-% IEEE Access manuscript -- GENERATED FILE, DO NOT EDIT.
-% Produced from paper/paper.md by paper/scripts/build_tex.py.
-% Edit the Markdown and rebuild; hand edits here are lost on the next build.
+%% IEEE Access manuscript -- GENERATED FILE, DO NOT EDIT.
+%% Produced from paper/paper.md by paper/scripts/build_tex.py.
+%% Edit the Markdown and rebuild; hand edits here are lost on the next build.
 \documentclass{ieeeaccess}
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
@@ -9,7 +9,34 @@
 \usepackage{textcomp}
 \usepackage{booktabs}
 \usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{microtype}
 \usepackage{url}
+
+%% Typewriter face. The class's default is Courier, which is wide, light and
+%% sits badly beside Times and Formata. Inconsolata is narrower and darker,
+%% which also shortens the long file paths this manuscript quotes inline.
+\IfFileExists{inconsolata.sty}{\usepackage[scaled=0.95,varqu]{inconsolata}}{%
+  \IfFileExists{beramono.sty}{\usepackage[scaled=0.82]{beramono}}{}}
+
+%% Wide content control. The text block is 177.53mm and a column 85.29mm, so
+%% long tokens and wide tables overflow silently unless told how to break.
+\lstset{
+  basicstyle=\ttfamily\scriptsize,
+  breaklines=true,
+  breakatwhitespace=false,
+  postbreak=\mbox{$\hookrightarrow$\space},   % no colour: the class does not
+                                              % define xcolor's named colours
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  frame=none,
+  aboveskip=6pt,
+  belowskip=6pt,
+}
+\Urlmuskip=0mu plus 1mu          % let URLs stretch rather than overflow
+\def\UrlBreaks{\do\/\do-\do.\do_\do:}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,
             urlcolor=blue]{hyperref}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
@@ -131,7 +158,8 @@ Because this paper's contribution is a dataset audit, the datasets on which neig
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lcccc}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{>{\hsize=0.547\hsize\raggedright\arraybackslash}X>{\hsize=1.248\hsize\raggedright\arraybackslash}X>{\hsize=1.206\hsize\raggedright\arraybackslash}Xcc}
 \toprule
 {\bfseries Study} & {\bfseries Image source} & {\bfseries Class construction} & {\bfseries Reported accuracy} & {\bfseries Audit} \\
 \midrule
@@ -141,7 +169,7 @@ Thomson and Varuna \cite{ref27} & A Kaggle {\itshape pill and vitamin} dataset f
 Thomson and Varuna \cite{ref28} & drugs.com product images & not specified & 92\% & none reported \\
 Roboflow {\itshape Counterfeit med detection} \cite{ref21} & Regulator advisory bulletins plus product photographs & Class correlates with document type, not authenticity (Section III-B) & --- & --- \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table*}
 
 
@@ -165,7 +193,8 @@ Three public sources were inventoried (Table~\ref{tab:2}). All three were consid
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lccc}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{>{\hsize=0.877\hsize\raggedright\arraybackslash}X>{\hsize=1.397\hsize\raggedright\arraybackslash}X>{\hsize=0.822\hsize\raggedright\arraybackslash}X>{\hsize=0.904\hsize\raggedright\arraybackslash}X}
 \toprule
 {\bfseries Source} & {\bfseries Files as shipped} & {\bfseries License} & {\bfseries Role} \\
 \midrule
@@ -173,7 +202,7 @@ Kaggle {\itshape Fake vs Real Medicine} \cite{ref19} & 661 unique (\texttt{Fake/
 Roboflow {\itshape Counterfeit\_med\_detection} v4 \cite{ref21} & 4,260 (includes the publisher's own 3$\times$ rotation/exposure augmentation) & CC BY 4.0 & Excluded from modeling; retained as a supplementary authentic pool \\
 Mendeley {\itshape Mobile-Captured Pharmaceutical Medication Packages} \cite{ref20} & 3,900 across six devices; the 150-image "Huawei CN" single-instance-per-product subset was used & CC BY 4.0 & External evaluation (Split C), authentic only \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table*}
 
 
@@ -186,12 +215,15 @@ Two properties of the primary source should be recorded before any result is rea
 \begin{center}
 \scriptsize
 \setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{%
 \begin{tabular}{lccccccc}
 \toprule
 {\bfseries T} & {\bfseries = 661,} & {\bfseries V} & {\bfseries = 453,} & {\bfseries E} & {\bfseries = 449,  V $\subset$ T,  E $\subset$ T,} & {\bfseries V $\cap$ E} & {\bfseries = 286} \\
 \midrule
 \bottomrule
 \end{tabular}
+}
 \end{center}
 
 
@@ -229,7 +261,8 @@ The modality census (Table~\ref{tab:3}) matters for how any result on this pool 
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lcc}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{>{\hsize=1.000\hsize\raggedright\arraybackslash}Xcc}
 \toprule
 {\bfseries Modality} & {\bfseries Count} & {\bfseries Share} \\
 \midrule
@@ -237,7 +270,7 @@ Blister pack & 223 & 43.7\% \\
 Outer packaging (carton) & 155 & 30.4\% \\
 Other (carton + blister together, sachet, mixed) & 132 & 25.9\% \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table*}
 
 
@@ -296,6 +329,8 @@ An assertion in the pipeline verifies zero product-identity overlap between ever
 \centering
 \scriptsize
 \setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{%
 \begin{tabular}{lccccccc}
 \toprule
  & {\bfseries Split A train} & {\bfseries Split A val} & {\bfseries Split A test} & {\bfseries Split B train} & {\bfseries Split B val} & {\bfseries Split B test} & {\bfseries Split C} \\
@@ -306,6 +341,7 @@ Authentic & 190 & 41 & 41 & 188 & 45 & 39 & 150 \\
 Counterfeit & 167 & 36 & 35 & 169 & 34 & 35 & 0 \\
 \bottomrule
 \end{tabular}
+}
 \end{table*}
 
 
@@ -336,7 +372,10 @@ Four model families are evaluated (Fig.~\ref{fig:2}). The roster is deliberately
 
 \begin{equation}
 \label{eq:2}
-\phi(x) = \big[\,\mathbf{h}_R(x) \,\|\, \mathbf{h}_G(x) \,\|\, \mathbf{h}_B(x)\,\big] \in \mathbb{R}^{96}, \qquad \mathbf{h}_{c,b}(x) = \frac{1}{HW}\sum_{i,j} \mathbb{1}\!\left[ x_{ij}^{(c)} \in B_b \right]
+\begin{aligned}
+\phi(x) = \big[\,\mathbf{h}_R(x) \,\|\, \mathbf{h}_G(x) \,\|\, \mathbf{h}_B(x)\,\big] \in \mathbb{R}^{96}, \\[2pt]
+\mathbf{h}_{c,b}(x) = \frac{1}{HW}\sum_{i,j} \mathbb{1}\!\left[ x_{ij}^{(c)} \in B_b \right]
+\end{aligned}
 \end{equation}
 
 
@@ -344,17 +383,23 @@ with the 32 bins $B_b$ uniformly partitioning [0, 256). A logistic regression is
 
 \begin{equation}
 \label{eq:3}
-P(y = 1 \mid x) = \sigma\big(\mathbf{w}^\top \phi(x) + b\big), \qquad \sigma(z) = \frac{1}{1 + e^{-z}}
+\begin{aligned}
+P(y = 1 \mid x) = \sigma\big(\mathbf{w}^\top \phi(x) + b\big), \\[2pt]
+\sigma(z) = \frac{1}{1 + e^{-z}}
+\end{aligned}
 \end{equation}
 
 
-with \texttt{class\_weight="balanced"} and L2 regularization at scikit-learn's default strength. This model exists to answer one question: how much of the reported accuracy on this benchmark is available to a classifier that cannot see spatial structure at all? It is intentionally excluded from the augmentation policy (Section V-C) and from the normalization pipeline (Section V-D) for reasons given in each.
+with \url{class_weight="balanced"} and L2 regularization at scikit-learn's default strength. This model exists to answer one question: how much of the reported accuracy on this benchmark is available to a classifier that cannot see spatial structure at all? It is intentionally excluded from the augmentation policy (Section V-C) and from the normalization pipeline (Section V-D) for reasons given in each.
 
 {\bfseries M2 --- Small CNN with a global-average-pooling head (23,938 trainable parameters).} Three convolutional blocks with a conventional channel progression (16 $\rightarrow$ 32 $\rightarrow$ 64; each block Conv3$\times$3 $\rightarrow$ BatchNorm $\rightarrow$ ReLU $\rightarrow$ MaxPool2$\times$2), with a global-average-pooling head rather than the \texttt{flatten $\rightarrow$ dense} head that small-dataset CNN work commonly uses:
 
 \begin{equation}
 \label{eq:4}
-g_k = \frac{1}{H'W'}\sum_{i=1}^{H'}\sum_{j=1}^{W'} a_{ijk}, \qquad \hat{y} = \mathrm{softmax}\big(W_{\!f}\,\mathrm{drop}_{0.5}(\mathbf{g}) + \mathbf{b}_{\!f}\big)
+\begin{aligned}
+g_k = \frac{1}{H'W'}\sum_{i=1}^{H'}\sum_{j=1}^{W'} a_{ijk}, \\[2pt]
+\hat{y} = \mathrm{softmax}\big(W_{\!f}\,\mathrm{drop}_{0.5}(\mathbf{g}) + \mathbf{b}_{\!f}\big)
+\end{aligned}
 \end{equation}
 
 
@@ -380,7 +425,7 @@ Three label-free operators are composed in a fixed order. Let $x$ be a decoded R
 
 \begin{equation}
 \label{eq:5}
-T_{\mathrm{res}}(x) = \begin{cases} x & \text{if } \min(W, H) \le s \\ \mathrm{resize}\big(x,\; \lambda W,\; \lambda H\big), \;\; \lambda = \dfrac{s}{\min(W,H)} & \text{otherwise} \end{cases}
+\resizebox{\columnwidth}{!}{$\displaystyle T_{\mathrm{res}}(x) = \begin{cases} x & \text{if } \min(W, H) \le s \\ \mathrm{resize}\big(x,\; \lambda W,\; \lambda H\big), \;\; \lambda = \dfrac{s}{\min(W,H)} & \text{otherwise} \end{cases}$}
 \end{equation}
 
 
@@ -388,7 +433,10 @@ T_{\mathrm{res}}(x) = \begin{cases} x & \text{if } \min(W, H) \le s \\ \mathrm{r
 
 \begin{equation}
 \label{eq:6}
-T_{\mathrm{bright}}(x) = \mathrm{clip}\!\left( x \cdot \frac{\mu^\star}{\bar{x}},\; 0,\; 1 \right), \qquad \bar{x} = \frac{1}{3HW}\sum_{c,i,j} x^{(c)}_{ij}
+\begin{aligned}
+T_{\mathrm{bright}}(x) = \mathrm{clip}\!\left( x \cdot \frac{\mu^\star}{\bar{x}},\; 0,\; 1 \right), \\[2pt]
+\bar{x} = \frac{1}{3HW}\sum_{c,i,j} x^{(c)}_{ij}
+\end{aligned}
 \end{equation}
 
 
@@ -420,7 +468,10 @@ M1 reads images directly and never passes through this operator. That exclusion 
 
 \begin{equation}
 \label{eq:9}
-\alpha^c_k = \frac{1}{HW}\sum_{i,j} \frac{\partial y^c}{\partial A^k_{ij}}, \qquad L^c_{\mathrm{Grad\text{-}CAM}} = \mathrm{ReLU}\!\left(\sum_k \alpha^c_k A^k\right)
+\begin{aligned}
+\alpha^c_k = \frac{1}{HW}\sum_{i,j} \frac{\partial y^c}{\partial A^k_{ij}}, \\[2pt]
+L^c_{\mathrm{Grad\text{-}CAM}} = \mathrm{ReLU}\!\left(\sum_k \alpha^c_k A^k\right)
+\end{aligned}
 \end{equation}
 
 
@@ -455,7 +506,7 @@ This set measures robustness to a documented perturbation style. It is {\bfserie
 
 \subsection{Environment}
 
-PyTorch 2.7.1 \cite{ref17} on CPU only (no CUDA available), scikit-learn 1.9.0 \cite{ref18}. Seed 42 is set for Python, NumPy and PyTorch before every training run, before every fold, and before every augmented feature-extraction pass. Non-deterministic CUDA kernels are not a factor; \texttt{torch.use\_deterministic\_algorithms} is left off because some CPU operators lack deterministic kernels.
+PyTorch 2.7.1 \cite{ref17} on CPU only (no CUDA available), scikit-learn 1.9.0 \cite{ref18}. Seed 42 is set for Python, NumPy and PyTorch before every training run, before every fold, and before every augmented feature-extraction pass. Non-deterministic CUDA kernels are not a factor; \url{torch.use_deterministic_algorithms} is left off because some CPU operators lack deterministic kernels.
 
 \subsection{Training protocol}
 
@@ -463,7 +514,11 @@ Identical for M2--M4 (Table~\ref{tab:5}): Adam, batch size 32, class-weighted cr
 
 \begin{equation}
 \label{eq:11}
-w_0 = \frac{n}{2 n_0}, \qquad w_1 = \frac{n}{2 n_1}, \qquad \mathcal{L} = -\frac{1}{n}\sum_{m=1}^{n} w_{y_m} \log \hat{p}_{m, y_m}
+\begin{aligned}
+w_0 = \frac{n}{2 n_0}, \\[2pt]
+w_1 = \frac{n}{2 n_1}, \\[2pt]
+\mathcal{L} = -\frac{1}{n}\sum_{m=1}^{n} w_{y_m} \log \hat{p}_{m, y_m}
+\end{aligned}
 \end{equation}
 
 
@@ -475,7 +530,8 @@ which follows the protocol choice of class weighting over oversampling. The mini
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lc}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{>{\hsize=0.804\hsize\raggedright\arraybackslash}X>{\hsize=1.196\hsize\raggedright\arraybackslash}X}
 \toprule
 {\bfseries Setting} & {\bfseries Value} \\
 \midrule
@@ -486,11 +542,11 @@ Learning-rate grid & \{1 $\times$ 10\textsuperscript{-}\textsuperscript{3}, 3 $\
 Selected LR (M2 / M3 / M4) & 1 $\times$ 10\textsuperscript{-}\textsuperscript{3} / 1 $\times$ 10\textsuperscript{-}\textsuperscript{3} / 1 $\times$ 10\textsuperscript{-}\textsuperscript{3} \\
 Loss & class-weighted cross-entropy, \eqref{eq:11} \\
 Input resolution & 224 $\times$ 224, ImageNet mean/std normalization \\
-M1 & \texttt{LogisticRegression(max\_iter=2000, class\_weight="balanced")} \\
+M1 & \url{LogisticRegression(max_iter=2000, class_weight="balanced")} \\
 Cached augmented passes (M3, M4) & K = 3, each seeded with 42 + pass index \\
 Seed & 42 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table*}
 
 
@@ -506,7 +562,11 @@ All metrics use a 0.5 decision threshold unless stated. With TP, FP, FN, TN defi
 
 \begin{equation}
 \label{eq:12}
-\mathrm{Sens} = \frac{TP}{TP+FN}, \quad \mathrm{Spec} = \frac{TN}{TN+FP}, \quad \mathrm{BA} = \frac{\mathrm{Sens}+\mathrm{Spec}}{2}
+\begin{aligned}
+\mathrm{Sens} = \frac{TP}{TP+FN}, \\[2pt]
+\mathrm{Spec} = \frac{TN}{TN+FP}, \\[2pt]
+\mathrm{BA} = \frac{\mathrm{Sens}+\mathrm{Spec}}{2}
+\end{aligned}
 \end{equation}
 
 
@@ -576,7 +636,8 @@ The separation is not an artifact of our filtering. It holds identically in the 
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lccccc}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{>{\hsize=1.156\hsize\raggedright\arraybackslash}Xc>{\hsize=0.844\hsize\raggedright\arraybackslash}Xccc}
 \toprule
 {\bfseries Group} & {\bfseries n} & {\bfseries Capture pattern} & {\bfseries Mean brightness} & {\bfseries Median short side (px)} & {\bfseries Mean file size} \\
 \midrule
@@ -585,7 +646,7 @@ Kaggle counterfeit & 238 & \texttt{Screenshot*.png} (100\%) & 0.555 & 405 & 339 
 Split C external (authentic) & 150 & device photograph & {\bfseries 0.162} & {\bfseries 2448} & 1,656 kB \\
 Split C synthetic (proxy counterfeit) & 150 & perturbed copy of the above & 0.153 & 2448 & 1,018 kB \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table*}
 
 
@@ -617,7 +678,8 @@ The confound is directly visible in the decision function of the simplest model.
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lccc}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{>{\hsize=0.864\hsize\raggedright\arraybackslash}Xc>{\hsize=1.136\hsize\raggedright\arraybackslash}Xc}
 \toprule
 {\bfseries Classifier} & {\bfseries Features} & {\bfseries Split A test (n = 76)} & {\bfseries Split B test (n = 74)} \\
 \midrule
@@ -627,7 +689,7 @@ Metadata LR & short-side resolution & 0.947 [0.872, 0.979] & 0.946 [0.869, 0.979
 Metadata LR & encoded file size & 0.974 [0.909, 0.993] & {\bfseries 1.000} [0.951, 1.000] \\
 Metadata LR & all three & 0.974 [0.909, 0.993] & {\bfseries 1.000} [0.951, 1.000] \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table*}
 
 
@@ -649,7 +711,8 @@ One dataset cannot establish a general claim, so we ran the identical procedure 
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lcc}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{c>{\hsize=0.892\hsize\raggedright\arraybackslash}X>{\hsize=1.108\hsize\raggedright\arraybackslash}X}
 \toprule
 {\bfseries Metadata used} & {\bfseries Kaggle (661 imgs, 584 groups)} & {\bfseries Roboflow v4 (4,207 imgs, 597 groups)} \\
 \midrule
@@ -659,7 +722,7 @@ Short-side resolution & 0.954 & 0.500 (all 640 $\times$ 640) \\
 Aspect ratio & 0.803 & 0.500 \\
 All of the above & {\bfseries 1.000} & 0.717 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table*}
 
 
@@ -685,6 +748,8 @@ Table~\ref{tab:9} gives the complete metric set for all four models on both in-d
 \centering
 \scriptsize
 \setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{%
 \begin{tabular}{lccccccccccccccc}
 \toprule
 {\bfseries Model} & {\bfseries Split} & {\bfseries n} & {\bfseries TP} & {\bfseries FP} & {\bfseries FN} & {\bfseries TN} & {\bfseries Accuracy} & {\bfseries Precision} & {\bfseries Sens} & {\bfseries Spec} & {\bfseries F1} & {\bfseries BA} & {\bfseries MCC} & {\bfseries ROC-AUC} & {\bfseries PR-AUC} \\
@@ -699,6 +764,7 @@ M4 EfficientNet-B0 & A & 76 & 34 & 0 & 1 & 41 & {\bfseries 0.987} [0.961, 1.000]
 M4 EfficientNet-B0 & B & 74 & 30 & 1 & 5 & 38 & 0.919 [0.851, 0.973] & 0.968 & 0.857 & 0.974 & 0.909 & 0.916 & 0.841 & 0.988 & 0.986 \\
 \bottomrule
 \end{tabular}
+}
 \end{table*}
 
 
@@ -708,6 +774,8 @@ M4 EfficientNet-B0 & B & 74 & 30 & 1 & 5 & 38 & 0.919 [0.851, 0.973] & 0.968 & 0
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{%
 \begin{tabular}{lcccc}
 \toprule
 {\bfseries Model} & {\bfseries Split A accuracy (95\% CI)} & {\bfseries Split B accuracy (95\% CI)} & {\bfseries Split B 5-fold CV} & {\bfseries $\Delta$ (A $-$ B)} \\
@@ -718,6 +786,7 @@ M3 MobileNetV3 & 0.934 [0.868, 0.987] & 0.932 [0.865, 0.986] & 0.964 $\pm$ 0.011
 M4 EfficientNet-B0 & 0.987 [0.961, 1.000] & 0.919 [0.851, 0.973] & 0.983 $\pm$ 0.011 & {\bfseries +0.068} \\
 \bottomrule
 \end{tabular}
+}
 \end{table*}
 
 
@@ -746,6 +815,8 @@ The power this affords is poor in absolute terms. At the observed discordance le
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{%
 \begin{tabular}{lcccccc}
 \toprule
 {\bfseries Model A} & {\bfseries Model B} & {\bfseries $n_{01}$} & {\bfseries $n_{10}$} & {\bfseries Discordant} & {\bfseries {\itshape p}} & {\bfseries Significant ($\alpha$ = 0.05)} \\
@@ -758,6 +829,7 @@ M2 & M4 & 4 & 8 & 12 & 0.388 & no \\
 M3 & M4 & 2 & 1 & 3 & 1.000 & no \\
 \bottomrule
 \end{tabular}
+}
 \end{table*}
 
 
@@ -808,7 +880,8 @@ Table~\ref{tab:12} and Fig.~\ref{fig:8} give the central result of this paper.
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lcccc}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{c>{\hsize=1.194\hsize\raggedright\arraybackslash}X>{\hsize=0.833\hsize\raggedright\arraybackslash}X>{\hsize=0.972\hsize\raggedright\arraybackslash}Xc}
 \toprule
 {\bfseries Model} & {\bfseries In-distribution authentic accuracy (k = 39)} & {\bfseries Split C, baseline (n = 150)} & {\bfseries Split C, 3-way normalized (n = 150)} & {\bfseries $\Delta$ (normalized)} \\
 \midrule
@@ -817,7 +890,7 @@ M2 CNN & 33/39 = 0.846 [0.703, 0.928] & 0/150 = 0.000 [0.000, 0.025] & 129/150 =
 M3 MobileNetV3 & 38/39 = 0.974 [0.868, 0.995] & 104/150 = 0.693 [0.615, 0.762] & 116/150 = 0.773 [0.700, 0.833] & +0.201 \\
 M4 EfficientNet-B0 & 38/39 = 0.974 [0.868, 0.995] & 5/150 = 0.033 [0.014, 0.076] & 121/150 = 0.807 [0.736, 0.862] & +0.167 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table*}
 
 
@@ -846,7 +919,8 @@ Because content is held fixed and only acquisition varies, this is a {\bfseries 
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lccc}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{c>{\hsize=1.000\hsize\raggedright\arraybackslash}X>{\hsize=1.000\hsize\raggedright\arraybackslash}Xc}
 \toprule
 {\bfseries Model} & {\bfseries Split C (n = 150)} & {\bfseries Split D (n = 149)} & {\bfseries Change} \\
 \midrule
@@ -855,7 +929,7 @@ M2 CNN & 129/150 = {\bfseries 0.860} [0.795, 0.907] & 69/149 = {\bfseries 0.463}
 M3 MobileNetV3 & 116/150 = 0.773 [0.700, 0.833] & 108/149 = 0.725 [0.648, 0.790] & $-$4.9 \\
 M4 EfficientNet-B0 & 121/150 = 0.807 [0.736, 0.862] & 124/149 = 0.832 [0.764, 0.884] & +2.6 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table*}
 
 
@@ -881,6 +955,8 @@ Split C is authentic-only and therefore silent on counterfeit recall. Table~\ref
 \centering
 \scriptsize
 \setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{%
 \begin{tabular}{lcccccccccccc}
 \toprule
 {\bfseries Model} & {\bfseries TP} & {\bfseries FP} & {\bfseries FN} & {\bfseries TN} & {\bfseries Accuracy} & {\bfseries Precision} & {\bfseries Sens} & {\bfseries Spec} & {\bfseries F1} & {\bfseries BA} & {\bfseries MCC} & {\bfseries ROC-AUC} \\
@@ -891,6 +967,7 @@ M3 MobileNetV3 & 29 & 34 & 121 & 116 & 0.483 & 0.460 & 0.193 & 0.773 & 0.272 & 0
 M4 EfficientNet-B0 & 44 & 29 & 106 & 121 & 0.550 & 0.603 & 0.293 & 0.807 & 0.395 & 0.550 & 0.117 & 0.570 \\
 \bottomrule
 \end{tabular}
+}
 \end{table*}
 
 
@@ -920,7 +997,8 @@ Three readings, in decreasing order of interest.
 \begin{center}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lcc}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\columnwidth}{>{\hsize=1.000\hsize\raggedright\arraybackslash}Xcc}
 \toprule
  & {\bfseries attends to product} & {\bfseries attends to background} \\
 \midrule
@@ -929,7 +1007,7 @@ M4, called counterfeit (wrong) & {\bfseries 10/10} & 0/10 \\
 M3, called authentic (correct) & 0/10 & {\bfseries 10/10} \\
 M3, called counterfeit (wrong) & {\bfseries 10/10} & 0/10 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{center}
 
 
@@ -959,7 +1037,8 @@ The three Grad-CAM scripts obtained their backbone by calling the constructor di
 \begin{center}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lccc}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\columnwidth}{>{\hsize=1.000\hsize\raggedright\arraybackslash}Xccc}
 \toprule
 {\bfseries Condition} & {\bfseries Border mass (95\% CI)} & {\bfseries Center mass} & {\bfseries Split C accuracy} \\
 \midrule
@@ -968,7 +1047,7 @@ Baseline, un-normalized & 0.182 [0.155, 0.209] & 0.563 & 0.060 \\
 Three-way normalized & 0.655 [0.613, 0.697] & 0.165 & 0.807 \\
 Paired change & {\bfseries +0.473 [+0.422, +0.524]} & $-$0.398 & --- \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{center}
 
 
@@ -988,6 +1067,8 @@ One conclusion survives under either reading, and it is a caution against a comm
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{%
 \begin{tabular}{lccc}
 \toprule
 {\bfseries Model} & {\bfseries Predictions} & {\bfseries Errors} & {\bfseries Error rate} \\
@@ -999,6 +1080,7 @@ M4 EfficientNet-B0 & 150 & 7 & 4.7\% \\
 Pooled & 600 & 61 & 10.2\% \\
 \bottomrule
 \end{tabular}
+}
 \end{table*}
 
 
@@ -1016,6 +1098,8 @@ The shape of Table~\ref{tab:15} is worth stating plainly against Section VII-D. 
 \centering
 \scriptsize
 \setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{%
 \begin{tabular}{lccccccc}
 \toprule
 {\bfseries Model} & {\bfseries Trainable params} & {\bfseries Frozen params} & {\bfseries Weight memory} & {\bfseries Preprocess} & {\bfseries Forward} & {\bfseries Total} & {\bfseries Throughput} \\
@@ -1026,6 +1110,7 @@ M3 MobileNetV3 & 1,154 & 927,008 & 3.54 MiB & 16.8 ms & 71.9 ms & 88.7 ms & 11.3
 M4 EfficientNet-B0 & 2,562 & 4,007,548 & 15.30 MiB & 16.8 ms & 154.4 ms & 171.2 ms & 5.8 img/s \\
 \bottomrule
 \end{tabular}
+}
 \end{table*}
 
 
@@ -1039,6 +1124,8 @@ Two points bear on deployment. First, preprocessing --- including the entire thr
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{%
 \begin{tabular}{lccccc}
 \toprule
 {\bfseries Model} & {\bfseries Split} & {\bfseries Epochs run} & {\bfseries Best epoch} & {\bfseries Best val loss} & {\bfseries Best val accuracy} \\
@@ -1051,6 +1138,7 @@ M4 EfficientNet-B0 & A & 13 & 8 & 0.099 & 0.974 \\
 M4 EfficientNet-B0 & B & 26 & 23 & 0.031 & 1.000 \\
 \bottomrule
 \end{tabular}
+}
 \end{table*}
 
 
@@ -1064,6 +1152,8 @@ Everything above treats the models as decision rules at a fixed threshold. Any d
 \centering
 \scriptsize
 \setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{%
 \begin{tabular}{lcccccccc}
 \toprule
 {\bfseries Model} & {\bfseries Split} & {\bfseries n} & {\bfseries Brier} & {\bfseries ECE} & {\bfseries MCE} & {\bfseries Conf} & {\bfseries Acc} & {\bfseries Conf $-$ acc} \\
@@ -1082,6 +1172,7 @@ M4 EfficientNet-B0 & C & 150 & 0.132 & 0.098 & 0.381 & 0.781 & 0.807 & $-$0.025 
 M4 EfficientNet-B0 & D & 149 & 0.113 & 0.055 & 0.166 & 0.815 & 0.832 & $-$0.018 \\
 \bottomrule
 \end{tabular}
+}
 \end{table*}
 
 
@@ -1107,19 +1198,20 @@ Section VII-B applied the provenance audit to a second pharmaceutical dataset. T
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lcccccc}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{>{\hsize=1.216\hsize\raggedright\arraybackslash}X>{\hsize=0.784\hsize\raggedright\arraybackslash}Xccccc}
 \toprule
 {\bfseries Dataset} & {\bfseries Area} & {\bfseries n} & {\bfseries Format} & {\bfseries Size} & {\bfseries Both} & {\bfseries Ext-rule} \\
 \midrule
 Kaggle {\itshape Fake vs Real Medicine} \cite{ref19} & Medicines (positive control) & 2224 & {\bfseries 1.000} & 0.999 & {\bfseries 1.000} & {\bfseries 1.000} \\
-\texttt{rhythmghai/ai-vs-real-images-dataset} & Generated images & 995 & {\bfseries 1.000} & 0.812 & {\bfseries 1.000} & {\bfseries 1.000} \\
-\texttt{cashbowman/ai-generated-images-vs-real-images} & Generated images & 974 & 0.577 & 0.553 & 0.562 & 0.554 \\
-\texttt{ishanikathuria/handwritten-signature-datasets} & Signatures (negative control) & 2400 & 0.500 & {\bfseries 0.843} & 0.845 & 0.560 \\
-\texttt{kshitizbhargava/deepfake-face-images} & Deepfake faces & --- & * & * & * & * \\
-\texttt{shahzaibshazoo/detect-ai-generated-faces...} & Generated faces & --- & * & * & * & * \\
-\texttt{prosperchuks/fakereal-logo-detection-dataset} & Brand logos & --- & * & * & * & * \\
+\url{rhythmghai/ai-vs-real-images-dataset} & Generated images & 995 & {\bfseries 1.000} & 0.812 & {\bfseries 1.000} & {\bfseries 1.000} \\
+\url{cashbowman/ai-generated-images-vs-real-images} & Generated images & 974 & 0.577 & 0.553 & 0.562 & 0.554 \\
+\url{ishanikathuria/handwritten-signature-datasets} & Signatures (negative control) & 2400 & 0.500 & {\bfseries 0.843} & 0.845 & 0.560 \\
+\url{kshitizbhargava/deepfake-face-images} & Deepfake faces & --- & * & * & * & * \\
+\url{shahzaibshazoo/detect-ai-generated-faces...} & Generated faces & --- & * & * & * & * \\
+\url{prosperchuks/fakereal-logo-detection-dataset} & Brand logos & --- & * & * & * & * \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table*}
 
 
@@ -1151,6 +1243,8 @@ Table~\ref{tab:20} and Fig.~\ref{fig:10}(a) ablate four axes on M4 within single
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{%
 \begin{tabular}{lcccccc}
 \toprule
 {\bfseries Group} & {\bfseries Res.} & {\bfseries Bright.} & {\bfseries Comp.} & {\bfseries White bal.} & {\bfseries Split B accuracy} & {\bfseries Split C accuracy} \\
@@ -1168,6 +1262,7 @@ Table~\ref{tab:20} and Fig.~\ref{fig:10}(a) ablate four axes on M4 within single
 (iii) & $\checkmark$ & $\checkmark$ & $\checkmark$ &  & 0.932 & {\bfseries 0.780} \\
 \bottomrule
 \end{tabular}
+}
 \end{table*}
 
 
@@ -1189,6 +1284,8 @@ The conclusion survives, more firmly than before. Gray-world normalization appli
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{%
 \begin{tabular}{lccc}
 \toprule
 {\bfseries Condition} & {\bfseries Operators} & {\bfseries Split B test accuracy} & {\bfseries Split C accuracy} \\
@@ -1200,6 +1297,7 @@ Two-way & R, B & 0.919 & 0.500 \\
 Two-way + WB & R, B, W & {\bfseries 0.960} & 0.347 \\
 \bottomrule
 \end{tabular}
+}
 \end{table*}
 
 
@@ -1224,7 +1322,8 @@ Yes, and the answer changed twice during this study, which is itself the methodo
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lccc}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{ccc>{\hsize=1.000\hsize\raggedright\arraybackslash}X}
 \toprule
 {\bfseries Model} & {\bfseries Two-way $\Delta$ external} & {\bfseries Three-way $\Delta$ external} & {\bfseries Three-way normalized: Split B / Split C} \\
 \midrule
@@ -1233,7 +1332,7 @@ M2 CNN & +0.847 (0.000 $\rightarrow$ 0.847) & {\bfseries +0.913} (0.000 $\righta
 M3 MobileNetV3 & $-$0.213 (0.733 $\rightarrow$ 0.520)* & +0.060 (0.753 $\rightarrow$ 0.813) & 0.946 / 0.813 \\
 M4 EfficientNet-B0 & +0.540 (0.087 $\rightarrow$ 0.627) & +0.727 (0.053 $\rightarrow$ 0.780) & 0.932 / 0.780 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table*}
 
 
@@ -1273,6 +1372,8 @@ What we no longer claim is that M2 generalizes best. On Split C alone it does, b
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{%
 \begin{tabular}{lccc}
 \toprule
 {\bfseries Varied} & {\bfseries Value} & {\bfseries Split B test accuracy} & {\bfseries Split C accuracy} \\
@@ -1288,6 +1389,7 @@ JPEG quality & 60 & 0.932 & 0.747 \\
 JPEG quality & 85 & 0.932 & 0.660 \\
 \bottomrule
 \end{tabular}
+}
 \end{table*}
 
 
@@ -1313,6 +1415,8 @@ One reading of the diffuse attention reported in Section VII-G is that the bottl
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{%
 \begin{tabular}{lccc}
 \toprule
 {\bfseries Order} & {\bfseries Compression applied} & {\bfseries Split B test accuracy} & {\bfseries Split C accuracy} \\
@@ -1325,6 +1429,7 @@ C, R, B & before the cap & 0.932 & 0.540 \\
 C, B, R & before the cap & 0.932 & 0.467 \\
 \bottomrule
 \end{tabular}
+}
 \end{table*}
 
 
@@ -1352,7 +1457,8 @@ The procedure is the audit of Section VII-A turned into an axis-selection rule a
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lccc}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{ccc>{\hsize=1.000\hsize\raggedright\arraybackslash}X}
 \toprule
 {\bfseries Acquisition statistic} & {\bfseries Balanced accuracy (sd)} & {\bfseries Fires?} & {\bfseries Normalization it implies} \\
 \midrule
@@ -1364,7 +1470,7 @@ Mean brightness & 0.777 (0.067) & yes & rescale to fixed target $\rightarrow$ {\
 Color balance (R:B) & 0.684 (0.051) & yes (marginal) & gray-world white balance \\
 Color balance (R:G) & 0.610 (0.044) & no & --- \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table*}
 
 
@@ -1462,7 +1568,7 @@ We accordingly ask that \eqref{eq:8} be read as a {\bfseries zero-target-sample 
 
 {\bfseries Small test partitions.} In-distribution test partitions contain 74--76 images. Bootstrap intervals are correspondingly wide (Table~\ref{tab:9}), all pairwise model comparisons are underpowered (Table~\ref{tab:11}, discordant counts 1--15), and the leakage delta of Section VII-C is measured against variance that a larger pool would suppress. Point differences of a few percentage points between models on this data should not be interpreted.
 
-{\bfseries Some numbers predate checkpoint persistence and cannot be re-derived.} For most of this study no script saved a trained model, and every downstream consumer --- external evaluation, Grad-CAM, the synthetic proxy --- re-derived "the trained model" from scratch. That design produced both defects of Section VI-E: the learning-rate divergence in M2's external evaluation, and a discrepancy in which two rebuild paths of the same nominal M4 model classified 16/150 versus 5/150 external images as authentic. Training now persists a checkpoint with the learning rate, seed, best epoch and epoch count it was trained under, \texttt{load\_checkpoint} raises if the recorded learning rate differs from the caller's expectation, and the external evaluations of Table~\ref{tab:13} load rather than retrain --- which independently reproduced M2's and M3's recorded Split C accuracies exactly. Two residual weaknesses follow from the change arriving late. M4's earlier Split B accuracy of 0.946 could not be explained when the checkpointed pipeline deterministically produced 0.919, because the artifacts of the original run no longer exist; the newer value is the one reported, and the older one is unrecoverable rather than refuted. And the two \texttt{experiment\_*\_all\_models.py} ablations still rebuild rather than load, so their absolute values are not directly comparable with the production tables --- the within-run comparisons they actually make are unaffected, and Section VIII says so where they are used.
+{\bfseries Some numbers predate checkpoint persistence and cannot be re-derived.} For most of this study no script saved a trained model, and every downstream consumer --- external evaluation, Grad-CAM, the synthetic proxy --- re-derived "the trained model" from scratch. That design produced both defects of Section VI-E: the learning-rate divergence in M2's external evaluation, and a discrepancy in which two rebuild paths of the same nominal M4 model classified 16/150 versus 5/150 external images as authentic. Training now persists a checkpoint with the learning rate, seed, best epoch and epoch count it was trained under, \texttt{load\_checkpoint} raises if the recorded learning rate differs from the caller's expectation, and the external evaluations of Table~\ref{tab:13} load rather than retrain --- which independently reproduced M2's and M3's recorded Split C accuracies exactly. Two residual weaknesses follow from the change arriving late. M4's earlier Split B accuracy of 0.946 could not be explained when the checkpointed pipeline deterministically produced 0.919, because the artifacts of the original run no longer exist; the newer value is the one reported, and the older one is unrecoverable rather than refuted. And the two \url{experiment_*_all_models.py} ablations still rebuild rather than load, so their absolute values are not directly comparable with the production tables --- the within-run comparisons they actually make are unaffected, and Section VIII says so where they are used.
 
 {\bfseries Single-run ablations.} Every ablation in Section VIII is one execution per condition, not a distribution over seeds, so none of them carries an interval. The reason this is tolerable is that the pipeline is now deterministic: the per-pass seeding defect of Section VI-E, under which nominally identical conditions moved by up to 17 points, was fixed partway through, and each ablation re-runs its own baseline inside the same execution so that every comparison it makes is within-run. Three checks support the harness rather than merely asserting it: the production condition returns 0.919 in-distribution and 0.820 externally in each of the three post-fix scripts that contain it (Tables~\ref{tab:21}, \ref{tab:23} and \ref{tab:24}), and the external evaluation from persisted checkpoints reproduced M2's and M3's recorded Split C counts exactly, byte for byte, on a re-run. What remains unmeasured is seed-to-seed variance itself; a condition differing from its baseline by a point or two should not be read as a difference, and we do not read any such difference. The ablations that predate the fix are identified in their captions --- all of Table~\ref{tab:20}, all of Table~\ref{tab:22}, and the superseded white-balance rows retained in Table~\ref{tab:26}; Tables~\ref{tab:21}, \ref{tab:23} and \ref{tab:24} are post-fix --- and the two conclusions Table~\ref{tab:18} is used for are separately reproduced post-fix in Table~\ref{tab:21}.
 
@@ -1534,6 +1640,8 @@ Table~\ref{tab:26} reproduces every normalization condition executed in this stu
 \centering
 \scriptsize
 \setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{%
 \begin{tabular}{lcccccccc}
 \toprule
 {\bfseries Run group} & {\bfseries Model} & {\bfseries Condition} & {\bfseries Res} & {\bfseries Bright} & {\bfseries Comp} & {\bfseries WB} & {\bfseries Split B} & {\bfseries Split C} \\
@@ -1577,6 +1685,7 @@ ordering sweep & M4 & C, R, B & $\checkmark$ & $\checkmark$ & $\checkmark$ &  & 
 ordering sweep & M4 & C, B, R & $\checkmark$ & $\checkmark$ & $\checkmark$ &  & 0.932 & 0.467 \\
 \bottomrule
 \end{tabular}
+}
 \end{table*}
 
 
@@ -1592,7 +1701,8 @@ Table~\ref{tab:27} records every exclusion rule applied to the modeling pool, wi
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lcc}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{c>{\hsize=1.103\hsize\raggedright\arraybackslash}X>{\hsize=0.897\hsize\raggedright\arraybackslash}X}
 \toprule
 {\bfseries Source} & {\bfseries Rule} & {\bfseries Files excluded} \\
 \midrule
@@ -1603,15 +1713,15 @@ Kaggle & not a device photograph of a product (1 browser screenshot, 3 marketing
 Kaggle & no packaging in frame (1 loose tablets, 4 syrup bottles) & 5 \\
 Kaggle & exact duplicate on the rotation-canonical hash (one copy retained) & --- (applied after the above; 605 filtered files $\rightarrow$ 510 pool images) \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table*}
 
 
 \section*{APPENDIX C --- REPRODUCTION}
 
-\begin{verbatim}
+\begin{lstlisting}
 # 1. Data pipeline (deterministic; ~35 s)
-python scripts/run_all.py                          # inventory → filter → dedup → provenance → splits
+python scripts/run_all.py                          # inventory -> filter -> dedup -> provenance -> splits
 python scripts/06_download_mendeley_split_c.py     # external set, one-time (~248 MB)
 python scripts/07_verify_split_c_independence.py   # pHash independence check
 python scripts/17_apply_synthetic_review.py        # assemble the synthetic proxy set
@@ -1651,7 +1761,7 @@ python paper/scripts/external_intervals.py
 python paper/scripts/model1_attribution.py
 python paper/scripts/benchmark_cost.py
 python paper/scripts/make_figures.py
-\end{verbatim}
+\end{lstlisting}
 
 \section*{ACKNOWLEDGMENT}
 
@@ -1677,13 +1787,13 @@ This paper is critical of the construction of a dataset whose uploader made it f
 
 \section*{DATA AND CODE AVAILABILITY}
 
-{\bfseries Repository.} All code and derived artifacts described below are available at \texttt{https://github.com/sophiezla/counterfeit-drug} and archived at {\bfseries doi:10.5281/zenodo.21936721} (release v1.0.0, 14 August 2026), which is the exact state of the code that produced every number reported here. The version-independent identifier doi:10.5281/zenodo.21936720 resolves to the most recent release. The repository contains the data pipeline, the four model implementations, every analysis and figure-generation script, the per-image statistics and split assignments, the persisted model checkpoints, and the manuscript source from which this document is built.
+{\bfseries Repository.} All code and derived artifacts described below are available at \url{https://github.com/sophiezla/counterfeit-drug} and archived at {\bfseries doi:10.5281/zenodo.21936721} (release v1.0.0, 14 August 2026), which is the exact state of the code that produced every number reported here. The version-independent identifier doi:10.5281/zenodo.21936720 resolves to the most recent release. The repository contains the data pipeline, the four model implementations, every analysis and figure-generation script, the per-image statistics and split assignments, the persisted model checkpoints, and the manuscript source from which this document is built.
 
 It deliberately contains {\bfseries no images}. The Kaggle archive carries no license grant, so no image from it is redistributed --- only derived per-image statistics, split assignments and filenames, as stated in the Acknowledgment. Grad-CAM overlays and the manual-review contact sheets are excluded for the same reason, since they reproduce image content rather than describe it; both are regenerated by committed scripts from a reader's own copy of the archives. The five analysis scripts named below need no images at all.
 
-All derived artifacts referenced in this paper are reproducible from the archived pipeline. The data pipeline (inventory $\rightarrow$ filtering $\rightarrow$ de-duplication $\rightarrow$ provenance $\rightarrow$ splits) runs deterministically from the raw archives; the four models, the external evaluations, the ablation experiments, the attention audits and every table and figure in this paper are produced by committed scripts. Per-image capture statistics (\texttt{data/metadata/capture\_method\_stats.csv}), all manuscript tables (\texttt{paper/tables/*.csv}) and all figures in vector form (\texttt{paper/figures/*.pdf}) accompany this manuscript. Five analysis scripts read only committed artifacts, need no image data and no training, and reproduce their results in seconds: \texttt{paper/scripts/metadata\_oracle.py} (Table~\ref{tab:7}), \texttt{paper/scripts/provenance\_audit\_multi.py} (Table~\ref{tab:8}), \texttt{paper/scripts/power\_and\_leakage\_bound.py} (the analytic leakage ceiling of Section VII-C), \texttt{paper/scripts/train\_only\_axis\_derivation.py} (Table~\ref{tab:25}) and \texttt{paper/scripts/external\_intervals.py} (the external and synthetic-proxy intervals). Together they cover the paper's two central quantitative claims --- the acquisition-attributable accuracy ceiling and the audit's behavior on a second dataset --- without requiring a reader to obtain the images or run a model.
+All derived artifacts referenced in this paper are reproducible from the archived pipeline. The data pipeline (inventory $\rightarrow$ filtering $\rightarrow$ de-duplication $\rightarrow$ provenance $\rightarrow$ splits) runs deterministically from the raw archives; the four models, the external evaluations, the ablation experiments, the attention audits and every table and figure in this paper are produced by committed scripts. Per-image capture statistics (\url{data/metadata/capture_method_stats.csv}), all manuscript tables (\url{paper/tables/*.csv}) and all figures in vector form (\url{paper/figures/*.pdf}) accompany this manuscript. Five analysis scripts read only committed artifacts, need no image data and no training, and reproduce their results in seconds: \url{paper/scripts/metadata_oracle.py} (Table~\ref{tab:7}), \url{paper/scripts/provenance_audit_multi.py} (Table~\ref{tab:8}), \url{paper/scripts/power_and_leakage_bound.py} (the analytic leakage ceiling of Section VII-C), \url{paper/scripts/train_only_axis_derivation.py} (Table~\ref{tab:25}) and \url{paper/scripts/external_intervals.py} (the external and synthetic-proxy intervals). Together they cover the paper's two central quantitative claims --- the acquisition-attributable accuracy ceiling and the audit's behavior on a second dataset --- without requiring a reader to obtain the images or run a model.
 
-Two caveats on exact reproduction, both stated in Sections VI-E and X. Model checkpoints are persisted for the production models, with the learning rate, seed, best epoch and epoch count each was trained under, and \texttt{result\_io.load\_checkpoint} refuses to return a checkpoint whose recorded learning rate differs from the caller's expectation; the external evaluations load these rather than retraining. The ablation scripts predate that mechanism and rebuild instead, so their absolute values are comparable within a run and not across runs. Results produced before the augmentation-seeding fix of 2026-07-26 are identified as such in the captions of Tables~\ref{tab:20}, \ref{tab:22} and \ref{tab:26}, and superseded results are archived alongside the current ones rather than deleted.
+Two caveats on exact reproduction, both stated in Sections VI-E and X. Model checkpoints are persisted for the production models, with the learning rate, seed, best epoch and epoch count each was trained under, and \url{result_io.load_checkpoint} refuses to return a checkpoint whose recorded learning rate differs from the caller's expectation; the external evaluations load these rather than retraining. The ablation scripts predate that mechanism and rebuild instead, so their absolute values are comparable within a run and not across runs. Results produced before the augmentation-seeding fix of 2026-07-26 are identified as such in the captions of Tables~\ref{tab:20}, \ref{tab:22} and \ref{tab:26}, and superseded results are archived alongside the current ones rather than deleted.
 
 \noindent\textit{{\bfseries Note on \cite{ref26}--\cite{ref28}.} These are cited as evidence about dataset-construction practice in this application area, which required reading them in full text; they are not cited as authoritative results, and two of the three appear in venues without visible peer-review records. That distribution of venues is itself part of the observation made in Section II-F.}
 
@@ -1706,7 +1816,7 @@ Two caveats on exact reproduction, both stated in Sections VI-E and X. Model che
 \bibitem{ref16} S. M. Lundberg and S.-I. Lee, "A unified approach to interpreting model predictions," in {\itshape Advances in Neural Information Processing Systems (NeurIPS)}, 2017, arXiv:1705.07874.
 \bibitem{ref17} A. Paszke, S. Gross, F. Massa, et al., "PyTorch: An imperative style, high-performance deep learning library," in {\itshape Advances in Neural Information Processing Systems (NeurIPS)}, 2019.
 \bibitem{ref18} F. Pedregosa, G. Varoquaux, A. Gramfort, et al., "Scikit-learn: Machine learning in Python," {\itshape Journal of Machine Learning Research}, vol. 12, pp. 2825--2830, 2011.
-\bibitem{ref19} S. K. Jha, "Fake vs Real Medicine Dataset (images)," Kaggle, dataset \texttt{surajkumarjha1/fake-vs-real-medicine-datasets-images}, last updated 13 Oct. 2025, license stated as "Unknown". [Online]. Available: https://www.kaggle.com/datasets/surajkumarjha1/fake-vs-real-medicine-datasets-images. {\itshape Identity confirmed by matching the archive's total size (279,596,681 bytes) against the listing metadata, re-verified 13 Aug. 2026. Usage figures quoted in Section II-F (574 downloads, 3 public notebooks, 2 votes) were read from the Kaggle dataset API on 13 Aug. 2026 and should be refreshed again at submission, since they change; between 29 Jul. and 13 Aug. 2026 downloads moved 540 $\rightarrow$ 574 while notebooks, votes, license and last-updated date did not change. The paper's argument depends on the order of magnitude, not the exact count.}
+\bibitem{ref19} S. K. Jha, "Fake vs Real Medicine Dataset (images)," Kaggle, dataset \url{surajkumarjha1/fake-vs-real-medicine-datasets-images}, last updated 13 Oct. 2025, license stated as "Unknown". [Online]. Available: https://www.kaggle.com/datasets/surajkumarjha1/fake-vs-real-medicine-datasets-images. {\itshape Identity confirmed by matching the archive's total size (279,596,681 bytes) against the listing metadata, re-verified 13 Aug. 2026. Usage figures quoted in Section II-F (574 downloads, 3 public notebooks, 2 votes) were read from the Kaggle dataset API on 13 Aug. 2026 and should be refreshed again at submission, since they change; between 29 Jul. and 13 Aug. 2026 downloads moved 540 $\rightarrow$ 574 while notebooks, votes, license and last-updated date did not change. The paper's argument depends on the order of magnitude, not the exact count.}
 \bibitem{ref20} M. Abdelmaksoud, H. Gadallah, and M. Asad, "Mobile-captured pharmaceutical medication packages," Mendeley Data, V1, doi: 10.17632/bjy2svvmn8.1, CC BY 4.0.
 \bibitem{ref21} Harshini T. G. R., "Counterfeit\_med\_detection," Roboflow Universe, version 4 (multiclass export), CC BY 4.0. [Online]. Available: https://universe.roboflow.com/harshini-t-g-r/counterfeit\_med\_detection. {\itshape Workspace identified from the Roboflow Universe listing; the landing page rejects automated requests, so the license line and access date should be confirmed in a browser before submission.}
 \bibitem{ref22} Q. McNemar, "Note on the sampling error of the difference between correlated proportions or percentages," {\itshape Psychometrika}, vol. 12, no. 2, pp. 153--157, 1947.

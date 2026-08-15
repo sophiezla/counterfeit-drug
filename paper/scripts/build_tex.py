@@ -86,6 +86,13 @@ UNICODE_MAP = {
 SPECIALS = {"&": r"\&", "%": r"\%", "$": r"\$", "#": r"\#",
             "_": r"\_", "{": r"\{", "}": r"\}", "^": r"\^{}"}
 
+# Code blocks are set verbatim, which cannot represent multi-byte UTF-8.
+CODE_ASCII = str.maketrans({
+    "→": "->", "←": "<-", "—": "--", "–": "-", "·": ".", "×": "x",
+    "≤": "<=", "≥": ">=", "✓": "yes", "≈": "~", "…": "...",
+    "“": '"', "”": '"', "‘": "'", "’": "'",
+})
+
 _unmapped = set()
 
 
@@ -179,7 +186,17 @@ def inline(text, do_crossrefs=True):
             out.append(r"\textsuperscript{"
                        + esc(re.sub(r"</?sup>", "", part)) + "}")
         elif part.startswith("`") and part.endswith("`"):
-            out.append(r"\texttt{" + esc(part[1:-1]) + "}")
+            code = part[1:-1]
+            # \texttt cannot break a long token, so URLs and the long file
+            # paths this manuscript cites run off the column. \url breaks at
+            # the characters listed in \UrlBreaks in the preamble.
+            breakable = ("://" in code
+                         or re.match(r"https?://|www\.", code)
+                         or (len(code) > 16 and ("/" in code or "_" in code)))
+            if breakable and "%" not in code and "#" not in code:
+                out.append(r"\url{" + code + "}")
+            else:
+                out.append(r"\texttt{" + esc(code) + "}")
         elif part.startswith("$") and part.endswith("$"):
             out.append(part)                      # already LaTeX maths
         else:
@@ -212,8 +229,49 @@ def render_table(lines, number, caption):
         return ""
     ncols = max(len(r) for r in rows)
     rows = [r + [""] * (ncols - len(r)) for r in rows]
-    spec = "l" + "c" * (ncols - 1)
     size = r"\scriptsize" if ncols > 7 else r"\footnotesize"
+
+    # Column types are chosen from the content, because a fixed "lccc..."
+    # overflows the text block whenever a cell holds prose. Any column whose
+    # widest cell exceeds WRAP_CHARS becomes a tabularx X column, which wraps;
+    # the rest stay centred at their natural width. Without this, Tables 1, 2
+    # and 19 ran up to 525pt past the margin.
+    WRAP_CHARS = 26
+
+    def visible(cell):
+        """Rough rendered length: drop markup that does not print."""
+        s = re.sub(r"\*\*|\*|`", "", cell)
+        s = re.sub(r"\\[a-zA-Z]+", "x", s)
+        return len(s)
+
+    widest = [max(visible(r[c]) for r in rows) for c in range(ncols)]
+    wrap = [w > WRAP_CHARS for w in widest]
+
+    if any(wrap):
+        # Share the wrappable width in proportion to how wide each such column
+        # actually wants to be, so a long "Notes" column is not squeezed to the
+        # same width as a short one.
+        n_wrap = sum(wrap)
+        total = sum(widest[c] for c in range(ncols) if wrap[c])
+        parts = []
+        for c in range(ncols):
+            if wrap[c]:
+                # \hsize multipliers must average 1 across the X columns
+                factor = n_wrap * widest[c] / total
+                parts.append(r">{\hsize=" + f"{factor:.3f}"
+                             + r"\hsize\raggedright\arraybackslash}X")
+            else:
+                parts.append("c")
+        spec = "".join(parts)
+        # A captioned table becomes a full-width table* float; an uncaptioned
+        # one stays in the two-column text, where the available width is a
+        # single column. Using \textwidth for the latter overflowed by exactly
+        # \textwidth - \columnwidth = 262.4pt.
+        env = "tabularx"
+        width = r"{\textwidth}" if number is not None else r"{\columnwidth}"
+    else:
+        spec = "l" + "c" * (ncols - 1)
+        env, width = "tabular", ""
 
     body = []
     for ri, row in enumerate(rows):
@@ -224,14 +282,26 @@ def render_table(lines, number, caption):
         if ri == 0:
             body.append(r"\midrule")
 
-    core = [
-        size,
-        r"\setlength{\tabcolsep}{4pt}",
-        rf"\begin{{tabular}}{{{spec}}}",
+    grid = [
+        rf"\begin{{{env}}}{width}{{{spec}}}",
         r"\toprule",
         *body,
         r"\bottomrule",
-        r"\end{tabular}",
+        rf"\end{{{env}}}",
+    ]
+    if env == "tabular":
+        # A many-column numeric table has no wrappable column, so it keeps its
+        # natural width and can exceed the text block -- which LaTeX reports
+        # only as "Overfull \hbox ... while \output is active", from the float
+        # rather than from any source line. Shrink to fit, but only when it
+        # actually overflows, so tables that already fit are left alone.
+        grid = ([r"\resizebox{\ifdim\width>\textwidth\textwidth"
+                 r"\else\width\fi}{!}{%"] + grid + ["}"])
+    core = [
+        size,
+        r"\setlength{\tabcolsep}{4pt}",
+        r"\renewcommand{\arraystretch}{1.15}",
+        *grid,
     ]
     if number is None:
         # An uncaptioned table in the source. It must NOT become a float:
@@ -264,10 +334,37 @@ def render_figure(m):
     ])
 
 
+MATH_FITS = 95          # characters of source that fit one column comfortably
+
+
+def _fit_math(inner):
+    """Make a wide display equation fit a 85.29mm column.
+
+    Several equations here state two things joined by \\qquad, which is wider
+    than a column and overflows silently. Splitting at that join is the
+    typographically correct fix. Equations built on a cases environment cannot
+    be split that way -- the separators are structural -- so those are scaled
+    instead, which is the lesser evil and still legible at 7pt.
+    """
+    if len(inner) <= MATH_FITS:
+        return inner
+
+    if r"\begin{cases}" in inner or r"\begin{aligned}" in inner:
+        return r"\resizebox{\columnwidth}{!}{$\displaystyle " + inner + "$}"
+
+    for sep in (r"\qquad", r"\quad"):
+        if sep in inner:
+            parts = [p.strip() for p in inner.split(sep) if p.strip()]
+            if len(parts) > 1:
+                body = " \\\\[2pt]\n".join(parts)
+                return "\\begin{aligned}\n" + body + "\n\\end{aligned}"
+    return inner
+
+
 def render_math(raw):
     inner = raw.strip().strip("$").strip()
     tag = EQ_TAG_RE.search(inner)
-    inner = EQ_TAG_RE.sub("", inner).strip()
+    inner = _fit_math(EQ_TAG_RE.sub("", inner).strip())
     if tag:
         return ("\\begin{equation}\n"
                 f"\\label{{eq:{tag.group(1)}}}\n{inner}\n\\end{{equation}}\n")
@@ -367,9 +464,14 @@ def render_body(blocks):
             out.extend(r"\item " + inline(it) for it in items)
             out.append(rf"\end{{{env}}}")
         elif kind == "code":
-            out.append(r"\begin{verbatim}")
-            out.extend(payload)
-            out.append(r"\end{verbatim}")
+            # lstlisting, not verbatim: verbatim cannot break a long line, and
+            # Appendix C's command lines are wider than a column, which alone
+            # produced eleven of the overfull boxes.
+            out.append(r"\begin{lstlisting}")
+            # lstlisting is verbatim-like and rejects multi-byte UTF-8, so the
+            # arrows in Appendix C's pipeline comments become ASCII.
+            out.extend(ln.translate(CODE_ASCII) for ln in payload)
+            out.append(r"\end{lstlisting}")
         elif kind == "rule":
             continue
         out.append("")
@@ -388,7 +490,34 @@ PREAMBLE = r"""%% IEEE Access manuscript -- GENERATED FILE, DO NOT EDIT.
 \usepackage{textcomp}
 \usepackage{booktabs}
 \usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{microtype}
 \usepackage{url}
+
+%% Typewriter face. The class's default is Courier, which is wide, light and
+%% sits badly beside Times and Formata. Inconsolata is narrower and darker,
+%% which also shortens the long file paths this manuscript quotes inline.
+\IfFileExists{inconsolata.sty}{\usepackage[scaled=0.95,varqu]{inconsolata}}{%
+  \IfFileExists{beramono.sty}{\usepackage[scaled=0.82]{beramono}}{}}
+
+%% Wide content control. The text block is 177.53mm and a column 85.29mm, so
+%% long tokens and wide tables overflow silently unless told how to break.
+\lstset{
+  basicstyle=\ttfamily\scriptsize,
+  breaklines=true,
+  breakatwhitespace=false,
+  postbreak=\mbox{$\hookrightarrow$\space},   % no colour: the class does not
+                                              % define xcolor's named colours
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  frame=none,
+  aboveskip=6pt,
+  belowskip=6pt,
+}
+\Urlmuskip=0mu plus 1mu          % let URLs stretch rather than overflow
+\def\UrlBreaks{\do\/\do-\do.\do_\do:}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,
             urlcolor=blue]{hyperref}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
@@ -400,9 +529,9 @@ PREAMBLE = r"""%% IEEE Access manuscript -- GENERATED FILE, DO NOT EDIT.
          xxxx 00, 0000.}
 \doi{10.1109/ACCESS.2026.DOI}
 
-\title{%(title)s}
+\title{@@TITLE@@}
 
-\author{%(authors)s}
+\author{@@AUTHORS@@}
 
 \address[1]{Mira Costa High School, Manhattan Beach, CA 90266 USA
             (e-mail: sophiezhu2028@gmail.com)}
@@ -416,11 +545,11 @@ section.}
 \corresp{Corresponding author: Sophie Zhu (e-mail: sophiezhu2028@gmail.com).}
 
 \begin{abstract}
-%(abstract)s
+@@ABSTRACT@@
 \end{abstract}
 
 \begin{keywords}
-%(keywords)s
+@@KEYWORDS@@
 \end{keywords}
 
 \titlepgskip=-15pt
@@ -495,13 +624,21 @@ def main():
     # \EOD is required by ieeeaccess.cls: it typesets the end-of-document
     # marker and the class raises "You have not used the command \EOD at the
     # end of your document" without it.
-    tex = (PREAMBLE % {
-        "title": inline(title, do_crossrefs=False),
-        "authors": authors,
-        "abstract": inline(abstract, do_crossrefs=False),
-        "keywords": inline(keywords, do_crossrefs=False),
-    } + "\n" + "\n".join(body) + "\n".join(bib) + BIOGRAPHY
-        + "\n\\EOD\n\n\\end{document}\n")
+    # Placeholder substitution rather than %-formatting: the preamble is LaTeX
+    # and contains literal % comments, which %-formatting would try to read as
+    # conversion specifiers.
+    preamble = PREAMBLE
+    for token, value in (
+        ("@@TITLE@@", inline(title, do_crossrefs=False)),
+        ("@@AUTHORS@@", authors),
+        ("@@ABSTRACT@@", inline(abstract, do_crossrefs=False)),
+        ("@@KEYWORDS@@", inline(keywords, do_crossrefs=False)),
+    ):
+        assert token in preamble, f"preamble lost its {token} placeholder"
+        preamble = preamble.replace(token, value)
+
+    tex = (preamble + "\n" + "\n".join(body) + "\n".join(bib) + BIOGRAPHY
+           + "\n\\EOD\n\n\\end{document}\n")
 
     OUTDIR.mkdir(parents=True, exist_ok=True)
     OUT.write_text(tex, encoding="utf-8")

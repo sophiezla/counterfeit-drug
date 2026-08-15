@@ -339,9 +339,14 @@ def fig_roc_pr():
                     x, y, auc = d["fpr"], d["tpr"], d["roc_auc"]
                 else:
                     x, y, auc = d["recall"], d["precision"], d["pr_auc"]
-                ax.plot(x, y, color=COLOR[tag], lw=1.6, dashes=DASH[tag],
-                        label=f"{MODEL_TINY[tag]}  {auc:.3f}",
-                        solid_capstyle="round", zorder=3)
+                # Solid, not dashed. These curves are step functions over 74
+                # test images, and a dashed or dotted staircase reads as a
+                # scribble at print size. Colour alone separates them; the
+                # palette is the validated colour-blind-safe set.
+                ax.plot(x, y, color=COLOR[tag], lw=1.5,
+                        label=MODEL_TINY[tag],
+                        solid_capstyle="butt", solid_joinstyle="miter",
+                        zorder=3)
             if kind == "roc":
                 ax.plot([0, 1], [0, 1], color=BASELINE, lw=0.9, dashes=(2, 2), zorder=1)
                 ax.set_xlabel("false positive rate")
@@ -352,10 +357,24 @@ def fig_roc_pr():
             ax.set_ylim(0.0 if kind == "pr" else -0.01, 1.02)
             ax.set_aspect("equal")
             style_axes(ax, xgrid=True)
-            ax.legend(loc="lower right" if kind == "roc" else "lower left",
-                      title="AUC" if kind == "roc" else "AP", title_fontsize=7.4,
-                      handlelength=2.4, labelspacing=0.32)
+            # The per-panel metric values go in the corner the curves never
+            # reach, as plain text. An in-axes legend sat on top of the data.
+            label = "AUC" if kind == "roc" else "AP"
+            lines = [f"{label}"] + [
+                f"{MODEL_TINY[t]}  "
+                f"{cd[f'{t}__{split}']['roc_auc' if kind == 'roc' else 'pr_auc']:.3f}"
+                for t in MODEL_TAGS]
+            ax.text(0.985, 0.03, "\n".join(lines), transform=ax.transAxes,
+                    ha="right", va="bottom", fontsize=6.9, color=INK2,
+                    linespacing=1.45,
+                    bbox=dict(boxstyle="round,pad=0.34", facecolor="white",
+                              edgecolor="#DDDCD6", linewidth=0.6, alpha=0.94))
         axes[0].set_ylabel("true positive rate" if kind == "roc" else "precision")
+        # One shared legend under both panels, so neither panel loses space.
+        handles, labels = axes[0].get_legend_handles_labels()
+        fig.legend(handles, labels, loc="lower center", ncol=4, frameon=False,
+                   handlelength=1.9, columnspacing=1.9, fontsize=8,
+                   bbox_to_anchor=(0.5, -0.055))
         fig.suptitle(title + "  ·  counterfeit = positive class",
                      fontsize=9.5, fontweight="600", color=INK, y=1.02)
         fig.tight_layout(w_pad=1.2)
@@ -382,7 +401,10 @@ def _cm_panel(ax, cm, title, vmax):
 
 def fig_confusion():
     perf = read("table_performance_full.csv")
-    fig, axes = plt.subplots(2, 4, figsize=(7.2, 3.9))
+    # Taller than wide-enough: the two rows need real vertical separation or
+    # the Split B titles collide with the bottom edge of the Split A matrices.
+    fig, axes = plt.subplots(2, 4, figsize=(7.2, 4.25),
+                             gridspec_kw={"hspace": 0.28, "wspace": 0.30})
     vmax = max(max(int(r[k]) for k in ("tp", "fp", "fn", "tn")) for r in perf)
     for row, split in enumerate(("A (naive)", "B (product-grouped)")):
         for col, tag in enumerate(MODEL_TAGS):
@@ -398,7 +420,7 @@ def fig_confusion():
         axes[1, col].set_xlabel("predicted", fontsize=7.6)
     fig.suptitle("Confusion matrices, in-distribution test partitions",
                  fontsize=9.5, fontweight="600", color=INK, y=1.02)
-    fig.tight_layout(w_pad=1.0, h_pad=1.1)
+    fig.tight_layout(w_pad=1.2, h_pad=2.4)
     save(fig, "fig06_confusion_ab")
 
 
