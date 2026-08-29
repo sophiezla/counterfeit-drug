@@ -22,9 +22,16 @@ because a version DOI does not exist until Zenodo mints it; if you would
 rather cite the version DOI, paste it into the one sentence in
 `paper/paper.md` under "Repository" and rebuild. Do not leave v1.0.1 cited.
 
-**2. Export the poster PDF.** `build_poster.py` writes the .pptx; the PDF
-needs PowerPoint COM, which is a manual export. The .pptx is current and its
-four columns report positive slack.
+**2. Re-export the two files that need Office.** `build_poster.py` writes the
+.pptx but the poster PDF needs a PowerPoint export, so
+`PharmaChecked_v2_poster.pdf` still carries the previous subtitle. And the
+Word-exported `PharmaChecked_v2_manuscript.pdf` was a stale 22-page file
+carrying the OLD TITLE; it has been renamed
+`SUPERSEDED_20260828_manuscript_old-title.pdf` so it cannot be submitted by
+mistake, and it is gitignored either way. The two current PDFs are
+`PharmaChecked_v2_manuscript_IEEEAccess.pdf` (20 pages) and
+`PharmaChecked_v2_supplementary_IEEEAccess.pdf` (25 pages), both built by
+`compile_pdf.py`; the .docx is current.
 
 **3. Kaggle usage figures are dated, not stale.** Section II-F and reference
 [19] quote 3,039 views / 591 downloads / 3 notebooks / 2 votes "as of 28
