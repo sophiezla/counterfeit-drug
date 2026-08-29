@@ -4,6 +4,51 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Submission state, 2026-08-29 — READ THIS FIRST
+
+Everything in the repository is committed and every check passes. Three things
+need a human and cannot be done from here; nothing else is outstanding.
+
+**1. Cut the v1.1.0 release, and do it before submitting.** The manuscript's
+Data and Code Availability says the archive "resolves to the current release,
+v1.1.0 ... the exact state of the code that produced every number reported
+here". That is true of the committed tree and false of v1.0.1, which predates
+the seed sweep and the occlusion analysis. So: push, tag `v1.1.0`, and publish
+the GitHub release so Zenodo mints the new version under the concept DOI
+10.5281/zenodo.21936720. `CITATION.cff` and `.zenodo.json` already carry
+version 1.1.0, the release date and a description naming both new analyses.
+The paper deliberately cites the CONCEPT DOI rather than a version DOI,
+because a version DOI does not exist until Zenodo mints it; if you would
+rather cite the version DOI, paste it into the one sentence in
+`paper/paper.md` under "Repository" and rebuild. Do not leave v1.0.1 cited.
+
+**2. Export the poster PDF.** `build_poster.py` writes the .pptx; the PDF
+needs PowerPoint COM, which is a manual export. The .pptx is current and its
+four columns report positive slack.
+
+**3. Kaggle usage figures are dated, not stale.** Section II-F and reference
+[19] quote 3,039 views / 591 downloads / 3 notebooks / 2 votes "as of 28
+August 2026". Those counts are rendered by JavaScript and cannot be fetched
+programmatically. They are explicitly dated, so they are correct as they
+stand; refresh them by hand only if the manuscript sits for months, and note
+that the argument depends on the order of magnitude, not the exact count.
+
+**What was verified on the day, not assumed.** The Overleaf zip was extracted
+into an empty directory and compiled there: 20 and 25 pages, matching the
+local build. Every table-producing analysis script was re-run and the working
+tree stayed clean, which means each one reproduced its committed CSV byte for
+byte -- including `cross_domain_audit.py`, which re-fetched all seven Kaggle
+listings live and returned identical numbers. A geometric check found zero
+text blocks past the 177.53 mm text block in either document. `CITATION.cff`
+parses and `.zenodo.json` is valid JSON.
+
+**One number to re-check if anything is ever re-run.** Section VI-E's "94.6% on
+Split B" was M4's superseded accuracy and is now 91.9%; the value of record
+lives in `modeling/results/leakage_table.csv`. Two documents quoted the old
+number for weeks after Section S-I-G documented its correction, so treat any
+0.946 in this project as suspect unless it is an ordering-sweep or
+constant-sweep row, where it is a real result.
+
 ## Proofread pass, 2026-08-29 (later the same day)
 
 A fresh read of the RENDERED pages, not the source, on the assumption that
