@@ -4,6 +4,87 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Submission-readiness pass, 2026-08-28
+
+A reviewer read the compiled PDF and named four production defects and two
+framing recommendations. All six are done. **The manuscript is 20 pages, the
+supplement 23, both compile clean, and `overleaf_upload.zip` now compiles
+both from an empty directory** — it did not before, and had gone stale.
+
+**Float placement.** One page of the manuscript was four full-width floats
+and no text at all, several pages after the text introducing them. Two causes,
+both fixed. The preamble now raises `dbltopnumber`, `dbltopfraction` and
+`dblfloatpagefraction` so the queue drains onto the tops of text pages instead
+of into pages of its own. And three figures were saved much taller than their
+`figsize`, because `savefig.bbox: tight` crops the empty *width* away while a
+legend anchored outside the axes keeps the height — so `width=\textwidth`
+scaled the resulting aspect **up**. Figure 3 reached 4.5 in on the page, half
+a page for one bar chart; its legend is now one row above the axes and its
+explanatory line moved into the caption. If you add a figure, check its saved
+aspect, not its `figsize`. `paper/scripts/compile_pdf.py` compiles both
+documents and then reports the float-to-text balance of every page, failing
+on a float-only page in the manuscript. Never trust a build report over a
+rendered page.
+
+**Tabular notes.** A note defining a mark used in a table's cells was a plain
+paragraph after the table, so the float carried the mark to a page top and
+left the note behind in running text. A paragraph opening `\*` immediately
+after a table is now folded into the float by both builders.
+
+**Six internal reference notes were printing in the bibliography.** The
+stripper matched a whitelist of opening words; notes starting any other way
+went through. It is now structural — a trailing italic span of four or more
+words ending in a full stop — and `verify_crossrefs.py` gates on the rendered
+bibliography containing no known note phrasing. A note ending on a quotation
+rather than a period slipped past the first version of that rule, which is
+why the predicate strips closing quotes before testing.
+
+**Every reference re-verified against a primary source.** [20]'s author list
+(Esraa Abdelmaksoud, Ahmed Gadallah, Ahmed Asad) confirmed on the Mendeley
+landing page. [30] upgraded from the arXiv preprint to the published ECCV 2024
+Workshops paper. Page ranges and DOIs added to [3], [23], [26]; ISSNs to [26],
+[27], [28]. Kaggle usage figures refreshed live (3,039 views, 591 downloads,
+2 votes, 3 notebooks, 28 Aug 2026). **A real error was corrected in the audit
+trail:** the archive's identity was said to match the listing on 279,596,681
+bytes, but that is the sum of uncompressed member sizes; the listing's
+`totalBytes` is 279,469,596, which is the zip's own size. Both are now stated
+and both check out.
+
+**Four section cross-references pointed at the wrong section** — a VI-C/VI-E
+swap in three places and a Section IX self-reference that should have been
+Section X. Every reference resolved, so nothing caught them. `verify_crossrefs.py`
+now reports references that point at their own enclosing section, which is the
+cheapest signature of a stale one. **A stale claim in the supplement was
+removed**: Section S-I-J said the attention categorizations were "illustrative
+samples, 15 of 24 and 5 of 20", contradicting its own opening and the figure
+caption. `modeling/results/gradcam_review_completed.csv` holds 62 of 62 tagged
+rows matching every number reported, so the coverage paragraph now separates
+the two true statements — every map produced was scored, and the images those
+maps came from are a seeded stratified sample.
+
+**Citation ranges were never compressing.** `\cite{ref26}--\cite{ref28}` was
+emitted for every range because the en-dash had already become `--` by the
+time the citation pattern ran, so its single-character class never matched.
+Ranges now emit one `\cite{ref26,ref27,ref28}`.
+
+**The two framing recommendations were adopted.** The frozen backbones are now
+introduced as **linear probes on a fixed representation** — the right
+instrument for attributing an accuracy change to the input distribution rather
+than to features that re-adapt — with the CPU-only constraint stated once
+rather than apologized for in four places. The limitation itself is unchanged
+and unsoftened: nothing here measures a fine-tuned network. And a new
+**Section VIII-E** collects four results already in the paper into the claim
+they jointly support, that the three-way normalization exchanges one confound
+for another rather than removing it. Nothing in it is a new result. Sections
+VIII-E/F/G became F/G/H and every reference was rewritten.
+
+**Watch the page count.** Over 20 pages requires a pre-submission inquiry to
+the Editor-in-Chief. The additions above cost about a page and were paid for
+by condensing the Conclusion, which was 6,700 characters of restatement, and
+by trimming the passages the new Section VIII-E made redundant. The margin is
+now one line: the `\EOD` end-mark is the last thing on page 20. Use
+`compile_pdf.py` after any prose addition.
+
 ## What this project is now
 
 A methods paper about **class-conditional provenance confounding**: in any
@@ -225,13 +306,19 @@ durable was saved when those numbers were produced.
 
 ## Build discipline
 
-`paper/paper.md` is the single source of truth. Three artefacts are
-generated from it, and none may be hand-edited:
+`paper/paper.md` and `paper/supplementary.md` are the single sources of truth.
+Every artefact is generated from them and none may be hand-edited. Run in this
+order:
 
 ```
+python paper/scripts/build_tex.py        # IEEE Access LaTeX, manuscript
+python paper/scripts/build_supplement.py # IEEE Access LaTeX, supplement
 python paper/scripts/build_docx.py       # IEEE Access .docx
-python paper/scripts/build_tex.py        # IEEE Access LaTeX, for Overleaf
-python paper/scripts/verify_crossrefs.py # gate: every ref/cite/label resolves
+python paper/scripts/verify_crossrefs.py # gate: refs, cites, labels, S-refs,
+                                         #   and no internal note in the bib
+python paper/scripts/compile_pdf.py      # both PDFs + per-page float audit
+python paper/scripts/final_sweep.py      # page count, docx/pdf agreement
+python paper/scripts/make_overleaf_zip.py
 python paper/scripts/build_poster.py     # then export PDF via PowerPoint COM
 ```
 
@@ -305,12 +392,15 @@ them would trade a defensible claim for a bigger number.
 ## Verify before submitting
 
 ```
-python paper/scripts/metadata_oracle.py
-python paper/scripts/provenance_audit_multi.py
-python paper/scripts/train_only_axis_derivation.py
-python paper/scripts/power_and_leakage_bound.py
-python paper/scripts/external_intervals.py
+python paper/scripts/metadata_oracle.py            # Table 5
+python paper/scripts/provenance_audit_multi.py     # Table 6
+python paper/scripts/cross_domain_audit.py         # Table 7
+python paper/scripts/train_only_axis_derivation.py # Section VII-B's axes
+python paper/scripts/power_and_leakage_bound.py    # the 9.2-point ceiling
+python paper/scripts/external_intervals.py         # Tables 8 and 9
 ```
 
-All five are fast, read committed artefacts only, and reproduce the numbers
-in Tables VII, VIII, XX and the power/ceiling figures in §7.3.
+All are fast, read committed artefacts only, and reproduce the numbers of
+record. The table numbers above replace the Roman ones this section used to
+list, which predated the 2026-08-13 renumbering and no longer resolved.
+Re-run and confirmed 2026-08-28.

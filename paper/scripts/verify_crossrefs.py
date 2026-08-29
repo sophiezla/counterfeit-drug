@@ -16,7 +16,23 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 MD = ROOT / "paper" / "paper.md"
+SUPP_MD = ROOT / "paper" / "supplementary.md"
 TEX = ROOT / "paper" / "latex" / "paper.tex"
+SUPP_TEX = ROOT / "paper" / "latex" / "supplementary.tex"
+
+# Phrases that only ever appear in the project's internal reference-audit
+# annotations. None belongs in a submitted bibliography, and six of them
+# reached the compiled PDF once, because the stripper matched a whitelist of
+# opening words rather than the shape of a note. This is the check that would
+# have caught it.
+NOTE_TELLS = (
+    "before submission", "should be refreshed", "full text read",
+    "full text re-read", "verified against", "not verified",
+    "confirm spelling", "we could examine", "identity confirmed",
+    "workspace identified", "author list corrected", "re-verified",
+    "no peer-reviewed version", "cited here for", "confirmed against",
+    "taken from the article", "added then", "2026-08-28",
+)
 
 problems = []
 
@@ -69,6 +85,45 @@ def check_markdown():
     subs = {f"{a}-{chr(64 + i)}" for a in heads for i in range(1, 27)}
     report(not (sec_refs - heads - subs), "section references look well-formed",
            f"odd: {sorted(sec_refs - heads - subs)}")
+
+    # A section reference pointing at the section it sits in is almost always
+    # a renumbering casualty: the text still describes what the old letter
+    # covered. Nothing else in this file can tell a stale section reference
+    # from a live one, because both resolve. Four wrong ones survived every
+    # other check here, and this is the one that catches the cheapest class of
+    # them. It reports rather than gates, since a genuine self-reference
+    # ("as this section argues") is legal, if rare.
+    heads_seq = [(m.start(), m.group(1), m.group(2) or "")
+                 for m in re.finditer(r"^(?:## ([IVXLC]+)\.|### ([A-Z])\.)",
+                                      md, re.M)]
+    section_at, roman = {}, None
+    marks = []
+    for pos, rom, letter in heads_seq:
+        if rom:
+            roman = rom
+            marks.append((pos, rom))
+        elif roman:
+            marks.append((pos, f"{roman}-{letter}"))
+
+    def enclosing(pos):
+        here = None
+        for start, name in marks:
+            if start <= pos:
+                here = name
+            else:
+                break
+        return here
+
+    selfrefs = []
+    for m in re.finditer(r"\bSections?\s+([IVXLC]+(?:-[A-Z])?)", md):
+        here = enclosing(m.start())
+        if here and m.group(1) == here:
+            selfrefs.append((here, " ".join(md[m.start():m.start() + 70].split())))
+    if selfrefs:
+        print(f"  [note] {len(selfrefs)} reference(s) point at their own "
+              f"section — check each is deliberate:")
+        for name, snippet in selfrefs:
+            print(f"           in {name}: {snippet}")
 
     # Sections are Roman in IEEE Access; tables are Arabic. Only tables.
     roman_left = re.findall(r"\bTables?\s+[IVXLC]+\b", md)
@@ -139,10 +194,88 @@ def check_tex():
         c = len(re.findall(r"\\end\{" + re.escape(env) + r"\}", tex))
         report(o == c, f"{env} environments balanced", f"{o} open, {c} close")
 
+    # The bibliography that ships must carry no internal apparatus.
+    entries = re.findall(r"\\bibitem\{(.*?)(?=\\bibitem|\\end\{thebib)",
+                         tex, re.S)
+    leaked = [e.split("}", 1)[0] for e in entries
+              if any(t in e.lower() for t in NOTE_TELLS)]
+    report(not leaked, "no internal reference note reached the bibliography",
+           f"leaked in: {leaked[:8]}")
+
+
+def check_supplement():
+    """The supplement is a separate document sharing one numbering scheme.
+
+    Neither file can resolve the other's S-references, so nothing in the
+    LaTeX build checks them. This is the only place the two are held against
+    each other.
+    """
+    print("\nsupplementary.md")
+    if not SUPP_MD.exists():
+        report(False, "supplementary.md exists")
+        return
+    supp = strip_code(SUPP_MD.read_text(encoding="utf-8"))
+    main_md = strip_code(MD.read_text(encoding="utf-8"))
+
+    sections, current = set(), None
+    for level, text in re.findall(r"^(#{2,4})\s*(.*)$", supp, re.M):
+        if len(level) == 2:
+            m = re.match(r"(S-[IVXLC]+)\.", text)
+            if m:
+                current = m.group(1)
+                sections.add(current)
+        elif len(level) == 3 and current:
+            m = re.match(r"([A-Z])\.", text)
+            if m:
+                sections.add(f"{current}-{m.group(1)}")
+
+    tables = {int(n) for n in re.findall(r"\*\*TABLE S(\d+)\.\*\*", supp)}
+    figures = {int(n) for n in re.findall(r"\*\*FIGURE S(\d+)\.\*\*", supp)}
+    report(sorted(tables) == list(range(1, len(tables) + 1)),
+           f"supplement tables numbered S1..S{len(tables)}",
+           f"got {sorted(tables)}")
+    report(sorted(figures) == list(range(1, len(figures) + 1)),
+           f"supplement figures numbered S1..S{len(figures)}",
+           f"got {sorted(figures)}")
+
+    def s_refs(text):
+        sec = set(re.findall(r"\bSections?\s+(S-[IVXLC]+(?:-[A-Z])?)", text))
+        tab = {int(n) for n in re.findall(r"\bTables?\s+S(\d+)", text)}
+        tab |= {int(n) for m in re.findall(
+                    r"\bTables?\s+S\d+((?:\s*(?:,|and|to|–|-)\s*S\d+)+)", text)
+                for n in re.findall(r"\d+", m)}
+        fig = {int(n) for n in re.findall(r"\b(?:Figs?\.|Figures?)\s+S(\d+)", text)}
+        return sec, tab, fig
+
+    for where, text in (("paper.md", main_md), ("supplementary.md", supp)):
+        sec, tab, fig = s_refs(text)
+        report(not (sec - sections), f"{where}: every Section S-x resolves",
+               f"dangling: {sorted(sec - sections)}")
+        report(not (tab - tables), f"{where}: every Table Sn resolves",
+               f"dangling: {sorted(tab - tables)}")
+        report(not (fig - figures), f"{where}: every Fig. Sn resolves",
+               f"dangling: {sorted(fig - figures)}")
+
+    _, cited_t, cited_f = s_refs(main_md + supp)
+    report(not (tables - cited_t), "every supplement table is cited somewhere",
+           f"never cited: {sorted(tables - cited_t)}")
+    report(not (figures - cited_f), "every supplement figure is cited somewhere",
+           f"never cited: {sorted(figures - cited_f)}")
+
+    if SUPP_TEX.exists():
+        stex = SUPP_TEX.read_text(encoding="utf-8")
+        for env in ("table*", "figure*", "equation", "enumerate", "itemize",
+                    "verbatim"):
+            o = len(re.findall(r"\\begin\{" + re.escape(env) + r"\}", stex))
+            c = len(re.findall(r"\\end\{" + re.escape(env) + r"\}", stex))
+            report(o == c, f"supplementary.tex: {env} balanced",
+                   f"{o} open, {c} close")
+
 
 def main():
     check_markdown()
     check_tex()
+    check_supplement()
     print()
     if problems:
         print(f"{len(problems)} check(s) FAILED")

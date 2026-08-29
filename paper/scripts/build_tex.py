@@ -122,7 +122,13 @@ def esc(text):
 INLINE = re.compile(
     r"(\*\*.+?\*\*|\*[^*]+?\*|`[^`]+?`|\$[^$]+?\$|<sup>.*?</sup>)")
 
-CITE_RE = re.compile(r"\[(\d+)\](?:\s*[–-]\s*\[(\d+)\])?")
+# The range separator is matched as an en-dash OR as the "--" it has already
+# been converted to by the time this runs: escaping happens first, so the
+# single-character class silently failed on every range in the manuscript and
+# each one was emitted as two \cite commands joined by a dash. That renders
+# "[26]-[28]" with a stretchable space in the middle of the range instead of
+# letting the cite package compress it.
+CITE_RE = re.compile(r"\[(\d+)\](?:\s*(?:–|-{1,2})\s*\[(\d+)\])?")
 TAB_REF_RE = re.compile(r"\bTables?\s+(\d+)((?:\s*(?:,|and|to|–|-)\s*\d+)*)")
 FIG_REF_RE = re.compile(r"\b(?:Figs?\.|Figures?)\s+(\d+)"
                         r"((?:\s*(?:,|and|to|–|-)\s*\d+)*)")
@@ -216,9 +222,36 @@ parse_blocks = _bd.parse_blocks                 # one parser, two renderers
 FIG_RE = re.compile(r"^\*\*FIGURE\s+(\d+)\.\*\*\s*`([^`]+)`\s*[—-]\s*(.*)$", re.S)
 TABLE_CAP_RE = re.compile(r"^\*\*TABLE\s+(\d+)\.\*\*\s*(.*)$", re.S)
 REF_RE = re.compile(r"^\[(\d+)\]\s+(.*)$", re.S)
-REF_NOTE_RE = re.compile(
-    r"\s*\*(?:Verified|Not verified|Author|Publisher|Primary)[^*]*\*\s*$")
+# A reference entry may carry a trailing italic verification annotation: the
+# project's audit trail, never part of the citation. It is stripped from both
+# built artefacts unless KEEP_INTERNAL_NOTES is set. The rule is structural
+# rather than a whitelist of opening words -- an earlier whitelist silently
+# passed six notes through into the compiled PDF.
+REF_NOTE_RE = re.compile(r"\s*\*([^*]+)\*\s*$")
 EQ_TAG_RE = re.compile(r"\\tag\{(\d+)\}")
+
+
+def strip_ref_note(entry):
+    """Drop a reference entry's trailing internal annotation, if it has one.
+
+    A note is a trailing italic span of at least four words that ends in a
+    full stop. A bibliographic italic at the end of an entry -- a journal or
+    book title -- is shorter than that and carries no terminal period inside
+    the italics, so the two are distinguishable without a word list. The test
+    is written in Python rather than folded into the pattern because the
+    obvious regex for it nests quantifiers and backtracks catastrophically on
+    a long note.
+    """
+    m = REF_NOTE_RE.search(entry)
+    if not m:
+        return entry
+    # A note may close with a quotation or a parenthesis after its full stop.
+    # Requiring a bare "." missed one that ended on a quoted phrase, and it
+    # printed.
+    note = m.group(1).rstrip("\"')]}”’")
+    if note.endswith(".") and len(m.group(1).split()) >= 4:
+        return entry[:m.start()]
+    return entry
 
 
 def greek_free(text):
@@ -242,7 +275,7 @@ def greek_free(text):
     return text
 
 
-def render_table(lines, number, caption):
+def render_table(lines, number, caption, note=None):
     rows = [r for r in ([c.strip() for c in ln.strip().strip("|").split("|")]
                         for ln in lines)
             if not re.match(r"^[\s:\-]+$", "".join(r))]
@@ -331,6 +364,17 @@ def render_table(lines, number, caption):
         r"\renewcommand{\arraystretch}{1.15}",
         *grid,
     ]
+    if note:
+        # A tabular note belongs inside the float. Left in the running text it
+        # is a paragraph that explains a symbol the reader is looking at on
+        # another page, because a table* can only land at the top of a page.
+        # \parbox rather than a bare line so a note longer than the text block
+        # wraps and stays left-aligned under the rule.
+        core += [
+            r"\vspace{2pt}",
+            r"\parbox{\textwidth}{\footnotesize\raggedright " + inline(note)
+            + "}",
+        ]
     if number is None:
         # An uncaptioned table in the source. It must NOT become a float:
         # \caption would advance the table counter and shift every later
@@ -348,6 +392,14 @@ def render_table(lines, number, caption):
     ])
 
 
+# Note for anyone adding a figure: every figure is generated with
+# "savefig.bbox: tight", which crops the empty width away, so a plot drawn
+# 6.6 in wide can be saved 5.25 in wide at an unchanged height -- and
+# width=\textwidth then scales that taller aspect UP rather than down. A 2.7
+# in plot reached 3.9 in on the page that way. The fix belongs in
+# make_figures.py, in the figsize and in whatever puts the white space there
+# (a suptitle, or a legend anchored outside the axes); a height cap here
+# would also shrink the three tall diagrams, which need their width.
 def render_figure(m):
     number, relpath, caption = m.groups()
     name = Path(relpath).name
@@ -418,10 +470,29 @@ def merge_lists(blocks):
     return merged
 
 
+# A paragraph opening with an escaped asterisk, immediately after a table, is
+# that table's tabular note: it defines a mark used in the cells. It has to
+# travel with the float. Left as running text it explains a symbol the reader
+# is looking at on a different page, since a table* only lands at a page top.
+TABLE_NOTE_RE = re.compile(r"^\\\*\s+")
+
+
+def table_note_after(blocks, idx):
+    """Return the tabular note following the table at blocks[idx], or None."""
+    if idx + 1 >= len(blocks):
+        return None
+    kind, payload = blocks[idx + 1]
+    if kind != "para":
+        return None
+    text = str(payload)
+    return text if TABLE_NOTE_RE.match(text) else None
+
+
 def render_body(blocks):
     blocks = merge_lists(blocks)
     out, in_refs, bibitems = [], False, []
     pending_caption = None
+    consumed_note = False
 
     skipping = False
     for idx, (kind, payload) in enumerate(blocks):
@@ -451,6 +522,10 @@ def render_body(blocks):
             out.append(r"\subsubsection{" + inline(str(payload)) + "}")
         elif kind == "para":
             text = str(payload)
+            if consumed_note:
+                # Already emitted inside the preceding float.
+                consumed_note = False
+                continue
             m = TABLE_CAP_RE.match(text)
             if m:
                 pending_caption = m.groups()
@@ -460,17 +535,19 @@ def render_body(blocks):
                 if r:
                     entry = r.group(2)
                     if not KEEP_INTERNAL_NOTES:
-                        entry = REF_NOTE_RE.sub("", entry)
+                        entry = strip_ref_note(entry)
                     bibitems.append((r.group(1), inline(entry,
                                                         do_crossrefs=False)))
                     continue
             out.append(inline(text))
         elif kind == "table":
+            note = table_note_after(blocks, idx)
+            consumed_note = note is not None
             if pending_caption:
-                out.append(render_table(payload, *pending_caption))
+                out.append(render_table(payload, *pending_caption, note=note))
                 pending_caption = None
             else:                       # an uncaptioned table in the source
-                out.append(render_table(payload, None, ""))
+                out.append(render_table(payload, None, "", note=note))
         elif kind == "quote":
             if (not KEEP_INTERNAL_NOTES and payload
                     and payload[0].startswith("**Reference verification")):
@@ -544,6 +621,23 @@ PREAMBLE = r"""%% IEEE Access manuscript -- GENERATED FILE, DO NOT EDIT.
   aboveskip=6pt,
   belowskip=6pt,
 }
+%% Float placement. Every table and figure here is full-width, and a
+%% double-column float can only be set at the top of a page. With LaTeX's
+%% defaults -- at most two per page top, filling at most 0.7 of it, and a
+%% float page declared as soon as the queue fills 0.5 of one -- the queue
+%% drains into pages that are nothing but floats: one page of this manuscript
+%% carried four floats and no text at all, several pages after the text that
+%% introduces them. Raising the per-page allowance and the fraction a float
+%% page must reach lets the queue drain onto the tops of text pages instead.
+\setcounter{topnumber}{3}
+\setcounter{dbltopnumber}{3}
+\setcounter{totalnumber}{4}
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\dbltopfraction}{0.92}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.90}
+\renewcommand{\dblfloatpagefraction}{0.95}
+
 \Urlmuskip=0mu plus 1mu          % let URLs stretch rather than overflow
 \def\UrlBreaks{\do\/\do-\do.\do_\do:}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,
@@ -562,7 +656,7 @@ PREAMBLE = r"""%% IEEE Access manuscript -- GENERATED FILE, DO NOT EDIT.
 \author{@@AUTHORS@@}
 
 \address[1]{Mira Costa High School, Manhattan Beach, CA 90266 USA
-            (e-mail: sophiezhu2028@gmail.com)}
+            (e-mail: sophiezhu2028@gmail.com; ORCID: 0009-0004-2403-910X)}
 
 \tfootnote{This work received no specific grant from any funding agency in the
 public, commercial, or not-for-profit sectors. The manuscript and the

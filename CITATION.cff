@@ -19,6 +19,7 @@ authors:
     given-names: Sophie
     affiliation: "Mira Costa High School, Manhattan Beach, CA, USA"
     email: sophiezhu2028@gmail.com
+    orcid: "https://orcid.org/0009-0004-2403-910X"
 repository-code: "https://github.com/sophiezla/counterfeit-drug"
 license: MIT
 version: "1.0.0"

@@ -74,11 +74,15 @@ paper/latex/paper.aux
 paper/latex/paper.log
 paper/latex/paper.out
 paper/latex/*.synctex*
+paper/latex/*.log
+paper/PharmaChecked_v2_manuscript.pdf
 paper/overleaf_upload.zip
 
 paper/latex/supplementary.pdf
 paper/latex/supplementary.aux
 paper/latex/supplementary.log
 paper/latex/supplementary.out
-paper/PharmaChecked_v2_supplementary_IEEEAccess.pdf
+# The two compiled deliverables are tracked, not ignored: a reader of this
+# repository needs both halves of the submission, and the manuscript PDF was
+# already tracked while its supplement was not.
 paper/_pre_split_backup/

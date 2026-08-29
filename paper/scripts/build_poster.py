@@ -300,10 +300,11 @@ para(tf, "Asymmetric class sourcing creates provenance confounds in authenticity
      size=T_SUB, color=RGBColor(0xCD, 0xE2, 0xFB), line=0.95)
 
 tb, tf = textbox(MARGIN, 3.05, W - 2 * MARGIN - 7.0, 1.0)
-para(tf, "[Author 1]¹   ·   [Author 2]²   ·   [Author 3]²", size=T_AUTHOR,
+para(tf, "Sophie Zhu", size=T_AUTHOR,
      bold=True, color=WHITE, first=True, space_after=2)
-para(tf, "¹[Institution 1], [City], [Country]     ²[Institution 2], [City], "
-         "[Country]     ·     contact: [email]",
+para(tf, "Mira Costa High School, Manhattan Beach, CA 90266 USA"
+         "     ·     ORCID 0009-0004-2403-910X"
+         "     ·     sophiezhu2028@gmail.com",
      size=T_SMALL + 3, color=RGBColor(0x9E, 0xC5, 0xF4))
 
 # header badge
@@ -405,7 +406,7 @@ para(tf, "**The two public sources are not independent:** rotation-aware "
          "between them would leak.", size=T_SMALL + 1, line=0.98, space_after=7)
 para(tf, "**Its shipped train/val/test split is not a split:** `train` holds "
          "all 661 images; `val` (453) and `test` (449) are subsets of it. "
-         "License *Unknown*, 540 downloads, 3 notebooks — an unvetted upload, "
+         "License *Unknown*, 591 downloads, 3 notebooks — an unvetted upload, "
          "not a community benchmark.", size=T_SMALL + 1, line=0.98,
      space_after=7)
 para(tf, "**Complete human review** (a census, not a sample) removed 56 files: "
@@ -610,7 +611,7 @@ para(tf, "**Capacity is the wrong axis.** M3's strong *uncorrected* score is "
          "sits at chance where both classes share it. **We would deploy none "
          "of them:** recall is untested against real counterfeits.",
      size=T_SMALL, line=0.96, space_after=6)
-para(tf, "**Independently corroborated.** Grommelt et al. (arXiv:2403.17608) "
+para(tf, "**Independently corroborated.** Grommelt et al. (*ECCV 2024 Workshops*) "
          "find GenImage's real/generated classes separated by JPEG compression "
          "and size — detectors partly reduced to JPEG detectors, >11 pt shift "
          "after equalizing. Same signature, unrelated field, independent "
@@ -637,15 +638,16 @@ para(tf, "QR\ncode\nhere", size=T_SMALL, bold=True, color=INK2, first=True,
 tb, tf = textbox(MARGIN + 2.05, FOOTER_Y - 0.02, 6.0, 1.9)
 para(tf, "Code, data card and all figures", size=T_SMALL + 1, bold=True,
      first=True, space_after=2)
-para(tf, "[replace this square with a QR code to the repository / preprint]",
+para(tf, "github.com/sophiezla/counterfeit-drug  ·  doi:10.5281/zenodo.21936721",
      size=T_FOOT, color=INK2, line=0.98)
 para(tf, "Vector versions of every figure accompany this poster as PDF.",
      size=T_FOOT, color=MUTED, line=0.98)
 
 tb, tf = textbox(MARGIN + 8.4, FOOTER_Y - 0.02, 11.5, 2.1)
 para(tf, "Acknowledgements", size=T_SMALL + 1, bold=True, first=True, space_after=2)
-para(tf, "[Funding, institutional support and individual acknowledgements to be "
-         "completed by the authors.] We thank the maintainers of the three "
+para(tf, "This work received no specific grant from any funding agency in the "
+         "public, commercial, or not-for-profit sectors, and declares no "
+         "conflict of interest. We thank the maintainers of the three "
          "public datasets used here. The Mendeley and Roboflow datasets are "
          "CC BY 4.0; the Kaggle archive states no license, its listing says "
          "\"Unknown\", and it is attributed to "

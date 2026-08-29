@@ -418,8 +418,36 @@ FIG_RE = re.compile(
 TABLE_CAP_RE = re.compile(r"^\*\*(TABLE\s+\d+\.)\*\*\s*(.*)$", re.S)
 EQ_NUM_RE = re.compile(r"\\tag\{(\d+)\}")
 REF_RE = re.compile(r"^\[\d+\]\s")
-REF_NOTE_RE = re.compile(
-    r"\s*\*(?:Verified|Not verified|Author|Publisher|Primary)[^*]*\*\s*$")
+# A paragraph opening with an escaped asterisk, directly after a table, is
+# that table's tabular note. build_tex.py folds it into the float; here
+# floats are inline, so it only needs a smaller size than body text.
+TABLE_NOTE_RE = re.compile(r"^\\\*\s+")
+# A reference entry may carry a trailing italic verification annotation: the
+# project's audit trail, never part of the citation. It is stripped from both
+# built artefacts unless KEEP_INTERNAL_NOTES is set. The rule is structural
+# rather than a whitelist of opening words -- an earlier whitelist silently
+# passed six notes through into the compiled PDF.
+REF_NOTE_RE = re.compile(r"\s*\*([^*]+)\*\s*$")
+
+
+def strip_ref_note(entry):
+    """Drop a reference entry's trailing internal annotation, if it has one.
+
+    A note is a trailing italic span of at least four words that ends in a
+    full stop. A bibliographic italic at the end of an entry -- a journal or
+    book title -- is shorter than that and carries no terminal period inside
+    the italics. Kept identical to build_tex.strip_ref_note; the test is in
+    Python because the obvious regex for it backtracks catastrophically on a
+    long note.
+    """
+    m = REF_NOTE_RE.search(entry)
+    if not m:
+        return entry
+    # A note may close with a quotation or a parenthesis after its full stop.
+    note = m.group(1).rstrip("\"')]}”’")
+    if note.endswith(".") and len(m.group(1).split()) >= 4:
+        return entry[:m.start()]
+    return entry
 
 
 def caption_paragraph(doc, label, text, above):
@@ -667,9 +695,16 @@ def main():
             m = TABLE_CAP_RE.match(text)
             if m:
                 caption_paragraph(doc, m.group(1), m.group(2), above=True)
+            elif TABLE_NOTE_RE.match(text) and idx and blocks[idx - 1][0] == "table":
+                # A tabular note: it defines a mark used in the cells above.
+                # Floats are inline here, so it already sits under its table
+                # and only needs the smaller size that marks it as apparatus
+                # rather than body text -- and the escaped asterisk unescaped.
+                body_paragraph(doc, TABLE_NOTE_RE.sub("* ", text),
+                               size=REF_PT, space_after=6, lead=9.0, indent=0)
             elif in_references and REF_RE.match(text):
                 if not KEEP_INTERNAL_NOTES:
-                    text = REF_NOTE_RE.sub("", text)
+                    text = strip_ref_note(text)
                 p = body_paragraph(doc, text, size=REF_PT, space_after=3,
                                    lead=9.0)
                 p.paragraph_format.left_indent = Mm(5)

@@ -265,7 +265,7 @@ def fig_confound():
         ("Split C external\n(photographs, n=150)", ext, SERIES[2]),
     ]
 
-    fig, axes = plt.subplots(1, 3, figsize=(7.2, 2.55))
+    fig, axes = plt.subplots(1, 3, figsize=(7.2, 2.25))   # float budget, see fig12
 
     # panel a: brightness
     ax = axes[0]
@@ -332,7 +332,7 @@ def fig_roc_pr():
     cd = _curves()
     for kind, stem, title in (("roc", "fig04_roc", "Receiver operating characteristic"),
                               ("pr", "fig05_pr", "Precision–recall")):
-        fig, axes = plt.subplots(1, 2, figsize=(6.6, 3.1), sharey=True)
+        fig, axes = plt.subplots(1, 2, figsize=(6.6, 2.7), sharey=True)
         for ax, split, sname in zip(axes, ("split_a", "split_b"),
                                     ("Split A (naive, image-level)",
                                      "Split B (product-grouped)")):
@@ -406,8 +406,8 @@ def fig_confusion():
     perf = read("table_performance_full.csv")
     # Taller than wide-enough: the two rows need real vertical separation or
     # the Split B titles collide with the bottom edge of the Split A matrices.
-    fig, axes = plt.subplots(2, 4, figsize=(7.2, 4.25),
-                             gridspec_kw={"hspace": 0.28, "wspace": 0.30})
+    fig, axes = plt.subplots(2, 4, figsize=(7.2, 3.35),
+                             gridspec_kw={"hspace": 0.26, "wspace": 0.30})
     vmax = max(max(int(r[k]) for k in ("tp", "fp", "fn", "tn")) for r in perf)
     for row, split in enumerate(("A (naive)", "B (product-grouped)")):
         for col, tag in enumerate(MODEL_TAGS):
@@ -507,11 +507,16 @@ def fig_generalisation():
     ax.set_xticklabels([MODEL_TINY[t] for t in MODEL_TAGS])
     ax.set_ylabel("accuracy on authentic images")
     ax.set_ylim(0, 1.13)
-    ax.legend(loc="upper left", bbox_to_anchor=(0, 1.32), labelspacing=0.3)
+    # A three-row legend stacked above the axes, plus an explanatory line
+    # below them, doubled this figure's height once "savefig.bbox: tight"
+    # cropped the empty width away: it reached 4.5 in when set to the text
+    # block, half a page for one bar chart. One legend row sits flush above
+    # the axes instead, and the explanatory line moved into the caption,
+    # where a caption's own type size applies to it.
+    ax.legend(loc="lower left", bbox_to_anchor=(0, 1.01), ncol=3,
+              labelspacing=0.3, columnspacing=1.4, handlelength=1.4,
+              fontsize=7.5, frameon=False, borderaxespad=0)
     style_axes(ax)
-    fig.text(0.5, -0.07, "M1 bypasses the normalized pipeline by design; its two Split C bars "
-                         "are the same 0.0% measurement shown twice.",
-             ha="center", va="top", fontsize=7, color=MUTED)
     save(fig, "fig08_external_generalisation")
 
 
@@ -640,7 +645,13 @@ def fig_calibration():
 # ================================================= Fig 12 Model 1 attribution
 def fig_attribution():
     rows = read("model1_attribution.csv")
-    fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.7),
+    # Height, here and in fig03, is set against a float budget rather than by
+    # eye: these two and their two neighbouring tables are declared within one
+    # subsection, all four are full-width, and at their previous heights the
+    # four together filled a page exactly, so LaTeX gave them a page of their
+    # own with no text on it. Both are wide panels; the trim comes out of
+    # vertical white space, not out of the marks.
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.35),
                              gridspec_kw={"width_ratios": [1.5, 1]})
     ax = axes[0]
     chan_colors = {"R": "#d03b3b", "G": "#0ca30c", "B": "#2a78d6"}
