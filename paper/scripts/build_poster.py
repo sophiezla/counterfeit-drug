@@ -295,8 +295,8 @@ rect(0, HEADER_H - 0.09, W, 0.09, fill=ORANGE, shape=MSO_SHAPE.RECTANGLE)
 tb, tf = textbox(MARGIN, 0.42, W - 2 * MARGIN - 7.0, 2.3)
 para(tf, "When the label predicts the camera, not the product",
      size=T_TITLE, bold=True, color=WHITE, first=True, line=0.88, space_after=6)
-para(tf, "Asymmetric class sourcing creates provenance confounds in authenticity-"
-         "classification datasets — a cheap audit that finds them, a label-free correction that partly repairs them",
+para(tf, "Provenance confounding in image authenticity classification — a cheap "
+         "audit that detects it, and why the label-free correction is a diagnostic rather than a remedy",
      size=T_SUB, color=RGBColor(0xCD, 0xE2, 0xFB), line=0.95)
 
 tb, tf = textbox(MARGIN, 3.05, W - 2 * MARGIN - 7.0, 1.0)

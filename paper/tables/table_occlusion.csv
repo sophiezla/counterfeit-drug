@@ -1,0 +1,7 @@
+model,group,n,border_mass_mean,border_ci_lo,border_ci_hi,centre_mass_mean,split_c_accuracy
+M3 MobileNetV3,all,150,0.7818,0.7626,0.801,0.0765,0.7733
+M3 MobileNetV3,called authentic (correct),116,0.76,0.7383,0.7817,0.0865,0.7733
+M3 MobileNetV3,called counterfeit (wrong),34,0.8561,0.8259,0.8862,0.0421,0.7733
+M4 EfficientNet-B0,all,150,0.6505,0.6217,0.6794,0.1661,0.8067
+M4 EfficientNet-B0,called authentic (correct),121,0.614,0.5853,0.6427,0.191,0.8067
+M4 EfficientNet-B0,called counterfeit (wrong),29,0.8031,0.7382,0.8679,0.0623,0.8067

@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: "If you use this software or its derived artifacts, please cite it as below."
 title: >-
-  Asymmetric Class Sourcing Creates Provenance Confounds in
-  Authenticity-Classification Image Datasets: code and analysis pipeline
+  Provenance Confounding in Image Authenticity Classification:
+  code and analysis pipeline
 abstract: >-
   Code, data pipeline and manuscript sources for a study of class-conditional
   provenance confounding: when the two classes of an authenticity-classification
@@ -11,8 +11,9 @@ abstract: >-
   in-distribution evaluation can detect it. Contains the data pipeline, four
   model families, external evaluation on two independently captured
   distributions, a label-free normalization operator with per-axis, per-constant
-  and per-order ablations, calibration and attention audits, and a provenance
-  audit run across four application areas. Contains no images.
+  and per-order ablations, a five-seed variance sweep, calibration and two
+  independent attention analyses, and a provenance audit run across four
+  application areas. Contains no images.
 type: software
 authors:
   - family-names: Zhu
@@ -22,7 +23,7 @@ authors:
     orcid: "https://orcid.org/0009-0004-2403-910X"
 repository-code: "https://github.com/sophiezla/counterfeit-drug"
 license: MIT
-version: "1.0.1"
+version: "1.1.0"
 date-released: "2026-08-29"
 doi: 10.5281/zenodo.21936720
 identifiers:
@@ -31,7 +32,10 @@ identifiers:
     description: Concept DOI, resolves to the latest release
   - type: doi
     value: 10.5281/zenodo.22151840
-    description: DOI of v1.0.1, the release the manuscript reports
+    description: >-
+      DOI of v1.0.1. Superseded: v1.1.0 adds the seed-variance sweep and the
+      occlusion analysis the manuscript now reports, so v1.0.1 no longer
+      corresponds to the numbers in the paper.
 keywords:
   - dataset bias
   - shortcut learning

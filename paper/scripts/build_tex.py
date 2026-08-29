@@ -161,7 +161,15 @@ def crossrefs(s):
     """Turn the manuscript's literal cross-references into real LaTeX ones."""
     s = TAB_REF_RE.sub(_numbered_ref("tab", "Table", "Tables"), s)
     s = FIG_REF_RE.sub(_numbered_ref("fig", "Fig.", "Figs."), s)
-    s = EQ_REF_RE.sub(lambda m: rf"\eqref{{eq:{m.group(1)}}}", s)
+    # A reference that opens a sentence needs the word, or the line starts
+    # "(8) composes ...". Mid-sentence, IEEEtran style is the bare number.
+    def _eq(m):
+        before = s[:m.start()].rstrip()
+        opens = (not before) or before.endswith((".", "!", "?", ":", "*"))
+        word = "Equation~" if opens else ""
+        return rf"{word}\eqref{{eq:{m.group(1)}}}"
+
+    s = EQ_REF_RE.sub(_eq, s)
     s = CITE_RE.sub(_cite, s)
     return s
 
@@ -334,7 +342,12 @@ def render_table(lines, number, caption, note=None):
 
     body = []
     for ri, row in enumerate(rows):
-        cells = [inline(c) for c in row]
+        # A long identifier is one unbreakable token, and these columns
+        # disable hyphenation on purpose, so "Counterfeit_med_detection"
+        # overflowed its column by 21pt. An underscore is a legal place
+        # to break an identifier and needs no hyphen to show for it.
+        cells = [inline(c).replace(r"\_", r"\_\allowbreak{}")
+                 for c in row]
         if ri == 0:                      # switch form, see inline() above
             cells = [r"{\bfseries " + c + "}" if c else c for c in cells]
         body.append(" & ".join(cells) + r" \\")
@@ -354,7 +367,13 @@ def render_table(lines, number, caption, note=None):
         # only as "Overfull \hbox ... while \output is active", from the float
         # rather than from any source line. Shrink to fit, but only when it
         # actually overflows, so tables that already fit are left alone.
-        grid = ([r"\resizebox{\ifdim\width>\textwidth\textwidth"
+        # \linewidth, not \textwidth: an uncaptioned table is set in the
+        # running text of ONE column, where \textwidth is the width of
+        # both of them. Guarding against the wrong one let a table
+        # overflow its column by 39.6pt while the build reported it fit.
+        # \linewidth is right in both places -- the column inside running
+        # text, the full block inside a table* float.
+        grid = ([r"\resizebox{\ifdim\width>\linewidth\linewidth"
                  r"\else\width\fi}{!}{%"] + grid + ["}"])
     core = [
         size,
@@ -453,7 +472,8 @@ def render_math(raw):
 
 HEAD_NUM_RE = re.compile(r"^(?:[IVXLC]+|[A-Z]|\d+)\.\s+")
 UNNUMBERED = ("Acknowledgment", "Data and Code Availability",
-              "Author Biographies")
+              "Author Biographies",
+              "Ethics, Conflicts of Interest, and Data Provenance")
 
 
 def merge_lists(blocks):
@@ -496,9 +516,10 @@ def render_body(blocks):
 
     skipping = False
     for idx, (kind, payload) in enumerate(blocks):
-        # The biography is emitted by the BIOGRAPHY constant below, using the
-        # class's own IEEEbiography environment (which places the photograph).
-        # Rendering the Markdown section as well would duplicate it.
+        # The biography is emitted by build_biography() below, which reads
+        # this same section and wraps it in the class's own IEEEbiography
+        # environment (which places the photograph). Rendering the Markdown
+        # section here as well would duplicate it.
         if kind == "h2" and str(payload).startswith("Author Biographies"):
             skipping = True
         if skipping:
@@ -638,7 +659,10 @@ PREAMBLE = r"""%% IEEE Access manuscript -- GENERATED FILE, DO NOT EDIT.
 \renewcommand{\floatpagefraction}{0.90}
 \renewcommand{\dblfloatpagefraction}{0.95}
 
-\Urlmuskip=0mu plus 1mu          % let URLs stretch rather than overflow
+\Urlmuskip=0mu plus 0.15mu       % enough give to break a long URL, not
+                                 % enough to gap it visibly: at plus 1mu
+                                 % an 85 mm column rendered the repo URL
+                                 % as https : / / github . com / ...
 \def\UrlBreaks{\do\/\do-\do.\do_\do:}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,
             urlcolor=blue]{hyperref}
@@ -679,20 +703,36 @@ section.}
 \maketitle
 """
 
-BIOGRAPHY = r"""
+# The biography is taken from paper.md's "Author Biographies" section, not
+# stored here. It was stored here until 2026-08-29, which meant two copies of
+# it existed and an edit to the Markdown silently did not reach the PDF --
+# exactly the drift the "paper.md is the single source of truth" rule exists
+# to prevent, and exactly how it was found.
+BIOGRAPHY_TEMPLATE = r"""
 \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,
-    keepaspectratio]{figures/author_photo.jpeg}}]{SOPHIE ZHU}
-is a student at Mira Costa High School, in Manhattan Beach, CA, USA. Her
-research interests include artificial intelligence, healthcare technology,
-computer vision, and machine learning applications in public health. Her work
-focuses on the development of accessible and scalable artificial intelligence
-systems for healthcare challenges, with an emphasis on low-cost technologies
-for resource-constrained environments. Her current research examines how
-dataset construction shapes what image classifiers actually learn, and what
-evaluation protocols are needed before such systems can be trusted in
-public-health settings.
+    keepaspectratio]{figures/author_photo.jpeg}}]{@@NAME@@}
+@@BODY@@
 \end{IEEEbiography}
 """
+
+
+def build_biography(md):
+    """Render the manuscript's own biography paragraph into IEEEbiography.
+
+    The environment takes the author's name as its argument and the biography
+    text as its body, beginning mid-sentence ("is a student at..."), which is
+    how the class typesets the run-in name.
+    """
+    m = re.search(r"^\*\*([A-Z][A-Z .'-]+)\*\*\s+(is\b.*?)(?=\n\n|\Z)",
+                  md, re.M | re.S)
+    if not m:
+        raise SystemExit(
+            "no author biography found in paper.md: expected a paragraph "
+            "starting '**NAME** is ...' under Author Biographies")
+    name, body = m.group(1).strip(), " ".join(m.group(2).split())
+    return (BIOGRAPHY_TEMPLATE
+            .replace("@@NAME@@", name)
+            .replace("@@BODY@@", inline(esc(body))))
 
 README = """# IEEE Access LaTeX build
 
@@ -776,7 +816,8 @@ def main():
         assert token in preamble, f"preamble lost its {token} placeholder"
         preamble = preamble.replace(token, value)
 
-    tex = (preamble + "\n" + "\n".join(body) + "\n".join(bib) + BIOGRAPHY
+    tex = (preamble + "\n" + "\n".join(body) + "\n".join(bib)
+           + build_biography(md)
            + "\n\\EOD\n\n\\end{document}\n")
     tex = resolve_dangling_eqrefs(tex)
 

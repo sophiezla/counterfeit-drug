@@ -28,7 +28,8 @@ and only acquisition varies, which makes it a paired capture-shift test. For a
 paper about acquisition confounding that is the sharper experiment, but it
 cannot speak to generalisation across products.
 
-Authentic-only, like Split C, so this measures the false-positive rate.
+Authentic-only, like Split C, so this measures specificity (counterfeit is
+the positive class, so accuracy here is the true-negative rate).
 
 Output: modeling/results/split_d_eval.csv
 """

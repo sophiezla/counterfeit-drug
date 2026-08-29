@@ -18,7 +18,7 @@ Split C: 150 Mendeley "huawei cn" photographs, brightness 0.162.
 Split D: 149 Mendeley "iphone 11 pro" photographs, brightness 0.389 -- same
          products, different camera and lighting protocol. See
          scripts/20_characterise_split_d.py. Both authentic-only, so both
-         measure the false-positive rate.
+         measure specificity (counterfeit is the positive class).
 
 M1 has no checkpoint (it is an sklearn fit, not a torch module) and is refitted
 directly; it is cheap and bypasses the normalisation operator by design.

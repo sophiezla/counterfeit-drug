@@ -138,6 +138,48 @@ try:
     listed = {int(x) for x in re.findall(r"(?m)^\[(\d{1,2})\]", pdf_text)}
     check(not (cited - listed - set(range(1, 31))),
           "PDF citations fall within the reference list")
+
+    # ---------------------------------------------------------- front matter
+    # Page 1 carries three placeholders that are NOT ours to fill, and it is
+    # worth naming them, because "the PDF still says 2023" reads like a defect
+    # on inspection. ieeeaccess.cls hard-codes VOLUME 11, 2023 in its footer,
+    # and the official template ships the dummy \history and \doi lines
+    # verbatim -- the class file used here is byte-identical to the one in
+    # ACCESS_latex_template_20240429 -- and IEEE replaces all three at
+    # production. Everything the AUTHOR owns is checked to be filled, and any
+    # placeholder-shaped token outside the template's own fields is reported.
+    TEMPLATE_FIELDS = ("xxxx 00, 0000", "10.1109/ACCESS.2026.DOI",
+                       "VOLUME 11, 2023")
+    for field in TEMPLATE_FIELDS:
+        if field in pdf_text:
+            note(f"template placeholder present as expected, IEEE fills it at "
+                 f"production: {field!r}")
+
+    squashed = re.sub(r"\s+", "", pdf_text)
+    title = re.search(r"^#\s+(.*)$", main, re.M).group(1)
+    check(re.sub(r"\s+", "", title) in squashed,
+          "PDF title matches paper.md's title")
+    for label, needle in (("author name", "SOPHIE ZHU"),
+                          ("affiliation", "Mira Costa High School"),
+                          ("author e-mail", "sophiezhu2028@gmail.com"),
+                          ("ORCID", "0009-0004-2403-910X"),
+                          ("corresponding author", "Corresponding author"),
+                          ("index terms", "INDEX TERMS"),
+                          ("funding statement", "no specific grant"),
+                          ("AI-use disclosure", "Generative-AI disclosure"),
+                          ("author biography", "is a student at Mira Costa")):
+        check(re.sub(r"\s+", "", needle) in squashed,
+              f"front matter carries the {label}")
+
+    residue = pdf_text
+    for field in TEMPLATE_FIELDS:
+        residue = residue.replace(field, "")
+    leftovers = sorted({m.group(0).strip() for m in re.finditer(
+        r"(?i)\b(xxxx+|tbd|todo|lorem ipsum|first a\. author|author@|"
+        r"your name here)\b", residue)})
+    check(not leftovers,
+          "no placeholder text outside the template's own fields",
+          f"found: {leftovers}")
 except Exception as exc:                                  # noqa: BLE001
     check(False, "PDF/docx inspection", str(exc))
 

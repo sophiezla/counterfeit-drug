@@ -32,8 +32,15 @@ EXTRACT_BATCH_SIZE = 32
 @torch.no_grad()
 def extract_features(feature_extractor: torch.nn.Module, gap: torch.nn.Module,
                       examples, train: bool, k_augment: int = 1,
-                      batch_size: int = EXTRACT_BATCH_SIZE):
+                      batch_size: int = EXTRACT_BATCH_SIZE,
+                      normalize: bool = True):
     """
+    normalize=False bypasses the three-way capture normalization, i.e. the
+    un-normalized baseline condition. It is a parameter so that both conditions
+    of a comparison run through this one extraction path instead of through a
+    reimplementation of it per experiment script; the default is the production
+    behaviour and is unchanged.
+
     Each augmented pass is seeded with SEED + pass_idx before iterating, so
     the augmented views are reproducible regardless of what RNG-consuming
     code ran earlier in the process. This was previously unseeded, which is
@@ -51,7 +58,7 @@ def extract_features(feature_extractor: torch.nn.Module, gap: torch.nn.Module,
     all_X, all_y, all_ids = [], [], []
     for pass_idx in range(k_augment):
         set_seed(SEED + pass_idx)
-        ds = PharmaImageDataset(examples, train=train)
+        ds = PharmaImageDataset(examples, train=train, normalize=normalize)
         loader = DataLoader(ds, batch_size=batch_size, shuffle=False, num_workers=0)
         for x, y, ids in loader:
             x = x.to(DEVICE)

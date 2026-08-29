@@ -5,7 +5,9 @@ Split C here is AUTHENTIC-ONLY (see data/README.md and the Mendeley
 candidate's provenance: it has no counterfeit label), per the user's
 explicit direction after the original plan's two-class Split C source
 search came up empty on independence grounds. This measures each model's
-false-positive rate on a source it has NEVER seen, from a different country,
+specificity on a source it has NEVER seen -- counterfeit is the positive
+class, so accuracy on an authentic-only set is the true-negative rate. From a
+different country,
 different photographers, different camera hardware, and programmatically
 verified (07_verify_split_c_independence.py) to be non-duplicative of the
 training pool -- a genuine test of whether "authentic packaging" was

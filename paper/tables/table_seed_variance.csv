@@ -1,0 +1,7 @@
+model,condition,n_seeds,seeds,split_b_test_acc_mean,split_b_test_acc_sd,split_b_test_acc_min,split_b_test_acc_max,split_c_acc_mean,split_c_acc_sd,split_c_acc_min,split_c_acc_max,split_d_acc_mean,split_d_acc_sd,split_d_acc_min,split_d_acc_max
+M3 MobileNetV3,normalized,5,42 43 44 45 46,0.9378,0.0074,0.9324,0.9459,0.724,0.0465,0.6467,0.7733,0.6846,0.0435,0.6376,0.7248
+M3 MobileNetV3,baseline,5,42 43 44 45 46,0.9405,0.0074,0.9324,0.9459,0.7147,0.0568,0.6667,0.78,0.6443,0.0427,0.5973,0.698
+M2 CNN,normalized,5,42 43 44 45 46,0.8243,0.0417,0.7568,0.8649,0.9093,0.0382,0.86,0.9533,0.6268,0.1353,0.4631,0.7919
+M2 CNN,baseline,5,42 43 44 45 46,0.8541,0.0176,0.8243,0.8649,0.0507,0.1025,0.0,0.2333,0.1758,0.2006,0.0067,0.5235
+M4 EfficientNet-B0,normalized,5,42 43 44 45 46,0.9351,0.0113,0.9189,0.9459,0.86,0.0343,0.8067,0.8933,0.8778,0.0312,0.8322,0.906
+M4 EfficientNet-B0,baseline,5,42 43 44 45 46,0.9054,0.0,0.9054,0.9054,0.1,0.0262,0.06,0.1333,0.2403,0.0475,0.1611,0.2819

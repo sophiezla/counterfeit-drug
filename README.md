@@ -1,4 +1,4 @@
-# Provenance confounds in authenticity-classification image datasets
+# Provenance confounding in image authenticity classification
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21936720.svg)](https://doi.org/10.5281/zenodo.21936720)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -12,11 +12,12 @@ in-distribution evaluation can detect it.
 The case study is a public counterfeit-medicine dataset. The manuscript is
 built from `paper/paper.md`; see `paper/` and Appendix C for reproduction.
 
-**Archived release.** The manuscript reports
-[v1.0.1](https://doi.org/10.5281/zenodo.22151840)
-(doi:10.5281/zenodo.22151840), which is the exact state of the code that
-produced every number in it. The badge above is the version-independent DOI
-and always resolves to the latest release.
+**Archived release.** The manuscript reports **v1.1.0**, the current
+release, which is the exact state of the code that produced every number
+in it. The badge above is the version-independent DOI and always resolves
+to the latest release. v1.0.1 (doi:10.5281/zenodo.22151840) is superseded:
+it predates the seed-variance sweep and the occlusion analysis the
+manuscript now reports.
 
 **This repository contains no images.** The case-study archive carries no
 licence grant, so nothing from it is redistributed here — only derived

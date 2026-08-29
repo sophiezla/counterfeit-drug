@@ -169,7 +169,7 @@ def fig_workflow():
     y4, h4 = 29, 13
     box(1, 22, y4, h4, "Split A\nnaive, image level\n70:15:15\n9/480 groups leak", "#fafaf8", BASELINE)
     box(25.5, 22, y4, h4, "Split B\nproduct-group level\n70:15:15 + 5-fold CV\n0 group overlap", "#f4f7fc", BLUE, weight="600")
-    box(50, 23.5, y4, h4, "Split C — real\n150 external authentic\nphotographs\n(false-positive rate)", "#eefaf5", AQUA)
+    box(50, 23.5, y4, h4, "Split C — real\n150 external authentic\nphotographs\n(specificity)", "#eefaf5", AQUA)
     box(76.5, 22.5, y4, h4, "Split C — synthetic\n150 authentic +\n150 perturbed\n(stress-test proxy)", "#f2f0fa", VIOLET)
 
     # ---- row 5: models

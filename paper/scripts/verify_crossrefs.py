@@ -7,9 +7,21 @@ silently disagree. This script is that check, run over both the Markdown
 source and the generated LaTeX.
 
     python paper/scripts/verify_crossrefs.py
+    python paper/scripts/verify_crossrefs.py --map
 
 Exit status is non-zero if anything dangles, so it can gate a build.
+
+A resolving reference is not necessarily a correct one, and that is the
+failure this file kept missing: a section reference that survives a
+restructuring still points somewhere, it just points somewhere else. Nine such
+references were found by hand in 2026-08-29, four of them naming a table whose
+number had moved. `--map` is the check that finds them without hand-reading the
+manuscript: it prints every Section, Table and Fig. reference in both documents
+next to the TITLE of whatever it resolves to, so a wrong target reads as a
+mismatch instead of as a number. It reports and never gates -- only a human can
+say whether "Section III-E" was meant to name the external evaluation set.
 """
+import csv
 import re
 import sys
 from pathlib import Path
@@ -160,6 +172,89 @@ def check_markdown():
               f"after any renumbering: {lists}")
 
 
+def check_pipe_lines():
+    """Every pipe-led line must belong to an actual table.
+
+    Both builders treat a line beginning with "|" as a table row. A set
+    statement written as "|T| = 661, |V| = 453, ..." was therefore typeset as a
+    one-row bold table in both the PDF and the .docx, with the cardinality bars
+    consumed as cell delimiters, so the page read "T = 661". Nothing else here
+    could see it: the table was well-formed, it just was not a table.
+    """
+    print("\npipe-led lines")
+    for label, path in (("paper.md", MD), ("supplementary.md", SUPP_MD)):
+        lines = path.read_text(encoding="utf-8").split("\n")
+        fence, blocks, cur = False, [], []
+        for i, ln in enumerate(lines, 1):
+            if ln.strip().startswith("```"):
+                fence = not fence
+            if fence:
+                continue
+            if ln.lstrip().startswith("|"):
+                cur.append((i, ln))
+            else:
+                if cur:
+                    blocks.append(cur)
+                cur = []
+        if cur:
+            blocks.append(cur)
+        bad = [b[0] for b in blocks
+               if not any(re.match(r"^\s*\|[\s:|-]+\|\s*$", l) for _, l in b)]
+        report(not bad, f"{label}: every pipe-led line is part of a table",
+               "; ".join(f"line {n}: {l.strip()[:60]}" for n, l in bad[:3]))
+
+
+def check_external_counts():
+    """Every k/150 and k/149 in either document must be a count that exists.
+
+    This is the check that catches the error the resolution checks cannot: a
+    reference to "5/150 to 122/150" resolves to nothing and dangles nowhere,
+    it is simply not the count the model produced, and the table two paragraphs
+    below says 121. The allowed set is DERIVED from committed artefacts rather
+    than typed here, so the only way to introduce a new count is to produce the
+    artefact that justifies it.
+    """
+    print("\nexternal counts")
+    allowed = {150: {0, 150}, 149: {0, 149}}
+
+    ext = ROOT / "modeling" / "results" / "external_from_checkpoints.csv"
+    for r in csv.DictReader(open(ext, newline="", encoding="utf-8")):
+        allowed.setdefault(int(r["n"]), set()).add(int(r["correct"]))
+
+    # The pre-normalization baseline column of Table 8 comes from the archived
+    # run, whose counts live in external_intervals.py.
+    src = (ROOT / "paper" / "scripts" / "external_intervals.py").read_text(
+        encoding="utf-8")
+    block = re.search(r"BASELINE_K\s*=\s*\{(.*?)\}", src, re.S)
+    if block:
+        allowed[150] |= {int(n) for n in re.findall(r":\s*(\d+)", block.group(1))}
+
+    # The border-mass audit retrains the un-normalized baseline rather than
+    # loading it, and reports its own Split C accuracy.
+    summ = ROOT / "modeling" / "results" / "gradcam_quantitative_summary.csv"
+    if summ.exists():
+        for r in csv.DictReader(open(summ, newline="", encoding="utf-8")):
+            if r["metric"] == "split_c_accuracy":
+                allowed[150].add(round(float(r["mean"]) * 150))
+
+    # Two literals that are not model counts and have nowhere else to come
+    # from: the 16/150 of the superseded rebuild that Section S-II reports as
+    # history, and the 150/150 approval rate of the synthetic-proxy review.
+    allowed[150] |= {16, 150}
+
+    for label, path in (("paper.md", MD), ("supplementary.md", SUPP_MD)):
+        text = strip_code(path.read_text(encoding="utf-8"))
+        bad = []
+        for m in re.finditer(r"\b(\d+)\s*/\s*(150|149)\b", text):
+            k, n = int(m.group(1)), int(m.group(2))
+            if k not in allowed[n]:
+                bad.append(f"{k}/{n} (" +
+                           " ".join(text[max(0, m.start() - 45):
+                                         m.end() + 5].split()) + ")")
+        report(not bad, f"{label}: every k/150 and k/149 is a count on record",
+               "; ".join(bad[:3]))
+
+
 def check_tex():
     print("\nlatex/paper.tex")
     if not TEX.exists():
@@ -272,8 +367,108 @@ def check_supplement():
                    f"{o} open, {c} close")
 
 
+def _titles(md, supp):
+    """Index every referenceable target in both documents by its own title."""
+    t = {}
+    roman = None
+    for m in re.finditer(r"^(?:## ([IVXLC]+)\.\s*(.*)|### ([A-Z])\.\s*(.*))$",
+                         md, re.M):
+        if m.group(1):
+            roman = m.group(1)
+            t[f"sec:{roman}"] = m.group(2).strip()
+        elif roman:
+            t[f"sec:{roman}-{m.group(3)}"] = m.group(4).strip()
+
+    s_roman = None
+    for m in re.finditer(r"^(?:## (S-[IVXLC]+)\.\s*(.*)|### ([A-Z])\.\s*(.*))$",
+                         supp, re.M):
+        if m.group(1):
+            s_roman = m.group(1)
+            t[f"sec:{s_roman}"] = m.group(2).strip()
+        elif s_roman:
+            t[f"sec:{s_roman}-{m.group(3)}"] = m.group(4).strip()
+
+    for src, pre in ((md, ""), (supp, "S")):
+        for m in re.finditer(r"^\*\*TABLE (S?\d+)\.\*\*\s*(.*)$", src, re.M):
+            t[f"tab:{m.group(1).lstrip('S') if pre else m.group(1)}"
+              if not pre else f"tab:S{m.group(1).lstrip('S')}"] = m.group(2).strip()
+        for m in re.finditer(r"^>\s*\*\*FIGURE (S?\d+)\.\*\*\s*`?([^`\n]*)", src, re.M):
+            key = f"fig:S{m.group(1).lstrip('S')}" if pre else f"fig:{m.group(1)}"
+            t[key] = m.group(2).strip()
+    return t
+
+
+def print_map():
+    """Print every cross-reference beside the title of what it resolves to."""
+    md = strip_code(MD.read_text(encoding="utf-8"))
+    supp = strip_code(SUPP_MD.read_text(encoding="utf-8"))
+    titles = _titles(md, supp)
+
+    # Enclosing-heading index, so each reference is reported from where it sits.
+    def marks_for(text, main):
+        out, roman = [], None
+        pat = (r"^(?:## ([IVXLC]+)\.|### ([A-Z])\.)" if main
+               else r"^(?:## (S-[IVXLC]+)\.|### ([A-Z])\.)")
+        for m in re.finditer(pat, text, re.M):
+            if m.group(1):
+                roman = m.group(1)
+                out.append((m.start(), roman))
+            elif roman:
+                out.append((m.start(), f"{roman}-{m.group(2)}"))
+        return out
+
+    REF = re.compile(
+        r"\bSections?\s+(S-[IVXLC]+(?:-[A-Z])?|[IVXLC]+(?:-[A-Z])?)"
+        r"|\bTables?\s+(S?\d+)"
+        r"|\b(?:Figs?\.|Figures?)\s+(S?\d+)")
+
+    rows = []
+    for doc, text, main in (("paper", md, True), ("supp", supp, False)):
+        marks = marks_for(text, main)
+        for m in REF.finditer(text):
+            here = None
+            for start, name in marks:
+                if start <= m.start():
+                    here = name
+                else:
+                    break
+            sec, tab, fig = m.groups()
+            key = (f"sec:{sec}" if sec else
+                   f"tab:{tab}" if tab else f"fig:{fig}")
+            snippet = " ".join(text[max(0, m.start() - 40):m.start() + 70].split())
+            # The console this runs on is cp1252; the manuscript is not. Report
+            # what cannot be encoded rather than dying halfway through the map.
+            snippet = snippet.encode("ascii", "replace").decode("ascii")
+            rows.append((key, doc, here or "-", snippet))
+
+    print("Every cross-reference, beside the title of what it resolves to.")
+    print("Read each line as a sentence: does the snippet mean that target?\n")
+    for key in sorted(set(r[0] for r in rows), key=_sortkey):
+        title = titles.get(key)
+        if title is not None:
+            title = title.encode("ascii", "replace").decode("ascii")
+        kind, ident = key.split(":", 1)
+        head = f"{kind.upper()} {ident}"
+        print(f"{head:<12} {title if title is not None else '*** DANGLING ***'}")
+        for _, doc, here, snippet in [r for r in rows if r[0] == key]:
+            print(f"    {doc:<5} in {here:<8} ...{snippet}...")
+        print()
+
+
+def _sortkey(key):
+    kind, ident = key.split(":", 1)
+    supp = ident.startswith("S")
+    body = ident.lstrip("S").lstrip("-")
+    return (kind, supp, body.zfill(4) if body.isdigit() else body)
+
+
 def main():
+    if "--map" in sys.argv:
+        print_map()
+        return
     check_markdown()
+    check_pipe_lines()
+    check_external_counts()
     check_tex()
     check_supplement()
     print()

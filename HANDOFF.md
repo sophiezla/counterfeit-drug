@@ -4,6 +4,162 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Proofread pass, 2026-08-29 (later the same day)
+
+A fresh read of the RENDERED pages, not the source, on the assumption that
+nothing was already correct. Eight defects, four of them visible on the page
+and two of them factual. The lesson repeats the one HANDOFF already records:
+every check in this repository reads the Markdown or the build log, and the
+things found here were invisible to both.
+
+**A set statement was being typeset as a table, in both outputs.** Section
+III-A wrote the shipped-split cardinalities as a line beginning with "|", so
+the Markdown parser read it as a one-row table and ate the bars as cell
+delimiters. The PDF and the .docx both printed "T = 661, V = 453" with no
+cardinality notation at all, and the .docx carried an eleventh table that does
+not exist. It is now prose. `verify_crossrefs.py` gates the class: every
+pipe-led line must belong to a block containing a |---| separator.
+
+**Two stale accuracies for M4.** Section VI-E said "a model at 94.6% on Split
+B" and the supplement's Type A entry said "in-distribution 0.946" -- both the
+value that Section S-I-G documents as *superseded*, corrected to 0.919 when
+checkpointing exposed it. The paper described the correction and then quoted
+the old number twice. Now 91.9% and 0.919.
+
+**Three claims contradicted the same day's own findings**, left behind when
+the occlusion result narrowed them: Future Work still said "both backbones
+justify authentic by the surround", S-II still called that the basis of both
+backbones' correct predictions, and Section IX asserted "seed-to-seed variance
+is itself unmeasured" two sentences after reporting the measurement. When a
+finding is read down, grep the whole corpus for the old phrasing.
+
+**Formatting, all confirmed by rendering the page rather than by the log:**
+the repository URL was stretched by the justified 85 mm column into
+"https : / / github . com / ..." (`\Urlmuskip` cut from 1mu to 0.15mu); the
+ethics declarations were emitted as a NUMBERED section, so "XII. ETHICS" sat
+between two unnumbered back-matter sections; two sentences began "(8)
+composes ..." because IEEEtran style drops the word "Eq." (`build_tex` now
+writes "Equation~(8)" sentence-initially); Table 4's "kB = 1000 bytes" note
+was stranded a page away from the float it defines, the same defect the
+2026-08-28 pass fixed for a different note, and is now inside the caption;
+and one leftover British spelling in the main paper plus three in the
+supplement survived `americanize.py`.
+
+**Two builder bugs, both of which had been silently producing wrong output.**
+`build_tex` stored its own copy of the author biography, so editing `paper.md`
+did not reach the PDF -- it now renders the biography from the Markdown. And
+the width guard on uncaptioned tables compared against `\textwidth` when such
+a table is set inside ONE column, so the new seed-variance table overflowed its
+column by 39.6pt while the build reported it fit; the guard now uses
+`\linewidth`, which is correct in a float and in running text alike.
+
+**Verification used from here on.** A geometric margin check beats the LaTeX
+log: rasterise nothing, just compare every text block's right edge against the
+177.53 mm text block. Both documents currently have zero blocks past it, while
+the log still reports 43 and 54 "overfull" boxes, of which 41 and 51 are the
+class's own page furniture and the rest are under 10pt and invisible.
+
+**Page count.** Still exactly 20, with the `\EOD` mark last on page 20 and no
+slack. Every addition in this pass was paid for by cutting duplication, mostly
+material the supplement carries in full.
+
+## Reviewer-response pass, 2026-08-29
+
+A reviewer read the compiled PDF and raised twelve items. Nine are done; three
+need data or annotation this pass could not produce, and are listed under Open
+items with what exists to make them cheap.
+
+**The paper was retitled** to *Provenance Confounding in Image Authenticity
+Classification: Detection and a Counterfeit-Medicine Case Study*. "Partial
+Repair" was giving the wrong emphasis to a paper whose Section VIII-E argues
+the correction is a diagnostic rather than a remedy. The new title is in
+`paper.md`, `supplementary.md`, `README.md`, `CITATION.cff`, `.zenodo.json` and
+the poster subtitle. **The published Zenodo v1.0.1 record still carries the old
+title**; edit that record's metadata if you want them to agree.
+
+**A factual contradiction was removed.** Table 2 described the Kaggle archive
+as "the dataset used by [3]", which contradicts Table 1 (Ramos et al.
+self-captured on a Raspberry Pi rig) and Section II-F (no located study uses
+it). This is the kind of error that makes a reviewer doubt the reference audit,
+so it is worth knowing how it survived: nothing checks a claim that resolves.
+
+**Sixteen cross-references pointed at the wrong target**, all of them
+resolving, so no existing check saw any of them. `verify_crossrefs.py --map`
+is the check that finds them: it prints every Section, Table and Fig.
+reference beside the TITLE of what it resolves to, so a wrong target reads as
+a mismatch rather than as a number. Run it after any renumbering or
+restructuring and read the list. Four were `Table 7` (cross-domain audit)
+meaning `Table 8` (external generalization); four were `Section S-I-D`
+(Training protocol) meaning `S-I-B` (synthetic proxy); the rest were VI-C/VI-D
+for VI-A/VI-E/VI-F, VII-A for VII-B, and Section IX pointing at VII-B for a
+derivation that lives in S-I-S.
+
+**A numerical inconsistency is now gated.** The prose said M4 went "5/150 to
+122/150" where every table says 121. `verify_crossrefs.py` now derives the
+legitimate k/150 and k/149 counts from `external_from_checkpoints.csv`,
+`external_intervals.py`'s archived baselines and the border-mass summary, and
+fails on any count that is not one of them. Adding a new count means producing
+the artefact that justifies it.
+
+**"False-positive rate" was wrong throughout and is now "specificity".**
+Counterfeit is the positive class, so accuracy on an authentic-only external
+set is the true-negative rate, not the false-positive rate. Section III-E
+defines the equivalence once; the four code files that repeated the error were
+corrected too.
+
+**Two new measurements, both of which changed a claim.** They are the reason
+this pass took hours rather than minutes, and both are reproducible:
+
+`modeling/seed_sweep.py` repeats M2, M3 and M4 at five seeds, production and
+un-normalized, on Split B/C/D (Section S-I-U, `table_seed_variance.csv`). Seed
+42 reproduces all three models' published numbers exactly, which validates the
+harness. Findings: the correction's effect on M2 and M4 is an order of
+magnitude larger than seed variance, so the headline holds; **M3's is not
+distinguishable from seed noise at all** (0.715 +/- 0.057 to 0.724 +/- 0.047),
+which converts the paper's cautious refusal to claim a benefit for M3 into a
+measurement; and **M2's Split D collapse is overstated by the run of record**
+-- 0.627 +/- 0.135 across seeds, with seed 42 the lowest of five, so the mean
+drop is 28 points rather than 39.7. Section VI-F now says so.
+
+`modeling/occlusion_sensitivity.py` re-tests the attention claim with a
+perturbation method that needs no annotator and covers all 150 external images
+per model. It **confirms** the Grad-CAM reading for M3 and for both models'
+errors and **contradicts** it for M4's correct answers (border mass 0.614
+[0.585, 0.643] against a 0.642 uniform reference; 55 of 121 images above it).
+The manuscript's "identical in both backbones, 40 of 40" reading is therefore
+withdrawn in Sections VI-G, VI-F, VIII-C, VIII-E, the abstract and the
+conclusion. Do not restore it.
+
+**The build had a second copy of the author biography.** `build_tex.py` stored
+it as a constant, so editing `paper.md` silently did not reach the PDF. It now
+renders the biography from the Markdown, which is what the single-source rule
+requires. If you add front matter, check whether a builder hard-codes it.
+
+**Front-matter placeholders are template-owned, and now documented as such.**
+`xxxx 00, 0000`, `10.1109/ACCESS.2026.DOI` and `VOLUME 11, 2023` come from
+`ieeeaccess.cls`, which is byte-identical to the one in
+`ACCESS_latex_template_20240429/`, and from the template's own `access.tex`.
+IEEE fills all three at production. `final_sweep.py` now reports them as
+expected and separately asserts the nine author-owned fields are filled,
+failing on any other placeholder token. **Do not "fix" them.**
+
+**Page count.** The additions pushed the manuscript to 21 pages and it is back
+to exactly 20, paid for by condensing material the supplement already carries
+in full -- the VIII-G taxonomy, VII-A's ablation summary, the Conclusion's
+qualifications, and a funding statement that appeared three times. The
+`\EOD` mark is again the last thing on page 20, so **any prose addition needs
+a compensating cut**. `compile_pdf.py` reports the page count.
+
+Also done: intervals are no longer described as uniformly bootstrap (two
+constructions, each table names its own); the abstract's "no in-distribution
+evaluation can expose this" was self-contradicting, since the metadata audit
+is in-distribution and does expose it, and now distinguishes conventional
+predictive evaluation from the audit; scope claims were narrowed from "any
+binary image task" to what the evidence supports; contribution 1 concedes the
+general phenomenon to [6]-[10] and claims the mechanism and the screen;
+references [3], [23] and [30] were re-verified against Crossref and DBLP and
+match exactly.
+
 ## Submission-readiness pass, 2026-08-28
 
 A reviewer read the compiled PDF and named four production defects and two
@@ -100,9 +256,10 @@ subject. Do not reframe the paper around that dataset being defective —
 a deep-research check confirmed no peer-reviewed work cites it, so
 "this dataset is bad" has no readership. The mechanism does.
 
-Title: *Asymmetric Class Sourcing Creates Provenance Confounds in
-Authenticity-Classification Image Datasets: Detection, Cost, and Partial
-Repair.*
+Title: *Provenance Confounding in Image Authenticity Classification:
+Detection and a Counterfeit-Medicine Case Study* (retitled 2026-08-29; the
+previous title led with the mechanism and ended on "Partial Repair", which
+oversold a correction the paper reports as a diagnostic).
 
 ## Things that are settled — do not re-litigate
 
@@ -256,11 +413,11 @@ boundary, so the name stayed consistent across paper.md, the generator and
 disk) and the cited author name "Manlises". Figures and poster were
 regenerated; the poster's four columns still report positive slack.
 
-**One item still needs the author and cannot be done here:** a public
-DOI-bearing repository (a placeholder in Data and Code Availability says so).
-The project is not yet a git repository at all. A second annotator for the
-attention audit also remains open; `scripts/21_build_gradcam_review.py`
-already produces the tool, so a second pass is cheap.
+**Both items in this paragraph are now done** and it is kept for the record:
+the repository is public and archived (doi:10.5281/zenodo.22151840), and the
+attention audit gained a second, annotation-free opinion on 2026-08-29 (see
+the reviewer-response pass above). A second human annotator is still open;
+`scripts/21_build_gradcam_review.py` already produces the tool.
 
 ## Current headline results
 
@@ -273,6 +430,8 @@ already produces the tool, so a second pass is cheap.
 | Pairwise model differences | none significant, all p ≥ 0.118; M3-vs-M4 unresolvable by construction |
 | External, Split C, after correction | M2 86.0%, M3 77.3%, M4 80.7% |
 | External, Split D (2nd capture shift) | M2 **46.3%**, M3 72.5%, M4 **83.2%** |
+| Seed variance, 5 seeds (Section S-I-U) | correction >> noise for M2/M4; M3 0.715±0.057 → 0.724±0.047, i.e. no effect; M2 Split D 0.627±0.135 |
+| Occlusion vs Grad-CAM on external attention | agree for M3 and for both models' errors; disagree for M4's correct answers |
 
 **Two findings dominate the current draft.** First, Model 2's Split C lead
 was specific to that capture condition (Split D), so the correction transfers
@@ -389,6 +548,21 @@ them would trade a defensible claim for a bigger number.
 5. A second annotator for the attention audit. Section IX discloses the
    single-annotator limitation, and `scripts/21_build_gradcam_review.py`
    already produces the tool, so a second pass is cheap.
+6. **The product-box annotation pass, which is the cheapest open item and
+   settles a live disagreement.** Grad-CAM and occlusion disagree about
+   whether M4's correct external answers rest on the background (Section
+   VI-G), and the border-mass statistic cannot referee it because it is
+   radial: it measures distance from the centre of the frame, not from the
+   product. `scripts/23_build_product_box_tool.py` builds a drag-one-box-
+   per-image HTML tool over the 150 Split C images (one drag, saves and
+   advances; about five minutes), and `modeling/attention_in_box.py` turns
+   the exported CSV into an area-normalised concentration ratio for both
+   attribution methods, split by outcome. Nothing else is needed.
+7. Re-running the ordering and per-axis ablations across seeds. Section
+   S-I-U measures seed variance for the production and baseline conditions
+   only; the ablations remain single executions, which is defensible while
+   their separations stay an order of magnitude above the variance measured
+   there, and is worth revisiting if any of them is ever pressed.
 
 The author block and biography were filled on 2026-08-13 and the poster's on
 2026-08-28; the item that used to stand here saying otherwise was stale. The

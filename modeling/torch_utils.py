@@ -43,8 +43,12 @@ PATIENCE = 4
 MIN_DELTA = 1e-3
 
 
-def make_loader(examples, train: bool, batch_size: int = BATCH_SIZE):
-    ds = PharmaImageDataset(examples, train=train)
+def make_loader(examples, train: bool, batch_size: int = BATCH_SIZE,
+                 normalize: bool = True):
+    # normalize=False is the un-normalized baseline condition; the default is
+    # the production pipeline and is unchanged. feature_cache.extract_features
+    # carries the same flag for the frozen-backbone path.
+    ds = PharmaImageDataset(examples, train=train, normalize=normalize)
     g = torch.Generator()
     g.manual_seed(SEED)
     return DataLoader(ds, batch_size=batch_size, shuffle=train, generator=g if train else None,
@@ -169,9 +173,12 @@ def _run_training_loop(model, train_loader, val_loader, lr, class_weights,
 
 
 def train_model(model, train_examples, val_examples, lr, model_tag, run_tag,
-                 max_epochs=MAX_EPOCHS, patience=PATIENCE, batch_size=BATCH_SIZE):
-    train_loader = make_loader(train_examples, train=True, batch_size=batch_size)
-    val_loader = make_loader(val_examples, train=False, batch_size=batch_size)
+                 max_epochs=MAX_EPOCHS, patience=PATIENCE, batch_size=BATCH_SIZE,
+                 normalize: bool = True):
+    train_loader = make_loader(train_examples, train=True, batch_size=batch_size,
+                                normalize=normalize)
+    val_loader = make_loader(val_examples, train=False, batch_size=batch_size,
+                              normalize=normalize)
     class_weights = compute_class_weights(train_examples)
     return _run_training_loop(model, train_loader, val_loader, lr, class_weights,
                                model_tag, run_tag, max_epochs, patience, has_ids=True)
@@ -187,10 +194,12 @@ def train_model_on_features(model, X_train, y_train, X_val, y_val, lr, model_tag
 
 
 @torch.no_grad()
-def evaluate_model(model, examples, batch_size: int = BATCH_SIZE):
+def evaluate_model(model, examples, batch_size: int = BATCH_SIZE,
+                    normalize: bool = True):
     model.eval()
     model = model.to(DEVICE)
-    loader = make_loader(examples, train=False, batch_size=batch_size)
+    loader = make_loader(examples, train=False, batch_size=batch_size,
+                          normalize=normalize)
     all_ids, all_true, all_prob = [], [], []
     for x, y, ids in loader:
         x = x.to(DEVICE)

@@ -7,6 +7,7 @@ ROC-AUC are all with respect to counterfeit), matching the plan's framing of
 counterfeit detection as the task of interest.
 """
 import csv
+import os
 import random
 from pathlib import Path
 
@@ -30,7 +31,15 @@ IMG_SIZE = 224
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD = [0.229, 0.224, 0.225]
 
-SEED = 42
+# 42 everywhere, which is the value every committed result was produced under
+# and the value every script must keep producing by default. The environment
+# override exists for one purpose: modeling/seed_sweep.py measures seed-to-seed
+# variance, which the paper's Limitations section reports as unmeasured, and
+# that requires the whole pipeline -- model init, DataLoader shuffling,
+# augmentation passes -- to move together rather than one call site at a time.
+# Read once at import, so a run's seed is fixed before any module derives from
+# it. Unset (the normal case) is exactly the previous behaviour.
+SEED = int(os.environ.get("PHARMAVISION_SEED", "42"))
 
 
 def set_seed(seed: int = SEED):
