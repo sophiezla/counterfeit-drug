@@ -96,6 +96,8 @@ This is standard linear-probing practice and it is what made M4 tractable at all
 
 ### F. Evaluation protocol and metrics
 
+Two kinds of analysis are mixed in this study and the difference matters for how much weight each carries. The split comparison, the four-model roster and the external evaluation were fixed by the protocol before any of them ran, and are confirmatory. Everything about the correction — which axes, which constants, which composition order — was developed after the external failure had been observed, and is exploratory in the strict sense: the axes were nominated by comparing the pool against Split C, and the constants and order were fixed by hand. Three later analyses convert parts of that back into something testable, and each says so where it is used: Section S-I-S re-derives the axes from the training partition alone under a threshold declared in advance, Section S-I-U repeats the production and baseline conditions across five seeds, and the constant and ordering sweeps report every condition they ran rather than the best one. The production constants and the production order were fixed before either sweep existed, which is why Sections VII-B and S-I-R can report that a better setting exists and decline to adopt it.
+
 All metrics use a 0.5 decision threshold unless stated. With TP, FP, FN, TN defined against counterfeit as positive:
 
 $$\mathrm{Sens} = \frac{TP}{TP+FN}, \quad \mathrm{Spec} = \frac{TN}{TN+FP}, \quad \mathrm{BA} = \frac{\mathrm{Sens}+\mathrm{Spec}}{2} \tag{12}$$

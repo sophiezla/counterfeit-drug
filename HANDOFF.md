@@ -4,6 +4,64 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Informal-review revision, 2026-08-29
+
+An informal reviewer returned a Major Revision with eight major and five minor
+concerns. Five of the eight were things the manuscript already stated, often in
+the reviewer's own words -- generality conceded as a mechanism and not a rate
+(I-A, VIII-H, IX, X), the external set as specificity rather than recall
+(III-E, IX), power and single-run ablations (S-I-H, S-I-U), attribution as
+suggestive (answered by the occlusion analysis, which contradicted part of the
+Grad-CAM reading), and the shared backdrop (already the study's most
+consequential gap). Those were left alone: the fix is a response letter, not
+new text. Four things were actionable and are done.
+
+**The mechanism is now separated from its neighbours in Section II-B**, which
+is where novelty gets judged. The paragraph that used to say only "a difference
+in cause" now says what shortcut learning, dataset bias and domain shift each
+name, and what this is instead: a property of how a dataset was assembled, in
+which acquisition correlates with the label WITHIN the training distribution,
+before a model is fitted and without reference to a deployment distribution.
+Three consequences follow that the neighbouring terms do not carry -- the
+association can be complete rather than partial (1.0 here against incidental
+and partial at [7]'s three hospitals), it is predictable from construction so
+the population at risk is nameable in advance, and it survives leakage-aware
+validation because every partition of one pool inherits it. Section VIII-F was
+cut back to what only it says, since it had been repeating this.
+
+**The target-distribution objection is answered where it arises.** Section V-D
+now states, at the point the axes are introduced, that they were chosen after
+Table 4 and that Section S-I-S re-derives the same three from the training
+partition alone under a threshold declared in advance. It was previously only
+in Limitations and the supplement, which is not where the doubt occurs.
+
+**Exploratory and confirmatory analyses are now labelled.** Section VI says
+which parts were fixed by the protocol before running and which were developed
+after the external failure; Section S-I-F gives the full statement, including
+which later analyses convert exploratory choices back into testable ones.
+
+**Two rhetorical phrasings were neutralised**, and no more: the voice is
+deliberate and "we would not deploy any of these models" is a substantive
+claim, not a flourish.
+
+**The title was kept.** The reviewer's objection is not to the words but to the
+risk that a coined term invites "how is this different?" -- which Section II-B
+now answers directly. Changing it again would also desynchronise the published
+Zenodo record for no scientific gain.
+
+**Page count.** The additions cost about 1,400 characters and were paid for by
+consolidating what the supplement already carries in full: Section VII-A's four
+headed paragraphs became two, Section VI-C's two middle readings became one
+(which also answers the reviewer's minor point that secondary analyses crowd
+the central one), and the no-redistribution statement stopped appearing in both
+the Acknowledgment and the availability statement. Back to exactly 20 pages.
+
+**No new Zenodo release was cut for this.** Nothing in `modeling/`, `scripts/`
+or `paper/tables/` changed, so v1.1.0 remains the exact state of the code that
+produced every number, which is what the manuscript claims of it. The
+manuscript text has moved on in git; archive the accepted version at
+acceptance, which is the normal point to do it.
+
 ## Submission state, 2026-08-29 — READ THIS FIRST
 
 Everything in the repository is committed and every check passes. Three things
