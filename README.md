@@ -12,9 +12,9 @@ in-distribution evaluation can detect it.
 The case study is a public counterfeit-medicine dataset. The manuscript is
 built from `paper/paper.md`; see `paper/` and Appendix C for reproduction.
 
-**Archived release.** The manuscript reports **v1.1.0**, the current
-release, which is the exact state of the code that produced every number
-in it. The badge above is the version-independent DOI and always resolves
+**Archived release.** The manuscript reports
+[v1.1.0](https://doi.org/10.5281/zenodo.22166543) (doi:10.5281/zenodo.22166543), which is the exact state
+of the code that produced every number in it. The badge above is the version-independent DOI and always resolves
 to the latest release. v1.0.1 (doi:10.5281/zenodo.22151840) is superseded:
 it predates the seed-variance sweep and the occlusion analysis the
 manuscript now reports.

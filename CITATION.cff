@@ -31,6 +31,9 @@ identifiers:
     value: 10.5281/zenodo.21936720
     description: Concept DOI, resolves to the latest release
   - type: doi
+    value: 10.5281/zenodo.22166543
+    description: DOI of v1.1.0, the release the manuscript reports
+  - type: doi
     value: 10.5281/zenodo.22151840
     description: >-
       DOI of v1.0.1. Superseded: v1.1.0 adds the seed-variance sweep and the

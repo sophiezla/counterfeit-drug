@@ -9,18 +9,16 @@ then `paper/paper.md`.
 Everything in the repository is committed and every check passes. Three things
 need a human and cannot be done from here; nothing else is outstanding.
 
-**1. Cut the v1.1.0 release, and do it before submitting.** The manuscript's
-Data and Code Availability says the archive "resolves to the current release,
-v1.1.0 ... the exact state of the code that produced every number reported
-here". That is true of the committed tree and false of v1.0.1, which predates
-the seed sweep and the occlusion analysis. So: push, tag `v1.1.0`, and publish
-the GitHub release so Zenodo mints the new version under the concept DOI
-10.5281/zenodo.21936720. `CITATION.cff` and `.zenodo.json` already carry
-version 1.1.0, the release date and a description naming both new analyses.
-The paper deliberately cites the CONCEPT DOI rather than a version DOI,
-because a version DOI does not exist until Zenodo mints it; if you would
-rather cite the version DOI, paste it into the one sentence in
-`paper/paper.md` under "Repository" and rebuild. Do not leave v1.0.1 cited.
+**1. DONE — v1.1.0 is released and archived.** Pushed, tagged and published on
+2026-08-29; Zenodo minted **doi:10.5281/zenodo.22166543** for it, and the
+concept DOI 10.5281/zenodo.21936720 now resolves there. The manuscript cites
+the VERSION DOI, deliberately: the concept DOI would silently start pointing at
+a later release and the sentence naming v1.1.0 would go stale without anyone
+editing it. `CITATION.cff` and `.zenodo.json` carry version 1.1.0 and both
+DOIs. One expected and harmless asymmetry: the DOI was minted from the release,
+so the archived snapshot's own `paper.md` cites the concept DOI while HEAD
+cites the version DOI. The analysis code and every number are identical in
+both; only that one sentence differs.
 
 **2. Re-export the two files that need Office.** `build_poster.py` writes the
 .pptx but the poster PDF needs a PowerPoint export, so
