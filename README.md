@@ -13,8 +13,8 @@ The case study is a public counterfeit-medicine dataset. The manuscript is
 built from `paper/paper.md`; see `paper/` and Appendix C for reproduction.
 
 **Archived release.** The manuscript reports
-[v1.0.0](https://doi.org/10.5281/zenodo.21936721)
-(doi:10.5281/zenodo.21936721), which is the exact state of the code that
+[v1.0.1](https://doi.org/10.5281/zenodo.22151840)
+(doi:10.5281/zenodo.22151840), which is the exact state of the code that
 produced every number in it. The badge above is the version-independent DOI
 and always resolves to the latest release.
 

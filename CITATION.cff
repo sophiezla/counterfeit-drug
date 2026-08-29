@@ -22,16 +22,16 @@ authors:
     orcid: "https://orcid.org/0009-0004-2403-910X"
 repository-code: "https://github.com/sophiezla/counterfeit-drug"
 license: MIT
-version: "1.0.0"
-date-released: "2026-08-14"
+version: "1.0.1"
+date-released: "2026-08-29"
 doi: 10.5281/zenodo.21936720
 identifiers:
   - type: doi
     value: 10.5281/zenodo.21936720
     description: Concept DOI, resolves to the latest release
   - type: doi
-    value: 10.5281/zenodo.21936721
-    description: DOI of v1.0.0, the release the manuscript reports
+    value: 10.5281/zenodo.22151840
+    description: DOI of v1.0.1, the release the manuscript reports
 keywords:
   - dataset bias
   - shortcut learning
