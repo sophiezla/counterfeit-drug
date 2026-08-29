@@ -369,8 +369,8 @@ CSVs rather than typing them.
    cue. Photographs against varied surfaces, in hand, or in uncontrolled
    conditions would test it directly.
 2. A content-aware attention measure — Grad-CAM mass inside an annotated
-   product box — would separate the two readings §7.7 leaves open. The
-   border-mass metric there is complete but purely radial.
+   product box — would separate the two readings Section VI-G leaves open.
+   The border-mass metric there is complete but purely radial.
 3. Re-running the two `experiment_*_all_models.py` ablations would make
    their absolute values comparable to production (their within-run
    comparisons are already valid, and the paper says so). These are now the
@@ -378,16 +378,22 @@ CSVs rather than typing them.
 
 **Do not re-tune the pipeline on external score.** Two sweeps have now found
 settings that beat production on Split C — a 96 px short side (0.873 vs
-0.820, Table 20) and the R, C, B composition order (0.880 vs 0.820,
-Table 21). Both were deliberately left unadopted, and the paper says why in
-Sections VIII-E and VIII-F: selecting preprocessing by its external score is
+0.820, Table S14) and the R, C, B composition order (0.880 vs 0.820,
+Table 10). Both were deliberately left unadopted, and the paper says why in
+Sections VII-A and VII-B: selecting preprocessing by its external score is
 exactly the target-distribution leakage the Limitations section warns about,
 and the production settings were fixed before either sweep existed. Adopting
 them would trade a defensible claim for a bigger number.
-4. Author block on page 1 is still `[Author 1]` etc. — deliberate, and the
-   author's call.
-5. A counterfeit-labelled external set remains the single most valuable
+4. A counterfeit-labelled external set remains the single most valuable
    addition, and would change what can be claimed.
+5. A second annotator for the attention audit. Section IX discloses the
+   single-annotator limitation, and `scripts/21_build_gradcam_review.py`
+   already produces the tool, so a second pass is cheap.
+
+The author block and biography were filled on 2026-08-13 and the poster's on
+2026-08-28; the item that used to stand here saying otherwise was stale. The
+`xxxx 00, 0000` publication date and the `10.1109/ACCESS.2026.DOI` on page 1
+are the template's own fields, which IEEE fills at acceptance — leave them.
 
 ## Verify before submitting
 
