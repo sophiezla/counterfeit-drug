@@ -45,6 +45,14 @@ PREAMBLE = r"""%% Supplementary material -- GENERATED FILE, DO NOT EDIT.
 \usepackage{listings}
 \usepackage{microtype}
 \usepackage{url}
+%% hyperref last, so it can patch what the packages above define. Its job
+%% here is the PDF info dictionary -- a supplementary file that opens with
+%% empty document properties looks unfinished in a reader.
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,
+            urlcolor=blue]{hyperref}
+\hypersetup{pdftitle={Provenance Confounding in Image Authenticity Classification: Detection and a Counterfeit-Medicine Case Study -- Supplementary Material},
+            pdfauthor={Sophie Zhu},
+            pdfsubject={IEEE Access submission, supplementary material}}
 
 \IfFileExists{inconsolata.sty}{\usepackage[scaled=0.95,varqu]{inconsolata}}{%
   \IfFileExists{beramono.sty}{\usepackage[scaled=0.82]{beramono}}{}}

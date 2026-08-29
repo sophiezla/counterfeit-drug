@@ -118,6 +118,27 @@ def esc(text):
     return text
 
 
+def plain(text):
+    """Strip markup for the PDF info dictionary, which takes no markup."""
+    import re as _re
+    t = _re.sub(r"\*\*|\*|`", "", text)
+    t = _re.sub(r"<[^>]+>", "", t)
+    return " ".join(t.split()).replace("{", "").replace("}", "")
+
+
+def author_name(md):
+    """The author line is the first bold run after the title."""
+    import re as _re
+    m = _re.search(r"^\*\*([A-Z][A-Za-z .'-]+)\*\*", md, _re.M)
+    return m.group(1).title() if m else ""
+
+
+def index_terms(md):
+    import re as _re
+    m = _re.search(r"\*\*INDEX TERMS\*\*\s*(.+)", md)
+    return m.group(1).rstrip(".") if m else ""
+
+
 # ------------------------------------------------------------------- inline
 INLINE = re.compile(
     r"(\*\*.+?\*\*|\*[^*]+?\*|`[^`]+?`|\$[^$]+?\$|<sup>.*?</sup>)")
@@ -666,6 +687,9 @@ PREAMBLE = r"""%% IEEE Access manuscript -- GENERATED FILE, DO NOT EDIT.
 \def\UrlBreaks{\do\/\do-\do.\do_\do:}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,
             urlcolor=blue]{hyperref}
+\hypersetup{pdftitle={@@PDFTITLE@@},pdfauthor={@@PDFAUTHOR@@},
+            pdfsubject={IEEE Access submission},
+            pdfkeywords={@@PDFKEYWORDS@@}}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
@@ -809,6 +833,10 @@ def main():
     preamble = PREAMBLE
     for token, value in (
         ("@@TITLE@@", inline(title, do_crossrefs=False)),
+        # Info-dictionary strings: plain text only.
+        ("@@PDFTITLE@@", plain(title)),
+        ("@@PDFAUTHOR@@", plain(author_name(md))),
+        ("@@PDFKEYWORDS@@", plain(index_terms(md))),
         ("@@AUTHORS@@", authors),
         ("@@ABSTRACT@@", inline(abstract, do_crossrefs=False)),
         ("@@KEYWORDS@@", inline(keywords, do_crossrefs=False)),
