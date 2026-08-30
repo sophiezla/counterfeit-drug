@@ -4,6 +4,50 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Third informal review, 2026-08-29 — shortened, claims narrowed
+
+Implemented: the length cut (21 -> 20 pages), the prevalence narrowing, the
+specificity discipline, the attribution softening, the normalization-as-probe
+framing, and an explicit answer to the circularity objection. Details are in
+commit 696bd56.
+
+**Declined, with reasons** -- do not re-add without deciding these again:
+
+  * **A heuristic audit-threshold table** (~0.5 / 0.6-0.8 / >0.9). The paper
+    argues from its own data that no validated threshold exists: five scorable
+    datasets is far too few for a false-positive rate. Printing invented
+    numbers would contradict that and hand a reviewer a soft target. The
+    operational guidance the reviewer wanted is already in Section VI-C and
+    the Conclusion, and it is grounded: a high score on FORMAT is close to
+    decisive because storage format is never a property of the photographed
+    object, while size, resolution and aspect ratio mix acquisition with
+    content -- which is exactly what the signature negative control shows at
+    0.500 on format against 0.843 on size.
+  * **A causal-story summary figure.** Costs a figure and roughly a third of a
+    page in a round whose main purpose was cutting. Section I-A already states
+    the chain in four sentences.
+  * **A separate "Threats to Validity" subsection.** Section IX plus S-II is
+    that section. Adding a third home for caveats is the repetition the same
+    review objected to.
+  * **A fine-tuning experiment.** Two consecutive informal reviews now ask for
+    it, so expect a real reviewer to. It remains declined on the author's
+    earlier decision and on CPU-only hardware; Sections V-B, IX and X state
+    the limitation and both directions it leaves open. This is the most likely
+    thing a submitted version gets asked for.
+  * **Neutralising the remaining voice.** The review wanted phrases like "the
+    check the field has institutionalized" made neutral. Repetition of those
+    phrases was cut; the phrases themselves stay, per the author's standing
+    instruction on writing style.
+
+**Going below 20 pages means deleting evidence, not prose.** Everything
+duplicative has now been cut across two rounds. The only remaining block of
+the right size is Section VI-B, the audit's false-negative mode on the
+Roboflow archive -- which is a contribution, not filler. Author's call.
+
+**Zenodo is still unreleased and the manuscript still names v1.1.0.** Unchanged
+from the previous section: cut v1.2.0 and update both DOI mentions before
+submitting.
+
 ## Second informal review (ChatGPT), 2026-08-29 — leakage measured, prior art closed
 
 A second informal review was run against the 20-page version. Three of its
