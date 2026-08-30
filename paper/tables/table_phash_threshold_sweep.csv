@@ -1,0 +1,9 @@
+threshold,production,clusters,largest_cluster,mixed_label_clusters,straddles_split_a,straddles_split_b
+0,False,507,2,0,2,0
+2,False,495,2,0,7,0
+4,False,490,2,0,7,0
+6,False,486,3,0,8,0
+8,True,482,3,0,9,0
+10,False,472,4,0,13,6
+12,False,444,10,3,18,17
+16,False,260,183,10,19,28

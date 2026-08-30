@@ -365,6 +365,17 @@ def check_supplement():
             c = len(re.findall(r"\\end\{" + re.escape(env) + r"\}", stex))
             report(o == c, f"supplementary.tex: {env} balanced",
                    f"{o} open, {c} close")
+        # A bare "Table 6" in supplementary.md means the manuscript's
+        # Table 6; this document's own floats are written "Table S6"
+        # and pass through as literal text. Left as a \ref, such a
+        # reference resolves against this document's own labels and
+        # prints "Table S6" -- wrong number, wrong table, no error.
+        # build_supplement.py resolves them to literal numbers; this
+        # asserts that happened.
+        stray = re.findall(r"\\ref\{(?:tab|fig):\d+\}", stex)
+        report(not stray,
+               "supplementary.tex: no cross-document float refs survive as LaTeX refs",
+               f"found: {sorted(set(stray))}")
 
 
 def _titles(md, supp):

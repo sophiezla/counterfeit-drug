@@ -1,0 +1,7 @@
+model,split,n_images,n_seeds,baseline_mean,normalized_mean,difference_pp,ci_lo_pp,ci_hi_pp,n01_norm_only,n10_base_only,mcnemar_p
+M2 CNN,Split C,150,5,0.0507,0.9093,85.9,81.7,89.7,644,0,2.739761686260504e-194
+M2 CNN,Split D,149,5,0.1758,0.6268,45.1,39.9,50.3,339,3,1.4883914837360327e-96
+M3 MobileNetV3,Split C,150,5,0.7147,0.724,0.9,-6.9,8.8,115,108,0.6879321803254607
+M3 MobileNetV3,Split D,149,5,0.6443,0.6846,4.0,-2.7,11.3,102,72,0.027626051149794977
+M4 EfficientNet-B0,Split C,150,5,0.1,0.86,76.0,69.9,81.5,572,2,5.337831468096183e-168
+M4 EfficientNet-B0,Split D,149,5,0.2403,0.8779,63.8,56.9,70.5,475,0,2.0501330894674953e-143

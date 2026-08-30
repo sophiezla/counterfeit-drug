@@ -887,3 +887,223 @@ All are fast, read committed artefacts only, and reproduce the numbers of
 record. The table numbers above replace the Roman ones this section used to
 list, which predated the 2026-08-13 renumbering and no longer resolved.
 Re-run and confirmed 2026-08-28.
+
+## The fourth informal review, 2026-08-30
+
+Thirty-nine numbered items, worked in the order the review itself proposed:
+positioning, then methodological validity, then statistics, then transparency,
+then language and compliance. Two new experiments, three new main tables, one
+new main figure and two new supplement sections. The manuscript went 16 -> 20
+pages with the additions and back to **18** by compression; nothing was
+deleted to get there, only tightened.
+
+### The one real internal contradiction, and what fixing it bought
+
+The audit was described as needing "no pixel decoding" while its feature set
+included **mean brightness**, which requires decoding the image. That is a
+contradiction a reviewer would have caught, and the fix made the result
+stronger rather than weaker. `paper/scripts/metadata_oracle.py` now fits two
+families separately:
+
+  * **header metadata** -- container format, encoded file size, stored
+    dimensions and the aspect ratio implied by them. Readable from a listing
+    and a header parse, no pixel decoded.
+  * **low-level acquisition proxies** -- mean brightness, reported apart.
+
+Measured, and now Table 5: format alone 1.000 / 1.000 (Split A / Split B),
+encoded size 0.974 / 1.000, short side 0.947 / 0.946, aspect ratio 0.645 /
+0.595, and **size + resolution + aspect ratio 1.000 / 1.000** -- so three
+header fields, without even the file extension, reproduce the labels exactly.
+Brightness alone is 0.829 / 0.716, the weakest candidate of the three despite
+the largest t-statistic. Every "three acquisition scalars and no pixels" in
+both documents is now "three header fields and no decoded pixels".
+
+This also aligns the case-study audit with Table S20, which was already
+header-only.
+
+### New experiment 1 -- the paired baseline-vs-normalized test (review item 10)
+
+`modeling/paired_external_test.py`, Section S-I-Z, Table S23. Table 6 reported
+the correction as the distance between two Wilson intervals; the two conditions
+are evaluated on the *same* 150 images, so the comparison is paired. The script
+replays the persisted baseline and normalized checkpoints at all five seeds,
+keeps the per-image verdict, and bootstraps over **images** so both arms move
+together -- the construction of `leakage_paired.py`. It asserts every replayed
+accuracy against `seed_sweep.csv` before writing anything.
+
+    M2  Split C  0.051 -> 0.909   +85.9 [+81.7, +89.7]
+    M2  Split D  0.176 -> 0.627   +45.1 [+39.9, +50.3]
+    M3  Split C  0.715 -> 0.724    +0.9 [-6.9, +8.8]
+    M3  Split D  0.644 -> 0.685    +4.0 [-2.7, +11.3]
+    M4  Split C  0.100 -> 0.860   +76.0 [+69.9, +81.5]
+    M4  Split D  0.240 -> 0.878   +63.8 [+56.9, +70.5]
+
+**Do not quote the McNemar column as the primary statistic.** It pools
+discordant pairs across five seeds, treating 745 verdicts as independent when
+they are 150 images seen five times by correlated runs, so it deflates every
+p. M3 on Split D is where that shows: McNemar 0.028 against a bootstrap
+interval containing zero. The bootstrap is the one whose resampling unit
+matches the design. Section S-I-Z says so in the text.
+
+Also worth knowing: a seed-42-only version of this test returns +10.7 pp,
+p = 0.023 for M3 on Split C -- a "significant" result that vanishes at five
+seeds. That is the whole argument for keeping sampling uncertainty and
+training-run variability apart, which Section IV-C now states explicitly as
+three kinds of uncertainty.
+
+### New experiment 2 -- the pHash threshold sweep (review item 15)
+
+`paper/scripts/phash_threshold_sweep.py`, Section S-I-Y, Table S22. Costs
+nothing: the canonical hashes are already in `dedup_clusters.csv`, so no image
+is decoded. Re-clusters the 510-image pool at thresholds 0-16 and checks the
+fixed Split A and Split B assignments against the result.
+
+The justification for 8 that came out of it is an external one: **up to
+distance 10 no cluster mixes the two class labels, at 12 three do, and at 16
+the largest cluster holds 183 of 510 images.** The clustering never reads
+labels, so that is evidence it does not use. Split A's countable leakage stays
+between 2 and 18 clusters across the whole range, so nothing the split
+comparison concludes turns on the threshold. And the honest limitation: at 10
+six clusters would straddle a Split B partition and at 12 seventeen would, so
+Split B's guarantee is a statement about distance <= 8, not about product
+identity.
+
+Clustering the pool alone gives 482 groups at threshold 8 where production
+records 480, because production clusters Kaggle and Roboflow together and two
+Kaggle pairs are joined through a Roboflow intermediary. Stated in the caption.
+
+### Main-paper additions
+
+* **Figure 1**, the mechanism diagram (`fig_mechanism` in `make_figures.py`),
+  replacing the external-generalisation bar chart, which duplicated Table 6
+  entirely and is now Fig. S13.
+* **Table 3**, the complete training protocol, so reproducing Section VI needs
+  no trip to the supplement. Table S2 is retitled as the same settings in the
+  code's own names.
+* **Table 7**, five-seed sensitivity, promoted from Section S-I-U.
+* **Table 9**, evidence status: ten claims, each marked demonstrated, not
+  established, or not measured, with a pointer. This is the cheapest thing in
+  the round and probably the most reviewer-friendly.
+* A formal statement in Section I-A: I(Y;A) > 0, complete when H(Y|A) = 0,
+  with the case study as the complete case. Both equations are **unnumbered**
+  on purpose -- numbering them would have shifted Eq. (1)-(10) and every
+  reference to them.
+
+### Language and claim strength
+
+"Every such substitution introduces" -> "can introduce". "Wherever a binary
+image task asks" -> "Where ... often ... where it is, the label can". Section
+VIII-G no longer says the claim is causal in a way Section I-A had already
+narrowed. "counterfeit stock is illegal to hold" -> difficult to obtain and in
+many jurisdictions restricted. Table 1's audit column reads "not reported"
+rather than "none", which is a statement about the paper and not about what
+its authors did -- and is a regression the 16-page cut introduced. The
+Raspberry Pi comparison no longer attributes any of the accuracy spread to
+acquisition confounding. "The accuracy ceiling attributable to acquisition
+alone is 1.000" is now the precise form: provenance alone predicts the label,
+so in-distribution accuracy cannot establish that a classifier learned
+packaging semantics -- sufficiency, not attribution.
+
+Terminology: **attention -> attribution** everywhere (Grad-CAM and occlusion
+are not attention mechanisms); **product-level -> near-duplicate-grouped**;
+**external generalization -> external authentic-class specificity** in the
+Section VI-C heading and Table 6's caption. The Shapley closed form is now
+named for what it is -- an exact linear attribution decomposition -- with the
+independent-feature assumption stated and the simplex constraint on histogram
+bins acknowledged.
+
+Title is now *Auditing Class-Conditional Provenance Confounding in Image
+Authenticity Classification: A Counterfeit-Medicine Case Study*. Abstract
+restructured to problem / method / finding / external evidence / implication,
+253 words. Contributions reduced from five to three.
+
+### What the review asked for and did not get, and why
+
+1. **A genuinely untouched external dataset**, ideally two-class (items 6, 8).
+   Not obtainable; Section III-E already documents the search. This remains
+   the single most valuable missing experiment and Section X says so.
+2. **Fine-tuning** (asked for by three consecutive reviews now). Declined on
+   the author's earlier decision and CPU-only hardware. Flagged again as the
+   most likely thing a real reviewer asks for.
+3. **The operator-order ablation at 3-5 seeds** (item 13). Thirty training
+   runs. The claim it supports is a 28-point separation between two groups of
+   three, an order of magnitude past anything in Table 7. Recorded as a known
+   limitation in Section S-I-U rather than run.
+4. **Split C vs Split D as a paired comparison** (item 10, second half). The
+   Mendeley archive ships no per-image product key and its two device folders
+   do not share a numbering -- checked: Split C's indices run to 162 and Split
+   D's to 226, with different gaps. The two sets cover the same 150 packages
+   on the archive's own account, but cannot be aligned image by image. Section
+   VI-D now says exactly that instead of "the same 150 products".
+5. **The IEEE template artefacts** (item 35). `VOLUME 11, 2023` and
+   `xxxx 00, 0000` are hard-coded in `ieeeaccess.cls`, which is byte-identical
+   to the official template; `final_sweep.py` already asserts them as expected.
+   Not a defect.
+
+### Traps confirmed again this round
+
+* **LaTeX auto-letters subsections.** Adding Section V-F was safe because it
+  appends, but the check was run anyway: extract the compiled PDF's text,
+  collect the `^[A-H]\. ` headings under each `^[IVX]+\. ` section, and
+  resolve every `Section X-y` reference against *those*. Zero dangling in
+  both directions (22 references from the manuscript, 15 from the supplement).
+  `verify_crossrefs` still cannot see this class of defect.
+* **Every figure is emitted as a full-width `figure*` at `width=\textwidth`.**
+  The mechanism diagram was drafted as a tall 3.45-inch column, which LaTeX
+  scaled up until it could not place the float and **dropped it silently** --
+  no error, no caption, and `verify_crossrefs` passed. It was caught only by
+  `final_sweep`'s docx-vs-pdf figure-numbering check. Re-laid 4 + 3 across the
+  page at 7.2 x 2.62 in. The note in `build_tex.render_figure` says this;
+  believe it.
+* **Supplement float order.** Fig. S14 was inserted into Section S-I-U, which
+  precedes Section S-I-W where Fig. S13 lived, so the captions ran 12, 14, 13.
+  `final_sweep` catches it; `verify_crossrefs` does not.
+* Heredocs in this environment mangle backslash escapes. Write patch scripts
+  to the scratchpad with the Write tool. This bit twice again today, once
+  turning `\n` inside a Python string literal into a real newline and
+  breaking the file.
+
+### Still blocking submission
+
+**Cut a Zenodo v1.2.0 release.** `modeling/paired_external_test.py` and
+`paper/scripts/phash_threshold_sweep.py` are new code behind reported numbers,
+so v1.1.0 no longer matches. The manuscript's availability statement was
+rewritten to cite the concept DOI (10.5281/zenodo.21936720) and "the release
+accompanying this manuscript", which is true rather than misleading in the
+meantime, but **README.md:16 and CITATION.cff still name v1.1.0 and
+doi:10.5281/zenodo.22166543** and must be updated when the release is cut. The
+author asked that Zenodo not be touched this round.
+
+The poster PDF still shows the old subtitle; re-export from
+`PharmaChecked_v2_poster.pptx`.
+
+### Two supplement defects found by reading the compiled PDF, 2026-08-30
+
+Both were invisible to every gate and had been shipping for some time.
+
+**Every reference from the supplement to a main-paper table resolved to the
+wrong table.** `crossrefs()` is shared between the two builders, so a bare
+"Table 6" in `supplementary.md` -- which means *the manuscript's* Table 6,
+since this document's own floats are written "Table S6" and pass through as
+literal text -- became `\\ref{tab:6}`. The supplement labels its own tables
+`tab:1..tab:25`, so the reference resolved inside the supplement and printed
+**"Table S6"**: wrong number, wrong table, no error, and nothing in
+`verify_crossrefs` or `final_sweep` looks at it. Twenty references were
+affected, including the one opening the new Section S-I-Z. Equations already
+had `resolve_dangling_eqrefs`; tables and figures did not.
+
+Fixed in `build_supplement.py`, which now rewrites `\\ref{tab:n}` and
+`\\ref{fig:n}` to literal numbers, and gated in `verify_crossrefs.py`
+("no cross-document float refs survive as LaTeX refs"). The supplement's intro
+now states the convention explicitly: unprefixed numbers point at the
+manuscript, S-prefixed ones point within the supplement.
+
+**The supplement's LaTeX title was two titles out of date.** `PREAMBLE` in
+`build_supplement.py` still read *Asymmetric Class Sourcing Creates Provenance
+Confounds in Authenticity-Classification Image Datasets* -- older than the
+2026-08-29 retitle, and asserting the causal "Creates" the manuscript has
+since narrowed to a mechanism. The markdown's own title line was stale too.
+Both now match the manuscript. **The title lives in three places** --
+`paper.md` line 1, `supplementary.md` line 3, and `build_supplement.py`'s
+`PREAMBLE` -- and `final_sweep` checks only the first against the compiled
+PDF. Change all three together.

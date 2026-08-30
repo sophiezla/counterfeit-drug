@@ -82,8 +82,9 @@ PREAMBLE = r"""%% Supplementary material -- GENERATED FILE, DO NOT EDIT.
 \history{Supplementary material.}
 \doi{10.1109/ACCESS.2026.DOI}
 
-\title{Supplementary Material: Asymmetric Class Sourcing Creates Provenance
-Confounds in Authenticity-Classification Image Datasets}
+\title{Supplementary Material: Auditing Class-Conditional Provenance
+Confounding in Image Authenticity Classification: A Counterfeit-Medicine
+Case Study}
 
 \author{\uppercase{Sophie Zhu}\authorrefmark{1}}
 \address[1]{Mira Costa High School, Manhattan Beach, CA 90266 USA
@@ -179,6 +180,14 @@ def main():
                  tex)
     # Equations cited across the boundary live in the main paper.
     tex = bt.resolve_dangling_eqrefs(tex)
+    # So do table and figure references. This document's own floats
+    # are written "Table S6" in the source and pass through as literal
+    # text, so every \ref{tab:n} here came from a bare
+    # "Table n", which means the manuscript. Left as a \ref it
+    # resolves against this document's own labels instead, printing
+    # "Table S6" and pointing at the wrong table.
+    tex = re.sub(r'\\ref\{(?:tab|fig):(\d+)\}',
+                 lambda m: m.group(1), tex)
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(tex, encoding="utf-8")

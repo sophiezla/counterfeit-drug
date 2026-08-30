@@ -2,9 +2,12 @@
 Metadata-only oracle: how much of the reported accuracy on the Kaggle pool is
 available to a classifier that never looks at a pixel's spatial arrangement?
 
-Three inputs only -- mean brightness, short-side resolution and encoded file
-size -- i.e. exactly the three acquisition statistics that Table VI shows are
-confounded with the class label. No pixels, no histogram, no spatial structure.
+Two feature families are reported separately, because they cost different
+things to obtain. Header metadata -- container format, encoded file size, pixel
+dimensions and the aspect ratio derived from them -- is readable from a file
+listing and a header parse, with no pixel decoding at all. Mean brightness is a
+low-level acquisition proxy and does require decoding the image, so it is
+reported apart from the metadata-only rows rather than inside them.
 
 This bounds the confound-attributable accuracy directly, rather than inferring
 it from M1's 96-dimensional colour histogram (which does see pixel intensities).
@@ -31,10 +34,16 @@ SEED = 42
 # Feature sets. Values are column names in capture_method_stats.csv; the
 # transform column says how each is fed to the model.
 FEATURE_SETS = [
-    ("brightness", ["brightness"]),
-    ("resolution", ["min_side"]),
-    ("file size", ["file_size_bytes"]),
-    ("all three", ["brightness", "min_side", "file_size_bytes"]),
+    ("format", ["is_png"]),
+    ("encoded file size", ["file_size_bytes"]),
+    ("short-side resolution", ["min_side"]),
+    ("aspect ratio", ["aspect"]),
+    ("header metadata, all four", ["is_png", "file_size_bytes", "min_side",
+                                   "aspect"]),
+    ("header metadata minus format", ["file_size_bytes", "min_side", "aspect"]),
+    ("mean brightness (pixel-derived)", ["brightness"]),
+    ("header metadata minus format, plus brightness",
+     ["file_size_bytes", "min_side", "aspect", "brightness"]),
 ]
 
 
@@ -50,6 +59,8 @@ def load():
             # log-scaled: both span orders of magnitude across the two pipelines
             "min_side": np.log10(float(r["min_side"])),
             "file_size_bytes": np.log10(float(r["file_size_bytes"])),
+            "aspect": float(r["width"]) / float(r["height"]),
+            "is_png": 1.0 if r["capture_pattern"].endswith(".png") else 0.0,
         }
     return by_id
 
