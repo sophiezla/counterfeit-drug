@@ -4,6 +4,88 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Second informal review (ChatGPT), 2026-08-29 — leakage measured, prior art closed
+
+A second informal review was run against the 20-page version. Three of its
+claims were wrong on the facts and are recorded here so nobody re-investigates
+them:
+
+  * It said `README.md` reports v1.0.1 / doi:10.5281/zenodo.22151840 against
+    the manuscript's v1.1.0. It does not; the README has said v1.1.0 /
+    22166543 since the release was cut, with v1.0.1 marked superseded.
+  * It said the footer's "VOLUME 11, 2023" is a stale template. It is
+    hard-coded in `ieeeaccess.cls:525`, the class file is byte-identical to
+    ACCESS_latex_template_20240429, and IEEE substitutes it at production.
+    `final_sweep.py` already asserts it as an expected placeholder.
+  * It said the normalization cannot be called zero-target-sample because
+    Split C informed the axis choice. Section S-I-S already re-derives the
+    same three axes from the training partition alone under a pre-declared
+    threshold. A pointer to S-I-S was added at the point of use.
+
+What was actually wrong, and what was done:
+
+**1. The 9.2-point "analytic ceiling" over-reached, and is now a measurement.**
+The old claim was that leakage "cannot inflate Split A test accuracy by more
+than 7/76 for any model, seed or architecture". That bounds the recognition
+channel only: admitting a mate into training also moves the parameters that
+decide the other 69 predictions. And Split A and Split B do not share a test
+set (230 of 510 images differ), so their delta was never a clean estimate.
+
+`modeling/leakage_paired.py` (new) measures it instead. One fixed test set of
+74 images; two training sets differing only in whether the 30 near-duplicate
+mates are admitted, balanced by class-matched substitutes so both arms are 350
+images with 167 counterfeit; identical validation set, architecture, learning
+rate and augmentation. 28 test images are exposed (every one the pool admits),
+46 unexposed, so the recognition and indirect channels are separated. Five
+seeds, M2/M3/M4. Result: **M2 +0.3 points [-1.9, +2.4]**, +0.0 [-2.9, +2.9]
+exposed, +0.4 [-2.2, +3.5] unexposed, McNemar p = 1.000; M3 and M4 unchanged
+at every seed, but both at ceiling here (1.000, 0.987) so their null is weak
+and Section S-I-V says so. The count survives as the "direct exposure rate";
+`power_and_leakage_bound.py` was reworded to match. New Section S-I-V, Tables
+S16 and S17 (the appendix tables shifted to S18/S19).
+
+**2. DeGrave et al. was missing, and it is close prior work.** Added as [31]
+(Nature Machine Intelligence 3:610-619, 2021) in Section II-B, with Torralba
+and Efros as [32] for the dataset-bias framing. Both verified against
+Crossref. NOTE: the review characterised DeGrave as combining positive and
+negative classes from different source repositories. That could not be
+verified -- the published full text is paywalled and Europe PMC serves no full
+text for PPR213715 -- so the citation claims only what the abstract states
+(reliance on confounding factors rather than pathology; failure at new
+hospitals). Do not strengthen it without reading the paper.
+
+**3. The abstract contradicted the body, twice.** It claimed normalization
+restores the class to "77-86%", but Section VI-E concludes "we therefore claim
+no normalization benefit for M3" and 77.3% is M3's. And it reported the 46%
+Split D drop, which S-I-U identifies as the lowest of five seeds (0.627 +/-
+0.135). Both fixed, and every downstream restatement (contributions 1 and 5,
+VI-E, VIII-E, Conclusion) now agrees. Abstract is 250 words.
+
+Smaller items: Table 8's last column relabelled a generalization gap, not a
+normalization effect; Table 9's Change column labelled percentage points;
+`p` was a bound rather than "approx 0"; Table 7's caption explains 2,224
+listing entries against 661 unique images and calls itself a pilot audit;
+product-identity groups named as a pHash proxy at first use; the
+generative-AI disclosure moved into the Acknowledgment where IEEE Access asks
+for it, with a pointer left in Ethics; "maximally learnable" and "bounds the
+confound directly" softened.
+
+**The paper is 21 pages, deliberately.** IEEE Access sets no page limit and
+recommends under 20. The duplication that could go without losing an argument
+already went this round: VIII-G reduced to a pointer at S-I-T, Future Work's
+re-defence of the frozen probe removed (Section IX carries it), the
+Conclusion's retelling of VI-E/F/G and VII-B compressed. What remains is
+load-bearing. `final_sweep.py`'s gate was moved to 21 with the reason recorded
+in the source, so it still catches unintended growth. Getting to 20 now means
+deleting a results section -- Section VI-B, the audit's false-negative mode,
+is the only candidate of the right size -- and that is a worse paper.
+
+**Zenodo was deliberately NOT updated.** `modeling/leakage_paired.py` is new
+code that produces a reported number, so v1.1.0 is no longer the exact state
+of the code behind every number. Cut a v1.2.0 release and repoint the version
+DOI before submitting, or at acceptance. The manuscript still names
+doi:10.5281/zenodo.22166543 -- FIX THAT WHEN THE RELEASE IS CUT.
+
 ## Informal-review revision, 2026-08-29
 
 An informal reviewer returned a Major Revision with eight major and five minor

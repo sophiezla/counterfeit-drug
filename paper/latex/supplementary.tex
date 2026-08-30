@@ -302,11 +302,11 @@ M4 EfficientNet-B0 & 0.987 [0.961, 1.000] & 0.919 [0.851, 0.973] & 0.983 $\pm$ 0
 \end{table*}
 
 
-The leakage effect is real but small, and only M4 shows it at a magnitude worth discussing (Fig. S3). Three of four deltas are within half a percentage point of zero, and even M4's 6.8-point delta sits inside overlapping confidence intervals (Split A [0.961, 1.000] against Split B [0.851, 0.973]). The mechanism is not in doubt --- Split B provably eliminates the 9 straddling product groups that Split A permits --- but its {\itshape magnitude} on this pool can be bounded exactly, and the bound is more informative than the measurement.
+The leakage effect is real but small, and only M4 shows it at a magnitude worth discussing (Fig. S3). Three of four deltas are within half a percentage point of zero, and even M4's 6.8-point delta sits inside overlapping confidence intervals (Split A [0.961, 1.000] against Split B [0.851, 0.973]). The mechanism is not in doubt --- Split B provably eliminates the 9 straddling product groups that Split A permits --- but its {\itshape magnitude} on this pool is better established by counting and by a paired experiment than by this delta, for the reason the next two paragraphs give.
 
-Counting directly: {\bfseries 7 of the 76 Split A test images belong to a product-identity group that also appears in Split A's training partition.} Those seven are the only images any model could classify correctly by recognizing a training photograph rather than by generalizing. No leakage mechanism, for any model, seed or architecture, can therefore inflate Split A test accuracy by more than 7/76 = {\bfseries 9.2 points}. The ceiling follows from the split alone, involving no model and no run, so it is immune to the sampling-variance objection that limits the measured deltas --- which duly fall below it (+0.2 to +4.1 points).
+Counting directly: {\bfseries 7 of the 76 Split A test images belong to a product-identity group that also appears in Split A's training partition}, a direct exposure rate of 9.2\%. Those seven are the only images any model could classify correctly by recognizing a training photograph rather than by generalizing, so 9.2 points is the most that {\itshape recognition} can contribute. The count follows from the split alone, involving no model and no run, so it is immune to the sampling-variance objection that limits the measured deltas --- which duly fall below it (+0.2 to +4.1 points).
 
-The available conclusion is therefore stronger than "we measured a small effect that might be noise": on a pool with this duplicate structure image-level leakage {\itshape cannot} be the dominant inflation mechanism, because the arithmetic caps it at 9.2 points while the external collapse of Section VI-E is worth more than 90. A dataset with heavier duplicate sourcing would raise the ceiling and might show a clearer effect; we report the ceiling alongside the measurement so the two are not confused.
+It is worth being exact about what that does not cover. Admitting a near-duplicate into training also changes the fitted parameters, and those parameters decide the remaining 69 predictions as well; the count constrains the recognition channel and says nothing about that indirect one, in either direction. The measured delta does not close the gap either, because Split A and Split B do not share a test set. Section S-I-V therefore measures leakage directly, holding the test set fixed and varying only whether the mates are admitted, and finds +0.3 points [$-$1.9, +2.4] for M2 and no change at all for M3 and M4. On a pool with this duplicate structure, then, image-level leakage is not the dominant inflation mechanism --- bounded at 9.2 points by the count, measured at 0.3 with an interval of $\pm$2, against an external collapse worth more than 90. A dataset with heavier duplicate sourcing would raise both the exposure rate and the effect.
 
 \begin{figure*}[!t]
 \centerline{\includegraphics[width=\textwidth]{figures/fig13_leakage.pdf}}
@@ -924,6 +924,67 @@ Two limits on this table. It covers the production and baseline conditions only,
 
 The baseline rows are re-derivations, not the archived pre-normalization run that Table~\ref{tab:8}'s baseline column reports. That column is an artifact of a run whose weights were never saved (Section S-I-G), and it records 0/150 for M2 and 5/150 for M4, against 0.051 $\pm$ 0.103 and 0.100 $\pm$ 0.026 here. The archived M4 figure sits below every seed measured, which is consistent with what Section S-I-J already reports for the same condition --- the border-mass audit, retraining the same baseline, returned 9/150 rather than the archived 5/150. Nothing in this paper's argument depends on the exact baseline value, which is why the discrepancy is recorded rather than reconciled: what the argument needs is that the baseline is near zero and the corrected pipeline is not, and every measurement of both agrees on that.
 
+\subsection*{V. A paired measurement of near-duplicate leakage}
+
+Section S-I-H bounds the recognition channel by counting and notes what the count leaves open. This section is the experiment that closes it, its design and its full output. \url{modeling/leakage_paired.py} builds the partition, runs it and writes the table.
+
+{\bfseries What has to be held fixed.} The quantity of interest is the effect of admitting a near-duplicate of a test image into training, and it is not what the Split A $-$ Split B delta measures: those two splits assign 230 of 510 images differently, so their difference mixes leakage with a change of test images. Holding the test set fixed and varying nothing but the mates isolates it. Two further controls matter. The arms must be the same size, or the comparison confounds leakage with training-set size; and they must carry the same class balance, or it confounds leakage with the class prior. Both are enforced by construction and asserted at run time (Table S16), together with the property that gives the design its name: the clean arm shares no product group with the test set, and the leaky arm's overlap with it is exactly the mates.
+
+\begin{table*}[!t]
+\caption{The paired leakage design. Built under a fixed design seed (20260829) independent of the training seed, so every training seed sees the identical partition and the pairing is exact. The pool has 480 product-identity groups over 510 images --- 26 of size 2 and 2 of size 3 --- so the 28 exposed test images are not a sample of the exposed images but all of them.}
+\label{tab:16}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lccc}
+\toprule
+{\bfseries Partition} & {\bfseries n} & {\bfseries Counterfeit} & {\bfseries Held by} \\
+\midrule
+Test --- exposed & 28 & 8 & neither arm \\
+Test --- unexposed & 46 & 27 & neither arm \\
+Mates & 30 & 8 & leaky arm only \\
+Substitutes & 30 & 8 & clean arm only \\
+Base train & 320 & 159 & both arms \\
+Validation & 56 & 28 & both arms \\
+{\bfseries Clean train total} & {\bfseries 350} & {\bfseries 167} & --- \\
+{\bfseries Leaky train total} & {\bfseries 350} & {\bfseries 167} & --- \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+M1 is excluded, for a different reason than in Section S-I-U: 97 parameters over a 96-bin color histogram cannot memorize an individual photograph, so the channel under test does not exist for it.
+
+\begin{table*}[!t]
+\caption{Leaky minus clean, five seeds (42--46), production pipeline. Accuracies are mean $\pm$ sample standard deviation across seeds; the difference and its 95\% interval come from a bootstrap over test images, resampling images rather than predictions so that both arms' verdicts on an image move together. McNemar is computed on the pooled discordant pairs.}
+\label{tab:17}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{ccccc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xc}
+\toprule
+{\bfseries Model} & {\bfseries Subset} & {\bfseries n} & {\bfseries Clean} & {\bfseries Leaky} & {\bfseries Difference (percentage points)} & {\bfseries McNemar {\itshape p}} \\
+\midrule
+M2 CNN & all & 74 & 0.865 $\pm$ 0.029 & 0.868 $\pm$ 0.018 & {\bfseries +0.3 [$-$1.9, +2.4]} & 1.000 \\
+M2 CNN & exposed & 28 & 0.936 $\pm$ 0.039 & 0.936 $\pm$ 0.016 & +0.0 [$-$2.9, +2.9] & 1.000 \\
+M2 CNN & unexposed & 46 & 0.822 $\pm$ 0.032 & 0.826 $\pm$ 0.027 & +0.4 [$-$2.2, +3.5] & 1.000 \\
+M3 MobileNetV3 & all & 74 & 1.000 $\pm$ 0.000 & 1.000 $\pm$ 0.000 & +0.0 [+0.0, +0.0] & 1.000 \\
+M4 EfficientNet-B0 & all & 74 & 0.987 $\pm$ 0.000 & 0.987 $\pm$ 0.000 & +0.0 [+0.0, +0.0] & 1.000 \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+
+{\bfseries What this establishes, and what it does not.} For M2, Table S17 establishes an effect indistinguishable from zero with an interval of roughly $\pm$2 points, on the whole test set and on both subsets separately --- so neither the recognition channel nor the indirect one is doing appreciable work. The two subsets are the point of the design: a difference confined to the exposed images would be recognition, and a difference on the unexposed ones would be the indirect channel that no counting argument can bound. Neither appears.
+
+For M3 and M4 the null is weaker than it looks, and we would rather say so than bank it. Both sit at or beside ceiling on this test set --- 1.000 and 0.987, at every seed and in both arms --- so the design has almost no room in which an effect could show. That ceiling is not a flaw in the experiment so much as a restatement of the paper's subject: on a pool where the label is perfectly predicted by acquisition, an in-distribution test partition is close to trivial, and there is little left for leakage to add. The interpretable measurement is M2's, which is also the only model here that learns its features rather than inheriting them.
+
+Two further limits are worth stating. The exposed subset is 28 images, which is every one the pool offers and still small; the $\pm$2.9-point interval on that subset is what the data support and no tighter statement should be read into the point estimate of 0.0. And this measures near-duplicate leakage as \texttt{pHash} clustering defines it (Section IV-B). Two dissimilar photographs of the same physical package would not be grouped, so both the exposure count and this experiment address near-duplicate leakage specifically, not every sense in which two images might share a product.
+
 \section*{S-II. Limitations}
 
 {\bfseries The external evaluation is authentic-only, so counterfeit recall is unmeasured.} Every external image in this study is genuine packaging, so every external number is a specificity --- equivalently, one minus the false-positive rate --- and nothing else. We state the resulting non-claim as plainly as we can: {\bfseries this paper does not report, estimate or bound the rate at which any of these models would detect a real counterfeit.} No independent counterfeit-labeled source could be found (Section III-E), and the synthetic proxy of Section S-I-B does not substitute for one.
@@ -948,7 +1009,7 @@ We accordingly ask that (8) of the main paper be read as a {\bfseries zero-targe
 
 {\bfseries Some numbers predate checkpoint persistence and cannot be re-derived.} For most of this study no script saved a trained model, and every downstream consumer --- external evaluation, Grad-CAM, the synthetic proxy --- re-derived "the trained model" from scratch. That design produced both defects of Section S-I-G: the learning-rate divergence in M2's external evaluation, and a discrepancy in which two rebuild paths of the same nominal M4 model classified 16/150 versus 5/150 external images as authentic. Training now persists a checkpoint with the learning rate, seed, best epoch and epoch count it was trained under, \texttt{load\_checkpoint} raises if the recorded learning rate differs from the caller's expectation, and the external evaluations of Table~\ref{tab:8} load rather than retrain --- which independently reproduced M2's and M3's recorded Split C accuracies exactly. Two residual weaknesses follow from the change arriving late. M4's earlier Split B accuracy of 0.946 could not be explained when the checkpointed pipeline deterministically produced 0.919, because the artifacts of the original run no longer exist; the newer value is the one reported, and the older one is unrecoverable rather than refuted. And the two \url{experiment_*_all_models.py} ablations still rebuild rather than load, so their absolute values are not directly comparable with the production tables --- the within-run comparisons they actually make are unaffected, and Section VII says so where they are used.
 
-{\bfseries Single-run ablations.} Every ablation in Section VII is one execution per condition, not a distribution over seeds, so none of them carries an interval. The reason this is tolerable is that the pipeline is now deterministic: the per-pass seeding defect of Section S-I-G, under which nominally identical conditions moved by up to 17 points, was fixed partway through, and each ablation re-runs its own baseline inside the same execution so that every comparison it makes is within-run. Three checks support the harness rather than merely asserting it: the production condition returns 0.919 in-distribution and 0.820 externally in each of the three post-fix scripts that contain it (Tables S12, S14 and 10), and the external evaluation from persisted checkpoints reproduced M2's and M3's recorded Split C counts exactly, byte for byte, on a re-run. Seed-to-seed variance is no longer unmeasured for the production and baseline conditions --- Section S-I-U repeats those at five seeds and finds standard deviations of 0.03 to 0.14 on the external sets --- but it remains unmeasured for the ablations themselves, which is why a condition differing from its baseline by a point or two is not read here as a difference. The ablations that predate the fix are identified in their captions --- all of Table S11, all of Table S13, and the superseded white-balance rows retained in Table S16; Tables S12, S14 and 10 are post-fix --- and the two conclusions Table S11 is used for are separately reproduced post-fix in Table S12.
+{\bfseries Single-run ablations.} Every ablation in Section VII is one execution per condition, not a distribution over seeds, so none of them carries an interval. The reason this is tolerable is that the pipeline is now deterministic: the per-pass seeding defect of Section S-I-G, under which nominally identical conditions moved by up to 17 points, was fixed partway through, and each ablation re-runs its own baseline inside the same execution so that every comparison it makes is within-run. Three checks support the harness rather than merely asserting it: the production condition returns 0.919 in-distribution and 0.820 externally in each of the three post-fix scripts that contain it (Tables S12, S14 and 10), and the external evaluation from persisted checkpoints reproduced M2's and M3's recorded Split C counts exactly, byte for byte, on a re-run. Seed-to-seed variance is no longer unmeasured for the production and baseline conditions --- Section S-I-U repeats those at five seeds and finds standard deviations of 0.03 to 0.14 on the external sets --- but it remains unmeasured for the ablations themselves, which is why a condition differing from its baseline by a point or two is not read here as a difference. The ablations that predate the fix are identified in their captions --- all of Table S11, all of Table S13, and the superseded white-balance rows retained in Table S18; Tables S12, S14 and 10 are post-fix --- and the two conclusions Table S11 is used for are separately reproduced post-fix in Table S12.
 
 {\bfseries Frozen backbones only.} Neither transfer model was fine-tuned; each trained a single linear head on cached features, a scope decision forced by CPU-only hardware --- an early attempt at live per-epoch backbone passes was terminated by the host before one split finished (Section S-I-E). Whether end-to-end fine-tuning would reduce or amplify the shortcut reliance documented here is genuinely open, and the possibilities are opposite: adaptable features could discard the confounded statistics, or specialize onto them more aggressively than a frozen representation can.
 
@@ -964,11 +1025,11 @@ One data point here bears on the question without settling it. M2 {\itshape is} 
 
 \section*{S-III. Appendix A --- Complete Per-Axis Ablation Record}
 
-Table S16 reproduces every normalization condition executed in this study, annotated with the script execution that produced it, so that valid within-run comparisons are identifiable. Absolute values are not comparable across groups; see Section VII's caveat.
+Table S18 reproduces every normalization condition executed in this study, annotated with the script execution that produced it, so that valid within-run comparisons are identifiable. Absolute values are not comparable across groups; see Section VII's caveat.
 
 \begin{table*}[!t]
 \caption{All normalization conditions. Res = resolution bottleneck (Eq. 5); Bright = brightness rescale (Eq. 6); Comp = JPEG bottleneck (Eq. 7); WB = gray-world white balance.}
-\label{tab:16}
+\label{tab:18}
 \centering
 \scriptsize
 \setlength{\tabcolsep}{4pt}
@@ -1025,11 +1086,11 @@ Only the last two groups --- the ordering sweep and the white-balance rerun --- 
 
 \section*{S-IV. Appendix B --- Exclusion Rules Applied to the Modeling Pool}
 
-Table S17 records every exclusion rule applied to the modeling pool, with the number of files each removed.
+Table S19 records every exclusion rule applied to the modeling pool, with the number of files each removed.
 
 \begin{table*}[!t]
 \caption{Every exclusion rule, with counts. Roboflow exclusions are listed for completeness; that source contributes to no split used in this paper's results.}
-\label{tab:17}
+\label{tab:19}
 \centering
 \footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -1086,9 +1147,11 @@ python modeling/experiment_model3_decompose.py
 python modeling/experiment_constant_sensitivity.py
 python modeling/experiment_order_permutation.py
 
-# 5. Seed variance (Section S-I-U); ~25 min per seed on one CPU
+# 5. Seed variance (Section S-I-U) and paired leakage (Section S-I-V); ~25 min per seed
 python modeling/seed_sweep.py                      # 5 seeds, resumable
 python modeling/seed_sweep.py --summary            # mean +/- sd tables
+python modeling/leakage_paired.py                  # paired leakage, 5 seeds, resumable
+python modeling/leakage_paired.py --design         # print the partition and its assertions
 
 # 6. Manuscript tables and figures
 python paper/scripts/compute_paper_metrics.py

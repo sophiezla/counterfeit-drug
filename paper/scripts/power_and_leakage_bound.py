@@ -56,8 +56,16 @@ def min_detectable(d):
     return best
 
 
-def leakage_ceiling():
-    """Test images under Split A whose product group also appears in A's train."""
+def direct_exposure_rate():
+    """
+    Test images under Split A whose product group also appears in A's train.
+
+    This bounds the RECOGNITION channel: these are the only test images a model
+    could get right by recognising a training photograph. It is not a bound on
+    the total effect of leakage, because admitting a mate into training also
+    moves the parameters that decide every other prediction.
+    modeling/leakage_paired.py measures both channels directly.
+    """
     groups = {}
     for r in csv.DictReader(open(SPLIT_B, newline="", encoding="utf-8")):
         groups[r["image_id"]] = r["product_identity"]
@@ -119,20 +127,22 @@ def main():
                          "value": round(need / n_test, 4),
                          "detail": f"net {need} of {n_test} test images"})
 
-    print("\n=== (2) Hard ceiling on the leakage effect ===")
-    k, n = leakage_ceiling()
+    print("\n=== (2) Direct exposure rate under Split A ===")
+    k, n = direct_exposure_rate()
     print(f"  Split A test images whose product group also appears in "
           f"Split A train: {k} of {n}")
-    print(f"  => no model can gain more than {k}/{n} = {k / n:.4f} "
-          f"({100 * k / n:.1f} points) from image-level leakage on this split.")
+    print(f"  => recognition alone cannot account for more than {k}/{n} = "
+          f"{k / n:.4f} ({100 * k / n:.1f} points) on this split.")
+    print("     The indirect channel is not bounded by this count; "
+          "modeling/leakage_paired.py measures both.")
     rows.append({"quantity": "leaked test images under Split A",
                  "value": f"{k}/{n}",
                  "detail": "test images sharing a product-identity group with "
                            "the training partition"})
-    rows.append({"quantity": "hard ceiling on leakage inflation",
+    rows.append({"quantity": "direct exposure rate under Split A",
                  "value": round(k / n, 4),
-                 "detail": f"{k}/{n}; model-independent upper bound derived "
-                           f"from the split alone"})
+                 "detail": f"{k}/{n}; model-independent, from the split alone. "
+                           f"Bounds the recognition channel only"})
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", newline="", encoding="utf-8") as fh:

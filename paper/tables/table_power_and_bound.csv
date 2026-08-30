@@ -9,4 +9,4 @@ quantity,value,detail
 "min detectable accuracy gap at D=14, n=74",0.1892,net 14 of 74 test images
 "min detectable accuracy gap at D=20, n=74",0.2703,net 20 of 74 test images
 leaked test images under Split A,7/76,test images sharing a product-identity group with the training partition
-hard ceiling on leakage inflation,0.0921,7/76; model-independent upper bound derived from the split alone
+direct exposure rate under Split A,0.0921,"7/76; model-independent, from the split alone. Bounds the recognition channel only"
