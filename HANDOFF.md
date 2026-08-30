@@ -4,6 +4,44 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Supplement audit, 2026-08-29 — six defects found by reading it fresh
+
+The supplement had drifted behind the manuscript. Nothing here was caught by
+verify_crossrefs or final_sweep, which check reference resolution and float
+numbering, not whether a sentence is still true.
+
+  1. **A superseded number quoted as current.** Section S-I-S said gray-world
+     white balance was "useless alone (0.107 external)". 0.107 is the
+     pre-seeding-fix value that Section S-I-N itself supersedes; the corrected
+     value is 0.067 (Table S12), which is what the main paper cites. Fixed,
+     with the table named.
+  2. **A broken cross-reference the gate cannot see.** Section S-II referred
+     twice to "Tables S12, S14 and 10", meaning the ordering-permutation table.
+     That table became Table 11 when Table 8 was inserted. The reference reads
+     "and 10", so neither the shift nor the gate's `Table Sn` pattern touched
+     it. Both fixed. **Watch for this shape whenever a main table is
+     renumbered.**
+  3. **An internal contradiction about M2.** Section S-I-G still said "M2
+     remains the best-generalizing model" while Section S-I-Q says "what we no
+     longer claim is that M2 generalizes best". S-I-G predates Split D. Reworded
+     to say what the learning-rate correction actually did and does not.
+  4. **A withdrawn claim stated as fact before its withdrawal.** Section S-I-J
+     asserted the two backbones behave "identically" three times in the
+     Grad-CAM subsection, and only narrowed it in the occlusion subsection
+     further down. A reader in order gets the withdrawn claim. The three now
+     mark it as the Grad-CAM reading and point forward.
+  5. **A claim attributed to Section I-A that Section I-A no longer makes.**
+     S-II said "Section I-A argues that asymmetric class sourcing makes
+     provenance confounding the default". That was narrowed this same day.
+  6. **A literal code fence in the PDF.** Appendix C's closing ``` was glued to
+     the last command, so page 27 rendered "final_sweep.py```".
+
+Also: Appendix C annotated 18_capture_method_stats.py as producing "Table 6,
+Fig. S5"; it produces the brightness/resolution/file-size statistics behind
+Table 4 and Fig. 1. And the manuscript said M2 and M4 move "at standard
+deviations under 0.04" when M2's baseline sd is 0.103 -- it is the normalized
+sds that are under 0.04.
+
 ## Third informal review, 2026-08-29 — shortened, claims narrowed
 
 Implemented: the length cut (21 -> 20 pages), the prevalence narrowing, the
