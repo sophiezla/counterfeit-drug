@@ -4,6 +4,37 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Cut to 16 pages, 2026-08-29 (author instruction: at least four pages)
+
+20 -> 16. What moved, and where it went:
+
+  * **Section VI-B** (audit on the Roboflow archive) and **Section VI-C** (the
+    seven-dataset pilot audit) are now **Section S-I-W**, in that reading
+    order. Author called VI-C removable; VI-B followed because the two are one
+    argument and splitting them across documents read worse than moving both.
+  * **Section VII** (ablation study) is now **Section S-I-X**, and the main
+    paper carries "VII. The Ablation Study, in Brief" -- every number retained,
+    including the full ordering result; only the six-row table left.
+  * **Figure 1** (distributions of the three confounded statistics) is now
+    **Fig. S13**; Table 3 already carried its numbers.
+  * **Table 3** (partition sizes) became a sentence pointing at Table S2.
+  * The reproduction caveats left the availability statement for Appendix C.
+
+**The trap this round: LaTeX auto-letters subsections.** Removing VI-B and VI-C
+silently renumbered the rest of Section VI in the PDF (old VI-D..VI-G became
+VI-B..VI-E) while the markdown headings and 25 cross-references still said
+D..G. `verify_crossrefs` passed throughout, because it resolves references
+against the markdown headings, not the rendered letters. Both were realigned by
+hand. **If you relocate a subsection again, re-letter the remaining ones in the
+markdown and re-check every `Section X-y` reference in BOTH files against the
+compiled PDF.** A direct check is in this session's transcript: extract the
+PDF text, collect `^[A-H]\. ` headings under each `^[IVX]+\. ` section, and
+confirm every `Section X-y` reference resolves. Both documents return zero
+dangling.
+
+Main paper is now Tables 1-6 and Figure 1; the supplement is Tables S1-S23 and
+Figures S1-S13, 30 pages.
+
 ## Supplement audit, 2026-08-29 — six defects found by reading it fresh
 
 The supplement had drifted behind the manuscript. Nothing here was caught by
