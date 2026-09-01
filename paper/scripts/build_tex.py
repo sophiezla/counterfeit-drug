@@ -695,6 +695,12 @@ PREAMBLE = r"""%% IEEE Access manuscript -- GENERATED FILE, DO NOT EDIT.
 
 \begin{document}
 
+%% The ieeeaccess class defaults its page footer to VOLUME 11, 2023. Set the
+%% submission volume and year so the footer is not stale; IEEE production
+%% replaces these along with \history and \doi below.
+\vol{14}
+\year{2026}
+
 \history{Date of publication xxxx 00, 0000, date of current version
          xxxx 00, 0000.}
 \doi{10.1109/ACCESS.2026.DOI}

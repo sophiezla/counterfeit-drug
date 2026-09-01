@@ -18,7 +18,7 @@ This work received no specific grant from any funding agency in the public, comm
 
 ---
 
-## I. Introduction
+## I. INTRODUCTION
 
 Substandard and falsified medical products are a persistent global health problem, concentrated in low- and middle-income countries and in unregulated online supply chains [1], [2]. Because much falsified product is visually imperfect — misprinted cartons, wrong color separations, missing batch information — image-based screening from a consumer smartphone is an attractive triage tool, and a body of work has applied convolutional networks to photographs of medicine packaging and reported high binary accuracy [3], [26]–[28], alongside a larger literature on pharmaceutical *identification* rather than *authentication* [4], [5].
 
@@ -66,7 +66,7 @@ The contributions are three, in the order we would defend them:
 
 This is an empirical critique and a diagnostic method. We propose no new architecture — a 97-parameter linear model and a 4-million-parameter pretrained network are not statistically distinguishable on this test partition — and do not propose the normalization of Section V-D for adoption either. Everything offered for adoption is a check: fit your classifier to acquisition metadata before training it, evaluate on images you did not collect, and audit a correction as you would a dataset.
 
-## II. Related Work
+## II. RELATED WORK
 
 ### A. Image-based pharmaceutical authentication and identification
 
@@ -118,7 +118,7 @@ Three observations follow, and each bears on the finding of Section VI-A.
 
 **Studies that do control acquisition say so explicitly.** Outside pharmaceuticals, Garcia-Cotte *et al.* [29] report counterfeit detection on branded garments from smartphone images captured "under natural, weakly controlled conditions", at 99.71% after a 3.06% rejection rate. Whatever else separates that work from Table 1, it states its acquisition regime as a property of the result — the reporting standard Section VII-D argues should become routine here.
 
-## III. Dataset
+## III. DATASET
 
 ### A. Sources considered
 
@@ -164,7 +164,7 @@ It is a *different point on the confounded axis* rather than a repeat: mean brig
 
 Because content is held approximately fixed and acquisition varies, Split D is a **capture-shift test**: not an independent product sample, and isolating exactly the axis this paper is about. What it can settle is correspondingly narrow. The two sets come from one archive, cover the same packages, and share one dark backdrop; they differ in capture device and lighting protocol and in nothing else we can identify. A model that survives C → D is therefore shown to be stable across **the device and lighting shift these two capture conditions represent**, not across acquisition in general — a distinction that matters because Section VI-E finds the backdrop itself implicated as a cue. The shared backdrop is the study's most consequential gap and is stated again where it bites (Sections VI-E, VIII).
 
-## IV. Data Preprocessing
+## IV. DATA PREPROCESSING
 
 The full pipeline is deterministic (fixed seed 42 throughout) and idempotent; re-running reproduces byte-identical outputs. Fig. S1 summarizes it.
 
@@ -202,7 +202,7 @@ The three-stage normalization that Sections V-D and VII evaluate is applied *ins
 
 ---
 
-## V. Methodology
+## V. METHODOLOGY
 
 ### A. Task and label convention
 
@@ -316,7 +316,7 @@ Table 3 gives the settings in one place, so reproducing any number in Section VI
 | Seed policy | 42, fixed before every run, fold and augmented extraction pass; sensitivity at 42–46 (Table 8) |
 | M1 | `LogisticRegression(max_iter=2000, class_weight="balanced")`, no augmentation, no normalization operator |
 
-## VI. Results
+## VI. RESULTS
 
 All results in this section come from the deterministic, three-way-normalized production pipeline, except where a table explicitly reports a baseline condition for contrast. Complete machine-readable tables are in `paper/tables/`.
 
@@ -499,7 +499,7 @@ Sections S-I-N to S-I-X ablate the correction per axis, per architecture, per co
 
 Two consequences bear on how any such pipeline should be reported. **In-distribution ranking is not merely uninformative here; it is inverted** — the ordering with the highest Split B accuracy of all six (brightness, compression, resolution, at 0.946) has the lowest external accuracy of all six, 0.380, so a practitioner selecting the order the ordinary way would have chosen the worst of six while watching a 2.7-point in-distribution spread conceal a 50-point external one. And **the reported order is again conservative**: resolution, compression, brightness beats production on both axes (0.880 against 0.820 externally, 0.932 against 0.919 in-distribution), and we have not re-run the paper around it, for the reason just given. Composition order is normally left implicit in a preprocessing description; on this evidence it deserves the treatment of a hyperparameter — reported, and not chosen in-distribution.
 
-## VII. Discussion
+## VII. DISCUSSION
 
 ### A. What the reported accuracies on this dataset actually measure
 
@@ -545,7 +545,7 @@ Section S-I-T gives each type its detector, its cost when undetected and its rep
 
 The claim of Section I-A is a causal mechanism — asymmetric class availability can create class-conditional acquisition differences that confound the intended task — and we state what evidence would count against it. Datasets in which the scarce class was obtained by the same procedure as the abundant one should show no Type A confound; [3], which photographed authentic and counterfeit samples on one Raspberry Pi rig, is the one study in Table 1 that plausibly meets this condition, and it also reports the lowest accuracy in that table — a single observation across heterogeneous studies, which is suggestive and not evidence. Conversely, a survey of authenticity datasets that found the audit firing no more often on separately-sourced collections than on jointly-sourced ones would refute the mechanism. That survey is the natural next study and we have not performed it: two datasets in one application area, plus one corroborating report from another [30], is enough to motivate the mechanism and not enough to establish its prevalence.
 
-## VIII. Limitations
+## VIII. LIMITATIONS
 
 Table 10 separates what this study demonstrates from what it hypothesizes or leaves unmeasured; the paragraphs after it state each limitation in turn, and Section S-II gives the evidence for and against each. The list is complete but compressed.
 
@@ -586,7 +586,7 @@ Table 10 separates what this study demonstrates from what it hypothesizes or lea
 
 **Two measurements of record cannot be re-derived from persisted weights.** An earlier M4 Split B accuracy of 0.946 could not be explained once the checkpointed pipeline deterministically produced 0.919, that run's artifacts no longer existing. The pre-normalization baseline column of Table 7 has the same status: its weights were never saved, so it cannot be re-executed, and the current harness re-derives the same nominal condition at different values for M3 and M4 (Sections S-I-U, S-I-Z). We retain it as the archived historical result, label it as such in Table 7's caption, and use the five-seed re-derivation of Table 8 for every sensitivity statement; the two are not presented as readings of one experimental run. Both discrepancies are recorded as an audit trail. Every other number in this paper comes from the current pipeline and its persisted checkpoints.
 
-## IX. Future Work
+## IX. FUTURE WORK
 
 **Acquire an external set that varies the photographic setting, and one that is counterfeit-labeled.** These are the two evaluations this study most needs and could not build. Both external sets share one backdrop, so neither disturbs the surround cue of Section VI-E, and photographs against varied surfaces would test it directly at a fraction of the cost. The counterfeit-labeled set would change most, and its requirements are specific: independently photographed, verified by the pHash procedure of Section IV-B, and with acquisition balanced across its classes so that it does not import the confound it exists to test.
 
@@ -598,7 +598,7 @@ Table 10 separates what this study demonstrates from what it hypothesizes or lea
 
 **Test further acquisition axes, and settle the attribution disagreement.** Sensor noise and staging conventions remain untested, and any new axis should be swept for composition position, not only for inclusion. A content-aware attribution measure — mass inside an annotated product box rather than a radial ring — would settle where the two methods of Section VI-E disagree; it is implemented and committed, and needs an annotation pass using rotated boxes.
 
-## X. Conclusion
+## X. CONCLUSION
 
 We set out to measure how much of a reported accuracy on a small public counterfeit-medicine dataset survives methodological correction, expecting leakage to be the mechanism at issue. It accounted for very little: at most 6.8 points across split designs, and 0.3 points [−1.9, +2.4] when varied alone on a fixed test set. Almost all of the inflation is something else, with a structural cause reaching beyond the dataset we started from.
 
@@ -614,7 +614,7 @@ Two qualifications keep that recommendation honest. The audit is necessary but n
 
 That the same signature has been documented independently in generated-image detection [30], and that our own pilot audit finds it in a third archive, is what a structural cause predicts. It remains a mechanism we would expect wherever a scarce class must be manufactured or harvested separately from an abundant one, and not a rate we have measured.
 
-## Acknowledgment
+## ACKNOWLEDGMENT
 
 This work was carried out on a single consumer laptop, and the CPU-only constraint that shapes several of this paper's design decisions follows from that. We thank the maintainers of the three public datasets used here [19], [20], [21]. The Mendeley and Roboflow datasets are distributed under CC BY 4.0; the Kaggle dataset carries no license, so it is attributed to its uploader, nothing from it is redistributed, and readers reproducing the pool must obtain it from the original listing.
 
@@ -622,7 +622,7 @@ This paper is critical of the construction of a dataset whose uploader made it f
 
 **Generative-AI disclosure.** This manuscript and the accompanying code were prepared with the assistance of Claude, an AI assistant developed by Anthropic, accessed through the Claude Code command-line interface over the course of the project; the specific model version varied across that period and is not recorded per session. Its use covered drafting and revising the text of every section, writing and debugging the analysis and figure-generation code, and identifying several defects in earlier versions of the pipeline that are disclosed in Section S-I-G. All experimental design decisions, all interpretations, and the decision to report each negative and superseded result rather than remove it are the author's. Every number reported here is produced by committed code from committed data and was verified by re-execution, and no result, citation or reference was generated by a language model without verification against a primary source. The author takes full responsibility for the content.
 
-## Ethics, Conflicts of Interest, and Data Provenance
+## ETHICS, CONFLICTS OF INTEREST, AND DATA PROVENANCE
 
 **Human and animal subjects.** This study involves neither. All images are photographs of pharmaceutical packaging from public archives; none depicts an identifiable person, and no personal or patient data was accessed.
 
@@ -638,7 +638,7 @@ This paper is critical of the construction of a dataset whose uploader made it f
 
 ---
 
-## Data and Code Availability
+## DATA AND CODE AVAILABILITY
 
 **Repository.** All code and derived artifacts are at `https://github.com/sophiezla/counterfeit-drug`, archived at the concept DOI **10.5281/zenodo.21936720**, which resolves to the most recent release. The release accompanying this manuscript is **v1.2.0**, and it is the exact state of the code that produced every number reported here; `README.md` and `CITATION.cff` name it, and the earlier releases they list are marked superseded. It holds the data pipeline, the four model implementations, every analysis and figure script, the per-image statistics and split assignments, the persisted checkpoints, and the sources of this manuscript and its supplement.
 
@@ -646,87 +646,16 @@ It deliberately contains **no images**: the Kaggle archive carries no license gr
 
 Six analysis scripts read only committed artifacts, need no image data and no training, and reproduce Table 5, Tables S18, S20 and S22, the direct exposure count and the external intervals in seconds — covering the paper's two central quantitative claims without requiring a reader to obtain the images or run a model. Section S-V names them.
 
-## References
+## REFERENCES
 
-This list is shared with the supplementary material, which cites it by the same numbers; references [17], [18], [22] and [24] are cited there rather than here.
+*Unchanged from `paper/paper.md`. Every entry there was verified against a primary source by the author and carries an italic verification note that the build strips from the compiled artifact. The list is reproduced verbatim in the built manuscript; it is not reprinted here because nothing in this rewrite touches it, and re-typing a verified reference list is the single easiest way to introduce an error into one.*
 
-> **Reference verification status.** Every reference has been verified against a primary source: full author lists, venues, volume/issue and DOIs were read from the publisher or indexed record rather than from an aggregator page or from recollection. Where a detail could not be confirmed it is omitted rather than guessed, and said so. Two carried-forward notes for the reviewer audit: reference [11] is a medRxiv preprint and is the sole citation for the patient-level-segregation argument, disclosed and scoped to that argument alone; reference [31] is cited only for what its abstract states, because the published full text is paywalled.
+Two notes carried forward for the reviewer audit:
 
+- **[REFERENCE VERIFICATION NEEDED — m-6]** Reference [11] (Öner *et al.*) is a medRxiv preprint and is the sole citation for the patient-level-segregation argument motivating the entire Split A / Split B design. The manuscript discloses the preprint status and scopes the citation to that argument alone, which is the correct handling. Confirm at submission whether a peer-reviewed version has appeared; if not, the disclosure stands.
+- Reference [31] (DeGrave *et al.*) is cited only for what its abstract states, because the published full text is paywalled and no full text is served for the preprint record. Do not strengthen the characterization without reading the paper.
 
-This list is shared with the supplementary material, which cites it by the same numbers; references [17], [18], [22] and [24] are cited there rather than here.
-
-> **Reference verification status.** Every reference has been verified against a primary source: full author lists, venues, volume/issue and DOIs were read from the publisher or indexed record rather than from an aggregator page or from recollection. Where a detail could not be confirmed it is omitted rather than guessed, and said so. Two additional sources encountered during the literature search — a graph-neural-network counterfeit detector operating on chemical structure, and a GAN + CNN + blockchain authentication system — were deliberately **excluded** because no primary source could be located for either; they should be added only if one is found, and never cited from an aggregator summary.
-
-[1] World Health Organization, "Substandard and falsified medical products," WHO fact sheet, 3 Dec. 2024. [Online]. Available: https://www.who.int/news-room/fact-sheets/detail/substandard-and-falsified-medical-products. *Verified against the primary source; states "at least 1 in 10 medicines in low- and middle-income countries are substandard or falsified". Fact sheets are revised in place, so the access date should be refreshed at submission.*
-
-[2] S. Ozawa, D. R. Evans, S. Bessias, D. G. Haynie, T. T. Yemeke, S. K. Laing, and J. E. Herrington, "Prevalence and estimated economic burden of substandard and falsified medicines in low- and middle-income countries: A systematic review and meta-analysis," *JAMA Network Open*, vol. 1, no. 4, e181662, 2018, doi: 10.1001/jamanetworkopen.2018.1662. *Verified against the primary record; replaces the unsourced industry market-size estimate carried over from [3].*
-
-[3] R. R. T. Ramos, K. R. B. Samonte, and C. O. Manlises, "Medicine authentication based on image processing using convolutional neural networks," in *Proc. 16th Int. Conf. Computer and Automation Engineering (ICCAE)*, 2024, pp. 278–282, doi: 10.1109/ICCAE59995.2024.10569752. *Author list, venue, page range and DOI verified 2026-08-28 against the indexed conference record; the page range and DOI were added then.*
-
-[4] H.-W. Ting, S.-L. Chung, C.-F. Chen, H.-Y. Chiu, and Y.-W. Hsieh, "A drug identification model developed using deep learning technologies: Experience of a medical center in Taiwan," *BMC Health Services Research*, vol. 20, art. 312, 2020, doi: 10.1186/s12913-020-05166-w.
-
-[5] K. Al-Hussaeni, I. Karamitsos, E. Adewumi, and R. M. Amawi, "CNN-based pill image recognition for retrieval systems," *Applied Sciences*, vol. 13, no. 8, art. 5050, 2023, doi: 10.3390/app13085050.
-
-[6] R. Geirhos, J.-H. Jacobsen, C. Michaelis, R. Zemel, W. Brendel, M. Bethge, and F. A. Wichmann, "Shortcut learning in deep neural networks," *Nature Machine Intelligence*, vol. 2, pp. 665–673, 2020, arXiv:2004.07780.
-
-[7] J. R. Zech, M. A. Badgeley, M. Liu, A. B. Costa, J. J. Titano, and E. K. Oermann, "Variable generalization performance of a deep learning model to detect pneumonia in chest radiographs: A cross-sectional study," *PLOS Medicine*, vol. 15, no. 11, e1002683, 2018, doi: 10.1371/journal.pmed.1002683.
-
-[8] B. G. Hill, F. L. Koback, and P. L. Schilling, "The risk of shortcutting in deep learning algorithms for medical imaging research," *Scientific Reports*, vol. 14, no. 1, art. 29224, 2024, doi: 10.1038/s41598-024-79838-6.
-
-[9] J. Seah, C. Tang, Q. D. Buchlak, M. Milne, X. Holt, H. Ahmad, J. F. Lambert, N. Esmaili, L. Oakden-Rayner, P. Brotchie, and C. M. Jones, "Do comprehensive deep learning algorithms suffer from hidden stratification? A retrospective study on pneumothorax detection in chest radiography," *BMJ Open*, vol. 11, no. 12, e053024, 2021, doi: 10.1136/bmjopen-2021-053024.
-
-[10] A. Trivedi, C. Robinson, M. Blazes, A. Ortiz, J. Desbiens, S. Gupta, R. Dodhia, P. K. Bhatraju, W. C. Liles, J. Kalpathy-Cramer, A. Lee, and J. Lavista Ferres, "Deep learning models for COVID-19 chest x-ray classification: Preventing shortcut learning using feature disentanglement," *PLOS ONE*, vol. 17, no. 10, e0274098, 2022, doi: 10.1371/journal.pone.0274098.
-
-[11] M. Ü. Öner, Y.-C. Cheng, H. K. Lee, and W.-K. Sung, "Training machine learning models on patient level data segregation is crucial in practical clinical applications," medRxiv preprint, 2020, doi: 10.1101/2020.04.23.20076406. *Preprint; no peer-reviewed version was located, and it is cited here for the patient-level-segregation argument only.*
-
-[12] D. Hendrycks and T. Dietterich, "Benchmarking neural network robustness to common corruptions and perturbations," in *Proc. Int. Conf. Learning Representations (ICLR)*, 2019, arXiv:1903.12261.
-
-[13] A. Howard, M. Sandler, G. Chu, L.-C. Chen, B. Chen, M. Tan, W. Wang, Y. Zhu, R. Pang, V. Vasudevan, Q. V. Le, and H. Adam, "Searching for MobileNetV3," in *Proc. IEEE Int. Conf. Computer Vision (ICCV)*, 2019, pp. 1314–1324, arXiv:1905.02244.
-
-[14] M. Tan and Q. V. Le, "EfficientNet: Rethinking model scaling for convolutional neural networks," in *Proc. Int. Conf. Machine Learning (ICML)*, 2019, arXiv:1905.11946.
-
-[15] R. R. Selvaraju, M. Cogswell, A. Das, R. Vedantam, D. Parikh, and D. Batra, "Grad-CAM: Visual explanations from deep networks via gradient-based localization," in *Proc. IEEE Int. Conf. Computer Vision (ICCV)*, 2017, arXiv:1610.02391.
-
-[16] S. M. Lundberg and S.-I. Lee, "A unified approach to interpreting model predictions," in *Advances in Neural Information Processing Systems (NeurIPS)*, 2017, arXiv:1705.07874.
-
-[17] A. Paszke, S. Gross, F. Massa, et al., "PyTorch: An imperative style, high-performance deep learning library," in *Advances in Neural Information Processing Systems (NeurIPS)*, 2019.
-
-[18] F. Pedregosa, G. Varoquaux, A. Gramfort, et al., "Scikit-learn: Machine learning in Python," *Journal of Machine Learning Research*, vol. 12, pp. 2825–2830, 2011.
-
-[19] S. K. Jha, "Fake vs Real Medicine Dataset (images)," Kaggle, dataset `surajkumarjha1/fake-vs-real-medicine-datasets-images`, last updated 13 Oct. 2025, license stated as "Unknown". [Online]. Available: https://www.kaggle.com/datasets/surajkumarjha1/fake-vs-real-medicine-datasets-images. *Identity re-confirmed 28 Aug. 2026 against the local archive on two independent byte totals: the downloaded zip is 279,469,596 bytes, which matches the listing's `totalBytes` exactly, and its 2,228 members sum to 279,596,681 bytes uncompressed. Earlier notes quoted the second figure as though it were the listing value; they are different quantities and both are now stated. Usage figures quoted in Section II-F (3,039 views, 591 downloads, 3 public notebooks, 2 votes, no discussion) were read from the live listing on 28 Aug. 2026; downloads moved 540 → 574 → 591 between 29 Jul. and 28 Aug. 2026 while notebooks, votes, license and last-updated date did not change. They change, so refresh them if the manuscript is held; the argument depends on the order of magnitude, not the exact count.*
-
-[20] E. Abdelmaksoud, A. Gadallah, and A. Asad, "Mobile-captured pharmaceutical medication packages," Mendeley Data, V1, doi: 10.17632/bjy2svvmn8.1, CC BY 4.0. *Author list corrected 2026-08-28 after re-checking against the dataset landing page and DOI resolution: the given names are Esraa, Ahmed and Ahmed, not the initials M./H./M. previously carried over from an earlier note.*
-
-[21] Harshini T. G. R., "Counterfeit_med_detection," Roboflow Universe, version 4 (multiclass export), Nov. 2022, CC BY 4.0. Accessed: Aug. 28, 2026. [Online]. Available: https://universe.roboflow.com/harshini-t-g-r/counterfeit_med_detection. *Contributor name, license, version count and year confirmed in a browser on 28 Aug. 2026 against the publisher's own suggested citation; the landing page rejects automated requests, which is why an earlier note deferred this. The version date, the 4,260-image count and the "resize to 640x640 (stretch)" preprocessing that Section S-I-W attributes to the publisher are read from `README.roboflow.txt` inside the export archive held locally.*
-
-[22] Q. McNemar, "Note on the sampling error of the difference between correlated proportions or percentages," *Psychometrika*, vol. 12, no. 2, pp. 153–157, 1947.
-
-[23] K. Zhou, Z. Liu, Y. Qiao, T. Xiang, and C. C. Loy, "Domain generalization: A survey," *IEEE Transactions on Pattern Analysis and Machine Intelligence*, vol. 45, no. 4, pp. 4396–4415, 2023, doi: 10.1109/TPAMI.2022.3195549, arXiv:2103.02503. *Author list, volume, issue and page range verified 2026-08-28 against the publisher-of-record listing; Crossref still carries the early-access record (pp. 1–20, 2022), so the final pagination was taken from the issue record instead.*
-
-[24] B. Efron and R. J. Tibshirani, *An Introduction to the Bootstrap*. New York, NY, USA: Chapman & Hall, 1993.
-
-[25] C. Zauner, "Implementation and benchmarking of perceptual image hash functions," M.Sc. thesis, Upper Austria University of Applied Sciences Hagenberg, Jul. 2010. [Online]. Available: https://www.phash.org/docs/pubs/thesis_zauner.pdf. *Verified: institution, year and title confirmed against the thesis PDF hosted by phash.org.*
-
-[26] K. Motwani, R. Dsouza, R. Dsouza, and J. Jose, "Counterfeit medicine detection using deep learning," *International Journal of Innovative Research in Technology (IJIRT)*, vol. 9, no. 3, pp. 818–821, Aug. 2022, ISSN 2349-6002. *Full text re-read 2026-08-28; volume, issue, page range and ISSN taken from the article's own running head, and the page range added then. The counterfeit class is constructed by the authors by altering logos and text on web-scraped authentic packaging images: "we scraped medicines of 10 manufacturers ... due to the lack of availability of fake images, we ourselves created by altering the logo and text on the package."*
-
-[27] B. S. Thomson and W. R. Varuna, "An intelligent counterfeit medicine classification prediction system using modified YOLO: A single stage object detector," *TPM (Testing, Psychometrics, Methodology in Applied Psychology)*, vol. 32, no. S2, pp. 1073–1088, 2025, ISSN 1972-6325. *Full text re-read 2026-08-28; volume, issue, page range and ISSN confirmed against the article's own running head. trains on GAN-synthesized counterfeit images derived from a Kaggle pharmaceutical pill dataset and tests against DrugBank and drugs.com imagery.*
-
-[28] B. S. Thomson and W. R. Varuna, "Detecting counterfeit medicines utilizing artificial intelligence technique," *International Journal of Creative Research Thoughts (IJCRT)*, vol. 13, no. 4, pp. i322–i329, Apr. 2025, ISSN 2320-2882. *Full text re-read 2026-08-28, volume, issue, page range and ISSN confirmed against the running head; reports 92% accuracy over an image set cited only as a drugs.com URL, with no image count stated, though the paper does state an 80/10/10 train/test/validation split.*
-
-[29] H. Garcia-Cotte, D. Mellouli, A. Rehman, L. Wang, and D. G. Stork, "Deep neural network-based detection of counterfeit products from smartphone images," arXiv:2410.05969, 2024.
-
-[30] P. Grommelt, L. Weiss, F.-J. Pfreundt, and J. Keuper, "Fake or JPEG? Revealing common biases in generated image detection datasets," in *Computer Vision – ECCV 2024 Workshops*, Lecture Notes in Computer Science. Cham, Switzerland: Springer, 2025, pp. 80–95, doi: 10.1007/978-3-031-92089-9_6, arXiv:2403.17608. *Verified 2026-08-28 against both the arXiv record and the Crossref record for the published version; this reference was upgraded from the preprint to the peer-reviewed proceedings entry then. Cited as the closest independent analogue of this paper's finding: real/generated separation by JPEG compression and image size on the GenImage benchmark, detectors partly reducible to JPEG detectors, and >11-point cross-generator shifts after equalization, all four claims checked against the abstract of record.*
-
----
-
-
----
-
-[31] A. J. DeGrave, J. D. Janizek, and S.-I. Lee, "AI for radiographic COVID-19 detection selects shortcuts over signal," *Nature Machine Intelligence*, vol. 3, no. 7, pp. 610–619, 2021, doi: 10.1038/s42256-021-00338-7. *Authors, journal, volume, issue, page range and year verified 2026-08-29 against the Crossref record; the quoted phrase is from the abstract of the preprint of the same title and authors (Europe PMC PPR213715). The published full text is paywalled, so nothing is claimed here about its methods or datasets beyond what that abstract states.*
-
-[32] A. Torralba and A. A. Efros, "Unbiased look at dataset bias," in *Proc. IEEE Conf. Computer Vision and Pattern Recognition (CVPR)*, 2011, pp. 1521–1528, doi: 10.1109/CVPR.2011.5995347. *Title, authors, venue, year and page range verified 2026-08-29 against the Crossref record. Cited for the dataset-bias framing itself, not for a specific numerical result.*
-
-## Author Biographies
+## AUTHOR BIOGRAPHIES
 
 ![Sophie Zhu](paper/figures/author_photo.jpeg)
 

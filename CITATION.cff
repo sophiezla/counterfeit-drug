@@ -12,7 +12,7 @@ abstract: >-
   model families, external evaluation on two independently captured
   distributions, a label-free normalization operator with per-axis, per-constant
   and per-order ablations, a five-seed variance sweep, calibration and two
-  independent attention analyses, and a provenance audit run across four
+  independent attribution analyses, and a provenance audit run across four
   application areas. Contains no images.
 type: software
 authors:
@@ -23,8 +23,8 @@ authors:
     orcid: "https://orcid.org/0009-0004-2403-910X"
 repository-code: "https://github.com/sophiezla/counterfeit-drug"
 license: MIT
-version: "1.1.0"
-date-released: "2026-08-29"
+version: "1.2.0"
+date-released: "2026-08-31"
 doi: 10.5281/zenodo.21936720
 identifiers:
   - type: doi
@@ -32,13 +32,15 @@ identifiers:
     description: Concept DOI, resolves to the latest release
   - type: doi
     value: 10.5281/zenodo.22166543
-    description: DOI of v1.1.0, the release the manuscript reports
+    description: >-
+      DOI of v1.1.0. Superseded: it predates the paired external test and the
+      pHash threshold sweep, both of which produce results the manuscript
+      reports, so v1.1.0 no longer corresponds to the numbers in the paper.
   - type: doi
     value: 10.5281/zenodo.22151840
     description: >-
-      DOI of v1.0.1. Superseded: v1.1.0 adds the seed-variance sweep and the
-      occlusion analysis the manuscript now reports, so v1.0.1 no longer
-      corresponds to the numbers in the paper.
+      DOI of v1.0.1. Superseded: it predates the seed-variance sweep and the
+      occlusion analysis as well.
 keywords:
   - dataset bias
   - shortcut learning

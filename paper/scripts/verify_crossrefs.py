@@ -237,6 +237,21 @@ def check_external_counts():
             if r["metric"] == "split_c_accuracy":
                 allowed[150].add(round(float(r["mean"]) * 150))
 
+    # The five-seed sweep is a per-seed record of the same two external sets.
+    # The manuscript quotes individual seeds from it where the archived
+    # baseline and the re-derivation disagree (Table 6's caption note, and the
+    # conflict flag under it). Those counts are on record; they were in an
+    # artefact this check did not read, which is how a true statement came to
+    # fail the gate. Deriving them here keeps the rule intact: a new count
+    # still requires the artefact that justifies it.
+    sweep = ROOT / "modeling" / "results" / "seed_sweep.csv"
+    if sweep.exists():
+        for r in csv.DictReader(open(sweep, newline="", encoding="utf-8")):
+            allowed.setdefault(int(r["split_c_n"]), set()).add(
+                int(r["split_c_correct"]))
+            allowed.setdefault(int(r["split_d_n"]), set()).add(
+                int(r["split_d_correct"]))
+
     # Two literals that are not model counts and have nowhere else to come
     # from: the 16/150 of the superseded rebuild that Section S-II reports as
     # history, and the 150/150 approval rate of the synthetic-proxy review.

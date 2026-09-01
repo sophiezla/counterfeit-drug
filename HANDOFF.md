@@ -4,6 +4,64 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Fifth review round, 2026-08-31 — all four conflict flags resolved, v1.2.0 cut
+
+The rewrite in `ieee_access_rewrite_20260830/` was **promoted into `paper/`**,
+which is again the single build tree. That folder now holds only the working
+record: the diagnosis, the reviewer audit, and `MANUSCRIPT_rewritten.md`, which
+is *generated* by `paper/scripts/mirror_authored_copy.py` and must not be
+hand-edited — hand-editing it is how it drifted 18 pages behind.
+
+**The four conflict flags are gone, each resolved against a committed artifact:**
+
+  * **M-1** (Table 6 vs. Table 7 baselines). The **archived run is retained as
+    the historical value of record**, labelled as such in the caption of what
+    is now Table 7, and quoted as 3.3% throughout; the five-seed re-derivation
+    of Table 8 is the value used for every sensitivity statement. The stray
+    "6%" in Section VI-E is gone. `table_external_intervals.csv` re-derives
+    104/150 and 5/150 exactly, so the archived column is still reproducible
+    from a committed artifact — which is what settled the choice.
+  * **M-2** (M4's Split B baseline). **0.905 confirmed**: `seed_sweep.csv`
+    gives 0.9054 at every one of seeds 42–46, sd exactly 0.000. The stray
+    0.919 came from a pre-seeding-fix ablation the paper itself declares
+    non-comparable.
+  * **M-3** ("at most 1.4 points"). **Scoped in both places** — Section VII-E
+    and the Conclusion now give the seed-42 figure and the five-seed range
+    (−3.0 for M2, +3.0 for M4) together.
+  * **M-4** (cross-source overlap). **Committed figures adopted**: 202
+    clusters, 2,665 of 4,027 Roboflow, 256 of 605 Kaggle, 42.3%, recomputed
+    from `data/metadata/dedup_clusters.csv`. The old 229 / 2,900 / 290-of-661
+    was computed on the pre-exclusion pool, which the repository does not ship;
+    it is now named in the text and explicitly *not* the value of record.
+
+**Also implemented, from a simulated reviewer pass.** Title shortened (the term
+is now defined in Section I-A, not carried in the title). Specificity discipline
+enforced: authentic-only sets are "external authentic-class specificity", never
+"accuracy" or "external failure". A confirmatory/exploratory tier table opens
+Section VI, and the normalization is characterised as one pre-specified operator
+rather than a proposed algorithm. Split C→D is now "the device and lighting
+shift these two capture conditions represent", never "generalizes across
+acquisition". Section VI-E promotes occlusion to primary evidence and demotes
+the single-annotator Grad-CAM categorization to corroboration. A five-row
+summary of the multi-dataset audit came **back into the main paper as Table 6**
+(reversing the 2026-08-29 cut of Section S-I-W, which stays in the supplement as
+the full record) — this is the renumbering that moved Tables 6–9 to 7–10 in both
+documents. "Shapley" is retired for "exact linear logit decomposition". A
+notation box fixes y=0/y=1 in Section V-A, and a set-off statement in VI-A fixes
+that the audit measures shortcut *availability*, not model behaviour. Prose
+neutralised throughout per the reviewer's ~15–20% request.
+
+**Template.** `ol{14}` and `\year{2026}` are now set in both build scripts;
+the footer read "VOLUME 11, 2023" from the class default before. `\history` and
+`\doi` remain the template's own placeholders, which IEEE fills at production.
+
+**Manuscript is 21 pages** (was 19), supplement 32. All gates pass; the
+geometric margin check gives a widest block of 178.06 mm against the class's
+178.67 mm rule.
+
+**Release.** v1.2.0 cut from this state. `README.md`, `CITATION.cff` and the
+availability statement name it; earlier releases are marked superseded.
+
 ## Cut to 16 pages, 2026-08-29 (author instruction: at least four pages)
 
 20 -> 16. What moved, and where it went:
