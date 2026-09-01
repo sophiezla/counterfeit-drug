@@ -63,7 +63,7 @@ Case Study}
 \corresp{Corresponding author: Sophie Zhu (e-mail: sophiezhu2028@gmail.com).}
 
 \begin{abstract}
-This document holds the material the main paper cites but does not reproduce: the full experimental setup, the complete per-model metric tables and their figures, the secondary evaluations and ablations, the reproducibility record, and the appendices. Nothing here is summarized --- every section appears as it did in the full record, and the main paper's claims are traceable to it. This document's tables, figures and equations carry an S prefix, and the main paper refers to them by those numbers. References without one point outward: "Table~7" and "Fig.~1" are the manuscript's, as is "Section VI-A", while "Table S6" and "Section S-III" point within this document.
+This document holds the material the main paper cites but does not reproduce: the full experimental setup, the complete per-model metric tables and their figures, the secondary evaluations and ablations, the reproducibility record, and the appendices. Nothing here is summarized --- every section appears as it did in the full record, and the main paper's claims are traceable to it. This document's tables, figures and equations carry an S prefix, and the main paper refers to them by those numbers. References without one point outward: "Table~4" and "Fig.~1" are the manuscript's, as is "Section VI-A", while "Table S6" and "Section S-III" point within this document.
 \end{abstract}
 
 \begin{keywords}
@@ -158,7 +158,7 @@ w_1 = \frac{n}{2 n_1}, \\[2pt]
 which follows the protocol choice of class weighting over oversampling. The minimum-improvement threshold (1 $\times$ 10\textsuperscript{-}\textsuperscript{3}) was added after observing a frozen-backbone linear head run for 46+ epochs on noise-level validation-loss "improvements" that a naive patience counter never terminated; with the threshold, patience resets only on a meaningful improvement. The best-validation-loss state is restored at the end of training.
 
 \begin{table*}[!t]
-\caption{Hyperparameters, in the form the code sets them. Table~3 of the main paper is the reader-facing summary of the same protocol; this table gives the same settings in the names the code uses, together with the learning-rate search range behind them.}
+\caption{Hyperparameters, in the form the code sets them. Section V-F of the main paper summarizes this protocol in prose; this table gives the same settings in the names the code uses, together with the learning-rate search range behind them.}
 \label{tab:2}
 \centering
 \footnotesize
@@ -503,7 +503,7 @@ We take the mechanical reading to be the more likely of the two, and its consequ
 
 One conclusion survives under either reading, and it is a caution against a common practice: {\bfseries a visually convincing, product-centered Grad-CAM map is not evidence that a model has learned the intended task.} That claim rests on the {\itshape un-normalized} model, whose input is unaltered and whose attribution is therefore not in question --- it is strongly product-centered, and it classifies 6\% of external images correctly. The model whose attribution looks most like it is reading the product is the one that fails externally.
 
-{\bfseries A second attribution method, and the one place it disagrees.} Everything above rests on Grad-CAM: one method, one annotator, forty sampled maps, and a method this subsection has just argued is degraded by the bottleneck it runs behind. \url{modeling/occlusion_sensitivity.py} puts the same question to a method that shares none of those weaknesses. It slides a 64 px occluder over the network's 224 $\times$ 224 input on a 6 $\times$ 6 grid and records how far P(authentic) falls when each region is hidden; a region whose occlusion costs the model its "authentic" answer is a region that answer was resting on. The positive part of that surface is normalized to unit mass and summarized with the border statistic used above, so the two methods are comparable by construction. It needs no annotation, no categorization and no sampling, so it runs on all 150 external images for each model, from the persisted production checkpoints --- and each model reproduces its Split C accuracy of record, 0.773 and 0.807, before any attribution number is reported. Where it and Grad-CAM disagree, on M4's correct external answers, neither settles the case; the region-substitution experiment of the main paper's Table~10 does, and in Grad-CAM's direction. Occlusion asks how much hiding one 64 px patch moves the score, which a decision spread over half the frame answers weakly wherever that half is; substitution destroys a whole region at once and is not subject to that.
+{\bfseries A second attribution method, and the one place it disagrees.} Everything above rests on Grad-CAM: one method, one annotator, forty sampled maps, and a method this subsection has just argued is degraded by the bottleneck it runs behind. \url{modeling/occlusion_sensitivity.py} puts the same question to a method that shares none of those weaknesses. It slides a 64 px occluder over the network's 224 $\times$ 224 input on a 6 $\times$ 6 grid and records how far P(authentic) falls when each region is hidden; a region whose occlusion costs the model its "authentic" answer is a region that answer was resting on. The positive part of that surface is normalized to unit mass and summarized with the border statistic used above, so the two methods are comparable by construction. It needs no annotation, no categorization and no sampling, so it runs on all 150 external images for each model, from the persisted production checkpoints --- and each model reproduces its Split C accuracy of record, 0.773 and 0.807, before any attribution number is reported. Where it and Grad-CAM disagree, on M4's correct external answers, neither settles the case; the region-substitution experiment of the main paper's Table~7 does, and in Grad-CAM's direction. Occlusion asks how much hiding one 64 px patch moves the score, which a decision spread over half the frame answers weakly wherever that half is; substitution destroys a whole region at once and is not subject to that.
 
 \begin{center}
 \footnotesize
@@ -589,7 +589,7 @@ M4 EfficientNet-B0 & 2,562 & 4,007,548 & 15.30 MiB & 16.8 ms & 154.4 ms & 171.2 
 \end{table*}
 
 
-Two points bear on deployment. First, preprocessing --- including the entire three-way normalization --- costs under 17 ms per image and is negligible relative to any CNN forward pass; the correction proposed in this paper is essentially free at inference time. Second, the accuracy/cost ordering is unhelpful for a field deployment: M4 costs 5$\times$ M2's total latency and 166$\times$ its weight memory for an in-distribution difference that Table S5 cannot distinguish statistically, while M2 is the model with the best external accuracy (Table~7).
+Two points bear on deployment. First, preprocessing --- including the entire three-way normalization --- costs under 17 ms per image and is negligible relative to any CNN forward pass; the correction proposed in this paper is essentially free at inference time. Second, the accuracy/cost ordering is unhelpful for a field deployment: M4 costs 5$\times$ M2's total latency and 166$\times$ its weight memory for an in-distribution difference that Table S5 cannot distinguish statistically, while M2 is the model with the best external accuracy (Table~4).
 
 {\bfseries Training wall-clock time is not reported.} The original runs were not instrumented for it and the host repeatedly terminated long-running background processes during the project, so any retrospective figure would be unreliable. Epochs to convergence are reported instead (Table S9); every model trains on CPU in minutes, not hours, and the frozen-backbone models train on cached features so that an "epoch" involves no image decoding and no convolution.
 
@@ -659,7 +659,7 @@ Four readings, and the first is the one that matters.
 
 {\bfseries M1 fails in an unusual and diagnostic direction.} In-distribution it is markedly {\itshape under}confident --- mean confidence 0.561 against accuracy 0.838, an ECE of 0.277 driven entirely by scores that hug the decision boundary. Externally the same hugging behavior becomes maximal overconfidence, because it is wrong on 150 of 150 and 149 of 149 images while still reporting confidences of 0.54--0.56. This is the same object as the synthetic-proxy result of Section S-I-I, where M1's ROC-AUC of 0.895 coexisted with accuracy pinned at exactly 0.500: its ranking carries some signal and its threshold carries none.
 
-{\bfseries M4 is the only model whose calibration survives both capture shifts} (0.061 $\rightarrow$ 0.098 $\rightarrow$ 0.055), which is consistent with its accuracy behavior in Table~9 and, like that result, says nothing about whether it is reading packaging --- Section S-I-J applies unchanged.
+{\bfseries M4 is the only model whose calibration survives both capture shifts} (0.061 $\rightarrow$ 0.098 $\rightarrow$ 0.055), which is consistent with its accuracy behavior in Table~6 and, like that result, says nothing about whether it is reading packaging --- Section S-I-J applies unchanged.
 
 One caveat bounds all of this. Splits C and D contain only authentic images, so accuracy on them is a specificity and the calibration statistics are measured against a single class; ECE and accuracy are therefore not independent quantities there in the way they are on Splits A and B, and the external rows should be read as a description of how confidently each model commits its false positives rather than as a full calibration curve. A counterfeit-labeled external set, which Section VIII lists as the outstanding acquisition, is what would make external calibration measurable in the ordinary sense.
 
@@ -768,13 +768,13 @@ M4 EfficientNet-B0 & +0.540 (0.087 $\rightarrow$ 0.627) & +0.727 (0.053 $\righta
 
 * Every condition in this table predates the seeding fix of Section S-I-G, but this is the one whose {\itshape sign} the fix later reversed, so treat its magnitude as unverified rather than merely imprecise.
 
-The final column of Table S13 does not reproduce Table~7, and the difference is expected rather than a discrepancy to reconcile: Table~7 reports the production pipeline, Table S13 reports standalone single-run ablation scripts. For M3 the two read 0.773 and 0.813 externally, for M4 0.813 and 0.780, and for M2 0.860 and 0.913. Only Table~7's column is the result of record. We report both rather than silently dropping the ablation's absolute values, because the within-run deltas those runs measure are the ablation's actual claim and are unaffected.
+The final column of Table S13 does not reproduce Table~4, and the difference is expected rather than a discrepancy to reconcile: Table~4 reports the production pipeline, Table S13 reports standalone single-run ablation scripts. For M3 the two read 0.773 and 0.813 externally, for M4 0.813 and 0.780, and for M2 0.860 and 0.913. Only Table~4's column is the result of record. We report both rather than silently dropping the ablation's absolute values, because the within-run deltas those runs measure are the ablation's actual claim and are unaffected.
 
-Two further caveats attach to the M2 rows specifically. Both ablation scripts trained M2 at 3 $\times$ 10\textsuperscript{-}\textsuperscript{4} --- the same stale constant described in Section S-I-G --- so their absolute values are not comparable to M2's production numbers in Table~7 (which use the recorded 1 $\times$ 10\textsuperscript{-}\textsuperscript{3}). Because baseline and normalized conditions within a single run share that learning rate, the {\itshape within-run} comparison each row reports is unaffected, which is the claim the ablation makes; the scripts now read the recorded rate, so a re-run would refresh the absolute values.
+Two further caveats attach to the M2 rows specifically. Both ablation scripts trained M2 at 3 $\times$ 10\textsuperscript{-}\textsuperscript{4} --- the same stale constant described in Section S-I-G --- so their absolute values are not comparable to M2's production numbers in Table~4 (which use the recorded 1 $\times$ 10\textsuperscript{-}\textsuperscript{3}). Because baseline and normalized conditions within a single run share that learning rate, the {\itshape within-run} comparison each row reports is unaffected, which is the claim the ablation makes; the scripts now read the recorded rate, so a re-run would refresh the absolute values.
 
 Under two-way normalization, M3 was the sole model the correction appeared to {\itshape harm}, and a decomposition run isolated the responsible axis: brightness normalization alone took M3 from 0.800 to 0.560 externally, while resolution normalization alone was neutral-to-positive (0.800 $\rightarrow$ 0.847), and the combination (0.400) was worse than either alone --- a negative interaction rather than two additive effects. On the strength of that, an earlier version of this analysis concluded that the correction was "architecture-dependent, helps two of four, harms one".
 
-Adding the compression axis reversed the sign for M3 (+0.060, improving on both axes simultaneously), and the production pipeline --- after the seeding fix --- puts M3 at 0.773 externally against a 0.693 pre-normalization baseline (Table~7). The most likely reading is that the harmful interaction was specific to the two-way mixture rather than intrinsic to normalizing this model's inputs. But we note that M3's answer to "does normalization help?" came out positive, negative and flat across three runs before the seeding bug was diagnosed, and that only the three-way production path has been verified deterministic. {\bfseries M3 is the one model for which we would want an independent replication before treating the sign as settled}, and Section S-I-U now supplies one: across five seeds the normalized and un-normalized conditions differ by 0.9 points against standard deviations of about 5, so there is no sign to settle.
+Adding the compression axis reversed the sign for M3 (+0.060, improving on both axes simultaneously), and the production pipeline --- after the seeding fix --- puts M3 at 0.773 externally against a 0.693 pre-normalization baseline (Table~4). The most likely reading is that the harmful interaction was specific to the two-way mixture rather than intrinsic to normalizing this model's inputs. But we note that M3's answer to "does normalization help?" came out positive, negative and flat across three runs before the seeding bug was diagnosed, and that only the three-way production path has been verified deterministic. {\bfseries M3 is the one model for which we would want an independent replication before treating the sign as settled}, and Section S-I-U now supplies one: across five seeds the normalized and un-normalized conditions differ by 0.9 points against standard deviations of about 5, so there is no sign to settle.
 
 \subsection*{P. The baseline that has nothing else: M1}
 
@@ -789,11 +789,11 @@ A 96-dimensional color histogram has almost nothing to work with once mean brigh
 \end{figure*}
 
 
-This has an uncomfortable implication, and it is worth being precise about its reach. On {\itshape this} dataset it is direct, and the header-only oracle of Table~5 makes it exact rather than suggestive: three header fields with no pixel decoded reach 100\% on the leakage-free partition, and a color histogram reaches 83.8\%. There is no residual on this pool that a convolutional network is needed to explain. M1's 83.8\% is the more conservative statement of the same point and the one we would defend if the oracle were disputed, but the oracle is the tighter bound. Beyond this dataset the implication is conditional rather than established: it applies to any collection in which the two classes were produced by different pipelines, which Section II-F finds is the majority of the located prior work --- [26] edits authentic images to create its counterfeit class, [27] generates it --- but we have not audited those collections and do not claim their reported figures are confounded. We claim they are unaudited, and that the audit is cheap.
+This has an uncomfortable implication, and it is worth being precise about its reach. On {\itshape this} dataset it is direct, and the header-only oracle of Table~2 makes it exact rather than suggestive: three header fields with no pixel decoded reach 100\% on the leakage-free partition, and a color histogram reaches 83.8\%. There is no residual on this pool that a convolutional network is needed to explain. M1's 83.8\% is the more conservative statement of the same point and the one we would defend if the oracle were disputed, but the oracle is the tighter bound. Beyond this dataset the implication is conditional rather than established: it applies to any collection in which the two classes were produced by different pipelines, which Section II-F finds is the majority of the located prior work --- [26] edits authentic images to create its counterfeit class, [27] generates it --- but we have not audited those collections and do not claim their reported figures are confounded. We claim they are unaudited, and that the audit is cheap.
 
 \subsection*{Q. The architectural ablation implicit in M2}
 
-M2 carries an architectural observation that is worth separating from the confound results. It scores 0.865 on the leakage-free split --- statistically indistinguishable from every other model in the roster (Table S3) --- and it is the {\itshape best} model externally after correction (0.860, Table~7), with the only negative generalization gap anywhere in this study. It reaches that with 23,938 parameters and no pretraining.
+M2 carries an architectural observation that is worth separating from the confound results. It scores 0.865 on the leakage-free split --- statistically indistinguishable from every other model in the roster (Table S3) --- and it is the {\itshape best} model externally after correction (0.860, Table~4), with the only negative generalization gap anywhere in this study. It reaches that with 23,938 parameters and no pretraining.
 
 The comparison this licenses is a narrow one, and we state it narrowly. A \texttt{flatten $\rightarrow$ dense(128)} head on this trunk would add roughly 6.4 M parameters, some 267 times the rest of the network, trained on 357 images. Nothing in these results suggests that capacity would buy anything: the accuracy ceiling on this pool is set by the confound (Section VI-A), not by model capacity. Parameter count is the wrong axis on data like this.
 
@@ -844,7 +844,7 @@ One reading of the diffuse attribution reported in Section S-I-J is that the bot
 
 \subsection*{S. Deriving the axes without the external set}
 
-Sections S-I-N to S-I-X establish what the correction recovers, that it is robust to its constants and that it is sensitive to its composition order, but not that it could have been {\itshape found} without the external set. The axes were originally identified by comparing the Kaggle pool against Split C (Table~4), which is target-distribution information no practitioner deploying a model would possess. This section removes that dependency, because it is the most serious objection to the correction and, until now, an untested one.
+Sections S-I-N to S-I-X establish what the correction recovers, that it is robust to its constants and that it is sensitive to its composition order, but not that it could have been {\itshape found} without the external set. The axes were originally identified by comparing the Kaggle pool against Split C (Table~1), which is target-distribution information no practitioner deploying a model would possess. This section removes that dependency, because it is the most serious objection to the correction and, until now, an untested one.
 
 The procedure is the audit of Section VI-A turned into an axis-selection rule and confined to the training data. Using the {\bfseries Split B training partition alone} --- 357 images, 336 product groups, with grouped 5-fold cross-validation {\itshape inside} that partition so that neither the validation partition nor the test partition nor Split C is consulted at any point --- we fit a one-feature classifier to each acquisition statistic a practitioner could compute from their own files, and normalize every axis whose balanced accuracy clears a threshold declared in advance (0.65). Table S15 gives the result.
 
@@ -938,14 +938,14 @@ Two limits on this table. It covers the production and baseline conditions only,
 
 \begin{figure*}[!t]
 \centerline{\includegraphics[width=\textwidth]{figures/fig08_external_generalisation.pdf}}
-\caption{In-distribution authentic accuracy against external accuracy before and after three-way normalization, per model, for the run of record. It plots Table~7 of the main paper; M1 bypasses the normalized pipeline by design, so its two Split C bars are the same 0.0\% measurement shown twice.}
+\caption{In-distribution authentic accuracy against external accuracy before and after three-way normalization, per model, for the run of record. It plots Table~4 of the main paper; M1 bypasses the normalized pipeline by design, so its two Split C bars are the same 0.0\% measurement shown twice.}
 \label{fig:13}
 \end{figure*}
 
 
 Fig. S13 plots the run of record behind those means.
 
-{\bfseries The archived pre-normalization run, and why it is superseded rather than co-equal.} Earlier versions of this paper reported the baseline column of the main paper's Table~7 from an archived production run made immediately before three-way normalization became the default, which returned 0/150 for M1 and M2, 104/150 for M3 and 5/150 for M4. Those figures are not lost and never were: the run's own log, with its full per-epoch training curves, is committed at \url{modeling/results/split_c_eval_log.txt} and has been present since the repository's first commit and in every archived release. \url{paper/scripts/external_intervals.py} now parses the counts from that log rather than carrying them as constants, so they are traceable rather than transcribed.
+{\bfseries The archived pre-normalization run, and why it is superseded rather than co-equal.} Earlier versions of this paper reported the baseline column of the main paper's Table~4 from an archived production run made immediately before three-way normalization became the default, which returned 0/150 for M1 and M2, 104/150 for M3 and 5/150 for M4. Those figures are not lost and never were: the run's own log, with its full per-epoch training curves, is committed at \url{modeling/results/split_c_eval_log.txt} and has been present since the repository's first commit and in every archived release. \url{paper/scripts/external_intervals.py} now parses the counts from that log rather than carrying them as constants, so they are traceable rather than transcribed.
 
 What could not previously be explained was why the current harness returns different values for the same nominal condition. It can be now, and the explanation is that the archived run was produced by a pipeline carrying the two defects of Section S-I-G, both since fixed. Comparing the archived per-epoch curves against the current harness at seed 42, under nominally identical seeds and hyperparameters:
 
@@ -969,7 +969,7 @@ Train loss and train accuracy at the first epoch, before early stopping can diff
 
 This also explains the one observation that a seed effect alone does not. M4's archived 5/150 lies {\itshape below} all five re-derived seeds, which span 9/150 to 20/150. The seed sweep varies the training seed while holding the now-seeded augmentation scheme fixed, so it does not span the source of variation the archived run was subject to; a draw from outside its range is what one would expect, not an anomaly.
 
-We therefore treat the archived run as {\bfseries superseded} rather than as a competing measurement, and the main paper's Table~7 reports both of its columns from the current deterministic pipeline at seed 42, so that the baseline and normalized columns differ only by the operator of (8). The archived figures are retained here as an audit trail and are quoted nowhere as a result. Nothing in the argument moves: every measurement of the baseline condition, archived or current, agrees that it is near zero for M1, M2 and M4 and around 0.7 for M3, and every measurement of the corrected pipeline agrees that it is not.
+We therefore treat the archived run as {\bfseries superseded} rather than as a competing measurement, and the main paper's Table~4 reports both of its columns from the current deterministic pipeline at seed 42, so that the baseline and normalized columns differ only by the operator of (8). The archived figures are retained here as an audit trail and are quoted nowhere as a result. Nothing in the argument moves: every measurement of the baseline condition, archived or current, agrees that it is near zero for M1, M2 and M4 and around 0.7 for M3, and every measurement of the corrected pipeline agrees that it is not.
 
 \subsection*{V. A paired measurement of near-duplicate leakage}
 
@@ -1034,9 +1034,9 @@ Two further limits are worth stating. The exposed subset is 28 images, which is 
 
 \subsection*{W. The provenance audit on datasets other than the case study}
 
-Section VI-A runs the audit on the case-study pool and summarizes what follows here in its Table~6. This section is the full record behind that summary: seven archives across four application areas, scored from public file listings alone, and then the second pharmaceutical dataset in the detail that establishes the audit's false-negative mode. Every number in the main paper's Table~6 is taken from Table S18 or Table S20 below, and the caveats on both apply to it unchanged. The two are reported in that order because the first tests whether the audit discriminates at all and the second tests what it misses.
+Section VI-A runs the audit on the case-study pool and summarizes what follows here in its Table~3. This section is the full record behind that summary: seven archives across four application areas, scored from public file listings alone, and then the second pharmaceutical dataset in the detail that establishes the audit's false-negative mode. Every number in the main paper's Table~3 is taken from Table S18 or Table S20 below, and the caveats on both apply to it unchanged. The two are reported in that order because the first tests whether the audit discriminates at all and the second tests what it misses.
 
-The capture statistics behind Table~4 of the main paper are plotted here rather than there, for space.
+The capture statistics behind Table~1 of the main paper are plotted here rather than there, for space.
 
 \begin{figure*}[!t]
 \centerline{\includegraphics[width=\textwidth]{figures/fig03_capture_confound.pdf}}
@@ -1048,7 +1048,7 @@ The capture statistics behind Table~4 of the main paper are plotted here rather 
 {\bfseries The audit across application areas.} A survey is what would test the wider claim, and its first step costs nothing: Kaggle's public file-listing endpoint returns the path and encoded size of every file in a dataset without authentication, the path carries the class in the folder-per-class layout these archives use, and the extension carries the format --- so two of the four audit features can be fitted {\bfseries as the publisher shipped it, without downloading a single image} (Table S18).
 
 \begin{table*}[!t]
-\caption{The provenance audit run from public file listings alone, no images downloaded. Balanced accuracy under stratified 5-fold cross-validation; chance is 0.500. Format is the one-hot file extension, size is log encoded bytes. Ext-rule is the accuracy of the single deterministic rule "extension predicts class". Listings are paginated and the endpoint stops at 2,400 files, so large archives are sampled in listing order; entries are files, not unique images, which is why the Kaggle archive lists 2,224 for 661 unique images --- it re-lists all of them across its bundled \texttt{train}/\texttt{val}/\texttt{test} folders (Table~2 of the main paper). This is a pilot audit of seven archives chosen for accessibility, not a prevalence estimate over a defined sampling frame.}
+\caption{The provenance audit run from public file listings alone, no images downloaded. Balanced accuracy under stratified 5-fold cross-validation; chance is 0.500. Format is the one-hot file extension, size is log encoded bytes. Ext-rule is the accuracy of the single deterministic rule "extension predicts class". Listings are paginated and the endpoint stops at 2,400 files, so large archives are sampled in listing order; entries are files, not unique images, which is why the Kaggle archive lists 2,224 for 661 unique images --- it re-lists all of them across its bundled \texttt{train}/\texttt{val}/\texttt{test} folders (Table~1 of the main paper). This is a pilot audit of seven archives chosen for accessibility, not a prevalence estimate over a defined sampling frame.}
 \label{tab:18}
 \centering
 \footnotesize
@@ -1217,7 +1217,7 @@ Table S22 gives the sweep. Three readings follow, and the third is a limitation 
 
 \subsection*{Z. A paired comparison of the baseline and normalized conditions}
 
-Table~7 reports the correction as the distance between two Wilson intervals. Those describe two separate proportions; the quantity of interest is their difference, and because both conditions are evaluated on the {\itshape same} 150 external photographs the comparison is paired. \url{modeling/paired_external_test.py} runs it as one. It loads the persisted baseline and normalized checkpoints written by the seed sweep at each of the five seeds, replays them over Splits C and D, and keeps the per-image verdict rather than the count. The bootstrap resamples {\itshape images}, so both arms' verdicts on an image move together and the pairing survives resampling; this is the construction of Section S-I-V, used here for the same reason. Every replayed accuracy is asserted against the value the seed sweep recorded for that model, seed and condition before anything is written --- the practice Section S-I-G argues for.
+Table~4 reports the correction as the distance between two Wilson intervals. Those describe two separate proportions; the quantity of interest is their difference, and because both conditions are evaluated on the {\itshape same} 150 external photographs the comparison is paired. \url{modeling/paired_external_test.py} runs it as one. It loads the persisted baseline and normalized checkpoints written by the seed sweep at each of the five seeds, replays them over Splits C and D, and keeps the per-image verdict rather than the count. The bootstrap resamples {\itshape images}, so both arms' verdicts on an image move together and the pairing survives resampling; this is the construction of Section S-I-V, used here for the same reason. Every replayed accuracy is asserted against the value the seed sweep recorded for that model, seed and condition before anything is written --- the practice Section S-I-G argues for.
 
 \begin{table*}[!t]
 \caption{Normalized minus baseline on the two external sets, five seeds (42--46). Accuracies are means over seeds. The difference and its 95\% interval come from a bootstrap over images. Both external sets are authentic-only, so every figure is a specificity.}
@@ -1245,7 +1245,7 @@ M4 EfficientNet-B0 & Split D (n = 149) & 0.240 & 0.878 & {\bfseries +63.8 [+56.9
 
 {\bfseries The McNemar column should be read with its caveat, and it illustrates why the three kinds of uncertainty of Section IV-C have to be kept apart.} It pools discordant pairs across the five seeds, which treats 745 verdicts as independent when they are 149 or 150 images seen five times by correlated runs. The pooling inflates every {\itshape n} and therefore deflates every {\itshape p}, and M3 on Split D is where that shows: McNemar returns 0.028 while the image bootstrap returns +4.0 [$-$2.7, +11.3], an interval containing zero. The bootstrap is the statistic we report, because it is the one whose resampling unit matches the design. A test that controls sampling uncertainty says nothing about training-run variability, and pooling seeds into it does not convert one into the other.
 
-Two limits carry over from Section S-I-U. The baseline arm here is the seed sweep's re-derivation rather than the archived pre-normalization run of Table~7's baseline column, which is why M2's baseline reads 0.051 rather than 0.000 and M4's 0.100 rather than 0.033; the discrepancy is recorded there and no conclusion turns on it. And M1 is out of scope, having no checkpoint and never passing through the operator.
+Two limits carry over from Section S-I-U. The baseline arm here is the seed sweep's re-derivation rather than the archived pre-normalization run of Table~4's baseline column, which is why M2's baseline reads 0.051 rather than 0.000 and M4's 0.100 rather than 0.033; the discrepancy is recorded there and no conclusion turns on it. And M1 is out of scope, having no checkpoint and never passing through the operator.
 
 \section*{S-II. Limitations}
 
@@ -1255,7 +1255,7 @@ The proxy's limitation is worth enumerating, because Table S6 could otherwise be
 
 {\bfseries The general claim rests on a narrow evidence base.} Section I-A identifies asymmetric class sourcing as a mechanism producing provenance confounding, and makes no claim about how often it occurs. The direct evidence here is two datasets in one application area, plus a structurally matching report from generated-image detection [30] that we did not produce. That is enough to motivate the mechanism, to justify the audit as a routine precaution, and to explain two independent observations of one signature; it is not enough to quantify how often the mechanism fires, and no number in this paper should be read as a prevalence estimate. Section VII-G states what would falsify the claim.
 
-{\bfseries The correction's axes were originally chosen with knowledge of the external set, though they need not have been.} Equation~(8) of the main paper uses no label information, which is what licenses applying it to Split C; but the {\itshape choice} of resolution, brightness and compression was made after Table~4 showed those statistics separating the Kaggle pool from Split C, and that is target-distribution information a practitioner would not have. Section S-I-S addresses this directly: a train-only audit, confined to the Split B training partition with grouped cross-validation inside it, nominates all three axes without consulting any external data. The objection is therefore answered on this dataset. Two residual weaknesses remain. The selection threshold (0.65 balanced accuracy) is a judgement rather than a derived quantity. More fundamentally, no training-set procedure can nominate an axis that is confounded in the deployment distribution but not in the training distribution, so a train-only audit is a safeguard against the confound you have, not a guarantee against the one you have not seen.
+{\bfseries The correction's axes were originally chosen with knowledge of the external set, though they need not have been.} Equation~(8) of the main paper uses no label information, which is what licenses applying it to Split C; but the {\itshape choice} of resolution, brightness and compression was made after Table~1 showed those statistics separating the Kaggle pool from Split C, and that is target-distribution information a practitioner would not have. Section S-I-S addresses this directly: a train-only audit, confined to the Split B training partition with grouped cross-validation inside it, nominates all three axes without consulting any external data. The objection is therefore answered on this dataset. Two residual weaknesses remain. The selection threshold (0.65 balanced accuracy) is a judgement rather than a derived quantity. More fundamentally, no training-set procedure can nominate an axis that is confounded in the deployment distribution but not in the training distribution, so a train-only audit is a safeguard against the confound you have, not a guarantee against the one you have not seen.
 
 {\bfseries The correction is a preprocessing bottleneck, not a domain-adaptation method, and is not compared against one.} The natural alternative to suppressing a confounded statistic is to align the distributions in feature space --- second-order alignment such as CORAL, importance reweighting, or an adversarial domain-confusion objective --- and we report no such comparison. The omission is a design constraint rather than an oversight, and the constraint is worth stating because it also limits what the comparison would mean. Every method in that family requires samples from the deployment distribution at training time, and consumes them to fit an alignment; (8) of the main paper is a fixed function of a single image that uses neither labels nor target data, which is what licenses applying it unchanged to Split C, to Split D, and to an image captured after deployment. A study that fitted CORAL on Split C could not then report Split C as an external evaluation. The honest statement of the trade is therefore that we chose the weaker intervention because it is the one that survives its own evaluation protocol, and that a practitioner who does hold target-domain data should expect to do better than (8) of the main paper --- how much better is unmeasured here.
 
@@ -1269,7 +1269,7 @@ We accordingly ask that (8) of the main paper be read as a {\bfseries zero-targe
 
 {\bfseries Small test partitions.} In-distribution test partitions contain 74--76 images. Bootstrap intervals are correspondingly wide (Table S3), all pairwise model comparisons are underpowered (Table S5, discordant counts 1--15), and the leakage delta of Section S-I-H is measured against variance that a larger pool would suppress. Point differences of a few percentage points between models on this data should not be interpreted.
 
-{\bfseries Some numbers predate checkpoint persistence and cannot be re-derived.} For most of this study no script saved a trained model, and every downstream consumer --- external evaluation, Grad-CAM, the synthetic proxy --- re-derived "the trained model" from scratch. That design produced both defects of Section S-I-G: the learning-rate divergence in M2's external evaluation, and a discrepancy in which two rebuild paths of the same nominal M4 model classified 16/150 versus 5/150 external images as authentic. Training now persists a checkpoint with the learning rate, seed, best epoch and epoch count it was trained under, \texttt{load\_checkpoint} raises if the recorded learning rate differs from the caller's expectation, and the external evaluations of Table~7 load rather than retrain --- which independently reproduced M2's and M3's recorded Split C accuracies exactly. Two residual weaknesses follow from the change arriving late. M4's earlier Split B accuracy of 0.946 could not be explained when the checkpointed pipeline deterministically produced 0.919, because the artifacts of the original run no longer exist; the newer value is the one reported, and the older one is unrecoverable rather than refuted. And the two \url{experiment_*_all_models.py} ablations still rebuild rather than load, so their absolute values are not directly comparable with the production tables --- the within-run comparisons they actually make are unaffected, and Section VII says so where they are used.
+{\bfseries Some numbers predate checkpoint persistence and cannot be re-derived.} For most of this study no script saved a trained model, and every downstream consumer --- external evaluation, Grad-CAM, the synthetic proxy --- re-derived "the trained model" from scratch. That design produced both defects of Section S-I-G: the learning-rate divergence in M2's external evaluation, and a discrepancy in which two rebuild paths of the same nominal M4 model classified 16/150 versus 5/150 external images as authentic. Training now persists a checkpoint with the learning rate, seed, best epoch and epoch count it was trained under, \texttt{load\_checkpoint} raises if the recorded learning rate differs from the caller's expectation, and the external evaluations of Table~4 load rather than retrain --- which independently reproduced M2's and M3's recorded Split C accuracies exactly. Two residual weaknesses follow from the change arriving late. M4's earlier Split B accuracy of 0.946 could not be explained when the checkpointed pipeline deterministically produced 0.919, because the artifacts of the original run no longer exist; the newer value is the one reported, and the older one is unrecoverable rather than refuted. And the two \url{experiment_*_all_models.py} ablations still rebuild rather than load, so their absolute values are not directly comparable with the production tables --- the within-run comparisons they actually make are unaffected, and Section VII says so where they are used.
 
 {\bfseries Single-run ablations.} Every ablation in Section VII is one execution per condition, not a distribution over seeds, so none of them carries an interval. The reason this is tolerable is that the pipeline is now deterministic: the per-pass seeding defect of Section S-I-G, under which nominally identical conditions moved by up to 17 points, was fixed partway through, and each ablation re-runs its own baseline inside the same execution so that every comparison it makes is within-run. Three checks support the harness rather than merely asserting it: the production condition returns 0.919 in-distribution and 0.820 externally in each of the three post-fix scripts that contain it (Tables S12, S14 and 9), and the external evaluation from persisted checkpoints reproduced M2's and M3's recorded Split C counts exactly, byte for byte, on a re-run. Seed-to-seed variance is no longer unmeasured for the production and baseline conditions --- Section S-I-U repeats those at five seeds and finds standard deviations of 0.03 to 0.14 on the external sets --- but it remains unmeasured for the ablations themselves, which is why a condition differing from its baseline by a point or two is not read here as a difference. The ablations that predate the fix are identified in their captions --- all of Table S11, all of Table S13, and the superseded white-balance rows retained in Table S24; Tables S12, S14 and 9 are post-fix --- and the two conclusions Table S11 is used for are separately reproduced post-fix in Table S12.
 
@@ -1382,7 +1382,7 @@ python scripts/run_all.py                          # inventory -> filter -> dedu
 python scripts/06_download_mendeley_split_c.py     # external set, one-time (~248 MB)
 python scripts/07_verify_split_c_independence.py   # pHash independence check
 python scripts/17_apply_synthetic_review.py        # assemble the synthetic proxy set
-python scripts/18_capture_method_stats.py          # per-image capture statistics (Table 4, Fig. S14)
+python scripts/18_capture_method_stats.py          # per-image capture statistics (Table 1, Fig. S14)
 
 # 2. Models
 python modeling/train_model1_classical.py
@@ -1398,7 +1398,7 @@ python modeling/gradcam_split_c.py                 # external attribution audit,
 python modeling/gradcam_split_c_model3.py          # external attribution audit, M3
 python modeling/gradcam_quantitative.py            # border mass, all 150 external
 python modeling/occlusion_sensitivity.py           # second attribution method
-python modeling/region_substitution.py             # third: region substitution, Table 10
+python modeling/region_substitution.py             # third: region substitution, Table 7
 python modeling/eval_external_from_checkpoints.py  # Split C and D from checkpoints
 
 # 4. Ablations
@@ -1441,6 +1441,59 @@ python paper/scripts/verify_crossrefs.py           # gates the build
 python paper/scripts/compile_pdf.py
 python paper/scripts/final_sweep.py
 \end{lstlisting}
+
+\section*{S-VI. Appendix D --- Image Sources Used by Prior Work}
+
+Section II-F of the main paper argues from this inventory and states its three observations; the tabulation is here for space.
+
+\begin{table*}[!t]
+\caption{Image sources used by located prior work on pharmaceutical authentication. "Audit" asks whether the study {\itshape reports} any check that acquisition conditions are balanced across its two classes; "not reported" is a statement about the paper, not about what its authors did.}
+\label{tab:26}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{>{\hsize=0.692\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=1.136\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=1.172\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xcc}
+\toprule
+{\bfseries Study} & {\bfseries Image source} & {\bfseries Class construction} & {\bfseries Reported accuracy} & {\bfseries Audit} \\
+\midrule
+Ramos {\itshape et al.} [3] & Self-captured, Raspberry Pi camera; one brand & Real authentic and counterfeit samples, same rig & 88.75\% & not reported \\
+Motwani {\itshape et al.} [26] & Web-scraped packaging, 10 manufacturers & Counterfeit class {\bfseries created by the authors} by altering logo and text & not per-class & not reported \\
+Thomson and Varuna [27] & Kaggle pill set for training; DrugBank and drugs.com for testing & Counterfeit class {\bfseries GAN-synthesized} & not comparable & not reported \\
+Thomson and Varuna [28] & drugs.com product images & not specified & 92\% & not reported \\
+Roboflow {\itshape Counterfeit\_\allowbreak{}med\_\allowbreak{}detection} [21] & Advisory bulletins plus product photographs & Class tracks document type, not authenticity (Section III-B) & --- & --- \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+
+\section*{S-VII. Appendix E --- The Operator a Train-Only Audit Nominates}
+
+Section VI-F of the main paper reports this result and its two readings; the tabulation is here for space. Produced by \url{modeling/experiment_train_only_operator.py}.
+
+\begin{table*}[!t]
+\caption{The reported operator against the one a train-only audit nominates. R = resolution cap, B = brightness rescale, W = gray-world white balance, C = JPEG bottleneck. The nominated operator is the one the rule of Section S-I-S selects using the Split B training partition alone, at a threshold fixed in advance; no external image informs it. Splits C and D are authentic-only, so those columns are specificities. Both conditions run inside one execution, so the within-run comparison is sound; absolute values are not comparable across runs, because this experiment rebuilds each model rather than loading a checkpoint (Section S-I-G) --- M4's reported-operator row reads 0.820 here against the 0.807 of Table~4 for that reason, and reproduces the committed colour-balance ablation exactly on both of its conditions.}
+\label{tab:27}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+{\bfseries Model} & {\bfseries Operator} & {\bfseries Split B test} & {\bfseries Split C} & {\bfseries Split D} \\
+\midrule
+M2 CNN & reported, R$\rightarrow$B$\rightarrow$C & 0.865 & 129/150 = 0.860 & 69/149 = 0.463 \\
+M2 CNN & nominated, R$\rightarrow$B$\rightarrow$W$\rightarrow$C & 0.784 & 139/150 = {\bfseries 0.927} & 75/149 = {\bfseries 0.503} \\
+M3 MobileNetV3 & reported, R$\rightarrow$B$\rightarrow$C & 0.932 & 116/150 = 0.773 & 108/149 = 0.725 \\
+M3 MobileNetV3 & nominated, R$\rightarrow$B$\rightarrow$W$\rightarrow$C & 0.932 & 123/150 = {\bfseries 0.820} & 117/149 = {\bfseries 0.785} \\
+M4 EfficientNet-B0 & reported, R$\rightarrow$B$\rightarrow$C & 0.919 & 123/150 = 0.820 & 124/149 = 0.832 \\
+M4 EfficientNet-B0 & nominated, R$\rightarrow$B$\rightarrow$W$\rightarrow$C & 0.932 & 117/150 = 0.780 & 122/149 = 0.819 \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
 
 \EOD
 

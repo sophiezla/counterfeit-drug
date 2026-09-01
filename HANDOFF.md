@@ -4,6 +4,68 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Length pass, 2026-09-01 -- 23 -> 21 pages, and what a shorter one costs
+
+Author asked for under 20 pages. **21 is where this landed without giving up a
+result**, from 23. Roughly 1,900 words of restatement removed across sixteen
+passes, plus three floats moved to the supplement. Every number, interval,
+caveat and negative result is still in the main text.
+
+**Three tables left the main paper.** Table 2 (sources inventoried) was deleted
+outright -- its counts, licences and roles are in Sections III-A/B/E and the
+Ethics statement. Table 3 (training protocol) went, being by the supplement's
+own description "the reader-facing summary of" Table S2; Section V-F now gives
+the settings in prose. Table 1 (image sources used by prior work) became
+**Table S26** in a new Appendix D, and the train-only operator table became
+**Table S27** in Appendix E. Section II-F keeps all three of its observations
+and Section VI-F keeps every number.
+
+**The measured exchange rate, for anyone doing this again: ~835 words per page,
+and a full-width float costs ~0.4 page beyond the text it holds.** Rewording
+alone yields almost nothing -- the first five passes cut 630 words and moved
+the page count zero. What moves pages is deleting a float or deleting an
+argument.
+
+**To go under 20 would cost about 1,400 more words**, which is no longer
+available from restatement. The realistic options, none taken:
+
+  * drop Table 3, the multi-dataset audit summary -- but that is the table the
+    fifth-round reviewer specifically asked to be brought into the main paper,
+    and it buys only ~0.7 page, so it loses something and still misses 19;
+  * drop Figure 1, the only figure;
+  * drop Table 7 (region substitution) or the Limitations paragraphs.
+
+**THE RENUMBERING TRAP FIRED AGAIN, TWICE.** Main tables were renumbered four
+times this session. `verify_crossrefs` passed throughout, because a stale
+reference to a table that still exists resolves fine. Two real errors were
+caught only by dumping every `Table n` reference with its surrounding text and
+reading them against the captions:
+
+  1. Five references in Sections II-F, IV-C and VII-G meant the prior-work
+     table and silently came to point at the capture-pipeline table when the
+     prior-work table moved to the supplement. Now `Table S26`.
+  2. A Limitations reference to the train-only result pointed at the evidence-
+     status table after that table moved out. Now `Table S27`. A third, in
+     contribution 1, pointed at Table 4 instead of Table 3.
+
+Also stale and fixed: Table S2's caption still called main Table 2 "the
+reader-facing summary of the same protocol" after that table was deleted.
+
+**Run this check by hand after any renumbering** -- it is the only one that
+catches this class, and it is cheap:
+
+```
+python - <<'EOF'
+import io, re
+t = io.open("paper/paper.md", encoding="utf-8").read()
+caps = {int(m.group(1)): m.group(2)[:70]
+        for m in re.finditer(r"^\*\*TABLE (\d+)\.\*\* (.+)$", t, re.M)}
+for n in sorted(caps): print(f"T{n}: {caps[n]}")
+for m in re.finditer(r"Tables?\s+(\d+)", t):
+    print(f"->T{m.group(1)}:", " ".join(t[max(0,m.start()-75):m.end()+55].split()))
+EOF
+```
+
 ## Sixth review round, 2026-09-01 -- two new experiments, reproducibility resolved
 
 **The M-1 "reproducibility problem" was never a reproducibility problem, and
