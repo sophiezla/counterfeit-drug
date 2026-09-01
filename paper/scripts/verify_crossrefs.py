@@ -221,13 +221,22 @@ def check_external_counts():
     for r in csv.DictReader(open(ext, newline="", encoding="utf-8")):
         allowed.setdefault(int(r["n"]), set()).add(int(r["correct"]))
 
-    # The pre-normalization baseline column of Table 8 comes from the archived
-    # run, whose counts live in external_intervals.py.
-    src = (ROOT / "paper" / "scripts" / "external_intervals.py").read_text(
-        encoding="utf-8")
-    block = re.search(r"BASELINE_K\s*=\s*\{(.*?)\}", src, re.S)
-    if block:
-        allowed[150] |= {int(n) for n in re.findall(r":\s*(\d+)", block.group(1))}
+    # The archived pre-normalization run is superseded (Section S-I-U) but both
+    # documents still quote its counts in order to diagnose it, so they must
+    # stay on record. They are read from that run's own committed log -- the
+    # same artefact external_intervals.py parses -- rather than from a constant
+    # in either script. Until 2026-09-01 this block scraped a hardcoded dict out
+    # of external_intervals.py, which meant the gate was validating those counts
+    # against a transcription of themselves rather than against an artefact.
+    baseline_log = ROOT / "modeling" / "results" / "split_c_eval_log.txt"
+    if baseline_log.exists():
+        for line in baseline_log.read_text(encoding="utf-8").splitlines():
+            hit = re.match(r"^Split C authentic acc:\s*([0-9.]+)\s*\(n=(\d+)\)",
+                           line.strip())
+            if hit:
+                n_log = int(hit.group(2))
+                allowed.setdefault(n_log, set()).add(
+                    round(float(hit.group(1)) * n_log))
 
     # The border-mass audit retrains the un-normalized baseline rather than
     # loading it, and reports its own Split C accuracy.
@@ -251,6 +260,19 @@ def check_external_counts():
                 int(r["split_c_correct"]))
             allowed.setdefault(int(r["split_d_n"]), set()).add(
                 int(r["split_d_correct"]))
+
+    # The train-only operator arm (Table 11) and the region-substitution
+    # experiment (Table 10) are two further per-image records of the same two
+    # external sets, added 2026-09-01.
+    for name, cols in (
+            ("train_only_operator_experiment.csv",
+             (("split_c_k", "split_c_n"), ("split_d_k", "split_d_n"))),
+            ("region_substitution.csv", (("k_authentic", "n"),))):
+        path = ROOT / "modeling" / "results" / name
+        if path.exists():
+            for r in csv.DictReader(open(path, newline="", encoding="utf-8")):
+                for kcol, ncol in cols:
+                    allowed.setdefault(int(r[ncol]), set()).add(int(r[kcol]))
 
     # Two literals that are not model counts and have nowhere else to come
     # from: the 16/150 of the superseded rebuild that Section S-II reports as

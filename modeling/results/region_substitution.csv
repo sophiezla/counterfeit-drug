@@ -1,0 +1,29 @@
+model,split,region,fill,area_fraction,k_authentic,n,specificity,delta_vs_intact
+model3_mobilenetv3small_frozen,split_c,intact,-,-,116,150,0.7733,0.0
+model3_mobilenetv3small_frozen,split_c,outer half-frame,mean,0.5025,42,150,0.28,-0.4933
+model3_mobilenetv3small_frozen,split_c,inner half-frame,mean,0.4975,120,150,0.8,0.0267
+model3_mobilenetv3small_frozen,split_c,outer half-frame,noise,0.5025,41,150,0.2733,-0.5
+model3_mobilenetv3small_frozen,split_c,inner half-frame,noise,0.4975,107,150,0.7133,-0.06
+model3_mobilenetv3small_frozen,split_c,border ring (0.642),mean,0.6421,35,150,0.2333,-0.54
+model3_mobilenetv3small_frozen,split_c,centre box (0.161),mean,0.1614,133,150,0.8867,0.1133
+model3_mobilenetv3small_frozen,split_d,intact,-,-,108,149,0.7248,0.0
+model3_mobilenetv3small_frozen,split_d,outer half-frame,mean,0.5025,41,149,0.2752,-0.4497
+model3_mobilenetv3small_frozen,split_d,inner half-frame,mean,0.4975,110,149,0.7383,0.0134
+model3_mobilenetv3small_frozen,split_d,outer half-frame,noise,0.5025,72,149,0.4832,-0.2416
+model3_mobilenetv3small_frozen,split_d,inner half-frame,noise,0.4975,117,149,0.7852,0.0604
+model3_mobilenetv3small_frozen,split_d,border ring (0.642),mean,0.6421,30,149,0.2013,-0.5235
+model3_mobilenetv3small_frozen,split_d,centre box (0.161),mean,0.1614,127,149,0.8523,0.1275
+model4_efficientnetb0_frozen,split_c,intact,-,-,121,150,0.8067,0.0
+model4_efficientnetb0_frozen,split_c,outer half-frame,mean,0.5025,73,150,0.4867,-0.32
+model4_efficientnetb0_frozen,split_c,inner half-frame,mean,0.4975,121,150,0.8067,0.0
+model4_efficientnetb0_frozen,split_c,outer half-frame,noise,0.5025,56,150,0.3733,-0.4333
+model4_efficientnetb0_frozen,split_c,inner half-frame,noise,0.4975,128,150,0.8533,0.0467
+model4_efficientnetb0_frozen,split_c,border ring (0.642),mean,0.6421,39,150,0.26,-0.5467
+model4_efficientnetb0_frozen,split_c,centre box (0.161),mean,0.1614,128,150,0.8533,0.0467
+model4_efficientnetb0_frozen,split_d,intact,-,-,124,149,0.8322,0.0
+model4_efficientnetb0_frozen,split_d,outer half-frame,mean,0.5025,91,149,0.6107,-0.2215
+model4_efficientnetb0_frozen,split_d,inner half-frame,mean,0.4975,128,149,0.8591,0.0268
+model4_efficientnetb0_frozen,split_d,outer half-frame,noise,0.5025,79,149,0.5302,-0.302
+model4_efficientnetb0_frozen,split_d,inner half-frame,noise,0.4975,135,149,0.906,0.0738
+model4_efficientnetb0_frozen,split_d,border ring (0.642),mean,0.6421,59,149,0.396,-0.4362
+model4_efficientnetb0_frozen,split_d,centre box (0.161),mean,0.1614,137,149,0.9195,0.0872

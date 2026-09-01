@@ -1,0 +1,7 @@
+model,condition,operators,split_b_test_acc,split_c_k,split_c_n,split_c_spec,split_d_k,split_d_n,split_d_spec
+model2_smallcnn_gap,reported operator (R->B->C),RBC,0.8649,129,150,0.86,69,149,0.4631
+model2_smallcnn_gap,train-only nominated (R->B->W->C),RBWC,0.7838,139,150,0.9267,75,149,0.5034
+model3_mobilenetv3small_frozen,reported operator (R->B->C),RBC,0.9324,116,150,0.7733,108,149,0.7248
+model3_mobilenetv3small_frozen,train-only nominated (R->B->W->C),RBWC,0.9324,123,150,0.82,117,149,0.7852
+model4_efficientnetb0_frozen,reported operator (R->B->C),RBC,0.9189,123,150,0.82,124,149,0.8322
+model4_efficientnetb0_frozen,train-only nominated (R->B->W->C),RBWC,0.9324,117,150,0.78,122,149,0.8188

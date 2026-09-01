@@ -503,7 +503,7 @@ We take the mechanical reading to be the more likely of the two, and its consequ
 
 One conclusion survives under either reading, and it is a caution against a common practice: {\bfseries a visually convincing, product-centered Grad-CAM map is not evidence that a model has learned the intended task.} That claim rests on the {\itshape un-normalized} model, whose input is unaltered and whose attribution is therefore not in question --- it is strongly product-centered, and it classifies 6\% of external images correctly. The model whose attribution looks most like it is reading the product is the one that fails externally.
 
-{\bfseries A second attribution method, and the one place it disagrees.} Everything above rests on Grad-CAM: one method, one annotator, forty sampled maps, and a method this subsection has just argued is degraded by the bottleneck it runs behind. \url{modeling/occlusion_sensitivity.py} puts the same question to a method that shares none of those weaknesses. It slides a 64 px occluder over the network's 224 $\times$ 224 input on a 6 $\times$ 6 grid and records how far P(authentic) falls when each region is hidden; a region whose occlusion costs the model its "authentic" answer is a region that answer was resting on. The positive part of that surface is normalized to unit mass and summarized with the border statistic used above, so the two methods are comparable by construction. It needs no annotation, no categorization and no sampling, so it runs on all 150 external images for each model, from the persisted production checkpoints --- and each model reproduces its Split C accuracy of record, 0.773 and 0.807, before any attribution number is reported.
+{\bfseries A second attribution method, and the one place it disagrees.} Everything above rests on Grad-CAM: one method, one annotator, forty sampled maps, and a method this subsection has just argued is degraded by the bottleneck it runs behind. \url{modeling/occlusion_sensitivity.py} puts the same question to a method that shares none of those weaknesses. It slides a 64 px occluder over the network's 224 $\times$ 224 input on a 6 $\times$ 6 grid and records how far P(authentic) falls when each region is hidden; a region whose occlusion costs the model its "authentic" answer is a region that answer was resting on. The positive part of that surface is normalized to unit mass and summarized with the border statistic used above, so the two methods are comparable by construction. It needs no annotation, no categorization and no sampling, so it runs on all 150 external images for each model, from the persisted production checkpoints --- and each model reproduces its Split C accuracy of record, 0.773 and 0.807, before any attribution number is reported. Where it and Grad-CAM disagree, on M4's correct external answers, neither settles the case; the region-substitution experiment of the main paper's Table~10 does, and in Grad-CAM's direction. Occlusion asks how much hiding one 64 px patch moves the score, which a decision spread over half the frame answers weakly wherever that half is; substitution destroys a whole region at once and is not subject to that.
 
 \begin{center}
 \footnotesize
@@ -943,7 +943,33 @@ Two limits on this table. It covers the production and baseline conditions only,
 \end{figure*}
 
 
-Fig. S13 plots the run of record behind those means. The baseline rows above are re-derivations, not the archived pre-normalization run that Table~7's baseline column reports. That column is an artifact of a run whose weights were never saved (Section S-I-G), and it records 0/150 for M2 and 5/150 for M4, against 0.051 $\pm$ 0.103 and 0.100 $\pm$ 0.026 here. The archived M4 figure sits below every seed measured, which is consistent with what Section S-I-J already reports for the same condition --- the border-mass audit, retraining the same baseline, returned 9/150 rather than the archived 5/150. Nothing in this paper's argument depends on the exact baseline value, which is why the discrepancy is recorded rather than reconciled: what the argument needs is that the baseline is near zero and the corrected pipeline is not, and every measurement of both agrees on that.
+Fig. S13 plots the run of record behind those means.
+
+{\bfseries The archived pre-normalization run, and why it is superseded rather than co-equal.} Earlier versions of this paper reported the baseline column of the main paper's Table~7 from an archived production run made immediately before three-way normalization became the default, which returned 0/150 for M1 and M2, 104/150 for M3 and 5/150 for M4. Those figures are not lost and never were: the run's own log, with its full per-epoch training curves, is committed at \url{modeling/results/split_c_eval_log.txt} and has been present since the repository's first commit and in every archived release. \url{paper/scripts/external_intervals.py} now parses the counts from that log rather than carrying them as constants, so they are traceable rather than transcribed.
+
+What could not previously be explained was why the current harness returns different values for the same nominal condition. It can be now, and the explanation is that the archived run was produced by a pipeline carrying the two defects of Section S-I-G, both since fixed. Comparing the archived per-epoch curves against the current harness at seed 42, under nominally identical seeds and hyperparameters:
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\columnwidth}{cccc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\toprule
+{\bfseries Model} & {\bfseries Archived epoch 0} & {\bfseries Current epoch 0} & {\bfseries Divergence} & {\bfseries Defect that accounts for it} \\
+\midrule
+M2 CNN & 0.6157 / 0.675 & 0.5777 / 0.709 & large & learning rate hard-coded at 3 x 10\^{}-4 \\
+M3 MobileNetV3 & 0.4661 / 0.836 & 0.4680 / 0.820 & small & unseeded augmented feature passes \\
+M4 EfficientNet-B0 & 0.3821 / 0.871 & 0.3788 / 0.867 & small & unseeded augmented feature passes \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+Train loss and train accuracy at the first epoch, before early stopping can differ. The pattern separates the models exactly along the line the two defects predict, and the two groups are disjoint. M2 is the one model whose learning rate the pre-fix external-evaluation script hard-coded, and it is the one model whose trajectory diverges immediately and substantially. M3 and M4 are the two models that consume the K = 3 cached augmented feature passes, which were unseeded before the fix, and their trajectories diverge by an order of magnitude less --- a perturbation of the training features rather than of the optimizer. Neither group shows the other's signature.
+
+This also explains the one observation that a seed effect alone does not. M4's archived 5/150 lies {\itshape below} all five re-derived seeds, which span 9/150 to 20/150. The seed sweep varies the training seed while holding the now-seeded augmentation scheme fixed, so it does not span the source of variation the archived run was subject to; a draw from outside its range is what one would expect, not an anomaly.
+
+We therefore treat the archived run as {\bfseries superseded} rather than as a competing measurement, and the main paper's Table~7 reports both of its columns from the current deterministic pipeline at seed 42, so that the baseline and normalized columns differ only by the operator of (8). The archived figures are retained here as an audit trail and are quoted nowhere as a result. Nothing in the argument moves: every measurement of the baseline condition, archived or current, agrees that it is near zero for M1, M2 and M4 and around 0.7 for M3, and every measurement of the corrected pipeline agrees that it is not.
 
 \subsection*{V. A paired measurement of near-duplicate leakage}
 
@@ -1372,6 +1398,7 @@ python modeling/gradcam_split_c.py                 # external attribution audit,
 python modeling/gradcam_split_c_model3.py          # external attribution audit, M3
 python modeling/gradcam_quantitative.py            # border mass, all 150 external
 python modeling/occlusion_sensitivity.py           # second attribution method
+python modeling/region_substitution.py             # third: region substitution, Table 10
 python modeling/eval_external_from_checkpoints.py  # Split C and D from checkpoints
 
 # 4. Ablations

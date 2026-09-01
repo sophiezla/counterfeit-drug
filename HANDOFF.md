@@ -4,6 +4,75 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Sixth review round, 2026-09-01 -- two new experiments, reproducibility resolved
+
+**The M-1 "reproducibility problem" was never a reproducibility problem, and
+the pre-rewrite manuscript simply did not disclose it.** Its Table 6 caption
+said only "Baseline is the production run immediately before three-way
+normalization became the default"; the disagreement with the re-derivation
+lived in S-I-U alone. The rewrite pulled it into the caption. Do not "restore"
+the old caption -- the defect is older than the rewrite, only its visibility
+was new.
+
+**Two things were found while checking that, and both are fixed.**
+
+  1. `paper/scripts/external_intervals.py` carried the archived counts as a
+     **hardcoded `BASELINE_K` dict**. They were the only figures in the paper
+     with no derivation from an artifact. The artifact existed all along:
+     `modeling/results/split_c_eval_log.txt`, committed since the first commit
+     and present in every Zenodo archive, records the full per-epoch curves and
+     the four Split C accuracies. The script now parses it. `verify_crossrefs`
+     was validating those counts by scraping that same dict -- i.e. against a
+     transcription of themselves -- and now reads the log too.
+  2. **The archived/current divergence now has an identified cause, per model.**
+     Comparing epoch-0 trajectories under nominally identical seeds: M2 diverges
+     large (0.6157 vs 0.5777) and is the one model whose LR the pre-fix script
+     hard-coded at 3e-4; M3 and M4 diverge an order of magnitude less (0.4661 vs
+     0.4680; 0.3821 vs 0.3788) and are the two models using the K=3 cached
+     augmented passes, unseeded before the fix. The groups are disjoint and each
+     shows exactly its own defect's signature. Also explains why M4's archived
+     5/150 sits *outside* the 9-20/150 training-seed spread: the seed sweep does
+     not vary the augmentation scheme. The archived run is now **superseded**,
+     and Table 7 reports both columns from the current pipeline at seed 42
+     (M3 100/150, M4 9/150). Headline moved 3.3% -> 6.0%.
+
+**Two new experiments, both approved by the author, both in `modeling/`:**
+
+  * **`region_substitution.py` -> Table 10.** Overwrite one region of the input
+    and re-evaluate. Area-matched halves (0.5025 vs 0.4975), two fills.
+    **Destroying the outer half costs 22-50 points of external specificity;
+    destroying the area-matched centre costs nothing or helps** -- in all eight
+    model x split x fill combinations. This **identifies M4's cue**, which
+    occlusion could not, resolves the Grad-CAM/occlusion disagreement in
+    Grad-CAM's favour, and turns "eliminating one provenance signal can expose
+    another" from Supported into Demonstrated. Intact rows reproduce the values
+    of record exactly.
+  * **`experiment_train_only_operator.py` -> Table 11.** The operator the
+    train-only rule of S-I-S actually nominates (R->B->W->C, including the
+    marginal colour-balance axis) run for all three models. **External
+    specificity is higher than the reported operator's for M2 (+6.7) and M3
+    (+4.7), lower for M4 (-4.0); mean 0.842 vs 0.818.** So the recovery is not
+    an artifact of having seen Split C. It also **corrects a claim that had
+    rested on M4 alone** -- white balance was ruled out on M4's -4.0, and it
+    helps the other two. M4's rows reproduce the committed colour-balance
+    ablation exactly, which validates the new harness.
+
+**Also fixed: a real error.** Section VI-D said M2's 0.463 on Split D was
+"barely above the rate obtained by calling everything counterfeit". On an
+authentic-only set that rate is 0.000. It now reads "marginally below the 0.500
+a coin flip would return".
+
+**Other reviewer items:** causal language softened throughout (association +
+intervention, never the full chain); an explicit bound on what an authentic-only
+design can support, including that a degenerate always-counterfeit classifier is
+indistinguishable from a shifted-threshold one on this data; and **Section V-G,
+the audit stated as a numbered procedure** with inputs, six steps, and what each
+output licenses.
+
+**Manuscript is 23 pages** (was 21); `final_sweep`'s page gate was raised 21 ->
+23 with the reason recorded in the script. Note the IEEE Access overlength
+charge applies per page beyond the tenth.
+
 ## Fifth review round, 2026-08-31 — all four conflict flags resolved, v1.2.0 cut
 
 The rewrite in `ieee_access_rewrite_20260830/` was **promoted into `paper/`**,

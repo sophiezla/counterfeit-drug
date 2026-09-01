@@ -110,12 +110,17 @@ try:
     import fitz
     mp, sp = fitz.open(MAIN_PDF), fitz.open(SUP_PDF)
     # IEEE Access sets no page limit and recommends staying under 20 for
-    # readability. We are at 21 deliberately: the paired leakage experiment of
-    # Section S-I-V, the prior-art positioning against [31] and [32], and the
-    # exposure-rate rewrite were all added after the 20-page version, and the
+    # readability; pages beyond the tenth carry an overlength charge, so growth
+    # is a real cost and this gate exists to make it deliberate rather than to
+    # forbid it. Raised 21 -> 23 on 2026-09-01 for the two experiments added in
+    # that round: the region-substitution result (Table 10), which identifies
+    # the surround as the cue the corrected models depend on, and the
+    # train-only operator arm (Table 11), which answers the target-informed
+    # objection to the correction. Each is a table plus its reading, and each
+    # replaces a passage that previously said the question was open. The
     # duplication that could be cut without losing an argument already has
     # been. The gate still catches unintended growth beyond that.
-    check(mp.page_count <= 21, "main paper is 21 pages or fewer",
+    check(mp.page_count <= 23, "main paper is 23 pages or fewer",
           f"{mp.page_count} pages")
     print(f"  [note] supplement: {sp.page_count} pages")
 
