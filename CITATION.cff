@@ -31,6 +31,9 @@ identifiers:
     value: 10.5281/zenodo.21936720
     description: Concept DOI, resolves to the latest release
   - type: doi
+    value: 10.5281/zenodo.22223271
+    description: DOI of v1.2.0, the release the manuscript reports
+  - type: doi
     value: 10.5281/zenodo.22166543
     description: >-
       DOI of v1.1.0. Superseded: it predates the paired external test and the

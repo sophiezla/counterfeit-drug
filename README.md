@@ -12,7 +12,9 @@ in-distribution evaluation can detect it.
 The case study is a public counterfeit-medicine dataset. The manuscript is
 built from `paper/paper.md`; see `paper/` and Appendix C for reproduction.
 
-**Archived release.** The manuscript reports **v1.2.0**, which is the exact
+**Archived release.** The manuscript reports
+[v1.2.0](https://doi.org/10.5281/zenodo.22223271)
+(doi:10.5281/zenodo.22223271), which is the exact
 state of the code that produced every number in it. The badge above is the
 version-independent concept DOI and always resolves to the latest release;
 cite it unless you need to pin a specific version. Earlier releases are
