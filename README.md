@@ -13,12 +13,14 @@ The case study is a public counterfeit-medicine dataset. The manuscript is
 built from `paper/paper.md`; see `paper/` and Appendix C for reproduction.
 
 **Archived release.** The manuscript reports
-[v1.3.0](https://doi.org/10.5281/zenodo.22238929)
-(doi:10.5281/zenodo.22238929), which is the exact
+[v1.3.1](https://doi.org/10.5281/zenodo.22239515)
+(doi:10.5281/zenodo.22239515), which is the exact
 state of the code that produced every number in it. The badge above is the
 version-independent concept DOI and always resolves to the latest release;
 cite it unless you need to pin a specific version. Earlier releases are
-superseded and do not correspond to the numbers in the current manuscript:
+superseded and do not correspond to the current manuscript:
+v1.3.0 (doi:10.5281/zenodo.22238929) predates the length pass and four
+table-reference corrections,
 v1.2.0 (doi:10.5281/zenodo.22223271) predates the region-substitution and
 train-only-operator experiments,
 v1.1.0 (doi:10.5281/zenodo.22166543) predates `modeling/paired_external_test.py`
