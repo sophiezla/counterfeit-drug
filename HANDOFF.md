@@ -4,6 +4,92 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Acceptance pass, 2026-09-02 -- six defects fixed, VI-A split, captions cut
+
+Branch `ieee-access-revision`. Scope was reorganization and refinement for
+IEEE Access review, with the instruction that no settled decision be reopened
+and nothing be invented. **Still 21 pages, all gates pass, no number changed
+except where a number was wrong.**
+
+**SIX REAL DEFECTS, ALL FOUND WITH EVERY EXISTING GATE PASSING.** This is the
+important part of this session: `verify_crossrefs` and `final_sweep` were
+green before and after, and neither can see any of these.
+
+  1. **The References preamble printed twice in the shipped PDF.** Two
+     near-identical blocks sat under `## References` -- the same 25-word
+     paragraph, followed by two *different* `Reference verification status`
+     notes. The notes are stripped at build, the paragraph is not, so it
+     printed twice on page 21 of every PDF built since 2026-08-31. Merged to
+     one paragraph and one note carrying all three carried-forward items.
+     Also removed two stray `---` rules that had split [31] and [32] off the
+     end of the list.
+  2. **A recovery *level* was quoted as a recovery *gain*, twice, in VII-E.**
+     "worth 80.7 to 86.0 points of external specificity" -- 80.7 is M4's
+     *level*, not its gain, which is 74.7 at seed 42. Likewise "recovers 81 to
+     86 of the roughly 94 points lost": neither 81 nor 86 is a recovery, and
+     **94 has no derivation anywhere in the paper** (M4 drops 91.4 points,
+     M2 84.6). Both now quote the paired five-seed figures of Table S23,
+     +85.9 for M2 and +76.0 for M4, which are the derived quantities.
+  3. **M3 and M4's generalization gaps were about to be swapped** in the
+     rewrite of the above; Table 4 gives M3 +0.201 and M4 +0.167. Caught in
+     the same pass, recorded here because the Conclusion's "16 to 20 points"
+     is unattributed and invites exactly this error.
+  4. **"Four of the seven were scorable alongside the case study"** reads as
+     four *besides* the case study, i.e. five of seven, contradicting the same
+     paragraph's three-unscorable count. It is four *including* it; Table 3's
+     fifth row is the Roboflow archive from Table S20, which is not one of the
+     seven. Now says so.
+  5. **A stale scope restriction in VII-E**: "Section VI-E indicates the
+     opposite for M3", left from before region substitution. VI-F itself
+     withdraws the reading that the two backbones differ, and Table 8 says
+     "costs neither backbone anything". Now "for both backbones".
+  6. **Table 5's caption contradicted Table 4.** It said its baseline rows
+     were "not the archived run of Table 4's baseline column" -- true before
+     the sixth round moved Table 4's baseline column onto the current harness,
+     false after. The two now agree by construction and the caption says that.
+
+**A new gate catches the class defect 1 belongs to.** `final_sweep` now fails
+on any prose paragraph over 120 characters that appears twice in either
+document. Tables and short lines are excluded because both legitimately
+repeat. Verified by injection: it fires, and it is the only check that would
+have caught the References duplication.
+
+**Section VI-A was split in two**, 1,631 words being two studies under one
+heading. VI-A is now the case study and **VI-B the audit on other datasets**;
+old VI-B..VI-F shifted to VI-C..VI-G. **64 references were renumbered across
+both documents.** Two of the 23 `VI-A` references pointed at the cross-domain
+half (the pilot-audit count in I-A, the negative control in V-G step 4) and
+were retargeted to VI-B; a third, the S-I-W opener, names both halves now.
+The tier table's confirmatory row became `VI-A–VI-C`, the audit now spanning
+two subsections. **Every one of the 64 was then read back against the new
+headings by hand**, because a stale section reference resolves like a stale
+table reference does.
+
+**Captions cut from 829 words to 624; the longest went 216 -> 99.** Table 4's
+caption held four separate readings conventions and the whole archived-run
+disclosure. Prose moved into the body immediately under each table -- it is
+not deleted, and the archived-run disclosure is more visible in running text
+than it was in a caption. Tables 3, 5 and 7 the same, smaller.
+
+**Added: the organization roadmap** at the end of I-B, the one IEEE Access
+structural convention the paper lacked. It cost a page at first draft; the
+short version fits.
+
+**On the page boundary.** The manuscript sits *exactly* on the 21/22 line --
+19,751 words was 21 pages, 19,812 was 22, 19,798 is 21. Page 22 held 85 words
+(reference [32] plus the biography). Any future edit adding more than about
+forty words will tip it, and the recovery is not rewording: HANDOFF's earlier
+measurement holds, and five separate rephrasing passes this session moved
+between -26 and -70 words each while moving zero pages until one of them
+crossed the line.
+
+**What was considered and deliberately not done.** The shared-backdrop caveat
+appears eight times; all eight were read, and seven do different work at
+different points in the argument. Only the genuinely doubled pair inside VI-E
+was merged. The "authentic-only / not counterfeit recall" discipline (15
+occurrences) is the fifth round's deliberate specificity discipline and was
+not touched. Compressing these would have been spin rather than refinement.
+
 ## Length pass, 2026-09-01 -- 23 -> 21 pages, and what a shorter one costs
 
 Author asked for under 20 pages. **21 is where this landed without giving up a

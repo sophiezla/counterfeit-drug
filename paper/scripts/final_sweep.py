@@ -104,6 +104,20 @@ for name, p in (("paper.md", MAIN_MD), ("supplementary.md", SUP_MD)):
     check(not bad, f"{name}: no encoding damage", f"found {bad}")
     ph = re.findall(r"\[(?:TO BE|To be|Placeholder|AUTHOR|Degree)[^\]]{0,60}\]", t)
     check(not ph, f"{name}: no editorial placeholders", f"{ph[:3]}")
+    # A whole paragraph emitted twice. Nothing else here catches it: the
+    # References preamble printed twice in every built PDF from 2026-08-31 to
+    # 2026-09-02 while every cross-reference, float and encoding gate passed,
+    # because a duplicated paragraph is well-formed by all of them. Prose
+    # blocks only -- tables legitimately repeat header and rule rows, and short
+    # lines legitimately recur.
+    paras = [q.strip() for q in re.split(r"\n\s*\n", t)]
+    paras = [q for q in paras if len(q) > 120 and not q.lstrip().startswith("|")]
+    seen, dup = set(), []
+    for q in paras:
+        if q in seen:
+            dup.append(q[:60])
+        seen.add(q)
+    check(not dup, f"{name}: no paragraph appears twice", f"{dup[:3]}")
 
 print("\nBUILT ARTEFACTS")
 try:
