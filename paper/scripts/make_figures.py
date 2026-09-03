@@ -545,7 +545,7 @@ def fig_ablation():
     b1 = ax.bar(x - w / 2, bsplit, w, color="#cde2fb", edgecolor=SERIES[0], linewidth=0.9,
                 label="Split B test accuracy (in-distribution)")
     b2 = ax.bar(x + w / 2, csplit, w, color="#eefaf5", edgecolor=SERIES[2], linewidth=0.9,
-                label="Split C accuracy (external)")
+                label="Split C specificity (external)")
     bar_labels(ax, b1, dy=0.015); bar_labels(ax, b2, dy=0.015)
     ax.set_xticks(x); ax.set_xticklabels(names, fontsize=6.8)
     ax.set_xlabel("normalization axes applied")
@@ -583,7 +583,7 @@ def fig_ablation():
                     fontsize=7, color=INK)
     ax.axhline(0, color=BASELINE, lw=0.9)
     ax.set_xticks(x); ax.set_xticklabels([MODEL_TINY[t] for t in MODEL_TAGS], fontsize=7.1)
-    ax.set_ylabel("change in Split C accuracy")
+    ax.set_ylabel("change in Split C specificity")
     ax.set_ylim(-0.35, 1.42)
     ax.set_title("b  Which axes help which architecture", loc="left")
     ax.legend(loc="upper left", labelspacing=0.28)

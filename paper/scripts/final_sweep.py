@@ -129,6 +129,20 @@ if _abs:
     check(_n <= 250, "paper.md: abstract within the journal's 250-word limit",
           f"{_n} words")
 
+# Section V-A rules that nothing computed on Splits C and D is an accuracy,
+# because both hold authentic images only. On 2026-09-02 the manuscript, the
+# supplement and two figure axis labels broke that rule in 31 places, including
+# Table 6's own caption, while every other gate passed. It is a core
+# methodological distinction, so it gets a gate. The one licensed use is Section
+# III-E, which names the rejected term in order to reject it.
+for _name, _p in (("paper.md", MAIN_MD), ("supplementary.md", SUP_MD),
+                  ("make_figures.py", ROOT / "paper" / "scripts" / "make_figures.py")):
+    _t = read(_p)
+    _hits = [m for m in re.findall(r"[^.]*?(?:external|Split [CD]) accurac(?:y|ies)[^.]*", _t)
+             if 'rather than "external accuracy"' not in m]
+    check(not _hits, f"{_name}: no Split C/D quantity called an accuracy (Section V-A)",
+          f"{[h.strip()[:70] for h in _hits[:2]]}")
+
 print("\nBUILT ARTEFACTS")
 try:
     import fitz
