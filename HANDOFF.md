@@ -4,6 +4,59 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Terminology and tone pass, 2026-09-02 (third) -- 31 specificity violations, Table 8 overclaim
+
+Same branch. **Back to 21 pages**, so the previous section's page note is
+superseded: the defensive-prose cut paid for the two earlier passes' additions.
+
+**DEFECT 9, AND IT IS THE WORST ONE THIS PROJECT HAS HAD.** Section V-A rules
+that *nothing computed on Splits C and D is an accuracy*, both sets holding
+authentic images only, and sets out a term table for it. **The paper broke its
+own rule in 31 places** -- 3 in the manuscript including **Table 6's own
+caption** ("accuracy is the fraction correctly called authentic"), 26 in the
+supplement, and **2 baked into figure axis labels in `make_figures.py`**, which
+is why `fig10_ablation.pdf` still read "Split C accuracy (external)" in the
+built supplement. Every gate passed throughout. This is the single most
+reviewer-visible class of defect the project has produced, because it concerns
+the distinction the paper is *about*. All 31 fixed, figures regenerated, and
+**`final_sweep` now gates the rule** across `paper.md`, `supplementary.md` and
+`make_figures.py`, with one licensed exception -- Section III-E names "external
+accuracy" in order to reject it. Verified by injection.
+
+**DEFECT 10. Table 8 claimed more than Section VI-F does.** The packaging row
+read `Demonstrated against: overwriting the centre of the frame costs neither
+backbone anything`. A centre substitution that costs nothing does not
+demonstrate that a model fails to recognize packaging; VI-F itself says only
+that neither backbone is *shown to*. Row is now `Not established`. This
+exposed a second, older problem: the caption glossed "not established" as
+"the paper argues for it without measuring it", which never fitted the
+generalize-across-acquisition row either. The gloss now covers both ways a
+claim goes unsettled.
+
+**Novelty wording.** Contribution 2 said "a previously undocumented confound",
+a priority claim the paper does not need. It now reports what the search found:
+"a confound its listing does not disclose and no study located by our search
+reports". **Only that one phrase in the whole paper made a priority claim** --
+`not previously`, `first to`, `novel`, `no prior work` were all grepped.
+
+**Defensive prose cut, about 180 words.** The rule applied was *state result,
+state interpretation, state the limitation once*. Removed: the meta-assurances
+("Both forms are reported wherever this claim appears", "The list is complete
+but compressed", "Two things it does not establish should be said in the same
+breath", "we record that reversal rather than quietly adopting it"), and seven
+places where a limitation already stated in Section VIII was restated in a
+results section (III-F's backdrop superlative, VI-D's authentic-only
+restatement, VI-F's first two of "three limits", VI-F's Grad-CAM annotator
+caveat, VII-E's duplicated recovery figures). **No limitation was deleted; each
+is still stated once.** The `rather than` construction runs 59 times and was
+left alone -- it is doing real contrastive work and is the author's habit, not
+a defect.
+
+**Five reviewer recommendations arrived with this pass; three needed no
+change** and are recorded above in the second-pass section (Table 8's row was
+the exception and is defect 10; the authentic-only discipline was correct in
+prose and wrong in Table 6's caption, which is defect 9).
+
 ## Submission-readiness pass, 2026-09-02 (second) -- abstract regression, two stale supplement claims, three additions
 
 Same branch `ieee-access-revision`, on five reviewer-style recommendations.
