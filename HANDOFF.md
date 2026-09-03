@@ -4,6 +4,84 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Submission-readiness pass, 2026-09-02 (second) -- abstract regression, two stale supplement claims, three additions
+
+Same branch `ieee-access-revision`, on five reviewer-style recommendations.
+**The paper is now 22 pages, up from 21, and that is deliberate** -- see the
+page note at the end of this section.
+
+**TWO MORE DEFECTS FOUND WITH ALL GATES GREEN.** Same lesson as the pass above.
+
+  7. **The abstract had drifted from 244 words to 302.** It was cut to 244 on
+     2026-08-13 for IEEE Access's 250-word limit (see the formatting-decisions
+     section below) and grew back over five rounds of revision because nothing
+     measured it. An overlong abstract is a desk-check item at Access, so this
+     was a real submission risk. Now 250 words exactly, every claim kept, and
+     **`final_sweep` now gates it** -- verified by injection.
+  8. **Section S-I-J attributed to Section VI-F a conclusion VI-F no longer
+     draws.** S-I-J closed with "Section VI-F states the consequence: ... the
+     reading that the two backbones behave *identically* is withdrawn." VI-F
+     withdraws the opposite reading -- that they behave *differently* -- since
+     region substitution settled M4 in M3's direction. Left over from before
+     region substitution existed. S-I-J now says the occlusion evidence leaves
+     M4 unresolved and VI-F settles it globally. Section S-II's "Split D does
+     not vary the backdrop" cited S-I-J for the weaker occlusion-only finding
+     and now cites VI-F for the stronger one alongside it.
+
+**Three additions, each answering one recommendation and each built only from
+what the paper already documents.**
+
+  - **The rule the paper offers, stated as one imperative line** at the head of
+    Section V-G: *"Before evaluating an image classifier, establish whether the
+    acquisition variables alone can predict the label."* The audit was already
+    contribution 1, in the abstract, in V-G and in the Conclusion; what it
+    lacked was a quotable sentence. The abstract's audit sentence was also
+    rewritten into the same imperative form during the word-count cut.
+  - **Section VI-B now closes on what the audit *is***, not only on what the
+    six archives showed: it establishes that a shortcut is available and
+    certifies nothing, because a publisher can erase the traces without
+    touching the confound and a separation found may belong to the objects.
+    **"A provenance audit is a diagnostic, not a clearance."** The three
+    readings above it already supported this; it was never stated.
+  - **A new Limitations paragraph says *why* no counterfeit external set was
+    run**, which previously read as an omitted experiment. Every reason is
+    already documented: of the three archives inventoried (III-A), the one
+    verified independent carries no counterfeit label (III-E); the one that
+    does is not external at all, 42.3% of the Kaggle pool having a mate in it
+    (III-C), its counterfeit class 57/57 advisory graphics with the label in
+    the pixels leaving two usable images (III-B), and its acquisition traces
+    already erased by the publisher (VI-B). **No reason was added that the
+    paper cannot cite.**
+
+**Three recommendations needed no change, and this is recorded so they are not
+re-opened.** (a) Table 8's region-substitution row already reads "The corrected
+models recognize packaging | Demonstrated against"; all eight places that touch
+the claim -- abstract, VI-F, VII-C, VII-E, Table 8, Conclusion -- were dumped
+and read, and all eight agree. (b) The authentic-only discipline is already
+stated immediately before Table 4, in Table 4's caption, in III-E, in Table 7's
+caption and in Limitations; the fifth round put it there deliberately. (c) The
+auxiliary-archive material already carries the discriminates / false-negative /
+false-positive structure; only the closing conclusion was missing.
+
+**On the page count: 21 -> 22, and not recoverable without cutting argument.**
+The three additions are +250 words net and the abstract cut gave back 52. Page
+22 now holds 159 words (references [30]-[32] and the biography), so pulling
+back to 21 would mean cutting about 160 words of body text. Sections VII-A to
+VII-D, the Conclusion and the back matter were each read for restatement to
+pay for it and none of them has 160 words of fat left -- the fifth and sixth
+rounds already took it. Cutting to 21 would mean deleting an argument or a
+caveat, which is the wrong trade for one page of overlength charge. **Do not
+"restore 21 pages" by trimming; the previous session's rewording measurements
+still hold and rewording will not buy it.**
+
+**Verification run.** `verify_crossrefs` and `final_sweep` green (22 pages, 3
+notes); the arithmetic checker clean apart from its known `9/150 = 6.0%`
+false positive; all 91 main-paper section references, all 99 supplement
+references and all 148 table references dumped and resolved against their
+headings and captions by hand; all four new passages confirmed present in the
+compiled PDFs. All artefacts rebuilt: `paper.tex`, `supplementary.tex`, both
+PDFs, the docx, `overleaf_upload.zip` and the mirrored authored copy.
+
 ## Acceptance pass, 2026-09-02 -- six defects fixed, VI-A split, captions cut
 
 Branch `ieee-access-revision`. Scope was reorganization and refinement for

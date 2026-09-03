@@ -119,6 +119,16 @@ for name, p in (("paper.md", MAIN_MD), ("supplementary.md", SUP_MD)):
         seen.add(q)
     check(not dup, f"{name}: no paragraph appears twice", f"{dup[:3]}")
 
+# The abstract had been cut to 244 words for the journal's 250-word limit and
+# had drifted back to 302 by 2026-09-02, undetected, because nothing measured
+# it. An overlong abstract is a desk-check item, so it gets its own gate.
+_abs = [ln for ln in read(MAIN_MD).splitlines() if ln.startswith("**ABSTRACT**")]
+check(len(_abs) == 1, "paper.md: exactly one abstract line", f"{len(_abs)} found")
+if _abs:
+    _n = len(_abs[0].split()) - 1  # the **ABSTRACT** run-in head is not abstract text
+    check(_n <= 250, "paper.md: abstract within the journal's 250-word limit",
+          f"{_n} words")
+
 print("\nBUILT ARTEFACTS")
 try:
     import fitz
