@@ -4,6 +4,44 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Claim hierarchy, 2026-09-02 (fourth) -- Section I-B ranked
+
+Same branch, still 21 pages, no claim or number removed.
+
+**Section I-B presented three co-equal contributions**, which is why a reader
+finishing the paper could still ask what it is chiefly for: the manuscript runs
+nineteen distinguishable analyses and the list did not say which of them the
+paper stands or falls on. I-B now states a hierarchy:
+
+  - **Primary contribution** -- the pre-training provenance audit.
+  - **Primary empirical finding** -- the case-study dataset carries a
+    deterministic class-acquisition confound, and it invalidates
+    in-distribution performance as evidence of authentication ability.
+  - **Secondary finding** -- external acquisition testing exposes the failure,
+    and the leakage correction this literature emphasizes does not.
+  - **Exploratory finding** -- removing the acquisition statistics the audit
+    names does not remove every provenance shortcut.
+
+**The old item 2 was two findings in one paragraph** (what the dataset is, and
+what testing regime exposes it) and they are now separated; that split is the
+only structural change. A lead-in says everything else -- the leakage
+experiments, the ablations, the attribution analyses, the cross-domain audit --
+supports or qualifies one of the four, and **points forward to the
+confirmatory/exploratory tier table at the head of Section VI**, which sorts
+the same claims by when they were specified. Do not let the two schemes drift
+apart: audit + primary + secondary are the confirmatory tier, the exploratory
+finding is the exploratory tier.
+
+**Paid for from the same subsection** -- I-A already gives the 510-image format
+result, the secondary paragraph restated its own opening, "This is an empirical
+critique and a diagnostic method" now duplicates the new lead-in, and the
+roadmap was shortened. Net +52 words and no page change.
+
+**Nothing was moved to the supplement and nothing was cut.** The reviewer
+concern was sprawl, and the answer taken was to rank the claims, not to remove
+analyses -- each of the nineteen is cited by one of the four tiers or by a
+limitation. If a future round does want to cut, the tier table is the map.
+
 ## Terminology and tone pass, 2026-09-02 (third) -- 31 specificity violations, Table 8 overclaim
 
 Same branch. **Back to 21 pages**, so the previous section's page note is
