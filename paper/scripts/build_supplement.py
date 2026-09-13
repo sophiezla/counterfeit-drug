@@ -50,7 +50,7 @@ PREAMBLE = r"""%% Supplementary material -- GENERATED FILE, DO NOT EDIT.
 %% empty document properties looks unfinished in a reader.
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,
             urlcolor=blue]{hyperref}
-\hypersetup{pdftitle={Provenance Confounding in Image Authenticity Classification: Detection and a Counterfeit-Medicine Case Study -- Supplementary Material},
+\hypersetup{pdftitle={Supplementary Material: @@PDFTITLE@@},
             pdfauthor={Sophie Zhu},
             pdfsubject={IEEE Access submission, supplementary material}}
 
@@ -88,9 +88,7 @@ PREAMBLE = r"""%% Supplementary material -- GENERATED FILE, DO NOT EDIT.
 \history{Supplementary material.}
 \doi{10.1109/ACCESS.2026.DOI}
 
-\title{Supplementary Material: Auditing Provenance
-Confounding in Image Authenticity Classification: A Counterfeit-Medicine
-Case Study}
+\title{Supplementary Material: @@TITLE@@}
 
 \author{\uppercase{Sophie Zhu}\authorrefmark{1}}
 \address[1]{Mira Costa High School, Manhattan Beach, CA 90266 USA
@@ -176,7 +174,15 @@ def main():
     blocks = bt.parse_blocks(rest)
     body = render_body(blocks)
 
+    # The title comes from paper.md, so the supplement cannot fall behind the
+    # manuscript's title again: until 2026-09-13 this file carried two
+    # hand-typed copies (\\title and pdftitle), and each was stale in its own
+    # way -- one pre-2026-09-01, the other pre-2026-08-29.
+    main_md = (ROOT / "paper" / "paper.md").read_text(encoding="utf-8")
+    title = re.search(r"^#\s+(.*)$", main_md, re.M).group(1).strip()
     tex = (PREAMBLE.replace("@@INTRO@@", bt.inline(intro.strip()))
+           .replace("@@TITLE@@", bt.inline(title, do_crossrefs=False))
+           .replace("@@PDFTITLE@@", bt.plain(title))
            + "\n" + "\n".join(body) + "\n\\EOD\n\n\\end{document}\n")
 
     # No reference list here: cite keys would dangle, so print the numbers.

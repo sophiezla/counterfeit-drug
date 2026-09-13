@@ -774,16 +774,14 @@ and rebuild, or the next build silently discards the change.
 
 ## Compiling
 
-There is no TeX distribution on the machine this was built on, so `paper.tex`
-has never been compiled here. Compile it on Overleaf:
+    python paper/scripts/compile_pdf.py
 
-1. Open the official *IEEE Access LaTeX template* on Overleaf.
-2. Upload `paper.tex` and the `figures/` directory into it.
-3. Compile with pdfLaTeX.
-
-`ieeeaccess.cls` is **not** included in this directory. Take it from the
-official template rather than from a mirror, so that the class file matches
-whatever IEEE currently requires.
+runs pdflatex three times on both documents and publishes the PDFs to
+`paper/`. `ieeeaccess.cls` in this directory is byte-identical to the one in
+`ACCESS_latex_template_20240429/`, the official template; the fonts and
+assets it loads by name sit beside it. `paper/scripts/make_overleaf_zip.py`
+packs the same set for Overleaf, and `paper/scripts/make_submission_folder.py`
+lays it out in `ieee-submission/` with the PDFs, the .docx and a manifest.
 
 ## What differs from the .docx
 
@@ -833,6 +831,13 @@ def main():
     # \EOD is required by ieeeaccess.cls: it typesets the end-of-document
     # marker and the class raises "You have not used the command \EOD at the
     # end of your document" without it.
+    # The stretch after it is deliberate. IEEEbiography opens with
+    # "\vskip \@IEEEBIOskipN plus 1fil" and the class sets \flushbottom, so
+    # on the last page that glue absorbed the whole unused column and floated
+    # the biography halfway down the page, an inch or more below the
+    # references (seen 2026-09-13). A far stronger stretch placed after the
+    # end mark takes the slack instead, and the biography sits directly under
+    # the reference list.
     # Placeholder substitution rather than %-formatting: the preamble is LaTeX
     # and contains literal % comments, which %-formatting would try to read as
     # conversion specifiers.
@@ -852,7 +857,7 @@ def main():
 
     tex = (preamble + "\n" + "\n".join(body) + "\n".join(bib)
            + build_biography(md)
-           + "\n\\EOD\n\n\\end{document}\n")
+           + "\n\\EOD\n\\par\\vskip 0pt plus 1000fil\n\n\\end{document}\n")
     tex = resolve_dangling_eqrefs(tex)
 
     OUTDIR.mkdir(parents=True, exist_ok=True)

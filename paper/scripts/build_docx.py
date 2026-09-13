@@ -291,7 +291,20 @@ def add_runs(paragraph, text, size=None, font=None, colour=None):
         if not part:
             continue
         if part.startswith("**") and part.endswith("**"):
-            r = paragraph.add_run(part[2:-2]); r.bold = True
+            # Inline maths inside a bold span was passed through raw
+            # ("$A_{\\mathrm{pure}}$" printed verbatim in III-E step 4 until
+            # 2026-09-13), so the bold branch flattens it too.
+            for sub in re.split(r"(\$[^$]+?\$)", part[2:-2]):
+                if not sub:
+                    continue
+                if sub.startswith("$") and sub.endswith("$"):
+                    r = paragraph.add_run(latex_to_unicode(sub[1:-1]))
+                    r.italic = True
+                else:
+                    r = paragraph.add_run(sub)
+                r.bold = True
+                made.append(r)
+            continue
         elif part.startswith("*") and part.endswith("*") and len(part) > 2:
             r = paragraph.add_run(part[1:-1]); r.italic = True
         elif part.startswith("<sup>"):

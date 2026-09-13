@@ -4,6 +4,46 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Submission bundle, 2026-09-13 (later the same day) -- ieee-submission/ and v1.4.1
+
+**`ieee-submission/` is the package to upload**, built by
+`paper/scripts/make_submission_folder.py`, which refuses to run on stale
+artefacts, wipes the folder each time, and writes `MANIFEST.md` with page
+counts, the build commit and a SHA-256 per file. Contents: the manuscript PDF
+(22 pp), the supplement PDF (36 pp), the .docx, the LaTeX source laid out
+and zipped (the same set `make_overleaf_zip.py` packs -- verified to compile
+standalone from the zip with text-identical output), Fig. 1 as the graphical
+abstract, and the author photo. **Regenerate it; never edit it.**
+
+**Four things a fresh read of the bundle caught, all fixed at source:**
+
+* **The biography floated an inch below the references.** `IEEEbiography`
+  opens with `\vskip ... plus 1fil` and the class sets `\flushbottom`, so on
+  the last page that glue took the whole unused column. `build_tex` now emits
+  `\par\vskip 0pt plus 1000fil` after `\EOD`; the biography sits under the
+  reference list.
+* **The supplement PDF's metadata title was a *third* stale title** --
+  `pdftitle` in `build_supplement.py` still read *"...Detection and a
+  Counterfeit-Medicine Case Study"*, older than the 2026-08-29 retitle. Both
+  `\title` and `pdftitle` are now derived from `paper.md` line 1 at build
+  time, so the title lives in **two** places (paper.md and the sweep's
+  check), not three.
+* **Fig. 1 said "(Split C)"** in the box under "A new acquisition pipeline";
+  the paper says condition C. `make_figures.py` relabelled -- the same
+  lesson as 2026-09-02: rendered figure text is invisible to every
+  Markdown-level check, grep the figure scripts.
+* **The .docx printed `$A_{\mathrm{pure}}$` raw** in III-E step 4: inline
+  maths inside a **bold** span bypassed the flattener. `build_docx.add_runs`
+  now flattens maths inside bold runs too.
+
+Also: the generative-AI disclosure now reads "assisted in drafting and
+revising the text ... and in writing and debugging the ... code" (author's
+wording); `paper/latex/README.md` is generated from a template in
+`build_tex.py` and still claimed no TeX distribution existed here -- the
+template is fixed, not the file. **v1.4.1** re-archives the code so that the
+availability statement ("the exact state of the code that produced every
+number") stays literally true; no number changed.
+
 ## Submission pass, 2026-09-13 -- references verified, supplement brought level with the paper, v1.4.0 cut
 
 Branch `ieee-access-revision`, merged to `main` and released as **v1.4.0**.
@@ -741,7 +781,7 @@ notation box fixes y=0/y=1 in Section V-A, and a set-off statement in VI-A fixes
 that the audit measures shortcut *availability*, not model behaviour. Prose
 neutralised throughout per the reviewer's ~15–20% request.
 
-**Template.** `ol{14}` and `\year{2026}` are now set in both build scripts;
+**Template.** `\vol{14}` and `\year{2026}` are now set in both build scripts;
 the footer read "VOLUME 11, 2023" from the class default before. `\history` and
 `\doi` remain the template's own placeholders, which IEEE fills at production.
 

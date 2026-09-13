@@ -8,16 +8,14 @@ and rebuild, or the next build silently discards the change.
 
 ## Compiling
 
-There is no TeX distribution on the machine this was built on, so `paper.tex`
-has never been compiled here. Compile it on Overleaf:
+    python paper/scripts/compile_pdf.py
 
-1. Open the official *IEEE Access LaTeX template* on Overleaf.
-2. Upload `paper.tex` and the `figures/` directory into it.
-3. Compile with pdfLaTeX.
-
-`ieeeaccess.cls` is **not** included in this directory. Take it from the
-official template rather than from a mirror, so that the class file matches
-whatever IEEE currently requires.
+runs pdflatex three times on both documents and publishes the PDFs to
+`paper/`. `ieeeaccess.cls` in this directory is byte-identical to the one in
+`ACCESS_latex_template_20240429/`, the official template; the fonts and
+assets it loads by name sit beside it. `paper/scripts/make_overleaf_zip.py`
+packs the same set for Overleaf, and `paper/scripts/make_submission_folder.py`
+lays it out in `ieee-submission/` with the PDFs, the .docx and a manifest.
 
 ## What differs from the .docx
 

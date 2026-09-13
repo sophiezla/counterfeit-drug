@@ -809,7 +809,7 @@ def fig_mechanism():
         ("High in-distribution@accuracy", "cannot separate@packaging from@provenance",
          BLUE, "#f4f7fc", "0.919 on the@leakage-free test set"),
         ("A new acquisition@pipeline", "images the authors@did not collect@ ",
-         RED, "#fdf1f1", "150 external authentic@photographs (Split C)"),
+         RED, "#fdf1f1", "150 external authentic@photographs (condition C)"),
         ("Failure", "the shortcut is@absent@ ", RED, "#fdf1f1",
          "9/150 correct (6.0%)"),
     ]
