@@ -1,0 +1,1716 @@
+%% Supplementary material -- GENERATED FILE, DO NOT EDIT.
+%% Produced from paper/supplementary.md by paper/scripts/build_supplement.py.
+\documentclass{ieeeaccess}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{microtype}
+\usepackage{url}
+%% hyperref last, so it can patch what the packages above define. Its job
+%% here is the PDF info dictionary -- a supplementary file that opens with
+%% empty document properties looks unfinished in a reader.
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,
+            urlcolor=blue]{hyperref}
+\hypersetup{pdftitle={Supplementary Material: Auditing Provenance Confounding in Image Authenticity Classification: A Counterfeit-Medicine Case Study},
+            pdfauthor={Sophie Zhu},
+            pdfsubject={IEEE Access submission, supplementary material}}
+
+\IfFileExists{inconsolata.sty}{\usepackage[scaled=0.95,varqu]{inconsolata}}{%
+  \IfFileExists{beramono.sty}{\usepackage[scaled=0.82]{beramono}}{}}
+
+\lstset{
+  basicstyle=\ttfamily\scriptsize,
+  breaklines=true,
+  breakatwhitespace=false,
+  postbreak=\mbox{$\hookrightarrow$\space},
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  frame=none,
+  aboveskip=6pt,
+  belowskip=6pt,
+}
+\Urlmuskip=0mu plus 1mu
+\def\UrlBreaks{\do\/\do-\do.\do_\do:}
+
+%% Supplementary numbering.
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\theequation}{S\arabic{equation}}
+
+\begin{document}
+
+%% The ieeeaccess class defaults its page footer to VOLUME 11, 2023. Set the
+%% submission volume and year so the footer is not stale; IEEE production
+%% replaces these along with \history and \doi below.
+\vol{14}
+\year{2026}
+
+\history{Supplementary material.}
+\doi{10.1109/ACCESS.2026.DOI}
+
+\title{Supplementary Material: Auditing Provenance Confounding in Image Authenticity Classification: A Counterfeit-Medicine Case Study}
+
+\author{\uppercase{Sophie Zhu}\authorrefmark{1}}
+\address[1]{Mira Costa High School, Manhattan Beach, CA 90266 USA
+            (e-mail: sophiezhu2028@gmail.com)}
+\corresp{Corresponding author: Sophie Zhu (e-mail: sophiezhu2028@gmail.com).}
+
+\begin{abstract}
+This document holds the material the main paper cites but does not reproduce: the full experimental setup, the complete per-model metric tables and their figures, the secondary evaluations and ablations, the reproducibility record, and the appendices. Nothing here is summarized --- every section appears as it did in the full record, and the main paper's claims are traceable to it. This document's tables, figures and equations carry an S prefix, and the main paper refers to them by those numbers. References without one point outward: "Table~5" and "Fig.~1" are the manuscript's, as is "Section IV-A", while "Table S6" and "Section S-III" point within this document.
+\end{abstract}
+
+\begin{keywords}
+Supplementary material.
+\end{keywords}
+
+\titlepgskip=-15pt
+\maketitle
+
+\section*{S-I. Dataset, Method and Experimental Detail}
+
+\subsection*{A. Complete manual quality and modality review}
+
+The entire pool was reviewed by a human annotator, image by image, using two purpose-built local tagging tools (a watermark/non-medicine pass and a modality pass), across four rounds. This was a census, not a sample. Fifty-six files were excluded at the filtering stage:
+
+\begin{itemize}
+\item {\bfseries 47 watermark or stock-photo-overlay images.} Checked rather than assumed: {\bfseries 47/47 (100\%) are authentic-labeled}, and they carry overlays from at least six distinct product-catalog or stock-photography sites. This is a second, smaller class-correlated confound, structurally similar to the bulletin-graphic problem of Section III-A.
+\item {\bfseries 4 non-medicine images}: one literal browser screenshot of another dataset's own web page, and three stock/marketing renders rather than device photographs.
+\item {\bfseries 5 images with no packaging in frame}: one loose-tablet photograph and four syrup bottles.
+\end{itemize}
+
+The modality census (Table S1) matters for how any result on this pool is described. The dataset is not outer-packaging-only, although its title and the usual framing of this task both suggest it is.
+
+\begin{table*}[!t]
+\caption{Modality composition of the 510-image modeling pool (complete census, human-annotated).}
+\label{tab:1}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xcc}
+\toprule
+{\bfseries Modality} & {\bfseries Count} & {\bfseries Share} \\
+\midrule
+Blister pack & 223 & 43.7\% \\
+Outer packaging (carton) & 155 & 30.4\% \\
+Other (carton + blister together, sachet, mixed) & 132 & 25.9\% \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+
+We therefore describe this study's scope as {\bfseries "packaging and immediate product containers"}. We considered filtering to outer packaging only, which would have removed roughly 57\% of the pool and required re-running every split and model; we did not, because the capture-confound finding does not depend on modality composition, and we report the composition explicitly instead. This is a wording correction to the prior claim, not a new experiment.
+
+\subsection*{B. Synthetic counterfeit proxy}
+
+Because no independent counterfeit-labeled source was available when this proxy was built --- the regulatory source of Section III-D was assembled later --- a proxy negative class is constructed by perturbing the {\itshape same} 150 external authentic photographs, so that the perturbation is the only systematic difference between classes by construction. Each image receives a deterministically seeded random subset (3--5 of 5) of photographic defects --- per-channel color/hue shift, halftone dot-grid overlay, per-channel registration offset, Gaussian blur, contrast reduction --- plus text-region tampering (ghosting, thin-strip jitter, or ink dropout) applied to 1 to about half of the text/logo regions located by classical edge-density and connected-component analysis. Parameters are randomized per image specifically to avoid substituting one uniform processing signature for the confound under study.
+
+Two design errors were found and corrected before the set was finalized, both worth recording because both are easy to repeat:
+
+\begin{enumerate}
+\item {\bfseries Insufficient severity.} In a first batch, 13\% of images were perceptually indistinguishable from their originals (mean per-pixel difference < 5/255 at review resolution) because independent weak parameter draws compounded. Severity ranges were widened, color shift was forced to at least 15\% per-channel deviation, halftone spacing was scaled to image size so it survives downscaling, and the number of applied effects was raised from 2--4 to 3--5. After the fix, 0\% were imperceptible and the minimum per-pixel difference was 6.0/255.
+\item {\bfseries A reintroduced capture confound.} The first version drew base images from a {\itshape different} device subset of the source dataset (iPhone 11 Pro) than the authentic class (Huawei CN). Those subsets differ in mean brightness by more than 2$\times$ (0.389 vs. 0.162) because the source dataset deliberately varies lighting across device subsets. This would have recreated exactly the confound this paper is about, via source selection rather than generation. The fix was to generate from the same Huawei CN photographs already serving as the authentic class; the post-fix check gives 0.162 vs. 0.153, and identical median resolution.
+\end{enumerate}
+
+All 150 candidates were reviewed by a human annotator side by side with their originals; 150/150 were approved, 0 rejected. The final set is 300 images (150 real authentic + 150 approved synthetic counterfeit). Its remaining class difference in mean file size (1,656 kB vs. 1,018 kB) is a direct causal consequence of the perturbations themselves --- blur and contrast reduction lower encoded detail --- not an independent acquisition confound.
+
+This set measures robustness to a documented perturbation style. It is {\bfseries not} a measurement of real-world counterfeit recall, and real counterfeits may differ in ways not modeled at all: absent security features, holograms or tamper seals, wrong packaging substrate, or serial-number and barcode errors. Every reference to it in this paper carries that caveat.
+
+\begin{figure*}[!t]
+\centerline{\includegraphics[width=\textwidth]{figures/fig01_workflow.pdf}}
+\caption{Data provenance, splitting protocol and evaluation design. Sources (top row) pass through source-specific exclusion or verification (second row); the Kaggle and Roboflow pools are de-duplicated into product-identity groups from which the 510-image modeling pool is drawn (third row); the four evaluation partitions (fourth row) feed a single shared training and normalization protocol (bottom band).}
+\label{fig:1}
+\end{figure*}
+
+
+\begin{figure*}[!t]
+\centerline{\includegraphics[width=\textwidth]{figures/fig02_architectures.pdf}}
+\caption{The four model families, with exact parameter counts. Hatched blocks are frozen.}
+\label{fig:2}
+\end{figure*}
+
+
+\subsection*{C. Environment}
+
+PyTorch 2.7.1 [17] on CPU only (no CUDA available), scikit-learn 1.9.0 [18]. Seed 42 is set for Python, NumPy and PyTorch before every training run, before every fold, and before every augmented feature-extraction pass. Non-deterministic CUDA kernels are not a factor; \url{torch.use_deterministic_algorithms} is left off because some CPU operators lack deterministic kernels.
+
+\subsection*{D. Training protocol}
+
+Identical for M2--M4 (Table S2): Adam, batch size 32, class-weighted cross-entropy, maximum 50 epochs, early stopping on validation loss with patience 4 and a minimum improvement threshold. Class weights are inverse-frequency,
+
+\begin{equation}
+\label{eq:11}
+\begin{aligned}
+w_0 = \frac{n}{2 n_0}, \\[2pt]
+w_1 = \frac{n}{2 n_1}, \\[2pt]
+\mathcal{L} = -\frac{1}{n}\sum_{m=1}^{n} w_{y_m} \log \hat{p}_{m, y_m}
+\end{aligned}
+\end{equation}
+
+
+which follows the protocol choice of class weighting over oversampling. The minimum-improvement threshold (1 $\times$ 10\textsuperscript{-}\textsuperscript{3}) was added after observing a frozen-backbone linear head run for 46+ epochs on noise-level validation-loss "improvements" that a naive patience counter never terminated; with the threshold, patience resets only on a meaningful improvement. The best-validation-loss state is restored at the end of training.
+
+\begin{table*}[!t]
+\caption{Hyperparameters, in the form the code sets them. Section III-C of the main paper summarizes this protocol in prose; this table gives the same settings in the names the code uses, together with the learning-rate search range behind them.}
+\label{tab:2}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{>{\hsize=0.804\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=1.196\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\toprule
+{\bfseries Setting} & {\bfseries Value} \\
+\midrule
+Optimizer & Adam \\
+Batch size & 32 \\
+Max epochs / patience / min improvement & 50 / 4 / 1 $\times$ 10\textsuperscript{-}\textsuperscript{3} \\
+Learning-rate grid & \{1 $\times$ 10\textsuperscript{-}\textsuperscript{3}, 3 $\times$ 10\textsuperscript{-}\textsuperscript{4}, 1 $\times$ 10\textsuperscript{-}\textsuperscript{4}\}, 5 epochs each \\
+Selected LR (M2 / M3 / M4) & 1 $\times$ 10\textsuperscript{-}\textsuperscript{3} / 1 $\times$ 10\textsuperscript{-}\textsuperscript{3} / 1 $\times$ 10\textsuperscript{-}\textsuperscript{3} \\
+Loss & class-weighted cross-entropy, Eq. (S1) \\
+Input resolution & 224 $\times$ 224, ImageNet mean/std normalization \\
+M1 & \url{LogisticRegression(max_iter=2000, class_weight="balanced")} \\
+Cached augmented passes (M3, M4) & K = 3, each seeded with 42 + pass index \\
+Seed & 42 \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+
+\subsection*{E. Frozen-backbone feature caching}
+
+For M3 and M4 the backbone is frozen, so its output for a given input never changes during head training, and re-running a full forward pass every epoch on CPU is wasted work. Features are extracted once per partition and the head trained on the cached vectors. To retain the benefit of augmentation despite caching, the training partition is expanded by $K = 3$ independently augmented passes through the backbone, so the head still sees three distinct augmented views of every training image. Validation, test and external partitions use a single deterministic pass.
+
+This is standard linear-probing practice and it is what made M4 tractable at all here: a first attempt at live per-epoch backbone forward passes was terminated by the host before Split A finished. It is nonetheless a fidelity trade-off relative to fresh-every-epoch augmentation, and we record it as such.
+
+\subsection*{F. Evaluation protocol and metrics}
+
+Two kinds of analysis are mixed in this study and the difference matters for how much weight each carries. The split comparison, the four-model roster and the external evaluation were fixed by the protocol before any of them ran, and are confirmatory. Everything about the correction --- which axes, which constants, which composition order --- was developed after the external failure had been observed, and is exploratory in the strict sense: the axes were nominated by comparing the pool against Split C, and the constants and order were fixed by hand. Three later analyses convert parts of that back into something testable, and each says so where it is used: Section S-I-S re-derives the axes from the training partition alone under a threshold declared in advance, Section S-I-U repeats the production and baseline conditions across five seeds, and the constant and ordering sweeps report every condition they ran rather than the best one. The production constants and the production order were fixed before either sweep existed, which is why Sections S-I-X and S-I-R can report that a better setting exists and decline to adopt it.
+
+All metrics use a 0.5 decision threshold unless stated. With TP, FP, FN, TN defined against counterfeit as positive:
+
+\begin{equation}
+\label{eq:12}
+\begin{aligned}
+\mathrm{Sens} = \frac{TP}{TP+FN}, \\[2pt]
+\mathrm{Spec} = \frac{TN}{TN+FP}, \\[2pt]
+\mathrm{BA} = \frac{\mathrm{Sens}+\mathrm{Spec}}{2}
+\end{aligned}
+\end{equation}
+
+
+\begin{equation}
+\label{eq:13}
+\mathrm{MCC} = \frac{TP \cdot TN - FP \cdot FN}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}
+\end{equation}
+
+
+ROC-AUC is computed by the Mann--Whitney form with mid-ranks for ties, and PR-AUC as average precision. Uncertainty is a percentile bootstrap over test-set resamples [24]: for $b = 1 \dots 2000$, resample $n$ indices with replacement, recompute the metric, and report the 2.5th and 97.5th percentiles.
+
+Paired model comparison uses McNemar's test [22] on the Split B test predictions. With $n_{01}$ the count of examples model A classifies correctly and model B does not, and $n_{10}$ the converse, we use the exact binomial test when the discordant total is below 25 (which it always is here, 1 $\le$ $n_{01}+n_{10}$ $\le$ 15):
+
+\begin{equation}
+\label{eq:14}
+p = 2 \sum_{k=0}^{\min(n_{01}, n_{10})} \binom{n_{01}+n_{10}}{k} 0.5^{\,n_{01}+n_{10}}
+\end{equation}
+
+
+The external generalization gap for model $m$ is defined on the authentic class only, since Split C has no counterfeit members:
+
+\begin{equation}
+\label{eq:15}
+\Delta_m = \mathrm{Acc}^{\text{auth}}_{m,\text{Split B test}} - \mathrm{Acc}^{\text{auth}}_{m,\text{Split C}}
+\end{equation}
+
+
+A negative $\Delta_m$ means the model performs {\itshape better} on the external source than on its own in-distribution test partition.
+
+\subsection*{G. Four reproducibility defects, disclosed}
+
+{\bfseries A non-determinism bug, found and fixed.} The augmented feature-extraction passes of Section S-I-E were originally unseeded, so the augmented views depended on whatever RNG state the process happened to be in --- which varies with what ran earlier in the same script and is not reproducible across invocations. This is the mechanism behind a sequence of contradictory readings: the question "does normalization help M3?" was answered positively (+6.0 points), negatively ($-$21.3 points) and neutrally ($-$1.3 points) across three runs of nominally the same or closely related conditions before the cause was identified. The fix seeds each pass with 42 + pass index. Determinism was then verified empirically, not assumed: training M3 twice back to back produced byte-identical metric outputs. All production numbers in Section IV postdate the fix. One ablation condition (M3 under two-way normalization, Section S-I-O) was never re-run afterwards and is reported as unverified.
+
+{\bfseries A learning-rate inconsistency, found and corrected.} Because no checkpoint is persisted, the external-evaluation script re-derives each trained model from scratch, and it hard-coded M2's learning rate at 3 $\times$ 10\textsuperscript{-}\textsuperscript{4} --- a value left over from an earlier retrain. Under the normalized pipeline M2's learning-rate search selects 1 $\times$ 10\textsuperscript{-}\textsuperscript{3} (Table S2), so M2's external figures were being produced by a model trained differently from the one supplying its in-distribution numbers.
+
+The hard-coded constant has been replaced by a recorded one: each training script now writes the learning rate it actually used, and every rebuild path reads it back, raising an error rather than guessing if the record is absent. The correction is verifiable --- under the recorded rate the rebuild's per-epoch training curve is byte-identical to the training run of record, which the 3 $\times$ 10\textsuperscript{-}\textsuperscript{4} rebuild demonstrably was not. M2's rows in both external evaluations were then re-measured. Its external specificity moves from 91.3\% to {\bfseries 86.0\%} and its generalization gap from $-$6.7 to {\bfseries $-$1.4} points; on the synthetic proxy its accuracy moves from 0.623 to 0.633 and its ROC-AUC from 0.788 to 0.794. No qualitative claim turns on the correction: M2 remains the strongest model on Split C and the only one with a negative gap. That it is the best-generalizing model was a separate claim, and Section IV-D withdrew it on the evidence of a second capture condition. The superseded values are preserved alongside the current ones in the archived results.
+
+{\bfseries Checkpoints, and the third divergence they immediately exposed.} The architectural weakness behind both defects above --- that no weights were ever saved, so every downstream consumer re-derived "the trained model" by retraining it --- has now been removed. Each training run persists the restored best-validation state together with the learning rate, seed, best epoch and epoch count it was produced under, and the loader refuses to return a checkpoint whose recorded learning rate differs from the one the caller expects, which is exactly the mismatch that produced the Model 2 defect.
+
+Persisting checkpoints required re-running the three trainable models, and that re-run disclosed a third discrepancy which we report rather than quietly adopt. M2 and M3 reproduced their recorded Split B test accuracies exactly (0.865 and 0.932). {\bfseries M4 did not: it now scores 0.919 (68/74) where the previously committed results recorded 0.946 (70/74)} --- a two-image difference, with a training trajectory that early-stops at epoch 18 rather than running to 26.
+
+We investigated and can report what is and is not established. The current value is {\itshape reproducible}: three consecutive re-runs of M4 produced byte-identical training curves and metric files, so the pipeline is deterministic as it now stands, and the determinism check previously performed on M3 now holds for M4 as well. The normalization operator is confirmed active in that run (a normalized and an un-normalized tensor for the same image differ by 0.44 in mean absolute value). The split and pool files are unchanged since they were built. What we cannot establish is the {\itshape cause} of the difference from the earlier run, because the artifacts that would identify it --- that run's weights and cached features --- were never saved, which is the very defect being fixed. The most likely explanation is an intermediate code state during the several rounds of normalization and learning-rate work, but we cannot demonstrate it.
+
+We therefore report 0.919 as M4's Split B accuracy of record, since it is the value the committed, deterministic pipeline produces and the one every derived table has been regenerated from. Its consequences are stated where they arise: M4's leakage delta rises from +4.1 to +6.8 points (Table S4), the smallest pairwise {\itshape p}-value rises from 0.057 to 0.118 (Table S5), and M4's pooled error count rises from 5 to 7 (Table S7). No qualitative claim in this paper changes --- the leakage effect remains small and bounded, no model comparison approaches significance, and the external results are unaffected --- but the episode is the clearest possible demonstration of why the checkpoint omission mattered, and of the fact that it was caught only because the omission was finally repaired.
+
+{\bfseries A fourth defect, in a path that never checked itself.} While building the attribution audit of Section S-I-J we found that all three Grad-CAM scripts obtained the backbone by calling its constructor directly, which returns a module in training mode, and set only the classification head to evaluation mode. The backbone's 49 batch-normalization layers therefore ran on batch-of-one statistics and overwrote their running averages on every image. This was invisible for as long as nobody asked the scripts for a number that could be checked: the heatmaps looked plausible. It surfaced immediately once a script printed its external specificity alongside the heatmaps and that figure read 0.16 against the 0.807 of record. Section S-I-J states the consequence for Fig. S10; the scripts now force evaluation mode and the quantitative audit asserts its accuracy against the value of record before reporting anything.
+
+Two lessons generalize beyond this study, and both are uncomfortable.
+
+The first concerns persistence: a pipeline can be fully seeded, deterministic on re-run, and still fail to reproduce its own published numbers, if nothing durable was saved at the moment those numbers were produced. Determinism is a property of the code; reproducibility of a {\itshape result} additionally requires that the artifact be persisted.
+
+The second concerns verification, and is the one we would emphasize. All four defects in this study --- a stale learning rate, an unseeded augmentation pass, an unreproducible accuracy, and a backbone in the wrong mode --- occurred in code paths that produced an output nobody could check against a known value. The evaluation and training paths, which produce accuracies that are compared against each other constantly, were correct throughout. The generalizable practice is therefore cheap and specific: {\bfseries any script that rebuilds or reloads a model should compute one metric whose correct value is already known, and refuse to report anything if it disagrees.} Every one of these defects would have been caught on first execution by that single line.
+
+\subsection*{H. In-distribution performance and the leakage comparison}
+
+One definition governs everything in this section. "Leakage-free", here and throughout, means free of {\bfseries product-identity} leakage: Split B guarantees that no perceptual-hash cluster of near-duplicate photographs straddles a partition or a cross-validation fold. It makes no claim about acquisition. Because every counterfeit-labeled image in the pool was produced by one capture pipeline and every authentic-labeled image by another (Section IV-A), {\itshape no} partition of this pool can place a capture process on only one side of a fold, and grouped cross-validation inherits the confound in every fold at full strength. The numbers below are therefore the best in-distribution estimates obtainable on this data and are still, in the sense Section IV-A makes precise, measurements of the acquisition process. Readers should not read Split B as a corrected evaluation; it corrects one of the two problems.
+
+Table S3 gives the complete metric set for all four models on both in-distribution test partitions; Fig. S6 gives the corresponding confusion matrices, Fig. S4 the ROC curves and Fig. S5 the precision--recall curves.
+
+\begin{table*}[!t]
+\caption{In-distribution test performance. Counterfeit is the positive class. Sens = recall. BA = balanced accuracy. Bracketed intervals are 95\% percentile bootstrap (2000 resamples).}
+\label{tab:3}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lccccccccccccccc}
+\toprule
+{\bfseries Model} & {\bfseries Split} & {\bfseries n} & {\bfseries TP} & {\bfseries FP} & {\bfseries FN} & {\bfseries TN} & {\bfseries Accuracy} & {\bfseries Precision} & {\bfseries Sens} & {\bfseries Spec} & {\bfseries F1} & {\bfseries BA} & {\bfseries MCC} & {\bfseries ROC-AUC} & {\bfseries PR-AUC} \\
+\midrule
+M1 hist+LR & A & 76 & 33 & 10 & 2 & 31 & 0.842 [0.763, 0.921] & 0.767 & 0.943 & 0.756 & 0.846 & 0.849 & 0.703 & 0.893 & 0.831 \\
+M1 hist+LR & B & 74 & 35 & 12 & 0 & 27 & 0.838 [0.743, 0.919] & 0.745 & 1.000 & 0.692 & 0.854 & 0.846 & 0.718 & 0.897 & 0.864 \\
+M2 CNN & A & 76 & 29 & 4 & 6 & 37 & 0.868 [0.789, 0.934] & 0.879 & 0.829 & 0.902 & 0.853 & 0.866 & 0.735 & 0.951 & 0.948 \\
+M2 CNN & B & 74 & 31 & 6 & 4 & 33 & 0.865 [0.784, 0.932] & 0.838 & 0.886 & 0.846 & 0.861 & 0.866 & 0.731 & 0.916 & 0.903 \\
+M3 MobileNetV3 & A & 76 & 31 & 1 & 4 & 40 & 0.934 [0.868, 0.987] & 0.969 & 0.886 & 0.976 & 0.925 & 0.931 & 0.870 & 0.995 & 0.994 \\
+M3 MobileNetV3 & B & 74 & 31 & 1 & 4 & 38 & 0.932 [0.865, 0.986] & 0.969 & 0.886 & 0.974 & 0.925 & 0.930 & 0.867 & 0.987 & 0.987 \\
+M4 EfficientNet-B0 & A & 76 & 34 & 0 & 1 & 41 & {\bfseries 0.987} [0.961, 1.000] & 1.000 & 0.971 & 1.000 & 0.986 & 0.986 & 0.974 & 0.999 & 0.998 \\
+M4 EfficientNet-B0 & B & 74 & 30 & 1 & 5 & 38 & 0.919 [0.851, 0.973] & 0.968 & 0.857 & 0.974 & 0.909 & 0.916 & 0.841 & 0.988 & 0.986 \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+\begin{table*}[!t]
+\caption{Leakage quantification. Delta is Split A accuracy minus Split B accuracy; a positive Delta is the direction the naive-split-inflates-accuracy hypothesis predicts. Bracketed intervals are 95\% percentile bootstrap (2000 resamples), as in Table S3. Split B CV is 5-fold \texttt{StratifiedGroupKFold} on the Split B training partition. Throughout this paper "leakage-free" means free of {\bfseries product-identity} leakage only. The grouping decorrelates which products appear in which fold and nothing else; it cannot decorrelate acquisition, because every counterfeit-labeled image in the pool came from one capture pipeline. Every number in this table is therefore measured under the provenance confound, which is the point of Section IV-A.}
+\label{tab:4}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+{\bfseries Model} & {\bfseries Split A accuracy (95\% CI)} & {\bfseries Split B accuracy (95\% CI)} & {\bfseries Split B 5-fold CV} & {\bfseries $\Delta$ (A $-$ B)} \\
+\midrule
+M1 hist+LR & 0.842 [0.763, 0.921] & 0.838 [0.743, 0.919] & 0.832 $\pm$ 0.049 & +0.004 \\
+M2 CNN & 0.868 [0.789, 0.934] & 0.865 [0.784, 0.932] & 0.865 $\pm$ 0.036 & +0.004 \\
+M3 MobileNetV3 & 0.934 [0.868, 0.987] & 0.932 [0.865, 0.986] & 0.964 $\pm$ 0.011 & +0.002 \\
+M4 EfficientNet-B0 & 0.987 [0.961, 1.000] & 0.919 [0.851, 0.973] & 0.983 $\pm$ 0.011 & {\bfseries +0.068} \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+The leakage effect is real but small, and only M4 shows it at a magnitude worth discussing (Fig. S3). Three of four deltas are within half a percentage point of zero, and even M4's 6.8-point delta sits inside overlapping confidence intervals (Split A [0.961, 1.000] against Split B [0.851, 0.973]). The mechanism is not in doubt --- Split B provably eliminates the 9 straddling product groups that Split A permits --- but its {\itshape magnitude} on this pool is better established by counting and by a paired experiment than by this delta, for the reason the next two paragraphs give.
+
+Counting directly: {\bfseries 7 of the 76 Split A test images belong to a product-identity group that also appears in Split A's training partition}, a direct exposure rate of 9.2\%. Those seven are the only images any model could classify correctly by recognizing a training photograph rather than by generalizing, so 9.2 points is the most that {\itshape recognition} can contribute. The count follows from the split alone, involving no model and no run, so it is immune to the sampling-variance objection that limits the measured deltas --- which duly fall below it (+0.2 to +6.8 points).
+
+It is worth being exact about what that does not cover. Admitting a near-duplicate into training also changes the fitted parameters, and those parameters decide the remaining 69 predictions as well; the count constrains the recognition channel and says nothing about that indirect one, in either direction. The measured delta does not close the gap either, because Split A and Split B do not share a test set. Section S-I-V therefore measures leakage directly, holding the test set fixed and varying only whether the mates are admitted, and finds +0.3 points [$-$1.9, +2.4] for M2 and no change at all for M3 and M4. On a pool with this duplicate structure, then, image-level leakage is not the dominant inflation mechanism --- bounded at 9.2 points by the count, measured at 0.3 with an interval of $\pm$2, against an external collapse worth more than 90. A dataset with heavier duplicate sourcing would raise both the exposure rate and the effect.
+
+\begin{figure*}[!t]
+\centerline{\includegraphics[width=\textwidth]{figures/fig13_leakage.pdf}}
+\caption{Split A vs. Split B test accuracy per model with 95\% bootstrap intervals and the per-model delta.}
+\label{fig:3}
+\end{figure*}
+
+
+{\bfseries No pairwise model difference is statistically significant} (Table S5). Discordant counts are small --- for M3 vs. M4 only three test images are classified differently --- and the smallest {\itshape p}-value is 0.118, for the comparison between the 97-parameter linear baseline and frozen MobileNetV3.
+
+"Not significant" conflates two different situations, and separating them matters, because only one of them is a statement about the models. Since McNemar's exact test depends only on the discordant pairs, the most significant {\itshape p}-value {\itshape available} at a given discordant total can be computed directly. For five of the six pairs it lies between 0.0001 and 0.002, so those comparisons could have detected a difference had one existed, and their non-significance is genuine evidence that the models perform alike on this partition. The sixth, M3 vs. M4, has a discordant total of 3, for which the most significant {\itshape p}-value obtainable is 0.250: {\bfseries no split of three discordant pairs can reach {\itshape p} < 0.05, so that comparison was unresolvable by construction} and is not evidence of equivalence at all.
+
+The power this affords is poor in absolute terms. At the observed discordance levels, reaching {\itshape p} < 0.05 requires a net difference of essentially the entire discordant set --- 10 of 74 test images at D = 10, 14 at D = 14 --- an accuracy gap of 13.5 to 18.9 points. {\bfseries This design could only have detected between-model differences larger than roughly 13 points.} Every model in the roster sits within 15 points of every other in-distribution, so it was never capable of separating them, and no ranking in this paper should be read as one. That is a property of the dataset's size, not a finding about architectures.
+
+\begin{table*}[!t]
+\caption{Pairwise McNemar's tests on the Split B test partition (n = 74), exact binomial. $n_{01}$: A correct, B wrong. $n_{10}$: A wrong, B correct.}
+\label{tab:5}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lcccccc}
+\toprule
+{\bfseries Model A} & {\bfseries Model B} & {\bfseries $n_{01}$} & {\bfseries $n_{10}$} & {\bfseries Discordant} & {\bfseries {\itshape p}} & {\bfseries Significant ($\alpha$ = 0.05)} \\
+\midrule
+M1 & M2 & 5 & 7 & 12 & 0.774 & no \\
+M1 & M3 & 4 & 11 & 15 & 0.118 & no \\
+M1 & M4 & 5 & 11 & 16 & 0.210 & no \\
+M2 & M3 & 3 & 8 & 11 & 0.227 & no \\
+M2 & M4 & 4 & 8 & 12 & 0.388 & no \\
+M3 & M4 & 2 & 1 & 3 & 1.000 & no \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+Six pairwise tests on one partition raises the question of family-wise error, and here it resolves trivially: no comparison is significant before correction, so no correction can make one significant. For completeness, Holm--Bonferroni over the six raises the smallest adjusted {\itshape p} from 0.118 to 0.711 and pins the remaining five at 1.000. The conclusion --- that this partition cannot distinguish a 97-parameter linear model from a 4-million-parameter pretrained backbone --- is therefore robust to the correction and, if anything, understated without it. The reverse risk, that correction masks a real difference, is addressed by the power calculation below rather than by the tests themselves.
+
+Multiplicity is worth a word for the rest of the paper too, because the manuscript reports a great many comparisons. Only Table S5 contains hypothesis tests; every other comparison here --- the leakage deltas, the per-axis ablations, the constant sweep, the ordering sweep --- is a point estimate reported with its interval where one exists, and none is accompanied by a {\itshape p}-value or described as significant. They are not a test family and no correction applies to them. What does apply is the weaker caution stated in Section S-II: they are single realisations, so a difference of a point or two between two conditions should not be read as a difference at all, and we draw conclusions only from separations far larger than that, such as the 28-point gap between the two ordering groups in Section S-I-X.
+
+Two further in-distribution observations. First, the training curves (Fig. S7) show the expected pattern: the frozen-backbone heads converge smoothly to near-zero loss, while the from-scratch CNN plateaus with a noisy validation curve and stops at epoch 13, consistent with its 23,938-parameter capacity being the binding constraint rather than overfitting. Second, calibration differs sharply across models (Fig. S8). M1's predicted probabilities are compressed into roughly [0.33, 0.56] --- it separates the classes largely by which side of 0.5 a narrow band of scores falls on --- whereas M3 and M4 are strongly saturated near 0 and 1. This becomes important in Section S-I-I.
+
+\begin{figure*}[!t]
+\centerline{\includegraphics[width=\textwidth]{figures/fig04_roc.pdf}}
+\caption{ROC curves, both in-distribution partitions, with AUCs.}
+\label{fig:4}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centerline{\includegraphics[width=\textwidth]{figures/fig05_pr.pdf}}
+\caption{Precision--recall curves, both partitions, with average precision.}
+\label{fig:5}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centerline{\includegraphics[width=\textwidth]{figures/fig06_confusion_ab.pdf}}
+\caption{Confusion matrices, all four models, both partitions.}
+\label{fig:6}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centerline{\includegraphics[width=\textwidth]{figures/fig07_training_curves.pdf}}
+\caption{Split B training and validation loss and accuracy; the filled marker is the restored best-validation-loss epoch.}
+\label{fig:7}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centerline{\includegraphics[width=\textwidth]{figures/fig11_calibration.pdf}}
+\caption{(a) Reliability curves on Split B test. (b) Per-model score distributions by true class.}
+\label{fig:8}
+\end{figure*}
+
+
+\subsection*{I. Synthetic counterfeit-proxy stress test}
+
+Split C is authentic-only and therefore silent on counterfeit recall. Table S6 reports all four models on the 300-image synthetic proxy of Section S-I-B, and Fig. S9 plots the same confusion counts as matrices. As stated there, this measures robustness to a specific documented perturbation style, not real-world counterfeit recall.
+
+\begin{table*}[!t]
+\caption{Synthetic counterfeit-proxy Split C (150 authentic + 150 perturbed copies of those same photographs). Confusion counts are exact. PR-AUC is not reported because per-image scores were not persisted by the evaluation script; this is a tooling gap, not a property of the data. 95\% intervals, n = 300 with 150 per class --- accuracy (Wilson): M1 0.500 [0.444, 0.556], M2 0.633 [0.577, 0.686], M3 0.483 [0.427, 0.540], M4 0.550 [0.493, 0.605]; {\bfseries M4's row here predates the Split B correction of Section S-I-G} and so describes the superseded 0.946 model rather than the 0.919 one; the two differ by two in-distribution images, and M4's qualitative verdict (weak separation at best, accuracy interval spanning 0.5) does not depend on which is used; ROC-AUC (Hanley--McNeil closed form, used because per-image scores are unavailable for a bootstrap): M1 0.895 [0.859, 0.932], M2 0.794 [0.743, 0.845], M3 0.503 [0.438, 0.569], M4 0.570 [0.505, 0.634].}
+\label{tab:6}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lcccccccccccc}
+\toprule
+{\bfseries Model} & {\bfseries TP} & {\bfseries FP} & {\bfseries FN} & {\bfseries TN} & {\bfseries Accuracy} & {\bfseries Precision} & {\bfseries Sens} & {\bfseries Spec} & {\bfseries F1} & {\bfseries BA} & {\bfseries MCC} & {\bfseries ROC-AUC} \\
+\midrule
+M1 hist+LR & 150 & 150 & 0 & 0 & 0.500 & 0.500 & 1.000 & 0.000 & 0.667 & 0.500 & 0.000 & {\bfseries 0.895} \\
+M2 CNN & 61 & 21 & 89 & 129 & 0.633 & 0.744 & 0.407 & 0.860 & 0.526 & 0.633 & 0.299 & 0.794 \\
+M3 MobileNetV3 & 29 & 34 & 121 & 116 & 0.483 & 0.460 & 0.193 & 0.773 & 0.272 & 0.483 & $-$0.041 & 0.503 \\
+M4 EfficientNet-B0 & 44 & 29 & 106 & 121 & 0.550 & 0.603 & 0.293 & 0.807 & 0.395 & 0.550 & 0.117 & 0.570 \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+Three readings, in decreasing order of interest.
+
+{\bfseries M1's result is a calibration failure, not an absence of signal.} It labels essentially everything counterfeit (sensitivity 1.000, specificity 0.000, accuracy pinned at exactly 0.500 by the balanced design, MCC exactly 0) --- yet it has by far the best ROC-AUC of the four at 0.895. Its raw scores rank perturbed images above clean ones well; its 0.5 threshold, fitted on the very different Kaggle brightness and resolution distribution, is simply in the wrong place for this set. Compare its 0.000 on the authentic-only Split C: the two results together say that M1's color-histogram features carry {\itshape some} transferable signal that its decision threshold cannot exploit out of distribution. This is consistent with the compressed score range visible in Fig. S8(b).
+
+{\bfseries M2 and M4 show modest genuine separation but under-detect.} AUCs of 0.794 and 0.570 with sensitivities of 0.407 and 0.293: at the default threshold both are far more likely to pass a synthetic counterfeit as authentic than the reverse --- M2 misses 89 of 150 and M4 misses 106. For a screening application that error direction is the costly one. The two models are not on the same footing, and the intervals in Table S6's caption matter here: M2's AUC interval [0.743, 0.845] is comfortably clear of chance, whereas M4's [0.505, 0.634] excludes 0.5 only barely, and M4's {\itshape accuracy} interval [0.493, 0.605] does not exclude it at all. M4 should be described as weakly separating at best, and no ranking between M4 and M3 is supportable on this evidence.
+
+{\bfseries M3 is at chance (AUC 0.503, 95\% CI [0.438, 0.569], MCC $-$0.041), and this cross-validates the attribution finding of Section S-I-J.} M3's comparatively strong external specificity is best explained by a backdrop-matching rule (Section S-I-J); such a rule provides exactly zero signal for separating a photograph from a perturbed copy of {\itshape the same photograph}, since the backdrop is identical in both. Chance performance is what that explanation predicts, obtained here from a completely independent evaluation set.
+
+\begin{figure*}[!t]
+\centerline{\includegraphics[width=\textwidth]{figures/fig09_confusion_synthetic.pdf}}
+\caption{Confusion matrices on the synthetic proxy, with accuracy and ROC-AUC per model.}
+\label{fig:9}
+\end{figure*}
+
+
+\subsection*{J. Attribution audit}
+
+{\bfseries All heatmaps in this section were regenerated after a defect described below, and categorized by a human annotator over the complete set --- 62 of 62, not a sample.} Each map targets the model's {\itshape predicted} class, so a map on an image called counterfeit shows the evidence for "counterfeit", and a map on an image called authentic shows the evidence for "authentic". That distinction turns out to carry the result.
+
+{\bfseries In-distribution (M4, Split B), n = 22.} Nine of 22 (41\%) place attribution mass on packaging-relevant regions --- logo, brand header, printed text --- seven (32\%) place it on incidental regions such as background, corners or backdrop, and six (27\%) are mixed. Split by outcome, the pattern is mild but in the expected direction: of 15 correct predictions, 7 attend to the product and 3 to incidental regions; of 7 errors, 4 attend to incidental regions and 2 to the product. In-distribution, then, the attribution is unremarkable --- mostly on the product, more often incidental when the model is wrong.
+
+{\bfseries External (M4 and M3, Split C), n = 20 each.} The external sets behave completely differently and, on this method, the two models behave {\itshape identically} --- a reading the occlusion analysis later in this section sustains for M3 and withdraws for M4:
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\columnwidth}{>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xcc}
+\toprule
+ & {\bfseries attends to product} & {\bfseries attends to background} \\
+\midrule
+M4, called authentic (correct) & 0/10 & {\bfseries 10/10} \\
+M4, called counterfeit (wrong) & {\bfseries 10/10} & 0/10 \\
+M3, called authentic (correct) & 0/10 & {\bfseries 10/10} \\
+M3, called counterfeit (wrong) & {\bfseries 10/10} & 0/10 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+The separation is total, in both models, with no exceptions in 40 heatmaps. Read with the target-class convention above, it says something specific and damaging: {\bfseries on external images the attribution mass supporting "authentic" concentrates in the background, and the mass supporting "counterfeit" on the product.} A second, annotation-free method reported below confirms three quarters of that pattern and contradicts the remaining quarter, so the claim the paper finally makes is narrower than this one. When either model gets an external image right, it is not because it recognized authentic packaging; it is responding to the photographic surround. When it gets one wrong, it is looking straight at the printed carton and concluding "counterfeit".
+
+This supersedes and generalizes an earlier reading. A previous version of this analysis made a similar argument about M3 alone, from five heatmaps, and treated M4's external attribution as evidence that the model was making a "spatially sensible decision calibrated to the wrong cue". With the complete set and corrected heatmaps, the finding is not specific to M3 and is not a point in M4's favor: on this method both frozen backbones do the same thing, and the product-focused attribution on M4's errors is the {\itshape failure} half of the pattern, not a redeeming feature. What survives the second method is the M3 half and the errors of both.
+
+It is consistent with the quantitative result of the previous subsection, though we put that more weakly than an earlier version of this paper did. Split C is 100\% authentic, so the model predicts "authentic" on most of it, and a surround-driven prediction should push attribution mass away from the center; the normalized model's border mass is 0.655 against a uniform reference of 0.642. That is in the predicted direction but it is also, in absolute terms, indistinguishable from uniform, so it corroborates the categorization only weakly and cannot be offered as independent confirmation of it.
+
+The categorization itself is more robust to that objection than the aggregate statistic is, and the reason is worth stating because the objection is a fair one. The diffuseness result reported below and the caveat that accompanies it --- that a 128 px bottleneck degrades activation-based attribution --- apply to the {\itshape magnitude and sharpness} of these maps. The finding here is not a magnitude but a {\bfseries contrast}: within one model, one bottleneck and one external set, the maps for correct predictions and the maps for incorrect predictions fall on opposite sides of the frame, 20 out of 20 each, twice over. Degraded attribution adds noise, which would blur that split; it does not manufacture a perfect one that happens to align with the outcome. We therefore continue to report the differential result while declining, below, to interpret the absolute spatial distribution.
+
+{\bfseries The consequence for condition D.} Section IV-D reported that M3 and M4 hold up on the second external distribution while M2 collapses, and read that as the pretrained backbones transferring across a capture shift. The attribution evidence forces a weaker reading. Split C and Split D are the same products photographed against {\bfseries the same dark backdrop} under different devices and lighting; the surround changes in brightness and color but not in kind. A model predicting "authentic" from the presence of that backdrop would continue to do so on Split D. {\bfseries Split D therefore does not test the shortcut these heatmaps identify}, and M3's and M4's stability across the two external sets is consistent with the shortcut persisting rather than with genuine packaging recognition. What Split D does establish stands --- M2's Split C result was capture-specific --- but it cannot be read as evidence that the backbones learned the intended task.
+
+\begin{figure*}[!t]
+\centerline{\includegraphics[width=\textwidth]{figures/fig14_gradcam.pdf}}
+\caption{Grad-CAM overlays, six of the 62 categorized maps. (a)--(b) M4 in-distribution, one product-focused correct prediction and one error attending to background corners. (c)--(d) M4 external: an authentic photograph called counterfeit with attribution on the printed name, and a correct authentic call with attribution on the surround. (e)--(f) the same pair for M3. Panels (c)--(f) are representative in the strict sense: on the external sets the split shown here held for all 40 maps. Every heatmap was regenerated from the persisted production checkpoint after the defect described below.}
+\label{fig:10}
+\end{figure*}
+
+
+{\bfseries Coverage, and a defect in how these heatmaps were produced.} Two different things are complete here and it is worth separating them. Every map the study produced was scored: 62 of 62, with no map set aside, and the tags are committed at \url{modeling/results/gradcam_review_completed.csv}. The {\itshape images} those maps were drawn from are a stratified sample rather than a census --- in-distribution, all 7 errors plus a seeded sample of 15 correct predictions; externally, a seeded sample of 10 correct and 10 incorrect predictions per model. The audit therefore characterizes the two outcome classes and not the full 150-image external set, and the claim it supports is the contrast between them. It also carries a defect we found only after the fact, and which we report because it bears on how much weight these maps can take.
+
+The three Grad-CAM scripts obtained their backbone by calling the constructor directly, which returns a module in {\bfseries training mode}, and set only the classification head to evaluation mode. With 49 batch-normalization layers in the backbone and Grad-CAM processing one image at a time, those layers therefore used batch-of-one statistics and overwrote their running averages on every call. Every heatmap produced before the fix consequently described a mis-configured network rather than the trained model. We detected this only when a later script printed a sanity metric --- its external specificity read 0.16 against the 0.807 of record --- and confirmed it by checking that, with evaluation mode set, a manually assembled feature path reproduces the production path to within 3 $\times$ 10\textsuperscript{-}\textsuperscript{6}. The scripts now force evaluation mode and load the persisted production head rather than retraining it, every map was regenerated from that path, and the categorization reported above is of the regenerated maps. The quantitative audit below asserts its own accuracy against the value of record before reporting anything, which is the check that would have caught the defect on first execution.
+
+{\bfseries A quantitative attribution audit.} To replace a human judgement on a small sample with a measurement over the whole set, we compute the {\bfseries border mass fraction} of each Grad-CAM map: the share of total attribution mass falling in an outer frame occupying the outer 20\% of each side. It requires no bounding-box annotation, which is what makes it runnable on all 150 external images, and it targets the specific failure the qualitative audit diagnosed --- attribution on backdrop, margins and corners rather than on the product. The border ring covers 0.642 of the frame, so 0.642 is the value for spatially uniform attribution; below it means center-concentrated, above it means the surround is favored. Both conditions run on the same images with matching preprocessing, and the normalized condition loads the production checkpoint, so its Split C specificity reproduces the 0.807 of record exactly (the un-normalized baseline has no checkpoint and is retrained, giving 9/150 against the archived 5/150).
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\columnwidth}{>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xccc}
+\toprule
+{\bfseries Condition} & {\bfseries Border mass (95\% CI)} & {\bfseries Center mass} & {\bfseries Split C specificity} \\
+\midrule
+Uniform attribution (reference) & 0.642 & 0.161 & --- \\
+Baseline, un-normalized & 0.182 [0.155, 0.209] & 0.563 & 0.060 \\
+Three-way normalized & 0.655 [0.613, 0.697] & 0.165 & 0.807 \\
+Paired change & {\bfseries +0.473 [+0.422, +0.524]} & $-$0.398 & --- \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+The result does not flatter the correction, and is the more interesting for it. {\bfseries Normalization does not move attribution onto the product; it makes attribution diffuse.} The un-normalized model is strongly center-concentrated --- 0.563 of its attribution mass in a center box covering 0.161 of the frame, a 3.5-fold over-representation on exactly the region where a centered product sits --- and it classifies 6\% of external images correctly. The normalized model distributes attribution almost exactly uniformly (border 0.655 against a uniform 0.642; center 0.165 against 0.161) and classifies 80.7\% correctly. Across these two conditions, spatial concentration of attribution {\bfseries anti-correlates} with external specificity.
+
+Two readings are available and this metric cannot separate them. The mechanical one: the resolution bottleneck caps the short side at 128 px before the 224 $\times$ 224 resize, so the normalized model's input carries little fine spatial structure for Grad-CAM to localize, and diffuseness is an artifact of the operator rather than a property of the decision. The substantive one: the model's evidence for "authentic packaging" is genuinely distributed across the image rather than concentrated in one region.
+
+We take the mechanical reading to be the more likely of the two, and its consequence is a restriction on what this subsection may be used for. Grad-CAM localizes by weighting a convolutional feature map with gradients computed on it, so its spatial resolution is bounded by the spatial information that reaches that layer; an operator that deliberately removes high-frequency structure before the network sees anything therefore degrades the attribution as well as the input. {\bfseries We accordingly make no claim about {\itshape what the normalized models see}.} The honest statement is narrower and negative: after normalization, activation-based attribution on these models carries little diagnostic signal, and the near-uniform maps should be read as a limitation of the method under an aggressive spatial bottleneck rather than as evidence of distributed reasoning. This generalizes past our pipeline --- any preprocessing or architectural bottleneck that caps effective resolution should be expected to reduce the interpretability of Grad-CAM and its relatives, and reporting such maps without noting the bottleneck invites over-reading them.
+
+One conclusion survives under either reading, and it is a caution against a common practice: {\bfseries a visually convincing, product-centered Grad-CAM map is not evidence that a model has learned the intended task.} That claim rests on the {\itshape un-normalized} model, whose input is unaltered and whose attribution is therefore not in question --- it is strongly product-centered, and it classifies 6\% of external images correctly. The model whose attribution looks most like it is reading the product is the one that fails externally.
+
+{\bfseries A second attribution method, and the one place it disagrees.} Everything above rests on Grad-CAM: one method, one annotator, forty sampled maps, and a method this subsection has just argued is degraded by the bottleneck it runs behind. \url{modeling/occlusion_sensitivity.py} puts the same question to a method that shares none of those weaknesses. It slides a 64 px occluder over the network's 224 $\times$ 224 input on a 6 $\times$ 6 grid and records how far P(authentic) falls when each region is hidden; a region whose occlusion costs the model its "authentic" answer is a region that answer was resting on. The positive part of that surface is normalized to unit mass and summarized with the border statistic used above, so the two methods are comparable by construction. It needs no annotation, no categorization and no sampling, so it runs on all 150 external images for each model, from the persisted production checkpoints --- and each model reproduces its Split C specificity of record, 0.773 and 0.807, before any attribution number is reported. Where it and Grad-CAM disagree, on M4's correct external answers, neither settles the case; the region-substitution experiment of the main paper's Table~7 does, and in Grad-CAM's direction. Occlusion asks how much hiding one 64 px patch moves the score, which a decision spread over half the frame answers weakly wherever that half is; substitution destroys a whole region at once and is not subject to that.
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\columnwidth}{>{\hsize=0.857\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xcc>{\hsize=1.143\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\toprule
+{\bfseries Model, by outcome} & {\bfseries Images} & {\bfseries Border mass (95\% CI)} & {\bfseries Images above the 0.642 uniform reference} \\
+\midrule
+M3, called authentic (correct) & 116 & 0.760 [0.738, 0.782] & 96/116 \\
+M3, called counterfeit (wrong) & 34 & {\bfseries 0.856} [0.826, 0.886] & 33/34 \\
+M4, called authentic (correct) & 121 & 0.614 [0.585, 0.643] & 55/121 \\
+M4, called counterfeit (wrong) & 29 & {\bfseries 0.803} [0.738, 0.868] & 24/29 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+Three readings, and the third one changes a claim.
+
+{\bfseries The error pattern is confirmed, for both models.} On external images each model calls counterfeit, the evidence for "authentic" sits in the surround --- 0.856 and 0.803 against a uniform 0.642, and 33 of 34 and 24 of 29 individual images above that reference. For a two-class model, evidence for "authentic" concentrated away from the product is the same statement as evidence for "counterfeit" concentrated on it, which is what the categorization reported.
+
+{\bfseries M3's correct answers are confirmed too.} 0.760 [0.738, 0.782], with 96 of 116 images above the uniform reference: when M3 gets an external image right, it is responding to the surround. An independent method, over the whole set rather than ten sampled maps, agrees with the categorization.
+
+{\bfseries M4's correct answers are not.} Its border mass over the 121 images it calls authentic is 0.614 [0.585, 0.643], which does not separate from the 0.642 uniform reference, and 55 of 121 individual images exceed it --- half of them. Occlusion does not find M4's correct external answers resting on the background, and the categorization of ten sampled maps said it did.
+
+We report the disagreement rather than choose a winner, and we read the paper's claim down to what both methods support. Three things bear on which to weight. The occlusion measurement covers every external image rather than a seeded sample of ten, and it is causal rather than gradient-based, which are reasons to prefer it. Grad-CAM here runs behind the 128 px bottleneck this subsection has already argued degrades it, which is a reason to distrust the maps. And the two do not measure the same quantity: Grad-CAM weights a feature map by the gradient of the predicted-class logit, occlusion measures what removing a region actually costs, and a model can carry a gradient signature over the surround without a causal dependence on it. What we will not do is keep the stronger claim because one of the two methods supports it. On the evidence in this subsection the surround dependence stands for M3 and for both models' errors and is unresolved for M4's correct external answers, occlusion being a local test that a decision spread over a large region answers weakly. Section IV-E settles it with a global one: region substitution finds both backbones dependent on the surround, which is the direction the categorization read and the direction we report, and it is the reading that the two backbones behave {\itshape differently} that is withdrawn.
+
+The content-aware measure that would settle it is still the one Section V-C names --- attribution mass inside an annotated product box rather than inside a radial ring, which distinguishes "away from the center" from "not on the product" for images whose product is off-center. \url{scripts/23_build_product_box_tool.py} and \url{modeling/attribution_in_box.py} implement it end to end and are committed; what they need is the annotation pass, which has not been done.
+
+\subsection*{K. Error analysis}
+
+\begin{table*}[!t]
+\caption{Error counts pooled over both in-distribution test partitions (each model contributes 76 + 74 = 150 predictions).}
+\label{tab:7}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lccc}
+\toprule
+{\bfseries Model} & {\bfseries Predictions} & {\bfseries Errors} & {\bfseries Error rate} \\
+\midrule
+M1 hist+LR & 150 & 24 & 16.0\% \\
+M2 CNN & 150 & 20 & 13.3\% \\
+M3 MobileNetV3 & 150 & 10 & 6.7\% \\
+M4 EfficientNet-B0 & 150 & 7 & 4.7\% \\
+Pooled & 600 & 61 & 10.2\% \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+Thirty-six distinct images account for all 61 errors, and six are misclassified by three or more independent model/split combinations. Three of those six were examined individually in an earlier round of this project, and their diagnoses are informative: one is the recurring carton whose Grad-CAM attribution falls on background corners (a confound case); one is a sachet, well lit and legible with no visible defect, whose attribution {\itshape does} fall on the product's regulatory logo (a genuine visual-similarity case, i.e. real task difficulty rather than a shortcut artifact); and one is a blister image on which the model attends to the tablets themselves. A fourth image examined in that round is a 100 $\times$ 100 px thumbnail, far below the pool's typical resolution, misclassified only by the two weakest models --- a resolution/detail failure rather than an ambiguity.
+
+The qualitative diagnoses above were made on the pre-normalization models; the counts in Table S7 are recomputed from the current models of record. Six of 36 error images is a deliberate, non-exhaustive sample selected for cross-model agreement, not a random one.
+
+The shape of Table S7 is worth stating plainly against Section IV-D. In-distribution, these models make few errors and most of those errors are explicable. Externally, two of them were wrong on every single image. Both statements are true simultaneously, and a study reporting only the first would be describing a system that does not work as one that works well.
+
+\subsection*{L. Computational cost}
+
+\begin{table*}[!t]
+\caption{Measured cost, single image, CPU only (PyTorch 2.7.1, batch size 1, mean over the 74 Split B test images after warm-up). Preprocessing for M2--M4 is decode + three-way normalization + resize + tensor conversion; for M1 it is decode + resize + histogram. Weight memory is fp32 parameter storage.}
+\label{tab:8}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lccccccc}
+\toprule
+{\bfseries Model} & {\bfseries Trainable params} & {\bfseries Frozen params} & {\bfseries Weight memory} & {\bfseries Preprocess} & {\bfseries Forward} & {\bfseries Total} & {\bfseries Throughput} \\
+\midrule
+M1 hist+LR & 97 & 0 & < 0.01 MiB & 18.2 ms & 0.01 ms & 18.2 ms & 54.9 img/s \\
+M2 CNN & 23,938 & 0 & 0.09 MiB & 16.8 ms & 17.4 ms & 34.3 ms & 29.2 img/s \\
+M3 MobileNetV3 & 1,154 & 927,008 & 3.54 MiB & 16.8 ms & 71.9 ms & 88.7 ms & 11.3 img/s \\
+M4 EfficientNet-B0 & 2,562 & 4,007,548 & 15.30 MiB & 16.8 ms & 154.4 ms & 171.2 ms & 5.8 img/s \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+Two points bear on deployment. First, preprocessing --- including the entire three-way normalization --- costs under 17 ms per image and is negligible relative to any CNN forward pass; the correction proposed in this paper is essentially free at inference time. Second, the accuracy/cost ordering is unhelpful for a field deployment: M4 costs 5$\times$ M2's total latency and 166$\times$ its weight memory for an in-distribution difference that Table S5 cannot distinguish statistically, while M2 is the model with the best external specificity (Table~5).
+
+{\bfseries Training wall-clock time is not reported.} The original runs were not instrumented for it and the host repeatedly terminated long-running background processes during the project, so any retrospective figure would be unreliable. Epochs to convergence are reported instead (Table S9); every model trains on CPU in minutes, not hours, and the frozen-backbone models train on cached features so that an "epoch" involves no image decoding and no convolution.
+
+\begin{table*}[!t]
+\caption{Epochs run and best-validation-loss epoch (M1 is a convex fit with a deterministic solver and no epoch structure).}
+\label{tab:9}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+{\bfseries Model} & {\bfseries Split} & {\bfseries Epochs run} & {\bfseries Best epoch} & {\bfseries Best val loss} & {\bfseries Best val accuracy} \\
+\midrule
+M2 CNN & A & 10 & 5 & 0.336 & 0.870 \\
+M2 CNN & B & 13 & 8 & 0.259 & 0.924 \\
+M3 MobileNetV3 & A & 15 & 10 & 0.073 & 0.974 \\
+M3 MobileNetV3 & B & 37 & 36 & 0.057 & 0.962 \\
+M4 EfficientNet-B0 & A & 18 & 13 & 0.082 & 0.974 \\
+M4 EfficientNet-B0 & B & 18 & 14 & 0.045 & 0.987 \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+\subsection*{M. Calibration of the probability outputs}
+
+Everything above treats the models as decision rules at a fixed threshold. Any deployment as a triage tool would instead read the probability, so calibration is the property that decides whether the score can be thresholded at all. Table S10 quantifies it from the persisted per-image scores, on the leakage-free test partition and both acquisition-shift conditions, with no retraining.
+
+\begin{table*}[!t]
+\caption{Calibration on the leakage-free test partition and both acquisition-shift conditions, computed from the persisted per-image scores. Brier is the mean squared error of the predicted probability. ECE is expected calibration error over ten equal-width confidence bins; MCE is the worst single bin. Conf is mean confidence in the predicted class; conf $-$ acc is positive for overconfidence. Splits C and D are authentic-only, so what is computed on them is a specificity and their calibration is measured against one class; see the caveat below.}
+\label{tab:10}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lcccccccc}
+\toprule
+{\bfseries Model} & {\bfseries Split} & {\bfseries n} & {\bfseries Brier} & {\bfseries ECE} & {\bfseries MCE} & {\bfseries Conf} & {\bfseries Acc} & {\bfseries Conf $-$ acc} \\
+\midrule
+M1 hist+LR & B & 74 & 0.207 & 0.277 & 0.372 & 0.561 & 0.838 & $-$0.277 \\
+M1 hist+LR & C & 150 & 0.295 & {\bfseries 0.543} & 0.552 & 0.543 & 0.000 & {\bfseries +0.543} \\
+M1 hist+LR & D & 149 & 0.310 & {\bfseries 0.556} & 0.556 & 0.556 & 0.000 & {\bfseries +0.556} \\
+M2 CNN & B & 74 & 0.118 & 0.122 & 0.427 & 0.837 & 0.865 & $-$0.028 \\
+M2 CNN & C & 150 & 0.112 & 0.118 & {\bfseries 0.962} & 0.790 & 0.860 & $-$0.070 \\
+M2 CNN & D & 149 & {\bfseries 0.356} & {\bfseries 0.226} & {\bfseries 0.976} & 0.666 & 0.463 & {\bfseries +0.203} \\
+M3 MobileNetV3 & B & 74 & 0.052 & 0.064 & {\bfseries 0.852} & 0.960 & 0.932 & +0.028 \\
+M3 MobileNetV3 & C & 150 & 0.149 & 0.083 & 0.292 & 0.809 & 0.773 & +0.036 \\
+M3 MobileNetV3 & D & 149 & 0.183 & 0.117 & 0.228 & 0.801 & 0.725 & +0.076 \\
+M4 EfficientNet-B0 & B & 74 & 0.053 & 0.061 & 0.748 & 0.956 & 0.919 & +0.037 \\
+M4 EfficientNet-B0 & C & 150 & 0.132 & 0.098 & 0.381 & 0.781 & 0.807 & $-$0.025 \\
+M4 EfficientNet-B0 & D & 149 & 0.113 & 0.055 & 0.166 & 0.815 & 0.832 & $-$0.018 \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+Four readings, and the first is the one that matters.
+
+{\bfseries In-distribution calibration is as blind to the confound as in-distribution accuracy.} M3 and M4 return in-distribution ECEs of 0.064 and 0.061 --- numbers a practitioner would read as a usably calibrated model --- and M2 returns 0.122. Those same models are then wrong, at high confidence, on external data: M2's ECE triples to 0.226 on Split D with a Brier score three times its in-distribution value. Nothing measurable on the confounded partition anticipates this. Calibration is not an escape route from the paper's central problem; it is another quantity that the confound corrupts and that in-distribution evaluation cannot audit.
+
+{\bfseries Averages conceal the failure that matters; the worst bin does not.} M3's in-distribution ECE of 0.064 sits alongside an MCE of 0.852, and M2's excellent-looking Split C ECE of 0.118 alongside an MCE of 0.962. In both cases there exists a confidence bin in which the model is almost maximally confident and almost entirely wrong. Reporting ECE alone would hide exactly the behavior that makes an authentication tool dangerous, which is a confident false negative rather than an average miscalibration.
+
+{\bfseries M1 fails in an unusual and diagnostic direction.} In-distribution it is markedly {\itshape under}confident --- mean confidence 0.561 against accuracy 0.838, an ECE of 0.277 driven entirely by scores that hug the decision boundary. Externally the same hugging behavior becomes maximal overconfidence, because it is wrong on 150 of 150 and 149 of 149 images while still reporting confidences of 0.54--0.56. This is the same object as the synthetic-proxy result of Section S-I-I, where M1's ROC-AUC of 0.895 coexisted with accuracy pinned at exactly 0.500: its ranking carries some signal and its threshold carries none.
+
+{\bfseries M4 is the only model whose calibration survives both capture shifts} (0.061 $\rightarrow$ 0.098 $\rightarrow$ 0.055), which is consistent with its accuracy behavior in Table~5 and, like that result, says nothing about whether it is reading packaging --- Section S-I-J applies unchanged.
+
+One caveat bounds all of this. Splits C and D contain only authentic images, so accuracy on them is a specificity and the calibration statistics are measured against a single class; ECE and accuracy are therefore not independent quantities there in the way they are on Splits A and B, and the external rows should be read as a description of how confidently each model commits its false positives rather than as a full calibration curve. The balanced external test of Section IV-C is the two-class external set on which calibration would be measurable in the ordinary sense; it was scored once for the metrics of Table~4 and its calibration was not computed.
+
+\subsection*{N. Which axes matter, and are they complementary?}
+
+Table S11 and Fig. S11(a) ablate four axes on M4 within single runs.
+
+\begin{table*}[!t]
+\caption{Per-axis ablation on M4 (EfficientNet-B0). Rows are grouped by the script execution that produced them; compare only within a group. $\checkmark$ = axis applied. All three groups predate the seeding fix of Section S-I-G, so their absolute values carry the caveat stated in the text; group (ii)'s white-balance rows are additionally superseded by the deterministic rerun in Table S12, and are retained here only so that the two can be read against each other. The two comparisons this table is used for --- that the axes are complementary, and that white balance is not one of them --- are both reproduced post-fix in Table S12.}
+\label{tab:11}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lcccccc}
+\toprule
+{\bfseries Group} & {\bfseries Res.} & {\bfseries Bright.} & {\bfseries Comp.} & {\bfseries White bal.} & {\bfseries Split B accuracy} & {\bfseries Split C specificity} \\
+\midrule
+{\bfseries (i)} &  &  &  &  & 0.919 & 0.087 \\
+(i) & $\checkmark$ &  &  &  & 0.932 & 0.220 \\
+(i) &  & $\checkmark$ &  &  & 0.919 & 0.273 \\
+(i) & $\checkmark$ & $\checkmark$ &  &  & {\bfseries 0.959} & 0.627 \\
+{\bfseries (ii)} & $\checkmark$ & $\checkmark$ &  &  & 0.959 & 0.453 \\
+(ii) &  &  &  & $\checkmark$ & 0.932 & 0.107 \\
+(ii) & $\checkmark$ & $\checkmark$ &  & $\checkmark$ & 0.959 & 0.420 \\
+{\bfseries (iii)} &  &  &  &  & 0.919 & 0.053 \\
+(iii) &  &  & $\checkmark$ &  & 0.905 & 0.127 \\
+(iii) & $\checkmark$ & $\checkmark$ &  &  & 0.932 & 0.507 \\
+(iii) & $\checkmark$ & $\checkmark$ & $\checkmark$ &  & 0.932 & {\bfseries 0.780} \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+Four conclusions.
+
+{\bfseries Each of resolution, brightness and compression helps alone, and each helps modestly.} Individually they take external specificity from 5--9\% to 22.0\%, 27.3\% and 12.7\% respectively --- real effects, none sufficient.
+
+{\bfseries They are strongly complementary, not redundant.} Resolution and brightness together give 62.7\% in group (i) against 22.0\% and 27.3\% alone: slightly more than additive. Adding compression in group (iii) takes 50.7\% to 78.0\%. Each axis recovers something the others do not, which is what one expects if the underlying confound is a {\itshape capture pipeline} expressed simultaneously through several correlated statistics rather than a single one.
+
+Every group in Table S11 predates the seeding fix of Section S-I-G, which matters more for this claim than for the others because it is the one the correction rests on. It is reproduced post-fix, and by a script written for a different purpose: the white-balance rerun of Table S12 contains both a two-way and a production three-way condition in one deterministic execution, and returns 0.500 against 0.820. The third axis adds 32 points there against the 27 recorded here, so the complementarity conclusion does not depend on the compromised runs even though the exact decimals do.
+
+{\bfseries White balance is ruled out, and the test was repeated to make sure of it.} It was a plausible fourth axis: the Kaggle pool has a measurably warm cast (channel means R:G:B $\approx$ 1 : 0.94 : 0.86) against the external set's more neutral 1 : 0.93 : 0.93. The original test of it, however, was run before the per-pass seeding defect of Section S-I-G was fixed, and it compared against a two-way pipeline that compression had not yet joined --- so it rejected the axis on a difference of 3.3 points using a harness whose spread on an unchanged condition was 17. That is not a basis for excluding anything, so the experiment was rebuilt with per-pass seeding and the recorded learning rate, and rerun against the pipeline that actually ships, with its own same-run baselines (Table S12).
+
+The conclusion survives, more firmly than before. Gray-world normalization applied alone leaves external specificity at 0.067, essentially the unnormalized baseline. Added to the production three-way operator it moves external specificity from 0.820 to 0.780. Added to the two-way operator --- the comparison the original experiment attempted --- it moves 0.500 to 0.347, a decrement four times larger than the one originally reported. Both combinations point the same way, and the axis buys nothing in either.
+
+\begin{table*}[!t]
+\caption{Gray-world white balance as a fourth axis. M4 (EfficientNet-B0), all five conditions from one script execution after the seeding fix, so all rows are directly comparable. WB is composed with the other photometric operator, before the compression bottleneck.}
+\label{tab:12}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lccc}
+\toprule
+{\bfseries Condition} & {\bfseries Operators} & {\bfseries Split B test accuracy} & {\bfseries Split C specificity} \\
+\midrule
+Production three-way & R, B, C & 0.919 & {\bfseries 0.820} \\
+White balance alone & W & 0.905 & 0.067 \\
+Production three-way + WB & R, B, W, C & 0.932 & 0.780 \\
+Two-way & R, B & 0.919 & 0.500 \\
+Two-way + WB & R, B, W & {\bfseries 0.960} & 0.347 \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+Three things are worth taking from this beyond the axis itself. A real, measurable, dataset-wide difference between the sources need not be part of the mechanism, which is an argument for testing candidate axes rather than reasoning about them. A rejection is a claim and needs a harness good enough to support it; this one did not have one until it was rerun, and the corrected numbers happen to agree, which was not guaranteed. And the two-way-plus-WB condition is a third instance of the inversion documented in Section S-I-X: it has the highest in-distribution accuracy of the five (0.960) and the second-lowest external specificity (0.347).
+
+{\bfseries Robustness and in-distribution accuracy are not in tension here.} The best external condition in group (i) is also the best in-distribution condition in that group (0.959), and in group (iii) the three-way condition matches the two-way condition in-distribution (0.932 both) while adding 27 points externally. Removing shortcut access did not force a trade-off; on this data it improved both, presumably because the removed variance was class-correlated noise with respect to the intended task.
+
+\begin{figure*}[!t]
+\centerline{\includegraphics[width=\textwidth]{figures/fig10_ablation.pdf}}
+\caption{(a) M4 within-run ablation of the three retained axes. (b) Change in external specificity under two-way and three-way normalization, per model.}
+\label{fig:11}
+\end{figure*}
+
+
+\subsection*{O. Is the correction architecture-dependent?}
+
+Yes, and the answer changed twice during this study, which is itself the methodological lesson.
+
+\begin{table*}[!t]
+\caption{Normalization extended to all four models. Two-way = resolution + brightness; three-way adds compression. Each row's baseline and normalized numbers come from the same script execution. M4's three-way row comes from the single-model experiment that introduced the axis (group (iii) of Table S11). Both the two-way and the three-way executions predate the seeding fix of Section S-I-G, so every number in this table carries that caveat; each row's within-run baseline-to-normalized comparison, which is what the table is used for, is unaffected.}
+\label{tab:13}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{ccc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\toprule
+{\bfseries Model} & {\bfseries Two-way $\Delta$ external} & {\bfseries Three-way $\Delta$ external} & {\bfseries Three-way normalized: Split B / Split C} \\
+\midrule
+M1 hist+LR & +0.000 (0.000 $\rightarrow$ 0.000) & +0.000 (0.000 $\rightarrow$ 0.000) & 0.541 / 0.000 \\
+M2 CNN & +0.847 (0.000 $\rightarrow$ 0.847) & {\bfseries +0.913} (0.000 $\rightarrow$ 0.913) & 0.838 / 0.913 \\
+M3 MobileNetV3 & $-$0.213 (0.733 $\rightarrow$ 0.520)* & +0.060 (0.753 $\rightarrow$ 0.813) & 0.946 / 0.813 \\
+M4 EfficientNet-B0 & +0.540 (0.087 $\rightarrow$ 0.627) & +0.727 (0.053 $\rightarrow$ 0.780) & 0.932 / 0.780 \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+
+* Every condition in this table predates the seeding fix of Section S-I-G, but this is the one whose {\itshape sign} the fix later reversed, so treat its magnitude as unverified rather than merely imprecise.
+
+The final column of Table S13 does not reproduce Table~5, and the difference is expected rather than a discrepancy to reconcile: Table~5 reports the production pipeline, Table S13 reports standalone single-run ablation scripts. For M3 the two read 0.773 and 0.813 externally, for M4 0.807 and 0.780, and for M2 0.860 and 0.913. Only Table~5's column is the result of record. We report both rather than silently dropping the ablation's absolute values, because the within-run deltas those runs measure are the ablation's actual claim and are unaffected.
+
+Two further caveats attach to the M2 rows specifically. Both ablation scripts trained M2 at 3 $\times$ 10\textsuperscript{-}\textsuperscript{4} --- the same stale constant described in Section S-I-G --- so their absolute values are not comparable to M2's production numbers in Table~5 (which use the recorded 1 $\times$ 10\textsuperscript{-}\textsuperscript{3}). Because baseline and normalized conditions within a single run share that learning rate, the {\itshape within-run} comparison each row reports is unaffected, which is the claim the ablation makes; the scripts now read the recorded rate, so a re-run would refresh the absolute values.
+
+Under two-way normalization, M3 was the sole model the correction appeared to {\itshape harm}, and a decomposition run isolated the responsible axis: brightness normalization alone took M3 from 0.800 to 0.560 externally, while resolution normalization alone was neutral-to-positive (0.800 $\rightarrow$ 0.847), and the combination (0.400) was worse than either alone --- a negative interaction rather than two additive effects. On the strength of that, an earlier version of this analysis concluded that the correction was "architecture-dependent, helps two of four, harms one".
+
+Adding the compression axis reversed the sign for M3 (+0.060, improving on both axes simultaneously), and the production pipeline --- after the seeding fix --- puts M3 at 0.773 externally against a 0.667 pre-normalization baseline (Table~5). The most likely reading is that the harmful interaction was specific to the two-way mixture rather than intrinsic to normalizing this model's inputs. But we note that M3's answer to "does normalization help?" came out positive, negative and flat across three runs before the seeding bug was diagnosed, and that only the three-way production path has been verified deterministic. {\bfseries M3 is the one model for which we would want an independent replication before treating the sign as settled}, and Section S-I-U now supplies one: across five seeds the normalized and un-normalized conditions differ by 0.9 points against standard deviations of about 5, so there is no sign to settle.
+
+\subsection*{P. The baseline that has nothing else: M1}
+
+M1 is unaffected by normalization externally (0.000 either way) and its in-distribution accuracy {\itshape collapses} under it, from 0.838 to 0.541 --- barely above the 0.527 majority-class rate of its test partition. This is the cleanest single result in the study.
+
+A 96-dimensional color histogram has almost nothing to work with once mean brightness is standardized away, because --- per the exact linear logit decomposition of Section IV-A --- mean brightness, expressed through the near-white bin, {\itshape was} essentially its entire decision function. Fig. S12 shows both halves of that decomposition: 93 of the 96 coefficients lie within $\pm$0.35 of zero, and the three near-white bins carry mean |$\varphi$| of 0.079--0.082 on the Split B test partition against $\le$ 0.002 for the remaining 93.
+
+\begin{figure*}[!t]
+\centerline{\includegraphics[width=\textwidth]{figures/fig12_model1_attribution.pdf}}
+\caption{(a) M1's logistic-regression coefficients across the 32 intensity bins of each RGB channel; the near-white bin dominates all three channels. (b) The eight features with the largest mean absolute logit contribution on the Split B test partition. Attribution is exact for this model, not sampled. Removing the confound does not unlock latent signal in this model, because there was no latent signal to unlock. We therefore report M1 as a clean negative result: {\bfseries on this benchmark, a classical color-statistics baseline is structurally incapable of the intended task, and its 83.8\% accuracy is a measurement of the confound rather than of packaging authenticity.} We considered enlarging its feature set (texture descriptors, color moments, edge statistics) and decided against it: the model shows zero external signal across every condition tested in this study, in both external evaluations, and a larger hand-crafted feature set is unlikely to overturn a pattern that consistent. The negative result is the useful finding.}
+\label{fig:12}
+\end{figure*}
+
+
+This has an uncomfortable implication, and it is worth being precise about its reach. On {\itshape this} dataset it is direct, and the header-only oracle of Table~2 makes it exact rather than suggestive: three header fields with no pixel decoded reach 100\% on the leakage-free partition, and a color histogram reaches 83.8\%. There is no residual on this pool that a convolutional network is needed to explain. M1's 83.8\% is the more conservative statement of the same point and the one we would defend if the oracle were disputed, but the oracle is the tighter bound. Beyond this dataset the implication is conditional rather than established: it applies to any collection in which the two classes were produced by different pipelines, which Section II-A finds is the majority of the located prior work --- [26] edits authentic images to create its counterfeit class, [27] generates it --- but we have not audited those collections and do not claim their reported figures are confounded. We claim they are unaudited, and that the audit is cheap.
+
+\subsection*{Q. The architectural ablation implicit in M2}
+
+M2 carries an architectural observation that is worth separating from the confound results. It scores 0.865 on the leakage-free split --- no statistically significant difference was detected between it and any other model in the roster on the shared internal test partition (Table S5) --- and it is the {\itshape best} model externally after correction (0.860, Table~5), with the only negative generalization gap anywhere in this study. It reaches that with 23,938 parameters and no pretraining.
+
+The comparison this licenses is a narrow one, and we state it narrowly. A \texttt{flatten $\rightarrow$ dense(128)} head on this trunk would add roughly 6.4 M parameters, some 267 times the rest of the network, trained on 357 images. Nothing in these results suggests that capacity would buy anything: the accuracy ceiling on this pool is set by the confound (Section IV-A), not by model capacity. Parameter count is the wrong axis on data like this.
+
+What we no longer claim is that M2 generalizes best. On Split C alone it does, by a clear margin. On the second capture condition of Section IV-D it collapses to 0.463 while both frozen backbones hold, which makes its Split C advantage a property of that particular capture condition rather than of the model. The defensible version of the architectural observation is therefore weaker and more interesting: a 23,938-parameter network from scratch can match far larger pretrained models in-distribution and on one external set, and still fail to carry that to a second --- so neither in-distribution accuracy nor a single external evaluation predicts which model to deploy.
+
+\subsection*{R. Are the three constants load-bearing?}
+
+Eqs. (5)--(7) of the main paper fix three constants: a 128 px short side, a target mean of 0.5 and JPEG quality 40. Only the first has a justification derived from the training distribution alone. A reviewer may reasonably suspect that a recovery from 6.0\% to 80.7\% rests on three fortunate choices, so we varied each one around its production value, on M4, inside a single script execution (Table S14).
+
+\begin{table*}[!t]
+\caption{Sensitivity of the three-way normalization to its constants. M4 (EfficientNet-B0), all nine conditions from one script execution, so all rows are directly comparable. The production triple is (128, 0.5, 40).}
+\label{tab:14}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lccc}
+\toprule
+{\bfseries Varied} & {\bfseries Value} & {\bfseries Split B test accuracy} & {\bfseries Split C specificity} \\
+\midrule
+--- (production) & (128, 0.5, 40) & 0.919 & 0.820 \\
+Short side & 96 & 0.905 & {\bfseries 0.873} \\
+Short side & 192 & 0.932 & 0.620 \\
+Short side & 256 & 0.905 & 0.480 \\
+Brightness target & 0.4 & 0.932 & 0.727 \\
+Brightness target & 0.6 & 0.932 & 0.773 \\
+JPEG quality & 25 & 0.946 & 0.807 \\
+JPEG quality & 60 & 0.932 & 0.747 \\
+JPEG quality & 85 & 0.932 & 0.660 \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+Four conclusions, and they largely defuse the objection.
+
+{\bfseries Nothing here is a knife edge.} Every axis varies smoothly. External specificity moves monotonically with the short side (0.873 $\rightarrow$ 0.820 $\rightarrow$ 0.620 $\rightarrow$ 0.480 across 96--256 px) and monotonically with JPEG quality (0.807 $\rightarrow$ 0.820 $\rightarrow$ 0.747 $\rightarrow$ 0.660 across 25--85), and shallowly and non-monotonically with the brightness target (0.727 / 0.820 / 0.773 across 0.4--0.6). There is no narrow window in which the correction works; the reported result sits on a broad plateau.
+
+{\bfseries In-distribution accuracy is insensitive to all three.} Split B accuracy stays within 0.905--0.946 across every condition, against an external range of 0.480--0.873. The constants trade almost nothing in-distribution while moving external specificity by nearly 40 points --- which is the same asymmetry, now measured across a hyperparameter sweep rather than across an architecture, that makes in-distribution evaluation on a confounded dataset uninformative.
+
+{\bfseries The production constants are conservative, not tuned.} A 96 px short side beats the 128 px we report (0.873 vs. 0.820), and JPEG quality 25 is level with quality 40. The headline figure therefore understates what the method achieves; we have not re-run the paper around the better value, because choosing constants by their external score is precisely the target-distribution leakage that Section S-II warns about. The 128 px threshold retains a defense the 96 px one does not: it was set from the training pool's own 10th percentile without consulting Split C.
+
+{\bfseries The two axes that behave monotonically are the two that impose an information bottleneck.} Capping resolution and forcing a lossy re-encode both destroy information, and doing more of either helps externally until in-distribution detail starts to matter. Rescaling brightness only shifts a location parameter, destroys nothing, and correspondingly has a flat optimum. That distinction predicts which future candidate axes are worth sweeping and which need only be applied: bottlenecks have a tunable strength, alignments do not.
+
+One reading of the diffuse attribution reported in Section S-I-J is that the bottleneck simply destroys the fine spatial structure a genuine packaging classifier would need, leaving a model that cannot localize anything. This sweep is the direct test of that reading, and it does not support it. If the 128 px cap were already past the point where authentication-relevant detail survives, tightening it to 96 px should cost external specificity; instead 96 px is the best external condition in this sweep (0.873), for 1.4 points of in-distribution accuracy. Detail is being removed, and removing more of it continues to help up to the limit tested. What the sweep cannot settle is the complementary possibility --- that the intended task needs detail this pipeline never had access to, in which case both the confound and the signal are being suppressed together and only the confound is being missed. Distinguishing those requires a source whose two classes share an acquisition pipeline, which Section V-D lists as the outstanding acquisition.
+
+\subsection*{S. Deriving the axes without the external set}
+
+Sections S-I-N to S-I-X establish what the correction recovers, that it is robust to its constants and that it is sensitive to its composition order, but not that it could have been {\itshape found} without the external set. The axes were originally identified by comparing the Kaggle pool against Split C (Table~1), which is target-distribution information no practitioner deploying a model would possess. This section removes that dependency, because it is the most serious objection to the correction and, until now, an untested one.
+
+The procedure is the audit of Section IV-A turned into an axis-selection rule and confined to the training data. Using the {\bfseries Split B training partition alone} --- 357 images, 336 product groups, with grouped 5-fold cross-validation {\itshape inside} that partition so that neither the validation partition nor the test partition nor Split C is consulted at any point --- we fit a one-feature classifier to each acquisition statistic a practitioner could compute from their own files, and normalize every axis whose balanced accuracy clears a threshold declared in advance (0.65). Table S15 gives the result.
+
+\begin{table*}[!t]
+\caption{Train-only axis derivation. Grouped 5-fold cross-validated balanced accuracy of a one-feature classifier fitted inside the Split B training partition only. No validation, test or external data is used. Chance is 0.500; the pre-declared normalization threshold is 0.650.}
+\label{tab:15}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{ccc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\toprule
+{\bfseries Acquisition statistic} & {\bfseries Balanced accuracy (sd)} & {\bfseries Fires?} & {\bfseries Normalization it implies} \\
+\midrule
+File format (PNG vs. JPEG) & 1.000 (0.000) & yes & re-encode all inputs $\rightarrow$ compression axis \\
+Encoded file size & 0.985 (0.019) & yes & fixed-quality re-encode $\rightarrow$ {\bfseries compression axis} \\
+Short-side resolution & 0.958 (0.018) & yes & short-side cap $\rightarrow$ {\bfseries resolution axis} \\
+Aspect ratio & 0.809 (0.019) & yes & already removed by the square 224 $\times$ 224 input resize \\
+Mean brightness & 0.777 (0.067) & yes & rescale to fixed target $\rightarrow$ {\bfseries brightness axis} \\
+Color balance (R:B) & 0.684 (0.051) & yes (marginal) & gray-world white balance \\
+Color balance (R:G) & 0.610 (0.044) & no & --- \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+
+{\bfseries The train-only procedure nominates the axes we used.} Resolution, brightness and compression are all selected, and they are selected in an order that matches their measured contribution in Section S-I-N rather than their {\itshape t}-statistics. Nothing in this table required knowing that Split C exists, let alone what it looks like. The correction of (8) of the main paper is therefore derivable from the training set alone, and the concession this paper previously made --- that the train-only variant was untested --- no longer holds.
+
+{\bfseries Its two extra nominations are both informative rather than embarrassing.} Aspect ratio fires at 0.809, and is already neutralized by the square input resize that this and essentially every comparable pipeline applies before the first convolution; the audit flags a real confound that standard practice happens to remove for unrelated reasons, which is worth knowing but implies no new operator. Color balance fires marginally on one of its two ratios (0.684 against a 0.650 threshold) --- and white balance is precisely the axis Section S-I-N tested and {\bfseries ruled out}, finding it useless alone (0.067 external, Table S12) and mildly harmful in combination. The one false positive the train-only rule produces is thus a candidate we independently showed does no good, at the cost of one ablation run.
+
+Two honest qualifications remain. The threshold of 0.65 is a judgement, not a derived quantity; a stricter 0.75 would have excluded color balance and retained all three axes used, and a looser 0.55 would have admitted both color ratios. And this demonstrates {\itshape derivability on one dataset}, not that a train-only audit will nominate the right axes generally --- in particular it cannot nominate an axis that is confounded in the deployment distribution but not in the training distribution, which is a real blind spot and not one any training-set procedure can address. What it does establish is that on this dataset the correction required no target knowledge, so the reported recovery is not an artifact of having seen the answer.
+
+\subsection*{T. A taxonomy of provenance defects, and what to check for each}
+
+The two datasets audited here failed in different ways, and a third near-failure was caught during construction of our own evaluation set. Taken together they suggest that "provenance confound" is not one defect but a small family, each member requiring a different check. We set out the four we encountered, with the cheapest test that detects each, in the order we would run them.
+
+{\bfseries Type A --- acquisition-statistic confound.} The classes differ in format, resolution, compression, brightness or aspect ratio because they were captured or encoded by different processes. {\itshape Detection:} the provenance audit of Section IV-A --- fit the intended classifier to metadata alone. {\itshape Instance:} the Kaggle dataset, audit accuracy 1.000, with even aspect ratio alone at 0.803. {\itshape Cost when undetected:} in-distribution 0.919, external 0.060. {\itshape Partial repair:} the label-free normalization of Section III-F, architecture-dependent.
+
+{\bfseries Type B --- content or modality confound.} The classes differ in what kind of {\itshape document} they are, not in the labeled property: one class is product photography and the other is bulletin graphics, screenshots, catalog renders or marketing material --- in the worst case with the ground-truth label rendered as text in the pixels. {\itshape Detection:} human inspection of a sample of each class, and of the extremes of any metadata distribution. Metadata may be silent, and normalizing a dataset for release makes it more so. {\itshape Instance:} the Roboflow dataset, 57/57 against 263/263, audit accuracy only 0.717. Also, in smaller degree, the 47 watermarked stock-catalog images in the Kaggle pool, 47/47 authentic-labeled. {\itshape Cost when undetected:} unbounded --- a model can reach 100\% by reading the printed label. {\itshape Repair:} exclusion; no preprocessing helps.
+
+{\bfseries Type C --- confound reintroduced by source selection.} The dataset is clean, but a {\itshape derived} set --- an external test set, a synthetic negative class, an augmented subset --- is drawn from a differently-acquired part of the source. {\itshape Detection:} recompute the Type A statistics on every partition after construction, not only on the training pool. {\itshape Instance:} our own first synthetic proxy drew its base images from a different device subset of the external source, differing more than twofold in brightness (Section S-I-B), which would have reproduced the confound under study via selection rather than generation. It was caught by re-running our own audit and fixed before use. {\itshape Cost when undetected:} a fabricated positive result, published as a validation of the very method under test.
+
+{\bfseries Type D --- degenerate shipped evaluation protocol.} The dataset's own partition files do not partition. {\itshape Detection:} intersect the filename sets. {\itshape Instance:} the Kaggle archive, whose \texttt{train} folder contains all 661 images while \texttt{val} and \texttt{test} are proper subsets of it (Section III-A). {\itshape Cost when undetected:} test accuracy is training accuracy. {\itshape Repair:} build your own split; treat a shipped split as a claim to be verified, not a service.
+
+{\bfseries Type E --- a real content difference that the audit reads as a confound.} This is the audit's false-positive mode rather than a defect of the dataset, and we add it because the cross-domain survey produced one. The classes differ in a low-level statistic for reasons intrinsic to the objects, not to how they were acquired. {\itshape Detection:} compare the audit's axes against each other. Storage format is never a property of the photographed object, so a high score on format is specific to acquisition; encoded size, resolution and aspect ratio all mix acquisition with content and are correspondingly ambiguous. {\itshape Instance:} the BHSig260 signature corpus (Section S-I-W), where both classes are written on the same paper and scanned by one procedure --- format returns exactly 0.500, as it should, while encoded size returns 0.843, almost certainly because forged signatures differ from genuine ones in stroke complexity and therefore in ink coverage, which drives the compressed size of a bitonal scan. {\itshape Consequence:} the audit's output is not a verdict. It says a trivial statistic separates the classes; establishing that the statistic is an {\itshape acquisition} artifact is a second step, and the format axis is the one that most nearly settles it on its own.
+
+Two cross-cutting lessons follow, and they are the ones we would most want carried into other application areas.
+
+{\bfseries Publisher-side tidying suppresses the symptom, not the disease.} The Roboflow archive had been resized to a uniform 640 $\times$ 640 and re-encoded to a single format before release. Those are ordinary, well-intentioned preparation steps, and their effect is to erase exactly the traces the cheap audit reads while leaving a total Type B confound untouched. A curated dataset is therefore {\itshape harder} to audit than a raw one, and a clean audit result on a normalized dataset carries almost no information. Where an archive has been normalized, the audit should be treated as inapplicable rather than as passed.
+
+{\bfseries Rank confounds by discriminability, not by effect size.} Brightness gave the largest {\itshape t}-statistic in the case-study dataset ({\itshape t} = 17.0) and was the {\itshape weakest} single predictor of the label (0.716 balanced accuracy, against 1.000 for format and 0.994 for file size). A large difference in means with overlapping distributions is less dangerous than a small difference with none. Since fitting a one-feature classifier costs no more than a {\itshape t}-test, there is no reason to use the {\itshape t}-test for this purpose.
+
+\subsection*{U. Seed-to-seed variance}
+
+Every number reported elsewhere in this study comes from one training run at seed 42, and earlier versions of this document listed seed-to-seed variance as unmeasured. It is now measured, for the conditions the paper's argument rests on. \url{modeling/seed_sweep.py} re-runs M2, M3 and M4 at five seeds (42--46), under the production pipeline and under the un-normalized baseline, and evaluates each on the Split B test partition and on both external sets. Each seed runs in its own process with the seed fixed before any module derives from it, so no run inherits another's RNG state --- the defect of Section S-I-G in a new form. M1 is excluded: it is a convex fit with a deterministic solver, no random initialization and no augmentation, so its accuracy is identical under every seed.
+
+The harness reproduces the values of record. At seed 42 the normalized condition returns M2 0.865 / 0.860 / 0.463, M3 0.932 / 0.773 / 0.725 and M4 0.919 / 0.807 / 0.832 on Split B, C and D --- the published numbers exactly, from the pipeline as it now stands. Mean $\pm$ sample standard deviation across the five seeds:
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+{\bfseries Model} & {\bfseries Condition} & {\bfseries Split B test} & {\bfseries Split C} & {\bfseries Split D} \\
+\midrule
+M2 CNN & baseline & 0.854 $\pm$ 0.018 & 0.051 $\pm$ 0.103 & 0.176 $\pm$ 0.201 \\
+M2 CNN & normalized & 0.824 $\pm$ 0.042 & {\bfseries 0.909 $\pm$ 0.038} & 0.627 $\pm$ 0.135 \\
+M3 MobileNetV3 & baseline & 0.941 $\pm$ 0.007 & 0.715 $\pm$ 0.057 & 0.644 $\pm$ 0.043 \\
+M3 MobileNetV3 & normalized & 0.938 $\pm$ 0.007 & 0.724 $\pm$ 0.047 & 0.685 $\pm$ 0.044 \\
+M4 EfficientNet-B0 & baseline & 0.905 $\pm$ 0.000 & 0.100 $\pm$ 0.026 & 0.240 $\pm$ 0.048 \\
+M4 EfficientNet-B0 & normalized & 0.935 $\pm$ 0.011 & {\bfseries 0.860 $\pm$ 0.034} & 0.878 $\pm$ 0.031 \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+
+Four readings, and the third and fourth are the ones that change how a claim should be stated.
+
+{\bfseries The correction's effect on M2 and M4 is an order of magnitude larger than seed variance.} M2's external specificity moves from 0.051 $\pm$ 0.103 to 0.909 $\pm$ 0.038 and M4's from 0.100 $\pm$ 0.026 to 0.860 $\pm$ 0.034. Those are 86- and 76-point shifts against standard deviations of three to ten points, and the two distributions do not come close to touching: the worst normalized seed beats the best baseline seed by a wide margin in both models. The paper's central quantitative claim does not depend on a fortunate initialization.
+
+{\bfseries M3's does not separate from seed variance at all, which settles a question this study left open.} Its baseline is 0.715 $\pm$ 0.057 and its normalized condition 0.724 $\pm$ 0.047 --- a difference of 0.9 points against standard deviations five times that. The five normalized values are 0.773, 0.733, 0.647, 0.733, 0.733 and the five baseline values 0.667, 0.773, 0.673, 0.780, 0.680; the two sets interleave. Section IV-E declines to claim a normalization benefit for M3 on the strength of overlapping Wilson intervals and a history of sign changes. That decision is now supported by a direct measurement rather than by caution, and the honest statement is stronger than the one it replaces: for M3 the correction has no effect this design can detect, and the sign changes recorded in Section S-I-O are what a 5-point standard deviation produces when it is read as signal.
+
+{\bfseries M2's collapse on the second capture shift is real in direction and overstated in magnitude by the reported run.} Across seeds M2 falls from 0.909 on Split C to 0.627 $\pm$ 0.135 on Split D, a mean drop of 28 points, while M3 moves $-$3.9 and M4 +1.8. The qualitative finding of Section IV-D therefore holds across seeds: the from-scratch CNN does not carry its corrected external specificity to a second capture condition and the two frozen backbones do. But the specific 39.7-point drop the paper reports is the largest of the five, because seed 42 returns M2's lowest Split D value of the five (0.463, against 0.738, 0.792, 0.584 and 0.557), and M2's Split D standard deviation of 0.135 is by far the largest in the table. The drop should be read as tens of points with wide run-to-run spread, not as 39.7.
+
+{\bfseries Seed 42 is not a central draw, and in different directions for different models.} Its Split C values are the {\itshape minimum} of five for M2 (0.860 against a mean of 0.909) and for M4 (0.807 against 0.860), and the {\itshape maximum} of five for M3 (0.773 against 0.724). The reported figures therefore understate the correction for the two models it demonstrably helps and flatter it for the model where it cannot be shown to help at all. We have not restated the paper around the means: seed 42 was fixed before any of this existed, every artifact and checkpoint of record was produced under it, and re-centering the manuscript on a five-seed mean would trade a reproducible number for a slightly better one. The variance is reported here so that the single-run figures can be read with it.
+
+Two limits on this table. It covers the production and baseline conditions only, not the per-axis, constant or ordering ablations, which remain single executions --- six orderings at five seeds is thirty further training runs, and the claim they support is a 28-point separation between two groups, an order of magnitude beyond anything in this table. And five seeds give a standard deviation with roughly 50\% relative uncertainty of its own, so these figures bound the variance rather than estimate it precisely. Neither limit affects the readings above, all of which turn on separations far larger than the quantities being estimated.
+
+\begin{figure*}[!t]
+\centerline{\includegraphics[width=\textwidth]{figures/fig08_external_generalisation.pdf}}
+\caption{In-distribution authentic accuracy against external specificity before and after three-way normalization, per model, for the run of record. It plots Table~5 of the main paper; M1 bypasses the normalized pipeline by design, so its two Split C bars are the same 0.0\% measurement shown twice.}
+\label{fig:13}
+\end{figure*}
+
+
+Fig. S13 plots the run of record behind those means.
+
+{\bfseries The archived pre-normalization run, and why it is superseded rather than co-equal.} Earlier versions of this paper reported the baseline column of the main paper's Table~5 from an archived production run made immediately before three-way normalization became the default, which returned 0/150 for M1 and M2, 104/150 for M3 and 5/150 for M4. Those figures are not lost and never were: the run's own log, with its full per-epoch training curves, is committed at \url{modeling/results/split_c_eval_log.txt} and has been present since the repository's first commit and in every archived release. \url{paper/scripts/external_intervals.py} now parses the counts from that log rather than carrying them as constants, so they are traceable rather than transcribed.
+
+What could not previously be explained was why the current harness returns different values for the same nominal condition. It can be now, and the explanation is that the archived run was produced by a pipeline carrying the two defects of Section S-I-G, both since fixed. Comparing the archived per-epoch curves against the current harness at seed 42, under nominally identical seeds and hyperparameters:
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\columnwidth}{cccc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\toprule
+{\bfseries Model} & {\bfseries Archived epoch 0} & {\bfseries Current epoch 0} & {\bfseries Divergence} & {\bfseries Defect that accounts for it} \\
+\midrule
+M2 CNN & 0.6157 / 0.675 & 0.5777 / 0.709 & large & learning rate hard-coded at 3 x 10\^{}-4 \\
+M3 MobileNetV3 & 0.4661 / 0.836 & 0.4680 / 0.820 & small & unseeded augmented feature passes \\
+M4 EfficientNet-B0 & 0.3821 / 0.871 & 0.3788 / 0.867 & small & unseeded augmented feature passes \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+Train loss and train accuracy at the first epoch, before early stopping can differ. The pattern separates the models exactly along the line the two defects predict, and the two groups are disjoint. M2 is the one model whose learning rate the pre-fix external-evaluation script hard-coded, and it is the one model whose trajectory diverges immediately and substantially. M3 and M4 are the two models that consume the K = 3 cached augmented feature passes, which were unseeded before the fix, and their trajectories diverge by an order of magnitude less --- a perturbation of the training features rather than of the optimizer. Neither group shows the other's signature.
+
+This also explains the one observation that a seed effect alone does not. M4's archived 5/150 lies {\itshape below} all five re-derived seeds, which span 9/150 to 20/150. The seed sweep varies the training seed while holding the now-seeded augmentation scheme fixed, so it does not span the source of variation the archived run was subject to; a draw from outside its range is what one would expect, not an anomaly.
+
+We therefore treat the archived run as {\bfseries superseded} rather than as a competing measurement, and the main paper's Table~5 reports both of its columns from the current deterministic pipeline at seed 42, so that the baseline and normalized columns differ only by the operator of (8). The archived figures are retained here as an audit trail and are quoted nowhere as a result. Nothing in the argument moves: every measurement of the baseline condition, archived or current, agrees that it is near zero for M1, M2 and M4 and around 0.7 for M3, and every measurement of the corrected pipeline agrees that it is not.
+
+\subsection*{V. A paired measurement of near-duplicate leakage}
+
+Section S-I-H bounds the recognition channel by counting and notes what the count leaves open. This section is the experiment that closes it, its design and its full output. \url{modeling/leakage_paired.py} builds the partition, runs it and writes the table.
+
+{\bfseries What has to be held fixed.} The quantity of interest is the effect of admitting a near-duplicate of a test image into training, and it is not what the Split A $-$ Split B delta measures: those two splits assign 230 of 510 images differently, so their difference mixes leakage with a change of test images. Holding the test set fixed and varying nothing but the mates isolates it. Two further controls matter. The arms must be the same size, or the comparison confounds leakage with training-set size; and they must carry the same class balance, or it confounds leakage with the class prior. Both are enforced by construction and asserted at run time (Table S16), together with the property that gives the design its name: the clean arm shares no product group with the test set, and the leaky arm's overlap with it is exactly the mates.
+
+\begin{table*}[!t]
+\caption{The paired leakage design. Built under a fixed design seed (20260829) independent of the training seed, so every training seed sees the identical partition and the pairing is exact. The pool has 480 product-identity groups over 510 images --- 26 of size 2 and 2 of size 3 --- so the 28 exposed test images are not a sample of the exposed images but all of them.}
+\label{tab:16}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lccc}
+\toprule
+{\bfseries Partition} & {\bfseries n} & {\bfseries Counterfeit} & {\bfseries Held by} \\
+\midrule
+Test --- exposed & 28 & 8 & neither arm \\
+Test --- unexposed & 46 & 27 & neither arm \\
+Mates & 30 & 8 & leaky arm only \\
+Substitutes & 30 & 8 & clean arm only \\
+Base train & 320 & 159 & both arms \\
+Validation & 56 & 28 & both arms \\
+{\bfseries Clean train total} & {\bfseries 350} & {\bfseries 167} & --- \\
+{\bfseries Leaky train total} & {\bfseries 350} & {\bfseries 167} & --- \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+M1 is excluded, for a different reason than in Section S-I-U: 97 parameters over a 96-bin color histogram cannot memorize an individual photograph, so the channel under test does not exist for it.
+
+\begin{table*}[!t]
+\caption{Leaky minus clean, five seeds (42--46), production pipeline. Accuracies are mean $\pm$ sample standard deviation across seeds; the difference and its 95\% interval come from a bootstrap over test images, resampling images rather than predictions so that both arms' verdicts on an image move together. McNemar is computed on the pooled discordant pairs.}
+\label{tab:17}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{ccccc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xc}
+\toprule
+{\bfseries Model} & {\bfseries Subset} & {\bfseries n} & {\bfseries Clean} & {\bfseries Leaky} & {\bfseries Difference (percentage points)} & {\bfseries McNemar {\itshape p}} \\
+\midrule
+M2 CNN & all & 74 & 0.865 $\pm$ 0.029 & 0.868 $\pm$ 0.018 & {\bfseries +0.3 [$-$1.9, +2.4]} & 1.000 \\
+M2 CNN & exposed & 28 & 0.936 $\pm$ 0.039 & 0.936 $\pm$ 0.016 & +0.0 [$-$2.9, +2.9] & 1.000 \\
+M2 CNN & unexposed & 46 & 0.822 $\pm$ 0.032 & 0.826 $\pm$ 0.027 & +0.4 [$-$2.2, +3.5] & 1.000 \\
+M3 MobileNetV3 & all & 74 & 1.000 $\pm$ 0.000 & 1.000 $\pm$ 0.000 & +0.0 [+0.0, +0.0] & 1.000 \\
+M4 EfficientNet-B0 & all & 74 & 0.987 $\pm$ 0.000 & 0.987 $\pm$ 0.000 & +0.0 [+0.0, +0.0] & 1.000 \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+
+{\bfseries What this establishes, and what it does not.} For M2, Table S17 establishes an effect indistinguishable from zero with an interval of roughly $\pm$2 points, on the whole test set and on both subsets separately --- so neither the recognition channel nor the indirect one is doing appreciable work. The two subsets are the point of the design: a difference confined to the exposed images would be recognition, and a difference on the unexposed ones would be the indirect channel that no counting argument can bound. Neither appears.
+
+For M3 and M4 the null is weaker than it looks, and we would rather say so than bank it. Both sit at or beside ceiling on this test set --- 1.000 and 0.987, at every seed and in both arms --- so the design has almost no room in which an effect could show. That ceiling is not a flaw in the experiment so much as a restatement of the paper's subject: on a pool where the label is perfectly predicted by acquisition, an in-distribution test partition is close to trivial, and there is little left for leakage to add. The interpretable measurement is M2's, which is also the only model here that learns its features rather than inheriting them.
+
+Two further limits are worth stating. The exposed subset is 28 images, which is every one the pool offers and still small; the $\pm$2.9-point interval on that subset is what the data support and no tighter statement should be read into the point estimate of 0.0. And this measures near-duplicate leakage as \texttt{pHash} clustering defines it (Section III-A). Two dissimilar photographs of the same physical package would not be grouped, so both the exposure count and this experiment address near-duplicate leakage specifically, not every sense in which two images might share a product.
+
+\subsection*{W. The provenance audit on datasets other than the case study}
+
+Section IV-A runs the audit on the case-study pool and summarizes what follows here in its Table~3. This section is the full record behind that summary: seven archives across four application areas, scored from public file listings alone, and then the second pharmaceutical dataset in the detail that establishes the audit's false-negative mode. Every number in the main paper's Table~3 is taken from Table S18 or Table S20 below, and the caveats on both apply to it unchanged. The two are reported in that order because the first tests whether the audit discriminates at all and the second tests what it misses.
+
+The capture statistics behind Table~1 of the main paper are plotted here rather than there, for space.
+
+\begin{figure*}[!t]
+\centerline{\includegraphics[width=\textwidth]{figures/fig03_capture_confound.pdf}}
+\caption{Distributions of the three confounded statistics. (a) Brightness: violin plots with group means labeled. (b) Short-side resolution, log scale, with medians. (c) File size, log scale, with means. The external set lies outside the range of both training classes on all three axes.}
+\label{fig:14}
+\end{figure*}
+
+
+{\bfseries The audit across application areas.} A survey is what would test the wider claim, and its first step costs nothing: Kaggle's public file-listing endpoint returns the path and encoded size of every file in a dataset without authentication, the path carries the class in the folder-per-class layout these archives use, and the extension carries the format --- so two of the four audit features can be fitted {\bfseries as the publisher shipped it, without downloading a single image} (Table S18).
+
+\begin{table*}[!t]
+\caption{The provenance audit run from public file listings alone, no images downloaded. Balanced accuracy under stratified 5-fold cross-validation; chance is 0.500. Format is the one-hot file extension, size is log encoded bytes. Ext-rule is the accuracy of the single deterministic rule "extension predicts class". Listings are paginated and the endpoint stops at 2,400 files, so large archives are sampled in listing order; entries are files, not unique images, which is why the Kaggle archive lists 2,224 for 661 unique images --- it re-lists all of them across its bundled \texttt{train}/\texttt{val}/\texttt{test} folders (Section III-A of the main paper). This is a pilot audit of seven archives chosen for accessibility, not a prevalence estimate over a defined sampling frame.}
+\label{tab:18}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{>{\hsize=1.216\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=0.784\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xccccc}
+\toprule
+{\bfseries Dataset} & {\bfseries Area} & {\bfseries n} & {\bfseries Format} & {\bfseries Size} & {\bfseries Both} & {\bfseries Ext-rule} \\
+\midrule
+Kaggle {\itshape Fake vs Real Medicine} [19] & Medicines (positive control) & 2224 & {\bfseries 1.000} & 0.999 & {\bfseries 1.000} & {\bfseries 1.000} \\
+\url{rhythmghai/ai-vs-real-images-dataset} & Generated images & 995 & {\bfseries 1.000} & 0.812 & {\bfseries 1.000} & {\bfseries 1.000} \\
+\url{cashbowman/ai-generated-images-vs-real-images} & Generated images & 974 & 0.577 & 0.553 & 0.562 & 0.554 \\
+\url{ishanikathuria/handwritten-signature-datasets} & Signatures (negative control) & 2400 & 0.500 & {\bfseries 0.843} & 0.845 & 0.560 \\
+\url{kshitizbhargava/deepfake-face-images} & Deepfake faces & --- & * & * & * & * \\
+\url{shahzaibshazoo/detect-ai-generated-faces...} & Generated faces & --- & * & * & * & * \\
+\url{prosperchuks/fakereal-logo-detection-dataset} & Brand logos & --- & * & * & * & * \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+
+* Not auditable from a listing, and no sample size (---) is reported: the sample reached only one class before the endpoint's file limit, so there is nothing to compare within the dataset and no score of any kind is defined. This is a property of the sampling method, not a finding about the dataset; it is not a low score, and it must not be read as one.
+
+Table S19 reads the resulting scores back as guidance, and three things follow from the rows themselves, of which the last two are the useful ones.
+
+{\bfseries The positive control passes, by an independent route.} The case-study dataset returns 1.000 on format and on the deterministic extension rule from its {\itshape public listing metadata alone} --- no pixels, no download, no local pipeline --- where Section IV-A reached the same conclusion from the archive on disk. The paper's central empirical claim is thus checked twice on entirely different inputs.
+
+{\bfseries The confound appears in another application area, and not everywhere in it.} One of the two generated-image datasets is perfectly separable by file format, as the medicine dataset is and as [30] reports for GenImage --- a third independent instance, and the first this paper measured itself. The second, in the same application area, returns 0.577 on format and 0.562 overall, near chance on these axes. A screen that fired on every dataset would carry no information; this one does not. That two archives built for the same task by different people differ completely is also a caution against reading the mechanism as a law.
+
+{\bfseries The negative control reveals a false-positive mode, and it changes how the audit's output should be read.} Genuine and forged signatures in the BHSig260 corpus are written on the same paper and digitized by one procedure, so there is no acquisition asymmetry to find, and format duly returns exactly 0.500. Encoded size returns {\bfseries 0.843}, most likely because forged signatures differ in stroke complexity and so in ink coverage, which drives the compressed size of a bitonal scan. The audit therefore answers a narrower question than "is this dataset confounded" --- it answers "can a trivial statistic separate your classes", and the researcher must then establish whether that statistic is an acquisition artifact or a property of the objects. A high score is a reason to investigate, not a verdict, and format is the more specific axis because storage format is never a property of the photographed object (Section S-I-T, Type E).
+
+\begin{table*}[!t]
+\caption{How to read an audit score. These are the values this study measured, not validated thresholds: with five scorable datasets there is no basis for a false-positive rate, and the rows below are an aid to interpretation rather than a decision rule. The {\bfseries format} axis is the discriminating one, because storage format is never a property of the photographed object, whereas encoded size, resolution and aspect ratio mix acquisition with content and can score high for reasons that are not confounds.}
+\label{tab:19}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{>{\hsize=0.260\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=0.347\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=2.392\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\toprule
+{\bfseries Observed score} & {\bfseries Dataset} & {\bfseries What it supported} \\
+\midrule
+0.500 format, 0.843 size & BHSig260 signatures & One acquisition procedure for both classes, and the audit's false-positive mode: the size score comes from a content difference, so a high score on an ambiguous axis alone is not evidence of a confound \\
+0.577 format, 0.562 overall & second generated-image set & Near chance; no acquisition asymmetry these features detect \\
+0.500 format, 0.717 overall & Roboflow archive & An archive that was in fact totally confounded, its format signal erased by the publisher's own resizing and re-encoding. Investigate a middling score rather than reading it as clearance, and treat a normalized archive as unauditable by this method \\
+1.000 format & Kaggle pool, one generated-image set & Acquisition determines the label. No in-distribution accuracy on the dataset is interpretable \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+
+{\bfseries The same audit on a second, independently published dataset.}
+
+One dataset cannot establish a general claim, so we ran the identical procedure against the other public authentic/counterfeit pharmaceutical image dataset we were able to obtain --- the Roboflow source of Section III-A, a different publisher, a different country of origin and a different class-construction method. Both are audited {\bfseries as shipped}, before any filtering of ours, under grouped 5-fold cross-validation on rotation-canonical pHash clusters so that a publisher's own augmented copies cannot straddle a fold. Balanced accuracy is reported because both are heavily imbalanced as distributed; 0.5 means metadata carries nothing about the label (Table S20).
+
+\begin{table*}[!t]
+\caption{The provenance-confound audit on two independently published datasets, as shipped. Grouped 5-fold cross-validated balanced accuracy of a logistic regression on the named metadata alone --- no pixel content. Chance is 0.500.}
+\label{tab:20}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{c>{\hsize=0.892\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=1.108\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\toprule
+{\bfseries Metadata used} & {\bfseries Kaggle (661 imgs, 584 groups)} & {\bfseries Roboflow v4 (4,207 imgs, 597 groups)} \\
+\midrule
+File format & {\bfseries 1.000} & 0.500 (single-format archive) \\
+Encoded file size & 0.994 & 0.717 \\
+Short-side resolution & 0.954 & 0.500 (all 640 $\times$ 640) \\
+Aspect ratio & 0.803 & 0.500 \\
+All of the above & {\bfseries 1.000} & 0.717 \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+
+The two columns fail differently, and the contrast is the most transferable result in this paper.
+
+On the Kaggle dataset the audit is decisive on every axis, including one we had not anticipated: {\bfseries aspect ratio alone reaches 0.803}, because screen captures inherit display proportions that photographs do not. Such a confound is not a single leak to be plugged; it is present redundantly in every statistic acquisition touches, which is why Section S-I-N finds three normalization axes each contributing separately.
+
+On the Roboflow dataset the audit largely {\bfseries fails to fire} --- and that dataset is nonetheless confounded in the most extreme way documented here: 57/57 of its counterfeit-labeled source images are advisory-bulletin graphics carrying the ground-truth word rendered in the pixels, against 263/263 clean product photographs labeled authentic (Section III-A). Metadata registers only a partial trace (0.717 from file size, which sees that bulletin collages compress differently) and nothing from format, resolution or aspect ratio.
+
+The reason is a trap rather than a limitation of one dataset. {\bfseries The publisher normalized the archive}, resizing every image to 640 $\times$ 640 and re-encoding to a single format before release, destroying the acquisition {\itshape tells} without touching the acquisition {\itshape confound}. A dataset tidied for distribution therefore looks cleaner under this audit than a raw one while being no less confounded. The audit is accordingly a {\bfseries necessary but not sufficient} screen, to be paired with the two checks that did catch this: a content pass over a sample of each class (Section S-I-A) and cross-source near-duplicate hashing (Section III-A).
+
+\subsection*{X. Composition order of the three operators}
+
+Section IV-E established that the composed operator of (8) works. This section decomposes it: which axes matter, whether they are complementary, whether the effect is architecture-dependent, what happens to a model that has nothing but the shortcut, and whether the result depends on the two things the operator's definition leaves free --- the magnitudes of its three constants and the order of composition.
+
+A caveat applies throughout. These ablations are {\bfseries single-run}: each compares conditions executed within one script invocation, so the within-run comparison is valid even where absolute numbers differ from the production pipeline's, and cross-run absolute comparisons should not be made. The same nominal condition read 62.7\%, 45.3\% and 50.7\% across three runs before the seeding bug of Section S-I-G was found; directional conclusions held in every run, specific decimals did not.
+
+Equation~(8) composes the three operators in one fixed order --- resolution, then brightness, then compression --- and Section S-I-R varied their magnitudes while holding that order constant. The order is a free parameter of the same method, it was never justified, and two of the three operators impose an information bottleneck rather than an alignment, so there is no reason to expect them to commute: a JPEG re-encode applied at 128 px quantizes blocks covering much of the frame, whereas the same re-encode at a 2400 px native size produces artifacts the subsequent downsample averages away. We therefore ran all 3! = 6 orderings at the production constants, on M4, inside a single execution (Table S21).
+
+\begin{table*}[!t]
+\caption{Composition order of the three normalization operators. M4 (EfficientNet-B0), production constants (128, 0.5, 40), all six orderings from one script execution, so all rows are directly comparable. R = resolution bottleneck (Eq. 5), B = brightness rescale (Eq. 6), C = compression bottleneck (Eq. 7). The production order of (8) is R, B, C.}
+\label{tab:21}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lccc}
+\toprule
+{\bfseries Order} & {\bfseries Compression applied} & {\bfseries Split B test accuracy} & {\bfseries Split C specificity} \\
+\midrule
+R, B, C (production) & after the cap & 0.919 & 0.820 \\
+R, C, B & after the cap & 0.932 & {\bfseries 0.880} \\
+B, R, C & after the cap & 0.919 & 0.847 \\
+B, C, R & before the cap & {\bfseries 0.946} & {\bfseries 0.380} \\
+C, R, B & before the cap & 0.932 & 0.540 \\
+C, B, R & before the cap & 0.932 & 0.467 \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+Order matters more than any of the three constants does, and it separates the six conditions perfectly along the axis the mechanism predicts.
+
+{\bfseries Compression must follow the resolution cap, and that one rule accounts for the entire spread.} The three orderings applying the JPEG bottleneck {\itshape after} the short side has been capped score 0.820, 0.847 and 0.880 externally; the three applying it before score 0.380, 0.467 and 0.540. The groups do not overlap and are separated by 28 points. The reading is mechanical rather than statistical: compressing at native resolution and then downsampling largely undoes the compression, because the resampling filter averages over precisely the quantization artifacts the bottleneck exists to impose. Those three conditions are in effect two-way normalizations that pay for a third operator without obtaining it, and 0.380--0.540 brackets the 0.500 that the genuine two-way condition reaches in Table S12.
+
+{\bfseries Brightness placement is a second-order effect.} Within the three sound orderings, moving the brightness rescale changes external specificity by 6 points (0.820 $\rightarrow$ 0.880) against the 28-point gap between groups --- the distinction of Section S-I-R in another guise: the bottleneck operators are position-sensitive, the location-shifting one is not.
+
+{\bfseries The in-distribution ranking is not merely uninformative here; it is inverted.} The ordering with the highest Split B accuracy of all six --- B, C, R at 0.946 --- is the ordering with the lowest external specificity of all six, 0.380. A practitioner selecting the composition order the ordinary way, by held-out accuracy on their own data, would have chosen the worst of the six available options, and would have watched a 2.7-point in-distribution spread (0.919--0.946) conceal a 50-point external one (0.380--0.880). This is the sharpest demonstration in the study of what a confounded in-distribution partition is worth, precisely because nothing else varies: the same three operators, the same constants, the same model, the same data, reordered.
+
+{\bfseries The reported order is again conservative rather than tuned.} R, C, B beats production on both axes (0.880 vs. 0.820 externally, 0.932 vs. 0.919 in-distribution). As in Section S-I-R we have not re-run the paper around the better value, for the same reason: selecting a preprocessing choice by its external score is the target-distribution leakage Section S-II warns about, and the production order was fixed before any of these six numbers existed. The headline figures continue to understate the method.
+
+The consequence generalizes past this pipeline. Composition order is normally left implicit in a preprocessing description; on this evidence it deserves the treatment of a hyperparameter --- reported, and not chosen in-distribution. Any pipeline composing two or more information-destroying operators should expect the same sensitivity, since the argument is about resampling and quantization rather than this dataset.
+
+\subsection*{Y. How much depends on the near-duplicate threshold?}
+
+Section III-A clusters at Hamming distance $\le$ 8 on a 64-bit rotation-canonical perceptual hash, and that threshold was fixed before any model ran. Why 8 is a fair question, so we swept it. Re-clustering costs nothing: the hashes are already computed, no image is decoded, and the fixed Split A and Split B assignments can be checked against whatever groups each threshold produces.
+
+\begin{table*}[!t]
+\caption{Sensitivity of the near-duplicate clustering to its Hamming threshold, over the 510-image modeling pool. "Mixed-label" counts clusters holding both authentic and counterfeit images --- a check the clustering itself never sees, since it reads no labels. "Straddles" counts clusters with members in more than one partition of the fixed Split A and Split B assignments. Clustering the pool alone gives 482 groups at the production threshold where the pipeline records 480, because production clusters the Kaggle and Roboflow images together (Section III-A) and two Kaggle pairs are joined through a Roboflow intermediary; nothing in this table turns on the difference.}
+\label{tab:22}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+{\bfseries Threshold} & {\bfseries Clusters} & {\bfseries Largest} & {\bfseries Mixed-label} & {\bfseries Straddles Split A} & {\bfseries Straddles Split B} \\
+\midrule
+0 (exact duplicates) & 507 & 2 & 0 & 2 & 0 \\
+2 & 495 & 2 & 0 & 7 & 0 \\
+4 & 490 & 2 & 0 & 7 & 0 \\
+6 & 486 & 3 & 0 & 8 & 0 \\
+{\bfseries 8 (production)} & {\bfseries 482} & {\bfseries 3} & {\bfseries 0} & {\bfseries 9} & {\bfseries 0} \\
+10 & 472 & 4 & 0 & 13 & 6 \\
+12 & 444 & 10 & 3 & 18 & 17 \\
+16 & 260 & 183 & 10 & 19 & 28 \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+Table S22 gives the sweep. Three readings follow, and the third is a limitation rather than a reassurance.
+
+{\bfseries The threshold is bounded above by evidence the clustering does not use.} Up to 10, no cluster mixes the two class labels; at 12 three do, and at 16 the largest single cluster holds 183 of the 510 images. Past 10, then, the hash is merging images the annotations call different, and the proxy has stopped tracking product identity. Eight sits inside that range with margin, which is the justification we can give for it: not that 8 is optimal, but that the clustering agrees with an external label there and stops agreeing shortly after.
+
+{\bfseries What the split comparison concludes does not depend on the threshold.} Countable Split A leakage runs from 2 clusters under exact matching to 18 at threshold 12 --- 0.4\% to 3.8\% of clusters. Every value in that range is small beside the acquisition confound, so no admissible choice would have changed Section V-A. The same holds for Section S-I-V, whose 30 mates are the pairs at distance $\le$ 8; a stricter threshold would shrink that set and a laxer one would contaminate it with different products.
+
+{\bfseries Split B's guarantee is a statement about distance $\le$ 8, not about product identity.} At the production threshold no cluster straddles a Split B partition, which the pipeline asserts on every run. At 10 six would and at 12 seventeen. This is the limitation Section III-A states in words, quantified: perceptual-hash grouping is an operational proxy for product identity, and two dissimilar photographs of one physical package go ungrouped at every threshold this analysis can defend.
+
+\subsection*{Z. A paired comparison of the baseline and normalized conditions}
+
+Table~5 reports the correction as the distance between two Wilson intervals. Those describe two separate proportions; the quantity of interest is their difference, and because both conditions are evaluated on the {\itshape same} 150 external photographs the comparison is paired. \url{modeling/paired_external_test.py} runs it as one. It loads the persisted baseline and normalized checkpoints written by the seed sweep at each of the five seeds, replays them over Splits C and D, and keeps the per-image verdict rather than the count. The bootstrap resamples {\itshape images}, so both arms' verdicts on an image move together and the pairing survives resampling; this is the construction of Section S-I-V, used here for the same reason. Every replayed accuracy is asserted against the value the seed sweep recorded for that model, seed and condition before anything is written --- the practice Section S-I-G argues for.
+
+\begin{table*}[!t]
+\caption{Normalized minus baseline on the two external sets, five seeds (42--46). Accuracies are means over seeds. The difference and its 95\% interval come from a bootstrap over images. Both external sets are authentic-only, so every figure is a specificity.}
+\label{tab:23}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{cccc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xc}
+\toprule
+{\bfseries Model} & {\bfseries External set} & {\bfseries Baseline} & {\bfseries Normalized} & {\bfseries Difference (percentage points)} & {\bfseries McNemar {\itshape p}, pooled} \\
+\midrule
+M2 CNN & Split C (n = 150) & 0.051 & 0.909 & {\bfseries +85.9 [+81.7, +89.7]} & < 10\textsuperscript{-}\textsuperscript{1}\textsuperscript{5} \\
+M2 CNN & Split D (n = 149) & 0.176 & 0.627 & {\bfseries +45.1 [+39.9, +50.3]} & < 10\textsuperscript{-}\textsuperscript{1}\textsuperscript{5} \\
+M3 MobileNetV3 & Split C (n = 150) & 0.715 & 0.724 & +0.9 [$-$6.9, +8.8] & 0.688 \\
+M3 MobileNetV3 & Split D (n = 149) & 0.644 & 0.685 & +4.0 [$-$2.7, +11.3] & 0.028 \\
+M4 EfficientNet-B0 & Split C (n = 150) & 0.100 & 0.860 & {\bfseries +76.0 [+69.9, +81.5]} & < 10\textsuperscript{-}\textsuperscript{1}\textsuperscript{5} \\
+M4 EfficientNet-B0 & Split D (n = 149) & 0.240 & 0.878 & {\bfseries +63.8 [+56.9, +70.5]} & < 10\textsuperscript{-}\textsuperscript{1}\textsuperscript{5} \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+
+{\bfseries The two conclusions the main paper draws survive the change of instrument, and are sharpened by it.} M2 and M4 gain 85.9 and 76.0 points on Split C with intervals nowhere near zero, so neither rests on Split C being only 150 images. M3 gains 0.9 points with an interval that spans zero symmetrically, which is the same verdict Section S-I-U reaches from the seed spread and Section IV-E reaches from overlapping Wilson intervals, now from a test that uses the pairing.
+
+{\bfseries The McNemar column should be read with its caveat, and it illustrates why the three kinds of uncertainty of Section III-B have to be kept apart.} It pools discordant pairs across the five seeds, which treats 745 verdicts as independent when they are 149 or 150 images seen five times by correlated runs. The pooling inflates every {\itshape n} and therefore deflates every {\itshape p}, and M3 on Split D is where that shows: McNemar returns 0.028 while the image bootstrap returns +4.0 [$-$2.7, +11.3], an interval containing zero. The bootstrap is the statistic we report, because it is the one whose resampling unit matches the design. A test that controls sampling uncertainty says nothing about training-run variability, and pooling seeds into it does not convert one into the other.
+
+Two limits carry over from Section S-I-U. The baseline arm here is the five-seed mean rather than the seed-42 run that Table~5's baseline column reports, which is why M2's baseline reads 0.051 rather than 0.000 and M4's 0.100 rather than 0.060; Section S-I-U gives the per-seed values and no conclusion turns on it. And M1 is out of scope, having no checkpoint and never passing through the operator.
+
+\section*{S-II. Limitations}
+
+{\bfseries The acquisition-shift experiment is authentic-only, so it measures no counterfeit recall.} Every image in conditions C and D is genuine packaging, so every number computed on them is a specificity --- equivalently, one minus the false-positive rate --- and nothing else. Counterfeit recall is measured elsewhere and on different terms: on the regulatory source in its native encodings (Section S-VIII) and, beside a specificity on the same footing, on the balanced external test (Table~4, Section S-IX). Neither is a recall under acquisition shift, which Section V-D records as unmeasured, and the synthetic proxy of Section S-I-B does not substitute for one.
+
+The proxy's limitation is worth enumerating, because Table S6 could otherwise be mistaken for a recall measurement. It perturbs genuine photographs, so it can only measure sensitivity to {\itshape degradation of a genuine image}. Real falsified packaging differs along axes it does not model at all: absent or imitated security features, holograms and tamper seals; wrong substrate, board weight or surface finish; serial numbers, batch codes and barcodes that are legible but incorrect; and --- most importantly --- competently produced counterfeits whose printing is not degraded in any visible way, which are precisely the cases a screening tool exists to catch. A model could score well on the proxy and fail on all of these; it could also fail the proxy and catch real counterfeits, since the perturbations are not drawn from any counterfeit distribution. The proxy supports only a weak, one-directional inference: a model that cannot separate a photograph from a visibly perturbed copy of {\itshape that same photograph} is unlikely to separate genuine from falsified packaging, and three of four models here fail that test.
+
+{\bfseries The general claim rests on a narrow evidence base.} Section I-A identifies asymmetric class sourcing as a mechanism producing provenance confounding, and makes no claim about how often it occurs. The direct evidence here is two datasets in one application area, an opportunistic screen of six further public archives of which three were scorable (Section S-I-W), and a structurally matching report from generated-image detection [30] that we did not produce. That is enough to motivate the mechanism, to justify the audit as a routine precaution, and to explain three independent observations of one signature; it is not enough to quantify how often the mechanism fires, and no number in this paper should be read as a prevalence estimate. Section V-B states what would falsify the claim.
+
+{\bfseries The correction's axes were originally chosen with knowledge of the external set, though they need not have been.} Equation~(8) of the main paper uses no label information, which is what licenses applying it to Split C; but the {\itshape choice} of resolution, brightness and compression was made after Table~1 showed those statistics separating the Kaggle pool from Split C, and that is target-distribution information a practitioner would not have. Section S-I-S addresses this directly: a train-only audit, confined to the Split B training partition with grouped cross-validation inside it, nominates all three axes without consulting any external data. The objection is therefore answered on this dataset. Two residual weaknesses remain. The selection threshold (0.65 balanced accuracy) is a judgement rather than a derived quantity. More fundamentally, no training-set procedure can nominate an axis that is confounded in the deployment distribution but not in the training distribution, so a train-only audit is a safeguard against the confound you have, not a guarantee against the one you have not seen.
+
+{\bfseries The correction is a preprocessing bottleneck, not a domain-adaptation method, and is not compared against one.} The natural alternative to suppressing a confounded statistic is to align the distributions in feature space --- second-order alignment such as CORAL, importance reweighting, or an adversarial domain-confusion objective --- and we report no such comparison. The omission is a design constraint rather than an oversight, and the constraint is worth stating because it also limits what the comparison would mean. Every method in that family requires samples from the deployment distribution at training time, and consumes them to fit an alignment; (8) of the main paper is a fixed function of a single image that uses neither labels nor target data, which is what licenses applying it unchanged to Split C, to Split D, and to an image captured after deployment. A study that fitted CORAL on Split C could not then report Split C as an external evaluation. The honest statement of the trade is therefore that we chose the weaker intervention because it is the one that survives its own evaluation protocol, and that a practitioner who does hold target-domain data should expect to do better than (8) of the main paper --- how much better is unmeasured here.
+
+We accordingly ask that (8) of the main paper be read as a {\bfseries zero-target-sample baseline}: the performance recoverable when nothing whatsoever is known about the deployment distribution, not the best available correction. Anyone holding even unlabeled target-domain images is in a strictly stronger position and should evaluate second-order feature alignment (Deep CORAL), distribution matching (MMD-based adaptation) or an adversarial domain-confusion head against this baseline before adopting it. We would expect those methods to win, and the quantity of interest --- how much accuracy a rigid per-image bottleneck leaves on the table relative to representation-level alignment --- is exactly what such a comparison would measure, and is not measured here.
+
+{\bfseries Cross-validating across sources or capture hardware is not possible on this data.} The strongest answer to a provenance confound would be a grouped cross-validation whose folds are acquisition pipelines rather than products, so that every fold is evaluated on a capture process it never saw. That design cannot be built here, and the reason is the confound itself: the counterfeit class exists in exactly one usable source. The only other public authentic/counterfeit pharmaceutical dataset we could obtain has a counterfeit class that is 57/57 advisory graphics carrying the ground-truth word in the pixels (Section III-A), which is unusable at any position in a fold; the acquisition-shift conditions are authentic-only, and the regulatory source of Section S-VIII holds 46 independent cases, too few to hold out as a training fold. A source-held-out fold would therefore hold no counterfeit images. The grouped cross-validation we do run decorrelates product identity and nothing else, and we do not claim otherwise; Section V-A states the consequence, which is that in-distribution machinery of any kind cannot see this defect.
+
+{\bfseries Split D does not vary the backdrop.} Section S-I-J identifies a surround-based cue as the basis of M3's correct external predictions and of both backbones' errors, Section IV-E extends it to both backbones' correct answers by region substitution, and Split C and Split D share the same staging. The second external set therefore cannot test that cue, and the stability of M3 and M4 across the two sets should not be read as evidence against it. An external set that varies the photographic setting --- different surfaces, in-hand or in-shelf photography, uncontrolled backgrounds --- is the evaluation this study most obviously lacks, and is a different requirement from the balanced set of Section S-IX, which shifts source while standardizing encoding.
+
+{\bfseries Two capture conditions, one archive, one product set.} This limitation was stated in an earlier version as a caution and has since been partly measured. Section IV-D adds a second capture condition, and it changed a headline claim: M2's post-correction specificity proved specific to Split C (0.860 $\rightarrow$ 0.463) while both frozen backbones held. What remains unmeasured is still substantial. Both conditions come from the same archive, the same 150 products and the same laboratory protocol, differing only in device and lighting --- so the evidence supports "the correction transfers across a change of camera for pretrained backbones" and not "the correction transfers." Nothing in that experiment tests generalization across products, across countries, or to photographs taken by end users in the conditions a screening tool would actually face; the balanced test of Section IV-C shifts source but standardizes encoding and varies no photographic setting. No number in this paper should be read as establishing a generalization {\itshape rate}.
+
+{\bfseries Small test partitions.} In-distribution test partitions contain 74--76 images. Bootstrap intervals are correspondingly wide (Table S3), all pairwise model comparisons are underpowered (Table S5, discordant counts 1--15), and the leakage delta of Section S-I-H is measured against variance that a larger pool would suppress. Point differences of a few percentage points between models on this data should not be interpreted.
+
+{\bfseries Some numbers predate checkpoint persistence and cannot be re-derived.} For most of this study no script saved a trained model, and every downstream consumer --- external evaluation, Grad-CAM, the synthetic proxy --- re-derived "the trained model" from scratch. That design produced both defects of Section S-I-G: the learning-rate divergence in M2's external evaluation, and a discrepancy in which two rebuild paths of the same nominal M4 model classified 16/150 versus 5/150 external images as authentic. Training now persists a checkpoint with the learning rate, seed, best epoch and epoch count it was trained under, \texttt{load\_checkpoint} raises if the recorded learning rate differs from the caller's expectation, and the external evaluations of Table~5 load rather than retrain --- which independently reproduced M2's and M3's recorded Split C specificities exactly. Two residual weaknesses follow from the change arriving late. M4's earlier Split B accuracy of 0.946 could not be explained when the checkpointed pipeline deterministically produced 0.919, because the artifacts of the original run no longer exist; the newer value is the one reported, and the older one is unrecoverable rather than refuted. And the two \url{experiment_*_all_models.py} ablations still rebuild rather than load, so their absolute values are not directly comparable with the production tables --- the within-run comparisons they actually make are unaffected, and Section S-I-O says so where they are used.
+
+{\bfseries Single-run ablations.} Every ablation in Sections S-I-N to S-I-X is one execution per condition, not a distribution over seeds, so none of them carries an interval. The reason this is tolerable is that the pipeline is now deterministic: the per-pass seeding defect of Section S-I-G, under which nominally identical conditions moved by up to 17 points, was fixed partway through, and each ablation re-runs its own baseline inside the same execution so that every comparison it makes is within-run. Three checks support the harness rather than merely asserting it: the production condition returns 0.919 in-distribution and 0.820 externally in each of the three post-fix scripts that contain it (Tables S12, S14 and S21), and the external evaluation from persisted checkpoints reproduced M2's and M3's recorded Split C counts exactly, byte for byte, on a re-run. Seed-to-seed variance is no longer unmeasured for the production and baseline conditions --- Section S-I-U repeats those at five seeds and finds standard deviations of 0.03 to 0.14 on the external sets --- but it remains unmeasured for the ablations themselves, which is why a condition differing from its baseline by a point or two is not read here as a difference. The ablations that predate the fix are identified in their captions --- all of Table S11, all of Table S13, and the superseded white-balance rows retained in Table S24; Tables S12, S14 and S21 are post-fix --- and the two conclusions Table S11 is used for are separately reproduced post-fix in Table S12.
+
+{\bfseries Frozen backbones only.} Neither transfer model was fine-tuned; each trained a single linear head on cached features, a scope decision forced by CPU-only hardware --- an early attempt at live per-epoch backbone passes was terminated by the host before one split finished (Section S-I-E). Whether end-to-end fine-tuning would reduce or amplify the shortcut reliance documented here is genuinely open, and the possibilities are opposite: adaptable features could discard the confounded statistics, or specialize onto them more aggressively than a frozen representation can.
+
+One data point here bears on the question without settling it. M2 {\itshape is} trained end to end from scratch with no frozen component, and it is simultaneously the model that relies on the shortcut most completely at baseline (0/150 external) and the strongest on Split C after correction (0.860, the only negative gap) --- though not on Split D, where it is the weakest. End-to-end training therefore conferred no protection against the confound, but also did not prevent the model from learning something transferable once the confound was suppressed. That is consistent with fine-tuning being neutral-to-helpful rather than harmful, but M2 differs from M3 and M4 in scale, initialization and capacity, so it is weak evidence and we do not lean on it.
+
+{\bfseries The attribution audit is complete but small, one annotator produced it, and a second method contradicts part of it.} All 62 heatmaps were regenerated from the persisted production checkpoint after the training-mode defect of Section S-I-G and categorized in full, so the audit is no longer a non-random sample of a mis-configured model. It remains 62 images scored by a single human against a three-way scheme, with no second annotator and therefore no inter-rater agreement to report. An earlier version of this paragraph argued that the external result was stark enough --- 40 of 40 maps splitting cleanly by outcome --- that a second opinion would not overturn it. A second opinion partly has: the occlusion analysis of Section S-I-J, which needs no annotator and covers every external image rather than ten per group, corroborates the categorization on both models' errors and on M3's correct answers and does not corroborate it on M4's, and Section IV-E now claims only what both methods support. The categories are also coarse: "attends to the background" does not identify {\itshape which} property of the background a model is using, and both quantitative measures reported here are purely radial --- they distinguish center from surround, not product from not-product. The content-aware measure that would is implemented and committed (\url{scripts/23_build_product_box_tool.py}, \url{modeling/attribution_in_box.py}) and awaits an annotation pass.
+
+{\bfseries Product identity is a proxy.} Split B groups on perceptual-hash clusters, not ground-truth product labels, which do not exist in this source. The clustering is not robust to mirroring, and while no cluster mixes class labels, the grouping could be coarser or finer than true product identity in ways that would slightly change the measured leakage rate.
+
+{\bfseries Scope of the modality claim.} The pool is 43.7\% blister packs and 25.9\% mixed presentations (Table S1). Results characterize "packaging and immediate product containers", and should not be read as results on outer cartons.
+
+{\bfseries Single-machine cost measurements.} Table S8 is one CPU on one machine at batch size 1. Absolute latencies will differ elsewhere; the relative ordering and the conclusion that normalization is negligible relative to a forward pass should be stable.
+
+\section*{S-III. Appendix A --- Complete Per-Axis Ablation Record}
+
+Table S24 reproduces every normalization condition executed in this study, annotated with the script execution that produced it, so that valid within-run comparisons are identifiable. Absolute values are not comparable across groups; see the caveat of Section S-I-X.
+
+\begin{table*}[!t]
+\caption{All normalization conditions. Res = resolution bottleneck (Eq. 5); Bright = brightness rescale (Eq. 6); Comp = JPEG bottleneck (Eq. 7); WB = gray-world white balance.}
+\label{tab:24}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lcccccccc}
+\toprule
+{\bfseries Run group} & {\bfseries Model} & {\bfseries Condition} & {\bfseries Res} & {\bfseries Bright} & {\bfseries Comp} & {\bfseries WB} & {\bfseries Split B} & {\bfseries Split C} \\
+\midrule
+resolution experiment & M4 & baseline &  &  &  &  & 0.919 & 0.087 \\
+resolution experiment & M4 & resolution only & $\checkmark$ &  &  &  & 0.932 & 0.220 \\
+resolution experiment & M4 & brightness only &  & $\checkmark$ &  &  & 0.919 & 0.273 \\
+resolution experiment & M4 & both & $\checkmark$ & $\checkmark$ &  &  & 0.959 & 0.627 \\
+brightness experiment & M1 & baseline &  &  &  &  & 0.838 & 0.000 \\
+brightness experiment & M1 & brightness &  & $\checkmark$ &  &  & 0.541 & 0.000 \\
+brightness experiment & M4 & baseline &  &  &  &  & 0.919 & 0.067 \\
+brightness experiment & M4 & brightness &  & $\checkmark$ &  &  & 0.932 & 0.313 \\
+white balance, superseded & M4 & res + bright & $\checkmark$ & $\checkmark$ &  &  & 0.959 & 0.453 \\
+white balance, superseded & M4 & white balance only &  &  &  & $\checkmark$ & 0.932 & 0.107 \\
+white balance, superseded & M4 & res + bright + WB & $\checkmark$ & $\checkmark$ &  & $\checkmark$ & 0.959 & 0.420 \\
+white balance, rerun & M4 & production three-way & $\checkmark$ & $\checkmark$ & $\checkmark$ &  & 0.919 & 0.820 \\
+white balance, rerun & M4 & white balance only &  &  &  & $\checkmark$ & 0.905 & 0.067 \\
+white balance, rerun & M4 & three-way + WB & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & 0.932 & 0.780 \\
+white balance, rerun & M4 & two-way & $\checkmark$ & $\checkmark$ &  &  & 0.919 & 0.500 \\
+white balance, rerun & M4 & two-way + WB & $\checkmark$ & $\checkmark$ &  & $\checkmark$ & 0.960 & 0.347 \\
+compression experiment & M4 & baseline (rerun) &  &  &  &  & 0.919 & 0.053 \\
+compression experiment & M4 & compression only &  &  & $\checkmark$ &  & 0.905 & 0.127 \\
+compression experiment & M4 & res + bright (rerun) & $\checkmark$ & $\checkmark$ &  &  & 0.932 & 0.507 \\
+compression experiment & M4 & all three & $\checkmark$ & $\checkmark$ & $\checkmark$ &  & 0.932 & 0.780 \\
+M3 decomposition & M3 & baseline &  &  &  &  & 0.946 & 0.800 \\
+M3 decomposition & M3 & resolution only & $\checkmark$ &  &  &  & 0.946 & 0.847 \\
+M3 decomposition & M3 & brightness only &  & $\checkmark$ &  &  & 0.932 & 0.560 \\
+M3 decomposition & M3 & both & $\checkmark$ & $\checkmark$ &  &  & 0.959 & 0.400 \\
+two-way, all models & M1 & baseline / normalized & $\checkmark$ & $\checkmark$ &  &  & 0.838 $\rightarrow$ 0.541 & 0.000 $\rightarrow$ 0.000 \\
+two-way, all models & M2 & baseline / normalized & $\checkmark$ & $\checkmark$ &  &  & 0.865 $\rightarrow$ 0.824 & 0.000 $\rightarrow$ 0.847 \\
+two-way, all models & M3 & baseline / normalized & $\checkmark$ & $\checkmark$ &  &  & 0.946 $\rightarrow$ 0.946 & 0.733 $\rightarrow$ 0.520 \\
+two-way, all models & M4 & baseline / normalized & $\checkmark$ & $\checkmark$ &  &  & 0.919 $\rightarrow$ 0.959 & 0.087 $\rightarrow$ 0.627 \\
+three-way, all models & M1 & baseline / normalized & $\checkmark$ & $\checkmark$ & $\checkmark$ &  & 0.838 $\rightarrow$ 0.541 & 0.000 $\rightarrow$ 0.000 \\
+three-way, all models & M2 & baseline / normalized & $\checkmark$ & $\checkmark$ & $\checkmark$ &  & 0.865 $\rightarrow$ 0.838 & 0.000 $\rightarrow$ 0.913 \\
+three-way, all models & M3 & baseline / normalized & $\checkmark$ & $\checkmark$ & $\checkmark$ &  & 0.932 $\rightarrow$ 0.946 & 0.753 $\rightarrow$ 0.813 \\
+ordering sweep & M4 & R, B, C (production) & $\checkmark$ & $\checkmark$ & $\checkmark$ &  & 0.919 & 0.820 \\
+ordering sweep & M4 & R, C, B & $\checkmark$ & $\checkmark$ & $\checkmark$ &  & 0.932 & 0.880 \\
+ordering sweep & M4 & B, R, C & $\checkmark$ & $\checkmark$ & $\checkmark$ &  & 0.919 & 0.847 \\
+ordering sweep & M4 & B, C, R & $\checkmark$ & $\checkmark$ & $\checkmark$ &  & 0.946 & 0.380 \\
+ordering sweep & M4 & C, R, B & $\checkmark$ & $\checkmark$ & $\checkmark$ &  & 0.932 & 0.540 \\
+ordering sweep & M4 & C, B, R & $\checkmark$ & $\checkmark$ & $\checkmark$ &  & 0.932 & 0.467 \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+Only the last two groups --- the ordering sweep and the white-balance rerun --- were produced after the seeding fix of Section S-I-G, by scripts that seed each augmentation pass and read the recorded learning rate. Every other group in this table was executed on 2026-07-25, the day before the fix, and its absolute values carry the caveat of Section S-I-X; the within-run comparisons each group was built to make are unaffected. The superseded white-balance group is retained only so that the rerun beneath it can be read against what it replaces. The production condition appears in both post-fix groups and returns 0.919 / 0.820 in each, matching its value in Table S14 --- three exact reproductions across two scripts.
+
+\section*{S-IV. Appendix B --- Exclusion Rules Applied to the Modeling Pool}
+
+Table S25 records every exclusion rule applied to the modeling pool, with the number of files each removed.
+
+\begin{table*}[!t]
+\caption{Every exclusion rule, with counts. Roboflow exclusions are listed for completeness; that source contributes to no split used in this paper's results.}
+\label{tab:25}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{c>{\hsize=1.103\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=0.897\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\toprule
+{\bfseries Source} & {\bfseries Rule} & {\bfseries Files excluded} \\
+\midrule
+Roboflow & simultaneous \texttt{authentic=1} and \texttt{counterfeit=1} annotation & 52 \\
+Roboflow & advisory-bulletin graphic (label rendered as pixel text) & 180 \\
+Kaggle & watermark / stock-photo overlay (47/47 authentic-labeled) & 47 \\
+Kaggle & not a device photograph of a product (1 browser screenshot, 3 marketing renders) & 4 \\
+Kaggle & no packaging in frame (1 loose tablets, 4 syrup bottles) & 5 \\
+Kaggle & exact duplicate on the rotation-canonical hash (one copy retained) & --- (applied after the above; 605 filtered files $\rightarrow$ 510 pool images) \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+
+\section*{S-V. Appendix C --- Reproduction}
+
+Two caveats on exact reproduction. The external evaluations load persisted checkpoints while the ablation scripts predate that mechanism and rebuild, so their values are comparable within a run and not across runs (Section S-I-G). Results predating the augmentation-seeding fix are identified in their captions, and superseded results are archived rather than deleted.
+
+\begin{lstlisting}
+# 1. Data pipeline (deterministic; ~35 s)
+python scripts/run_all.py                          # inventory -> filter -> dedup -> provenance -> splits
+python scripts/06_download_mendeley_split_c.py     # external set, one-time (~248 MB)
+python scripts/07_verify_split_c_independence.py   # pHash independence check
+python scripts/17_apply_synthetic_review.py        # assemble the synthetic proxy set
+python scripts/18_capture_method_stats.py          # per-image capture statistics (Table 1, Fig. S14)
+
+# 2. Models
+python modeling/train_model1_classical.py
+python modeling/train_model2_cnn.py
+python modeling/train_model3_mobilenet.py
+python modeling/train_model4_efficientnet.py
+
+# 3. Evaluation
+python modeling/eval_split_c.py                    # external, authentic-only
+python modeling/eval_split_c_synthetic.py          # synthetic proxy
+python modeling/gradcam.py                         # in-distribution attribution audit
+python modeling/gradcam_split_c.py                 # external attribution audit, M4
+python modeling/gradcam_split_c_model3.py          # external attribution audit, M3
+python modeling/gradcam_quantitative.py            # border mass, all 150 external
+python modeling/occlusion_sensitivity.py           # second attribution method
+python modeling/region_substitution.py             # third: region substitution, Table 7
+python modeling/eval_external_from_checkpoints.py  # conditions C and D from checkpoints
+
+# 3b. The balanced external test (Section S-IX). Steps 30-31 hit the Commons
+#     API and take about 20 min; step 32 rehashes the whole raw tree.
+python scripts/30_harvest_balanced_authentic.py    # product-matched candidate harvest
+python scripts/31_download_balanced_authentic.py   # bounded-width fetch, resumable
+python scripts/32_build_balanced_external.py       # automated screens, independence, contact sheets
+python scripts/record_balanced_review.py notes.txt # apply a subject-matter review
+python scripts/33_apply_review_and_build.py        # select 46, ingest both classes, audit, lock
+python modeling/eval_balanced_external.py          # Table 4; runs once
+python modeling/eval_split_e.py                    # the counterfeit source in native encodings
+python modeling/split_e_screen_sensitivity.py      # Table S28
+
+# 4. Ablations
+python modeling/experiment_resolution_norm.py
+python modeling/experiment_brightness_norm.py
+python modeling/experiment_colorbalance_norm.py
+python modeling/experiment_compression_norm.py
+python modeling/experiment_normalization_all_models.py
+python modeling/experiment_compression_all_models.py
+python modeling/experiment_model3_decompose.py
+python modeling/experiment_constant_sensitivity.py
+python modeling/experiment_order_permutation.py
+
+# 5. Seed variance (Section S-I-U) and paired leakage (Section S-I-V); ~25 min per seed
+python modeling/seed_sweep.py                      # 5 seeds, resumable
+python modeling/seed_sweep.py --summary            # mean +/- sd tables
+python modeling/leakage_paired.py                  # paired leakage, 5 seeds, resumable
+python modeling/leakage_paired.py --design         # print the partition and its assertions
+python modeling/paired_external_test.py             # paired baseline-vs-normalized, Section S-I-Z
+
+# 6. Manuscript tables and figures
+python paper/scripts/compute_paper_metrics.py
+python paper/scripts/metadata_oracle.py
+python paper/scripts/provenance_audit_multi.py
+python paper/scripts/cross_domain_audit.py         # Table S18; fetches Kaggle listings
+python paper/scripts/power_and_leakage_bound.py
+python paper/scripts/phash_threshold_sweep.py      # Table S22
+python paper/scripts/train_only_axis_derivation.py
+python paper/scripts/external_intervals.py
+python paper/scripts/calibration_analysis.py       # Table S10
+python paper/scripts/model1_attribution.py
+python paper/scripts/benchmark_cost.py
+python paper/scripts/make_figures.py
+
+# 7. Manuscript and supplement
+python paper/scripts/build_tex.py
+python paper/scripts/build_supplement.py
+python paper/scripts/build_docx.py
+python paper/scripts/verify_crossrefs.py           # gates the build
+python paper/scripts/compile_pdf.py
+python paper/scripts/final_sweep.py
+\end{lstlisting}
+
+\section*{S-VI. Appendix D --- Image Sources Used by Prior Work}
+
+Section II-A of the main paper argues from this inventory and states its three observations; the tabulation is here for space.
+
+\begin{table*}[!t]
+\caption{Image sources used by located prior work on pharmaceutical authentication. "Audit" asks whether the study {\itshape reports} any check that acquisition conditions are balanced across its two classes; "not reported" is a statement about the paper, not about what its authors did.}
+\label{tab:26}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{>{\hsize=0.692\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=1.136\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=1.172\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xcc}
+\toprule
+{\bfseries Study} & {\bfseries Image source} & {\bfseries Class construction} & {\bfseries Reported accuracy} & {\bfseries Audit} \\
+\midrule
+Ramos {\itshape et al.} [3] & Self-captured, Raspberry Pi camera; one brand & Real authentic and counterfeit samples, same rig & 88.75\% & not reported \\
+Motwani {\itshape et al.} [26] & Web-scraped packaging, 10 manufacturers & Counterfeit class {\bfseries created by the authors} by altering logo and text & not per-class & not reported \\
+Thomson and Varuna [27] & Kaggle pill set for training; DrugBank and drugs.com for testing & Counterfeit class {\bfseries GAN-synthesized} & not comparable & not reported \\
+Thomson and Varuna [28] & drugs.com product images & not specified & 92\% & not reported \\
+Roboflow {\itshape Counterfeit\_\allowbreak{}med\_\allowbreak{}detection} [21] & Advisory bulletins plus product photographs & Class tracks document type, not authenticity (Section III-A) & --- & --- \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+
+\section*{S-VII. Appendix E --- The Operator a Train-Only Audit Nominates}
+
+Section IV-E of the main paper reports this result and its two readings; the tabulation is here for space. Produced by \url{modeling/experiment_train_only_operator.py}.
+
+\begin{table*}[!t]
+\caption{The reported operator against the one a train-only audit nominates. R = resolution cap, B = brightness rescale, W = gray-world white balance, C = JPEG bottleneck. The nominated operator is the one the rule of Section S-I-S selects using the Split B training partition alone, at a threshold fixed in advance; no external image informs it. Splits C and D are authentic-only, so those columns are specificities. Both conditions run inside one execution, so the within-run comparison is sound; absolute values are not comparable across runs, because this experiment rebuilds each model rather than loading a checkpoint (Section S-I-G) --- M4's reported-operator row reads 0.820 here against the 0.807 of Table~5 for that reason, and reproduces the committed color-balance ablation exactly on both of its conditions.}
+\label{tab:27}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+{\bfseries Model} & {\bfseries Operator} & {\bfseries Split B test} & {\bfseries Split C} & {\bfseries Split D} \\
+\midrule
+M2 CNN & reported, R$\rightarrow$B$\rightarrow$C & 0.865 & 129/150 = 0.860 & 69/149 = 0.463 \\
+M2 CNN & nominated, R$\rightarrow$B$\rightarrow$W$\rightarrow$C & 0.784 & 139/150 = {\bfseries 0.927} & 75/149 = {\bfseries 0.503} \\
+M3 MobileNetV3 & reported, R$\rightarrow$B$\rightarrow$C & 0.932 & 116/150 = 0.773 & 108/149 = 0.725 \\
+M3 MobileNetV3 & nominated, R$\rightarrow$B$\rightarrow$W$\rightarrow$C & 0.932 & 123/150 = {\bfseries 0.820} & 117/149 = {\bfseries 0.785} \\
+M4 EfficientNet-B0 & reported, R$\rightarrow$B$\rightarrow$C & 0.919 & 123/150 = 0.820 & 124/149 = 0.832 \\
+M4 EfficientNet-B0 & nominated, R$\rightarrow$B$\rightarrow$W$\rightarrow$C & 0.932 & 117/150 = 0.780 & 122/149 = 0.819 \\
+\bottomrule
+\end{tabular}
+}
+\end{table*}
+
+
+\section*{S-VIII. Appendix F --- The Counterfeit Source's Eligibility Screen, and What It Is Worth}
+
+The balanced external test's counterfeit class is drawn from 202 regulatory-alert candidates by removing 52 of them (Split E; Section III-D, Section S-IX). This appendix records that screen and the sensitivity analysis on it. The screen is applied to all 150 surviving photographs, of which the 46 case representatives entering Table~4 are a subset. The removals are judgements about what each frame shows, made by one reviewer looking at each image, and several of the exclusion codes correlate with the class by construction --- only the counterfeit class carries alert banners, and only the authentic class is carton artwork. A reviewer is entitled to ask whether the reported recall is a property of the models or of the screen. This appendix records the screen and answers that question.
+
+\subsection*{A. The codes}
+
+Each candidate carries a decision, a code and a written reason, published per image alongside the data so the screen can be read and overruled without re-deriving it.
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\columnwidth}{cc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\toprule
+{\bfseries Code} & {\bfseries n} & {\bfseries What it removes} \\
+\midrule
+\url{X_BANNER_COMPOSITE} & 16 & A burned-in caption naming the contents as falsified --- rendered text present on one class and absent from the other \\
+\texttt{X\_\allowbreak{}NOT\_\allowbreak{}PRODUCT} & 8 & No medical product in the frame: the WHO logo, the WHO emblem as line art, laboratory thin-layer chromatography plates, a chromatogram \\
+\texttt{X\_\allowbreak{}TEXT\_\allowbreak{}ONLY} & 8 & A rendered table of product details, with no photographic content \\
+\texttt{X\_\allowbreak{}NOT\_\allowbreak{}PHOTOGRAPH} & 8 & Flat vector carton artwork supplied as a reference for the genuine label \\
+\texttt{X\_\allowbreak{}ANNOTATED} & 5 & Regulator markup --- ellipses and arrows --- drawn onto the image \\
+\texttt{X\_\allowbreak{}MIXED\_\allowbreak{}CLASS} & 3 & One frame holding both an authentic and a counterfeit exemplar, unlabelable under a binary scheme \\
+\url{X_LABEL_UNVERIFIED} & 3 & The source does not assert a class \\
+\url{X_CLASS_TOO_SMALL} & 1 & The single surviving authentic photograph; one image is not a class \\
+{\bfseries retained} & {\bfseries 150} &  \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+\texttt{X\_NOT\_PHOTOGRAPH} is the code that decides the design. Eight of the nine authentic candidates are artwork rather than photographs, so applying the screen leaves one authentic image and Split E is reported falsified-only rather than as a 150-against-1 two-class set.
+
+\subsection*{B. The screen does not produce the result}
+
+Every candidate labeled falsified by its source --- including the ones the screen removes --- was scored once from the same checkpoints. Table S28 re-reads those predictions under five screen settings, from a set holding only single whole-product photographs to no screen at all.
+
+\begin{table*}[!t]
+\caption{External counterfeit recall on the full 150-image regulatory source, in its native encodings, under five settings of the eligibility screen, with 95\% case-clustered bootstrap intervals resampling whole regulatory cases. The predictions are identical across rows; only the subset read changes. S0 is the setting the 46 representatives of Table~4 are drawn from; Section S-IX-D relates this one-sided measurement to Table~4's two-sided one. S3 restores the frames carrying burned-in falsification captions and S4 restores everything, including the WHO logo and the laboratory plates, which is the no-screen bound rather than a defensible set.}
+\label{tab:28}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xcccccc}
+\toprule
+{\bfseries Setting} & {\bfseries n} & {\bfseries Cases} & {\bfseries M1} & {\bfseries M2} & {\bfseries M3} & {\bfseries M4} \\
+\midrule
+S1 whole-product photographs only & 117 & 34 & 0.991 [0.97, 1.00] & 0.573 [0.47, 0.68] & 0.513 [0.41, 0.61] & 0.573 [0.45, 0.70] \\
+S2 minus multi-panel montages & 128 & 36 & 0.992 [0.97, 1.00] & 0.594 [0.50, 0.69] & 0.555 [0.45, 0.65] & 0.609 [0.48, 0.73] \\
+{\bfseries S0 as reported} & {\bfseries 150} & {\bfseries 46} & {\bfseries 0.967 [0.93, 0.99]} & {\bfseries 0.593 [0.50, 0.69]} & {\bfseries 0.553 [0.46, 0.64]} & {\bfseries 0.607 [0.49, 0.72]} \\
+S3 plus banner composites & 166 & 53 & 0.886 [0.82, 0.94] & 0.584 [0.49, 0.67] & 0.524 [0.43, 0.61] & 0.578 [0.47, 0.68] \\
+S4 no screen at all & 183 & 56 & 0.836 [0.76, 0.90] & 0.590 [0.50, 0.67] & 0.552 [0.47, 0.63] & 0.601 [0.50, 0.70] \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+
+M2, M3 and M4 move by at most 0.06 across the whole range, and every interval overlaps every other interval for the same model. M1 stays between 0.836 and 0.992; its decline as the loosest settings are added is the color-histogram baseline responding to the large white text banners those settings restore, which is consistent with what Section S-I-P reports about that model and irrelevant to the conclusion drawn from it. {\bfseries The screen removes frames that should not be scored; it does not manufacture the number.}
+
+What the table does not do is substitute for a second reviewer. It shows that the result is insensitive to the screen's {\itshape aggregate} effect, not that any individual call is right, and no inter-rater agreement was measured (Section V-D).
+
+\subsection*{C. Duplication}
+
+Split E was checked against every image in the project's raw tree --- the Roboflow and Kaggle modeling pool, Splits C and D, the iphone11pro archive and the synthetic counterfeits, 7,081 images --- by the rotation-canonical pHash procedure of Section III-A at the same threshold of 8/64. (Section S-IX-C reports the same check against 7,283 images: the reference tree grew by the 202 candidates screened here, which were on disk by the time the balanced set was assembled. Neither figure is a correction of the other.) {\bfseries 0 of 202 candidates matched anything within the threshold}; the nearest approach was Hamming distance 10, the same distance at which Split C's nearest approach to the modeling pool sits, with median 18. Byte-level SHA-256 finds no exact duplicate among the retained images. Four harvested candidates were caught as pool near-duplicates during collection and discarded before the screen ran, and 27 byte-identical repeats were removed within the harvest itself: the alert archives genuinely re-publish photographs across related alerts, so this is a live risk rather than a hypothetical one.
+
+Eight near-duplicate pairs exist among the candidates, all within one regulatory case and all among the carton-artwork images that \texttt{X\_NOT\_PHOTOGRAPH} removes, so {\bfseries no near-duplicate pair survives into the retained 150}.
+
+\section*{S-IX. Appendix G --- The Balanced External Test: Construction, Screen and Audit}
+
+Section III-D states what the balanced external test is and why each of its design decisions was forced. This appendix records the numbers behind those decisions, the per-image screens, and the audit of the finished set.
+
+\subsection*{A. Why neither existing source could supply the authentic class}
+
+The balanced set needs an authentic class independent of the modeling pool, independent of the counterfeit class's source, and {\bfseries not separable from it by acquisition}. Every source already in this study fails the third condition, and the failures are measured rather than asserted.
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\columnwidth}{>{\hsize=0.886\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xcc>{\hsize=0.687\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=1.428\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\toprule
+{\bfseries Candidate authentic source} & {\bfseries Mean brightness} & {\bfseries Median short side} & {\bfseries Gap to the regulatory photographs} & {\bfseries Verdict} \\
+\midrule
+Regulatory archives' own authentic-labeled images & --- & --- & {\bfseries +0.233} brightness, within the manifest & 8 of 9 are flat vector carton artwork; rejected by the screen of Section S-VIII \\
+Condition C (Mendeley) & 0.162 & 2448 px & {\bfseries $-$0.396} brightness, 2009 px resolution & Rejected: a larger gap than the artwork's \\
+Condition D (Mendeley, iPhone 11 Pro) & 0.389 & 2419 px & $-$0.169 brightness, 1980 px resolution & Rejected on the same grounds \\
+The regulatory photographs themselves & 0.558 & 439 px & --- & The counterfeit class \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+The first row is the finding that decided the design and it generalizes beyond this harvest: a regulator publishes {\bfseries photographs of what it seized} and {\bfseries manufacturer artwork of what the genuine article should look like}, so the archive that can supply a counterfeit class structurally cannot supply an acquisition-matched authentic one. The second and third rows are the reason the acquisition-shift conditions stay where they are: pairing either with the regulatory photographs would have opened a class--acquisition gap {\itshape larger} than the one that disqualified the artwork, reproducing this paper's headline defect inside its own external validation.
+
+\subsection*{B. The harvest, and the screens applied to it}
+
+The authentic class was harvested from Wikimedia Commons, a third-party photographic archive unrelated to any source in this study, carrying per-file license and authorship. Candidates were sought by product: the 46 regulatory alerts name their products in their titles, and those names --- brand names, INNs, and the drug class where an alert names a class rather than a product --- became 42 search terms, supplemented by five category trees walked to depth 2.
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\columnwidth}{>{\hsize=0.383\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xc>{\hsize=1.617\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\toprule
+{\bfseries Stage} & {\bfseries Remaining} & {\bfseries Removed, and why} \\
+\midrule
+Commons search and category walk & 3,568 & bitmap candidates; SVG excluded at the API \\
+Pre-download filter & 788 & title or credit names a non-photograph; native short side < 300 px; per-term cap of 24 \\
+Downloaded & 672 & 116 returned no thumbnail rendition \\
+Automated screens & 449 & 173 outside the counterfeit brightness support [0.341, 0.714]; 50 flat artwork; 11 within-set near-duplicates (\url{A_NEAR_DUPLICATE_WITHIN}) \\
+Independence & 438 & {\bfseries 0} matched the reference tree within the threshold \\
+Subject-matter review & {\bfseries 174} & 99 \texttt{A\_\allowbreak{}NOT\_\allowbreak{}PRODUCT}, 69 \texttt{A\_\allowbreak{}PERSON}, 38 \texttt{A\_\allowbreak{}NOT\_\allowbreak{}PHOTOGRAPH}, 28 \texttt{A\_\allowbreak{}HISTORICAL}, 25 \texttt{A\_\allowbreak{}NO\_\allowbreak{}PACKAGE}, 5 \texttt{A\_\allowbreak{}AMBIGUOUS} \\
+Brightness-matched selection & {\bfseries 46} & across 29 distinct product search terms \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+{\bfseries The artwork rule is calibrated, not asserted.} The screen that matters most is the one that separates photographs from flat carton artwork, since that is the rule that removed 8 of 9 authentic candidates on the regulatory side. Rather than choose a threshold by eye, it is fitted on labeled data this project already holds: the 8 regulatory candidates the screen of Section S-VIII judged \texttt{X\_NOT\_PHOTOGRAPH} as positives, and the 150 accepted regulatory photographs as negatives. Three candidate axes are scored and the best single one is taken.
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lccc}
+\toprule
+{\bfseries Axis} & {\bfseries Artwork range} & {\bfseries Photograph p5--p95} & {\bfseries Youden J} \\
+\midrule
+{\bfseries Near-white pixel fraction} & 0.365 -- 0.490 & 0.000 -- 0.116 & {\bfseries 0.980} \\
+Quantized color count & 198 -- 867 & 340 -- 2230 & 0.620 \\
+Mean gradient magnitude & 0.0197 -- 0.0225 & 0.0107 -- 0.0396 & 0.473 \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+
+Only the near-white fraction separates the two classes; on the other two the artwork range sits inside the photographs' central band. The rule is therefore a single threshold, \url{near_white_frac > 0.320}, placed at the midpoint of the gap the classes leave, and it catches {\bfseries 8 of 8} artwork images at {\bfseries 3 of 150} false positives. A first version of this screen required all three axes at once and caught {\bfseries 0 of 8} --- a conjunction of one discriminating axis with two noise axes excludes nothing while looking careful, and it is recorded here because a screen that fires on nothing is the worst of the available failures.
+
+{\bfseries The subject-matter review is the screen no statistic replaces.} Commons, searched by drug name, returns a great deal that is not a photograph of a medicine package. The 438 eligible candidates were laid out on 13 numbered contact sheets and each was given a decision, a code and a written reason:
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\columnwidth}{cc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\toprule
+{\bfseries Code} & {\bfseries n} & {\bfseries What it removes} \\
+\midrule
+\texttt{A\_\allowbreak{}NOT\_\allowbreak{}PRODUCT} & 99 & No medical product in the frame: vehicles, buildings, landscapes, aircraft, consumer electronics, laboratory equipment, signage, forms \\
+\texttt{A\_\allowbreak{}PERSON} & 69 & A person's face or body is a subject of the frame. An anonymous hand holding a product does not trigger this; such a frame is judged on what the hand holds \\
+\texttt{A\_\allowbreak{}NOT\_\allowbreak{}PHOTOGRAPH} & 38 & Drawings, engravings, paintings, molecular renderings, diagrams, micrographs, period advertising art \\
+\texttt{A\_\allowbreak{}HISTORICAL} & 28 & Antique or museum objects rather than current retail packages \\
+\texttt{A\_\allowbreak{}NO\_\allowbreak{}PACKAGE} & 25 & No manufacturer packaging or labeled container: loose tablets, capsules or powder, unlabeled syringes and ampoules \\
+\texttt{A\_\allowbreak{}AMBIGUOUS} & 5 & Subject undeterminable, or the frame may show seized rather than legitimate product \\
+{\bfseries accepted} & {\bfseries 174} &  \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+{\bfseries Who performed it, and what it decided.} This review was carried out by the AI assistant named in the Acknowledgment, working to the codes above under the author's protocol; it is not a human reviewer's pass and no inter-rater agreement was measured. Its rubric is subject matter only --- is this a photograph, of a medicine package, of a current retail product. {\bfseries It makes no authenticity judgement}, and could not: nothing visible in a photograph establishes that the contents of a carton were made by the manufacturer named on it. The authentic side of this set is therefore an {\itshape authentic-labeled} reference class, not a verified one, and Section V-D states the consequence. It is published per image with its reason, and the contact sheets are regenerated by committed code, so any call can be checked and overruled. Section V-D records this as a limitation alongside the corresponding one on the counterfeit side.
+
+\subsection*{C. Independence}
+
+The 449 candidates surviving the automated screens were checked against {\bfseries 7,283 images} --- every image under \texttt{data/raw}, covering the Roboflow and Kaggle modeling pool, both acquisition-shift conditions, the iPhone 11 Pro archive, the synthetic counterfeits and the regulatory photographs --- by the rotation-canonical pHash procedure of Section III-A at the same threshold of 8/64. {\bfseries 0 of 449 matched anything within the threshold.} The nearest approach was Hamming distance 10, against an iPhone 11 Pro photograph --- the same closest approach that condition C and the regulatory candidates each recorded, which is a useful coincidence: three independently assembled external sources, three identical nearest approaches, none of them a match. Eleven within-set near-duplicate pairs were found and one member of each removed.
+
+\subsection*{D. Ingestion, and what it does and does not standardize}
+
+Both classes pass through one pipeline: decode to RGB, resample the short side to 448 px with Lanczos filtering, re-encode as JPEG at quality 92 with fixed chroma subsampling and metadata stripped. Container format, encoder, encoder settings and stored short side are therefore {\bfseries standardized across the classes by construction}, which holds the acquisition attributes of $A_{\mathrm{pure}}$ constant by design and takes the size and resolution components of $A_{\mathrm{mix}}$ with them. 448 px was chosen as the nearest round figure to the regulatory photographs' 439 px median short side; the models resize to 224 px regardless, so the choice is close to invisible to them and decisive for the audit.
+
+Two consequences are worth stating rather than leaving to be discovered. {\bfseries First, recall on this set is not comparable to recall on the same photographs in their native files.} Scored in their original encodings, all 150 regulatory photographs return 0.967, 0.593, 0.553 and 0.607 for M1--M4 under case-clustered intervals (Table S28's S0 row); the 46 re-encoded representatives in Table~4 return 0.957, 0.652, 0.435 and 0.587. The two are different measurements on overlapping images and neither supersedes the other on its own terms --- but Table~4 is the counterfeit-side evidence of record, because it is the only one reported beside a specificity measured on the same footing. {\bfseries Second, brightness cannot be equalized this way} without intervening on content, so it is handled by matched selection instead: candidates outside the counterfeit class's observed brightness support were screened out, and the final 46 chosen by nearest-neighbour brightness matching to the 46 counterfeit frames.
+
+\subsection*{E. The audit of the finished set}
+
+Section III-E's procedure, run on the finished 92 images:
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\columnwidth}{ccc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\toprule
+{\bfseries Axis} & {\bfseries Kind} & {\bfseries Balanced accuracy} & {\bfseries Reference} \\
+\midrule
+Container format & $A_{\mathrm{pure}}$ & --- & Constant (JPEG) by construction; carries no information \\
+Stored short side & $A_{\mathrm{pure}}$ & --- & Constant (448 px) by construction \\
+Encoded file size (log\textsubscript{1}\textsubscript{0}) & $A_{\mathrm{mix}}$ & 0.598 & chance 0.500 \\
+Aspect ratio & $A_{\mathrm{mix}}$ & 0.435 & chance 0.500 \\
+Mean brightness & $A_{\mathrm{mix}}$ & 0.413 & chance 0.500 \\
+{\bfseries All three jointly} & $A_{\mathrm{mix}}$ & {\bfseries 0.620} & chance 0.500; {\bfseries the case-study pool scores 1.000} \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+Between-class mean brightness differs by {\bfseries +0.005}, against the +0.233 that disqualified the regulatory artwork and the $-$0.396 that disqualified condition C. Five-fold stratified cross-validation, logistic regression, seed 42.
+
+{\bfseries How to read 0.620.} It is above chance and the paper does not pretend otherwise. Encoded file size is the residual axis, which is what fixing resolution and encoder quality predicts: with those held constant, file size tracks scene complexity, and photographs of seized product in field conditions are not equally complex to photographs uploaded by hobbyists. What the audit establishes is that a provenance shortcut is {\itshape available} at 0.620 rather than at 1.000 --- a diagnostic, not a clearance, exactly as Section IV-A says of the audit generally. A model scoring 0.652 balanced accuracy on a set whose acquisition variables score 0.620 has not been shown to be reading packaging; it has been shown not to be doing much better than the shortcut. That reading is stated in Section V-D and is one of the reasons no deployment claim is made.
+
+\subsection*{F. The lock}
+
+\url{data/metadata/balanced_external_provenance.csv} was written and hashed before any model saw the set, and the evaluation ran once. The order was: training, then preprocessing, then normalization, then the 0.5 decision threshold and the model-selection rule, then the set, then a single scoring pass from the persisted Split B checkpoints --- the same checkpoints that produced Tables~5 to 7, loaded rather than retrained. Nothing about any model or its pipeline was changed after Table~4 was read. Had anything been, this appendix would say so and Table~4 would move to the exploratory tier.
+
+The images themselves are not redistributed, for the same reason nothing else in this project is: 140 of the 150 regulatory photographs are held under metadata-only permission, and the Commons files carry per-file license terms that vary. What is published is the manifest, the per-image screen record with every decision and reason, the per-image predictions, and the five scripts that rebuild the set from a reader's own fetch (Section S-V).
+
+\EOD
+
+\end{document}
