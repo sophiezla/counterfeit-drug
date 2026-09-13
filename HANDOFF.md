@@ -96,9 +96,9 @@ and `final_sweep` still requires it.
 **Release.** README's status section now points at the manuscript as the
 record and marks the July working log as historical, with the three ways it
 disagrees with the paper named. CITATION.cff and `.zenodo.json` describe the
-balanced test and region substitution; version 1.4.0. The version DOI is
-recorded in README and CITATION.cff after Zenodo mints it, as for every
-earlier release.
+balanced test and region substitution; version 1.4.0. Zenodo minted
+**doi:10.5281/zenodo.22739071** for v1.4.0 and the concept DOI resolves to
+it; README.md and CITATION.cff record it.
 
 ## The balanced external test, 2026-09-09 -- the paper finally has a two-sided number
 
