@@ -1,0 +1,27 @@
+SUBJECT-MATTER REVIEW
+  eligible after the automated screens: 438
+    (included)           174
+    A_NOT_PRODUCT        99
+    A_PERSON             69
+    A_NOT_PHOTOGRAPH     38
+    A_HISTORICAL         28
+    A_NO_PACKAGE         25
+    A_AMBIGUOUS          5
+  accepted: 174
+
+COUNTERFEIT SIDE: 46 case representatives drawn from 150 images across 46 regulatory cases (the within-case median-brightness frame)
+
+AUTHENTIC SIDE: 46 selected by nearest-neighbour brightness matching, across 29 distinct product search terms
+
+PROVENANCE AUDIT ON THE FINISHED SET (Section III-E)
+  A_pure, container format: ['JPEG'] -- constant by construction, no information
+  stored short side: [448] (67 distinct (w,h) pairs, aspect follows content)
+  A_mix, log10 file size        balanced accuracy 0.598 (chance 0.500)
+  A_mix, aspect ratio           balanced accuracy 0.435 (chance 0.500)
+  A_mix, mean brightness        balanced accuracy 0.413 (chance 0.500)
+  A_mix, all three jointly      balanced accuracy 0.620 (chance 0.500)
+  brightness: authentic 0.551, counterfeit 0.546, gap +0.005  (the gap that disqualified the regulatory artwork: +0.233)
+
+LOCK
+  balanced_external_provenance.csv sha256 d60e7ffc28501b4d3557ec186a81eb4fdce80a404e30f978a9022ccf646abd26
+  The set is frozen at this point. Nothing downstream may change the model, its preprocessing, its normalisation, its decision threshold or this set; the evaluation runs once.

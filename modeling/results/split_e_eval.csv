@@ -1,0 +1,5 @@
+model,n,n_cases,correct,external_counterfeit_recall,wilson_lo,wilson_hi,cluster_boot_lo,cluster_boot_hi,split_c_specificity,split_d_specificity
+model1_classical_colorhist_logreg,150,46,145,0.9667,0.9243,0.9857,0.927,0.9938,0.0,0.0
+model2_smallcnn_gap,150,46,89,0.5933,0.5133,0.6687,0.4968,0.6883,0.86,0.4631
+model3_mobilenetv3small_frozen,150,46,83,0.5533,0.4734,0.6306,0.4601,0.6397,0.7733,0.7248
+model4_efficientnetb0_frozen,150,46,91,0.6067,0.5268,0.6812,0.4935,0.7178,0.8067,0.8322

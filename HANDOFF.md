@@ -4,6 +4,310 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Submission pass, 2026-09-13 -- references verified, supplement brought level with the paper, v1.4.0 cut
+
+Branch `ieee-access-revision`, merged to `main` and released as **v1.4.0**.
+**Still 22 pages.** Both gates green, plus three new ones (below).
+
+**WHAT THIS PASS WAS.** A final read of both documents against each other
+and against the CSVs of record, a reference audit against Crossref, DataCite
+and arXiv, the Claude mention removed from the title footnote and the Ethics
+pointer (the Acknowledgment disclosure is the one IEEE Access reads), a light
+redundancy trim, and the release.
+
+**THE SUPPLEMENT WAS TWELVE DAYS BEHIND THE PAPER, WITH EVERY GATE GREEN.**
+This is the same lesson as 2026-09-02, at the document level rather than the
+sentence level. `supplementary.md` and `build_supplement.py`'s PREAMBLE still
+carried the pre-2026-09-01 title -- *Auditing Class-Conditional Provenance
+Confounding...* -- so the compiled supplement's front page disagreed with the
+manuscript's. `final_sweep` checked the manuscript's title only. It now checks
+both. **The title lives in three places** (paper.md:1, supplementary.md:3,
+build_supplement.py PREAMBLE); the last two are now gated.
+
+**S-II, the supplement's Limitations, still described a study with no
+counterfeit-labeled external data** -- "every external image in this study is
+genuine packaging", "no independent counterfeit-labeled source could be
+found", "both external sets are authentic-only", "nothing here tests
+generalization across sources". All of that was true until 2026-09-07 and
+false since, and Section V-D of the main paper cites S-II as the evidence
+behind each limitation. Rewritten to name the regulatory source (S-VIII) and
+the balanced test (S-IX) and to state the actual gap, two-class performance
+under acquisition shift. S-I-B and S-I-M carried the same stale premise in
+one sentence each.
+
+**TABLE S9 DESCRIBED THE SUPERSEDED M4 RUN.** Its M4 rows read 13/8/0.099 and
+26/23/0.031/1.000 -- the pre-checkpoint run that Section S-I-G itself says
+was replaced by one that early-stops at epoch 18. The run of record is
+18/13/0.082/0.974 and 18/14/0.045/0.987 (`paper/tables/table_training_curves.csv`).
+Table S3 also carried four rounding slips against
+`table_performance_full.csv` (two ROC/PR-AUC cells, two balanced-accuracy
+cells). **`final_sweep` now checks Tables S3 and S9 cell by cell against
+their CSV** -- the first numeric gate in the sweep; every earlier gate reads
+structure. Extend it to any other supplement table that is a transcription
+of a committed CSV before trusting that table.
+
+**The renumbering trap fired again, three times in the main paper**, all on
+the 2026-09-09 map: "(Table 5)" for the five-seed table in III-B, III-C and
+V-D, where it has been Table 6 since the balanced test became Table 4.
+`verify_crossrefs` cannot see this and never will. The supplement had six
+more of the same species: IV-C for what is now IV-E (twice), IV-C for IV-D,
+"Section V" three times for what is now S-I-N..S-I-X (the supplement's own
+pre-restructure numbering), "Tables S12, S14 and 9" for S21, and S-IX-E
+crediting IV-B with IV-A's closing line. Plus stale numbers: M3's
+pre-normalization baseline quoted as 0.693 (archived run; it is 0.667), M4's
+normalized condition C as 0.813 (0.807), the Type A "cost when undetected"
+as 0.033 (0.060), the leakage deltas as "+0.2 to +4.1" (+6.8 since M4's
+correction), and S-I-Z explaining Table 5's baseline column as the archived
+run when it has been the current seed-42 run since 2026-09-01.
+
+**Smaller things a reader would have noticed.** Every `#### 1)` heading
+printed as "1) 1) ..." because ieeeaccess.cls numbers `\subsubsection`
+itself; `build_tex` now strips the markdown numeral. Table 4 had two
+identical columns ("Balanced external accuracy" and "Balanced accuracy");
+one now, the caption saying why. The Grad-CAM categorisation was described
+as two-way in III-G and four-way in S-II; the committed record has three
+tags. "(Finding 13)" -- a working-log label -- was in S-I-G. "Step 25" in
+S-IX meant nothing to a reader and is now "the screen of Section S-VIII".
+S-IX-F said four rebuild scripts; the paper and S-V say five.
+
+**References.** All 14 DOIs resolve on Crossref/DataCite and match on
+authors, venue, volume, pages and year; all 9 arXiv IDs match on title and
+author list. Four corrections: [9] "M. Milne" -> "M. R. Milne" and "J. F.
+Lambert" -> "J. Lambert" (the record has Michael Robert Milne, John Lambert);
+[10] "A. Lee" -> "A. Y. Lee", "J. Lavista Ferres" -> "J. M. Lavista Ferres";
+[20] gained its year (2022, from DataCite); [1] gained an access date. The
+Kaggle listing was re-read 2026-09-13 through the public API and the live
+page: 662 downloads, 3 notebooks, 3 votes, no discussion; II-A updated.
+The [3] ICCAE record carries no volume, as cited.
+
+**Polish, deliberately small.** Nothing was reworded for its own sake. Cut:
+the IV-A callout box (the availability/attribution distinction was already
+stated in I-B, III-E step 6 and the Conclusion), one duplicated sentence in
+IV-D, the duplicated scorable-count clause after Table 3, one "not a sample
+of any supply chain" (V-D and Table 8 keep it), and IV-E-1's restatement of
+the tier paragraph. Net -129 words; still 22 pages. The `rather than`
+habit is untouched, as before.
+
+**Removed from the paper on request:** the Claude sentence in the title
+footnote and the "Generative-AI disclosure. Stated in full in the
+Acknowledgment" line in Ethics. The Acknowledgment disclosure is unchanged
+and `final_sweep` still requires it.
+
+**Release.** README's status section now points at the manuscript as the
+record and marks the July working log as historical, with the three ways it
+disagrees with the paper named. CITATION.cff and `.zenodo.json` describe the
+balanced test and region substitution; version 1.4.0. The version DOI is
+recorded in README and CITATION.cff after Zenodo mints it, as for every
+earlier release.
+
+## The balanced external test, 2026-09-09 -- the paper finally has a two-sided number
+
+Branch `ieee-access-revision`. **The paper is 22 pages, down from 23**, and the
+external-validation structure went from three named splits to two named
+experiments.
+
+**WHAT CHANGED, IN ONE LINE.** Every external number this project had was
+one-sided -- C and D authentic-only, E counterfeit-only -- so no accuracy, no
+balanced accuracy, no F1 and no ROC-AUC existed anywhere in the paper. A
+**balanced external test** now does: 46 authentic against 46 counterfeit,
+scored once, and it is Section IV-C and Table 4.
+
+**THE RESULT, AND IT IS THE PAPER'S BEST EVIDENCE.** Balanced accuracy 0.478,
+0.478, 0.543, 0.652 for M1-M4; **only M4's interval [0.554, 0.750] excludes
+chance**. M1 and M2 return ROC-AUC 0.422 and 0.403 -- point estimates on the
+wrong side of 0.5. Two things fall out that nothing else in the study could
+show. **M1 is measured as the degenerate all-counterfeit classifier**: 90 of 92
+called counterfeit, 0.957 recall at 0.000 specificity, F1 0.647 -- an F1 that
+looks respectable and describes a model that never says "authentic". And **M2,
+which holds the best external specificity in the whole study (0.860 on
+condition C), is last here at 0.478 with AUC 0.403.** Surviving the one-sided
+test predicts nothing about the two-sided one, and the model ordering is not
+even preserved.
+
+**WHERE THE AUTHENTIC CLASS CAME FROM, AND WHY IT COULD NOT COME FROM HERE.**
+This was the whole design problem. Pairing Split E's counterfeits with Split C
+authentic images would have opened a **brightness gap of +0.396 and a
+2448-vs-439 px resolution gap** -- *larger* than the +0.233 gap that caused
+step 25 to discard the regulatory manifest's own authentic class. Reusing C or
+D would have reproduced this paper's headline defect inside its own external
+validation. So the authentic class is **newly harvested from Wikimedia
+Commons**, product-matched to the 46 alert titles: 3,568 candidates -> 788
+pre-filtered -> 672 downloaded -> 449 past the automated screens -> 438 after
+independence -> **174 past a subject-matter review** -> 46 selected by
+brightness matching across 29 products. Scripts 30-33 plus
+`record_balanced_review.py`.
+
+**THE INGESTION DECISION, WHICH IS THE ONE A REVIEWER WILL PUSH ON.** Both
+classes go through one pipeline: RGB, short side 448, JPEG q92, metadata
+stripped. Container format, encoder, encoder settings and stored resolution are
+therefore constant across classes **by construction** -- A_pure eliminated by
+design. **The cost is that recall on this set is not comparable to Split E's
+native-encoding recall** (0.957/0.652/0.435/0.587 here against
+0.967/0.593/0.553/0.607 there), and Section S-IX-D says so in as many words
+rather than letting someone discover it.
+
+**THE AUDIT ON THE FINISHED SET IS 0.620, NOT 0.500, AND THE PAPER SAYS SO.**
+Format and resolution carry no information by construction; file size scores
+0.598, aspect 0.435, brightness 0.413, all three jointly **0.620** against the
+case-study pool's 1.000. Brightness gap between classes **+0.005**. Do not
+quietly round this to "clean": Section V-D states that a model at 0.652 on a
+set whose acquisition variables reach 0.620 has not been shown to read
+packaging, and that is one of the reasons no deployment claim is made.
+
+**THE SUBJECT-MATTER REVIEW WAS DONE BY THE AI ASSISTANT, AND THE PAPER SAYS
+THAT TOO.** 438 candidates on 13 contact sheets, six codes, 174 accepted, every
+call published with its reason. It is *not* described as a human reviewer's
+pass anywhere -- Section V-D and Section S-IX-B name who did it. Commons
+searched by drug name returns cell-biology diagrams, hospital buildings,
+keyboards, pole vaulters and glasses of water; no pixel statistic removes any
+of that, which is why the review exists.
+
+**THE RESTRUCTURE, AND THE RENUMBERING TRAP THAT WAS *NOT* AVOIDED THIS TIME.**
+Unlike the Split E pass, this one renumbers. The map, which is **not
+invertible** and cannot be applied as a numeric shift:
+
+  - old Table 4 (condition C baseline/normalized) -> **new Table 5**
+  - old Table 6 (C vs D)                          -> **new Table 5** (merged in)
+  - old Table 5 (five-seed)                       -> **new Table 6**
+  - new Table 4 is the balanced external test
+  - old IV-C (external validation) -> **new IV-D**
+  - old IV-D (normalization) and old IV-E (region substitution) -> **new IV-E**
+  - new IV-C is the balanced external evaluation
+
+Two old numbers land on one new number in both maps, which is why
+`scripts/suppmap.py`-style blind substitution is safe only for the supplement
+(all 15 of its "Table 4" refs and its single "Table 6" ref both meant the
+condition C table). The main paper was done by hand.
+
+**TERMINOLOGY.** The main text now says **internal grouped test**, **balanced
+external test** and **external acquisition-shift test**. "Split C/D/E" survives
+in exactly **three places in paper.md**, all in Methods III-D where the labels
+are defined for reproducibility. Splits C and D are "condition C" and
+"condition D" -- two conditions of one experiment, never two datasets, and the
+paper explicitly refuses to pool their 299 images because the same packages
+appear in both.
+
+**BOTH GATES WERE WIDENED, AND ONE OF THEM CAUGHT ITS OWN HOLE.**
+`final_sweep`'s specificity rule had to learn that the balanced set *does* have
+an accuracy: it now licenses "balanced external accuracy" and still rejects
+bare "external accuracy" (verified by injection). It failed first time on
+**Table 4's own column heading**, because the licence list was case-sensitive
+and the heading is capitalised -- now matched case-insensitively.
+`verify_crossrefs`'s external-count gate now derives the legitimate k/46 and
+k/92 counts from `balanced_external_eval.csv` rather than accepting them.
+
+**WHAT IS STILL NOT MEASURED, AND IT IS NOW A SHARPER GAP.** Two-class
+performance **under acquisition shift**. The balanced set has two classes but
+shifts *source* and equalizes acquisition; the acquisition-shift experiment
+moves acquisition but holds one class. Table 8 records this as its own row.
+Closing it needs photography, not harvesting.
+
+**Page note.** 23 -> 22. Consolidating C and D into one experiment and moving
+the Split E table out of the main text paid for Table 4 and Section IV-C with a
+page to spare.
+
+## Split E, 2026-09-07/08 -- the first counterfeit-labelled external set
+
+Branch `ieee-access-revision`. **The paper is 23 pages, up from 21, and that is
+the price of the addition** -- see the page note at the end.
+
+**A third external set now exists.** Splits C and D are authentic-only, so every
+external number the paper had was a specificity and Table 8 listed counterfeit
+recall as *not measured*. **Split E is 150 photographs from 46 FDA/WHO
+falsified-medicine alerts, counterfeit class only**, and it measures external
+counterfeit recall. New Sections III-G and VI-H, new supplement Appendix S-VIII
+with Table S28, two Table 8 rows replacing one, and rewrites in V-A and VIII.
+
+**No renumbering was needed and none was done.** III-G goes after III-F, VI-H
+after VI-G, S-VIII after S-VII, and the Split E results table in VI-H is
+**deliberately uncaptioned** so it does not advance the table counter -- a
+`**TABLE 9.**` there would have pushed the existing Table 8 to 9 across both
+documents. Main tables are still 1-8. This is the renumbering trap avoided
+rather than survived; do not "tidy" that table by captioning it.
+
+**What arrived and what it actually was.** The delivered zip was a *rights-
+audited candidate manifest, not an image dataset* -- `images/`, `hashes/`,
+`splits/` inside it are empty directories, 131 of 188 rows are queue records
+with no URL, and only 57 rows name a retrievable file. Nine defects are recorded
+in `data/metadata/split_e_findings.md`, including **`PC_000055` being the WHO
+corporate logo labelled FALSIFIED**, three frames holding both classes at once,
+and a count disagreement between `metadata.csv` (200 rows) and the manifest
+(188).
+
+**THE DEFECT THAT DECIDED THE DESIGN.** The manifest carries a deterministic
+class-acquisition confound *of exactly the species this paper documents*: 8 of
+its 9 AUTHENTIC images are flat vector carton artwork, every FALSIFIED image is
+a field photograph, and the measured brightness gap is **+0.233**. A two-class
+Split E built from that source would have reproduced the paper's own headline
+defect inside its own external validation. **The authentic class is therefore
+discarded and Split E is falsified-only.** Do not "fix" this by re-adding the
+artwork.
+
+**Reaching a usable size.** 28 images from 8 cases was too small (M2's clustered
+interval ran [0.214, 0.821]). The 143 queue records could not close the gap --
+all 143 carry the same generic index URL. Steps 27-28 locate the alerts
+themselves. **WHO moved to PDF-only alerts around 2022**: harvesting inline
+images alone returned 42 distinct URLs across 48 alerts, nearly all page
+furniture, and adding `pymupdf` raster extraction is what made the recent
+archive usable. 410 resources -> 145 kept -> 121 pass the screen, plus 29 from
+the manifest.
+
+**Independence: 0 of 202 candidates matched anything** in the whole 7,081-image
+raw tree, nearest approach Hamming 10 against a threshold of 8 -- the same
+closest approach Split C had. Step 28 caught 4 pool near-duplicates and 27
+byte-identical repeats before the screen; the archives really do re-publish
+photographs across related alerts.
+
+**The result, and why it matters more than the recall number.** M1 returns
+**0.967 recall against 0.000/0.000 specificity** -- it is the degenerate
+all-counterfeit classifier Section VIII had described *hypothetically*, now
+observed in a reported model. M2/M3/M4 return 0.553-0.607 while holding
+0.725-0.860 specificity, so surviving external specificity testing does not
+establish counterfeit recall.
+
+**The screen does not drive the result, and this is measured, not asserted.**
+`modeling/split_e_screen_sensitivity.py` scores every falsified-labelled
+candidate once and re-reads the same predictions under five screen settings
+(Table S28): M2-M4 move by at most 0.06 from "whole-product photographs only"
+(n=117) to "no screen at all" (n=183). **Ship that table with any Split E
+claim** -- 52 of 202 exclusions on one reviewer's per-frame judgement is the
+obvious attack surface, and this is the answer to it.
+
+**Split E is NOT an acquisition-shift set and the paper must not imply it is.**
+Brightness 0.558, median short side 439 px -- beside the training pool's 0.668
+and 225 px, nowhere near Split C (0.162, 2448) or Split D (0.389, 2419). It
+shifts source, product and photographer. Table 8's counterfeit-recall row is
+**narrowed to source shift, not closed**; a separate row records the acquisition
+case as still not measured.
+
+**`final_sweep`'s Section V-A gate now covers Split E.** The regex was
+`Split [CD] accurac(y|ies)`; it is now `[CDE]`. C and D are authentic-only and E
+is counterfeit-only, so nothing computed on any of the three is an accuracy --
+the first two yield a specificity, the third a recall.
+
+**Terminology scoping.** Eight places said "both external sets" meaning C and D;
+with three sets that is now ambiguous and all eight are scoped explicitly.
+Table 7's caption included.
+
+**Open, and stated in the paper as open.** The eligibility screen is **one
+reviewer's single pass** with no inter-rater agreement -- a new Limitations
+paragraph says so. `scripts/29_build_split_e_review_tool.py` builds a local
+`file://` review tool (`data/metadata/split_e_review_tool.html`) for a second
+pass; it exports an adjudication CSV, and re-running step 25 applies it. It is
+deliberately not a hosted artifact: **140 of the 150 images are WHO
+`metadata_only_permission_required` and must not be uploaded anywhere.** Only 10
+of 150 are redistributable, so this is a reproducible recipe, not a publishable
+dataset.
+
+**Page note.** 21 -> 23 pages. Two compression passes on the new text recovered
+132 words and moved nothing, because **page 23 holds only the second author's
+biography, an atomic block that will not split** -- recovering it needs a
+biography-block's height freed on page 22, not 57 words of prose. Getting back
+to 22 means deleting an existing argument or float, which is an author decision
+and was not taken. `final_sweep`'s page gate is 23, so this passes; IEEE Access
+recommends under 20 and the paper has been over that since well before this
+pass.
+
 ## Claim hierarchy, 2026-09-02 (fourth) -- Section I-B ranked
 
 Same branch, still 21 pages, no claim or number removed.

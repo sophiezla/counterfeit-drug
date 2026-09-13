@@ -350,17 +350,47 @@ authentic packaging), but are **not** used by any split by default.
   images, verified independent) — see "Sources" above and
   `modeling/README.md` "Split C" for results. Not the two-class benchmark
   the plan originally envisioned (see Open Items below).
+- **Split E (external, counterfeit-only)**: 150 photographs from 46 FDA and WHO
+  falsified-medicine alerts, built 2026-09-07. Two acquisitions: the 57 images
+  named by the rights-audited manifest at the repo root (`scripts/24`), and a
+  harvest of the wider WHO/FDA alert archive including rasters extracted from
+  alert PDFs (`scripts/27`–`28`) — WHO moved to PDF-only alerts around 2022, so
+  without the PDF path the last five years of the archive contribute nothing.
+  Verified independent of everything in `data/raw` by the same
+  rotation-canonical pHash procedure at the same threshold — **0 of 202
+  candidates matched any of the 7,081 existing images**, nearest approach at
+  Hamming distance 10 against a threshold of 8. It measures **external
+  counterfeit recall** and is the complement of Splits C and D, not a
+  replacement for them: step 26 puts it at brightness 0.558 and median short
+  side 439 px, next to the training pool rather than out with Splits C and D, so
+  it shifts source and product but **not acquisition**. Bytes are gitignored
+  (140 of 150 are WHO-hosted and metadata-only, i.e. not redistributable); the
+  scripts regenerate them from the manifests. Full audit — the nine defects
+  found in the source package, the class-conditional confound that forced the
+  authentic class to be discarded, and the five-setting screen-sensitivity check
+  showing the eligibility screen does not drive the result — is in
+  `data/metadata/split_e_findings.md`. Screens:
+  `data/metadata/split_e_eligibility_review.csv` and
+  `data/metadata/split_e_harvest_eligibility_review.csv`.
 
 ## Open items / what's still needed before modeling starts
 
-1. **A counterfeit-labeled independent Split C source.** The authentic-only
-   Mendeley check (above) resolves the "is there sampling/generalization
-   bias" question for the authentic class, but says nothing about whether
-   counterfeit-detection recall generalizes externally — that remains
-   untested. A genuinely independent source that also has a counterfeit
-   label would still need the same pHash independence verification before
-   being trusted (Roboflow, the obvious second source, turned out to
-   overlap with Kaggle by 44% despite looking independent by description).
+1. **A counterfeit-labeled independent Split C source — PARTIALLY CLOSED
+   2026-09-07 by Split E; narrowed, not closed.** The authentic-only Mendeley
+   check (above) resolves the "is there sampling/generalization bias" question
+   for the authentic class. Split E now measures counterfeit recall on 28
+   confirmed-falsified products from 8 FDA/WHO alerts, verified independent by
+   the same pHash procedure (0/202 matched — Roboflow, the obvious second source,
+   had turned out to overlap with Kaggle by 44% despite looking independent by
+   description, which is why the check is not optional). What remains open:
+   (a) Split E's acquisition statistics sit next to the training pool, so
+   counterfeit recall under *acquisition* shift is still unmeasured — only
+   under *source* shift; (b) Split E has no authentic class, and the regulatory
+   archive cannot supply one — regulators publish photographs of seized
+   falsified product, and their authentic reference imagery is manufacturer
+   artwork, a class-conditional confound of the species this project documents —
+   so a genuinely two-class external benchmark still does not exist; (c) neither
+   eligibility screen has had a second-reviewer pass.
 2. **Manual modality review — DONE and complete for the Kaggle modeling
    pool (2026-07-24), still open for Roboflow's supplementary pool.**
    Three rounds: an AI contact-sheet pass (composition estimate + 11

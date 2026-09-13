@@ -1,0 +1,146 @@
+image_id,manifest_label,decision,exclusion_code,panel_composite,label_crop,reviewer,review_date,reason
+HV_000001_x41,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000001_x42,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000001_x43,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000001_x44,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000002_x17,FALSIFIED,exclude,X_NOT_PRODUCT,no,no,claude_first_pass,2026-09-07,The World Health Organization corporate logo; no medical product depicted.
+HV_000002_x37,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000002_x38,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000002_x39,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000002_x40,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000011_x49,FALSIFIED,include,,no,yes,claude_first_pass,2026-09-07,Photographic close-up of printed packaging (label or carton panel).
+HV_000011_x50,FALSIFIED,include,,no,yes,claude_first_pass,2026-09-07,Photographic close-up of printed packaging (label or carton panel).
+HV_000019_x25,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000019_x40,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000019_x49,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,"Multi-panel montage of one product; photographic, single class, no burned-in caption."
+HV_000035_x24,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,"Multi-panel montage of one product; photographic, single class, no burned-in caption."
+HV_000036_x24,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,"Multi-panel montage of one product; photographic, single class, no burned-in caption."
+HV_000036_x29,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,"Multi-panel montage of one product; photographic, single class, no burned-in caption."
+HV_000045_x38,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,"Multi-panel montage of one product; photographic, single class, no burned-in caption."
+HV_000060,FALSIFIED,exclude,X_TEXT_ONLY,no,no,claude_first_pass,2026-09-07,Rendered product-details table; no photographic content.
+HV_000062_x28,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,"Multi-panel montage of one product; photographic, single class, no burned-in caption."
+HV_000069,FALSIFIED,exclude,X_BANNER_COMPOSITE,no,no,claude_first_pass,2026-09-07,Rendered table with burned-in field labels around inset photographs.
+HV_000070_x34,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000070_x35,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000070_x48,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000078_x36,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,"Multi-panel montage of one product; photographic, single class, no burned-in caption."
+HV_000096_x28,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000103,FALSIFIED,exclude,X_BANNER_COMPOSITE,no,no,claude_first_pass,2026-09-07,Rendered table with burned-in field labels around inset photographs.
+HV_000104_x39,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000104_x40,FALSIFIED,exclude,X_ANNOTATED,no,no,claude_first_pass,2026-09-07,Regulator markup: red arrow and red ellipse drawn onto the carton panel.
+HV_000104_x41,FALSIFIED,exclude,X_ANNOTATED,no,no,claude_first_pass,2026-09-07,Regulator markup: red ellipse drawn onto the rightmost vial.
+HV_000116_x55,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,"Multi-panel montage of one product; photographic, single class, no burned-in caption."
+HV_000116_x56,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000123,FALSIFIED,exclude,X_TEXT_ONLY,no,no,claude_first_pass,2026-09-07,Rendered product-details table; no photographic content.
+HV_000124,FALSIFIED,exclude,X_BANNER_COMPOSITE,no,no,claude_first_pass,2026-09-07,"Burned-in caption naming the batch as falsified, above inset photographs."
+HV_000125_x49,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000125_x50,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000125_x53,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000125_x54,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000133_x54,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000133_x59,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000133_x66,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000135_x60,FALSIFIED,exclude,X_NOT_PRODUCT,no,no,claude_first_pass,2026-09-07,Laboratory thin-layer chromatography plate from the investigation; not a product.
+HV_000135_x62,FALSIFIED,exclude,X_NOT_PRODUCT,no,no,claude_first_pass,2026-09-07,Laboratory TLC plate; not a product.
+HV_000135_x63,FALSIFIED,exclude,X_NOT_PRODUCT,no,no,claude_first_pass,2026-09-07,Laboratory TLC plate under UV lamp; not a product.
+HV_000135_x65,FALSIFIED,exclude,X_NOT_PRODUCT,no,no,claude_first_pass,2026-09-07,Laboratory TLC reference plate; not a product.
+HV_000135_x66,FALSIFIED,exclude,X_NOT_PRODUCT,no,no,claude_first_pass,2026-09-07,Chromatogram trace; not a product.
+HV_000145_x47,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000145_x48,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000153_x35,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,"Multi-panel montage of one product; photographic, single class, no burned-in caption."
+HV_000153_x36,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,"Multi-panel montage of one product; photographic, single class, no burned-in caption."
+HV_000162_x42,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000162_x44,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000170_x50,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000170_x51,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000177,FALSIFIED,exclude,X_TEXT_ONLY,no,no,claude_first_pass,2026-09-07,Rendered product-details table; no photographic content.
+HV_000178,FALSIFIED,exclude,X_BANNER_COMPOSITE,no,no,claude_first_pass,2026-09-07,"Burned-in caption naming the batch as falsified, above an inset photograph."
+HV_000179_x34,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,"Multi-panel montage of one product; photographic, single class, no burned-in caption."
+HV_000180_x36,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000180_x38,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000189_x11,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000189_x7,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000189_x9,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000201_x41,FALSIFIED,exclude,X_BANNER_COMPOSITE,no,no,claude_first_pass,2026-09-07,Rendered lot/country table with burned-in headers around inset photographs.
+HV_000217_x27,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000217_x28,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000217_x33,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000217_x34,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000225_x44,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,"Multi-panel montage of one product; photographic, single class, no burned-in caption."
+HV_000233_x34,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000233_x41,FALSIFIED,include,,no,yes,claude_first_pass,2026-09-07,Photographic close-up of printed packaging (label or carton panel).
+HV_000233_x42,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000233_x43,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000233_x49,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000233_x50,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000241_x29,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000241_x30,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000241_x42,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000241_x43,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000249_x32,FALSIFIED,include,,no,yes,claude_first_pass,2026-09-07,Photographic close-up of printed packaging (label or carton panel).
+HV_000249_x33,FALSIFIED,include,,no,yes,claude_first_pass,2026-09-07,Photographic close-up of printed packaging (label or carton panel).
+HV_000249_x49,FALSIFIED,include,,no,yes,claude_first_pass,2026-09-07,Photographic close-up of printed packaging (label or carton panel).
+HV_000249_x50,FALSIFIED,include,,no,yes,claude_first_pass,2026-09-07,Photographic close-up of printed packaging (label or carton panel).
+HV_000257_x48,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000257_x49,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000257_x50,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000266_x47,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000266_x48,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000266_x49,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000281,FALSIFIED,exclude,X_TEXT_ONLY,no,no,claude_first_pass,2026-09-07,Rendered table stating WHO has no photographs to share; no image content.
+HV_000282_x45,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000282_x47,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000282_x49,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000282_x51,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000282_x53,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000290_x30,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000290_x31,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000290_x32,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000290_x33,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000290_x34,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000290_x39,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000290_x40,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000298_x34,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000298_x37,FALSIFIED,include,,no,yes,claude_first_pass,2026-09-07,Photographic close-up of printed packaging (label or carton panel).
+HV_000298_x38,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000298_x41,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000298_x42,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000298_x45,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000306_x49,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000306_x50,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000306_x51,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000306_x52,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000306_x53,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000314_x48,FALSIFIED,exclude,X_NOT_PRODUCT,no,no,claude_first_pass,2026-09-07,WHO emblem rendered as line art; no product depicted.
+HV_000314_x49,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000314_x54,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000314_x55,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000322_x34,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000322_x35,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000322_x36,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000322_x37,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000330_x51,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,"Multi-panel montage of one product; photographic, single class, no burned-in caption."
+HV_000337,FALSIFIED,exclude,X_TEXT_ONLY,no,no,claude_first_pass,2026-09-07,Rendered product-details table; no photographic content.
+HV_000338,FALSIFIED,exclude,X_BANNER_COMPOSITE,no,no,claude_first_pass,2026-09-07,"Burned-in caption naming the lot as falsified, above an inset photograph."
+HV_000347_x42,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000347_x43,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000347_x47,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000347_x48,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000347_x49,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000355_x34,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000355_x35,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000355_x36,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000355_x37,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000363_x25,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000363_x26,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000363_x31,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000371_x36,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000371_x37,FALSIFIED,include,,no,yes,claude_first_pass,2026-09-07,Photographic close-up of printed packaging (label or carton panel).
+HV_000371_x38,FALSIFIED,include,,no,yes,claude_first_pass,2026-09-07,Photographic close-up of printed packaging (label or carton panel).
+HV_000371_x39,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of the falsified product or its packaging.
+HV_000381_x47,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,"Multi-panel montage of one product; photographic, single class, no burned-in caption."
+HV_000381_x51,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,"Multi-panel montage of one product; photographic, single class, no burned-in caption."
+HV_000381_x57,FALSIFIED,exclude,X_ANNOTATED,no,no,claude_first_pass,2026-09-07,Regulator markup: red ellipse and arrow drawn onto the vial.
+HV_000388,FALSIFIED,exclude,X_TEXT_ONLY,no,no,claude_first_pass,2026-09-07,Rendered product-details table; no photographic content.
+HV_000390,FALSIFIED,exclude,X_BANNER_COMPOSITE,no,no,claude_first_pass,2026-09-07,"Burned-in caption naming the product as falsified, above inset photographs."
+HV_000391,FALSIFIED,exclude,X_BANNER_COMPOSITE,no,no,claude_first_pass,2026-09-07,Burned-in caption naming the batch as falsified; also carries regulator markup.

@@ -1,0 +1,63 @@
+Split E independence and eligibility report
+(regulatory-alert candidate set: FDA and WHO falsified-medicine alerts)
+
+Candidates fetched from the manifest: 202
+Reference pool checked against: 7081 images (all of data/raw: Roboflow, Kaggle, Mendeley Splits C and D, iphone11pro, synthetic counterfeits)
+Hamming threshold (same as 03_dedup.py and step 07): 8/64 bits
+
+=== (1a) Split E vs. everything already in this project ===
+Candidates flagged as near-duplicates: 0/202
+Nearest-neighbour distance distribution: min=10, median=18, max=20
+No candidate matched any existing image within threshold.
+VERDICT: no overlap with the training pool or with either existing
+external set. The closest approach is distance 10, against a threshold of 8; for
+reference, Split C's closest approach to the training pool was 10.
+
+Ten closest candidates (all above threshold unless flagged above):
+  PC_000026 dist=10 -> kaggle_fake_real/dataset/Real/images5021.jpg
+  PC_000045 dist=10 -> roboflow/train/images4054_jpg.rf.315f0014632e27d83a940aea16d875b1.jpg
+  HV_000104_x40 dist=12 -> kaggle_fake_real/dataset/Fake/Screenshot 2025-09-17 173925.png
+  HV_000233_x49 dist=12 -> roboflow/train/images5110_jpg.rf.01c4e3db3c0a14137a7ec020c507b58b.jpg
+  HV_000371_x38 dist=12 -> kaggle_fake_real/dataset/Fake/Screenshot 2025-09-17 183015.png
+  PC_000043 dist=12 -> roboflow/train/images5041_jpg.rf.38c07d59aeea8e7c6cca5387e781ff15.jpg
+  HV_000001_x43 dist=14 -> roboflow/train/images5069_jpg.rf.23e5911ce387cc8b253f411a68a52ce8.jpg
+  HV_000036_x29 dist=14 -> kaggle_fake_real/dataset/Real/images4032.jpg
+  HV_000070_x35 dist=14 -> mendeley_iphone11pro/iphone_11_pro_(184).JPG
+  HV_000125_x49 dist=14 -> mendeley_split_c/huawei_cn_(143).jpg
+
+=== (1b) Duplication within Split E ===
+Near-duplicate pairs within the candidate set: 8
+  PC_000007 (authentic, CASE_0001) <-> PC_000008 (authentic, CASE_0001) dist=6
+  PC_000007 (authentic, CASE_0001) <-> PC_000009 (authentic, CASE_0001) dist=2
+  PC_000007 (authentic, CASE_0001) <-> PC_000010 (authentic, CASE_0001) dist=4
+  PC_000008 (authentic, CASE_0001) <-> PC_000009 (authentic, CASE_0001) dist=8
+  PC_000008 (authentic, CASE_0001) <-> PC_000010 (authentic, CASE_0001) dist=6
+  PC_000009 (authentic, CASE_0001) <-> PC_000010 (authentic, CASE_0001) dist=4
+  PC_000011 (authentic, CASE_0001) <-> PC_000012 (authentic, CASE_0001) dist=4
+  PC_000013 (authentic, CASE_0001) <-> PC_000014 (authentic, CASE_0001) dist=6
+  of which both members survive the eligibility screen: 0
+
+=== (2) Eligibility screen ===
+Reviewed: 202   include: 150   exclude: 52
+  X_ANNOTATED            5  HV_000104_x40, HV_000104_x41, HV_000381_x57, PC_000034, PC_000035
+  X_BANNER_COMPOSITE    16  HV_000069, HV_000103, HV_000124, HV_000178, HV_000201_x41, HV_000338, HV_000390, HV_000391, PC_000043, PC_000044, PC_000049, PC_000051, PC_000052, PC_000053, PC_000054, PC_000057
+  X_CLASS_TOO_SMALL      1  PC_000015
+  X_LABEL_UNVERIFIED     3  PC_000038, PC_000039, PC_000040
+  X_MIXED_CLASS          3  PC_000033, PC_000036, PC_000037
+  X_NOT_PHOTOGRAPH       8  PC_000007, PC_000008, PC_000009, PC_000010, PC_000011, PC_000012, PC_000013, PC_000014
+  X_NOT_PRODUCT          8  HV_000002_x17, HV_000135_x60, HV_000135_x62, HV_000135_x63, HV_000135_x65, HV_000135_x66, HV_000314_x48, PC_000055
+  X_TEXT_ONLY            8  HV_000060, HV_000123, HV_000177, HV_000281, HV_000337, HV_000388, PC_000048, PC_000050
+
+=== Final Split E ===
+Images: 150   class counts: {'counterfeit': 150}
+Distinct regulatory cases (product_identity groups): 46
+Redistributable bytes (FDA public domain): 10; metadata-only (WHO): 140
+
+SINGLE-CLASS SET. Split E carries only the counterfeit class, so it
+measures external counterfeit recall (sensitivity) and nothing else --
+the exact complement of Splits C and D, which are authentic-only and
+measure specificity. It is not an accuracy and must never be reported
+as one. Read on its own a recall figure is uninterpretable: a model
+that called every image counterfeit would score 1.000 here. It is
+interpretable only jointly with the Split C and D specificities, which
+bound that degenerate solution from the other side.

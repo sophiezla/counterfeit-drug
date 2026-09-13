@@ -1,0 +1,21 @@
+condition,model,n,n_cases,recall,cluster_boot_lo,cluster_boot_hi
+S1 whole-product photographs only,model1_classical_colorhist_logreg,117,34,0.9915,0.9714,1.0
+S1 whole-product photographs only,model2_smallcnn_gap,117,34,0.5726,0.4673,0.6789
+S1 whole-product photographs only,model3_mobilenetv3small_frozen,117,34,0.5128,0.4068,0.6146
+S1 whole-product photographs only,model4_efficientnetb0_frozen,117,34,0.5726,0.446,0.7023
+S2 minus multi-panel montages,model1_classical_colorhist_logreg,128,36,0.9922,0.9737,1.0
+S2 minus multi-panel montages,model2_smallcnn_gap,128,36,0.5938,0.4959,0.6903
+S2 minus multi-panel montages,model3_mobilenetv3small_frozen,128,36,0.5547,0.4531,0.6544
+S2 minus multi-panel montages,model4_efficientnetb0_frozen,128,36,0.6094,0.4846,0.7333
+S0 Split E as built (reported),model1_classical_colorhist_logreg,150,46,0.9667,0.927,0.9938
+S0 Split E as built (reported),model2_smallcnn_gap,150,46,0.5933,0.4968,0.6883
+S0 Split E as built (reported),model3_mobilenetv3small_frozen,150,46,0.5533,0.4601,0.6397
+S0 Split E as built (reported),model4_efficientnetb0_frozen,150,46,0.6067,0.4935,0.7178
+S3 plus banner composites,model1_classical_colorhist_logreg,166,53,0.8855,0.8159,0.9409
+S3 plus banner composites,model2_smallcnn_gap,166,53,0.5843,0.4937,0.673
+S3 plus banner composites,model3_mobilenetv3small_frozen,166,53,0.5241,0.434,0.6093
+S3 plus banner composites,model4_efficientnetb0_frozen,166,53,0.5783,0.4687,0.6836
+S4 no screen at all,model1_classical_colorhist_logreg,183,56,0.8361,0.7596,0.9029
+S4 no screen at all,model2_smallcnn_gap,183,56,0.5902,0.5,0.6747
+S4 no screen at all,model3_mobilenetv3small_frozen,183,56,0.5519,0.4726,0.6302
+S4 no screen at all,model4_efficientnetb0_frozen,183,56,0.6011,0.5027,0.6991

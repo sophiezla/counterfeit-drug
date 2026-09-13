@@ -279,16 +279,34 @@ def check_external_counts():
     # history, and the 150/150 approval rate of the synthetic-proxy review.
     allowed[150] |= {16, 150}
 
+    # The balanced external test, added 2026-09-09. It is the one external set
+    # on which an accuracy is defined, so the manuscript quotes counts out of
+    # 92 (the whole set) and out of 46 (either class on its own). Each of those
+    # is a cell of the confusion matrix or a sum of two, so the legitimate set
+    # is derivable from the artefact and none of it is typed here.
+    bx = ROOT / "modeling" / "results" / "balanced_external_eval.csv"
+    if bx.exists():
+        for r in csv.DictReader(open(bx, newline="", encoding="utf-8")):
+            tn, fp_, fn_, tp = (int(r["tn"]), int(r["fp"]),
+                                int(r["fn"]), int(r["tp"]))
+            allowed.setdefault(46, set()).update(
+                {tn, fp_, fn_, tp, tn + fp_, fn_ + tp})
+            allowed.setdefault(92, set()).update({tn + tp, fp_ + fn_})
+    allowed.setdefault(46, set()).add(46)
+    allowed.setdefault(92, set()).add(92)
+
+    DENOMS = "150|149|92|46"
     for label, path in (("paper.md", MD), ("supplementary.md", SUPP_MD)):
         text = strip_code(path.read_text(encoding="utf-8"))
         bad = []
-        for m in re.finditer(r"\b(\d+)\s*/\s*(150|149)\b", text):
+        for m in re.finditer(rf"\b(\d+)\s*/\s*({DENOMS})\b", text):
             k, n = int(m.group(1)), int(m.group(2))
-            if k not in allowed[n]:
+            if k not in allowed.get(n, set()):
                 bad.append(f"{k}/{n} (" +
                            " ".join(text[max(0, m.start() - 45):
                                          m.end() + 5].split()) + ")")
-        report(not bad, f"{label}: every k/150 and k/149 is a count on record",
+        report(not bad,
+               f"{label}: every k/{{{DENOMS}}} is a count on record",
                "; ".join(bad[:3]))
 
 

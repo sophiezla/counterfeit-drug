@@ -782,79 +782,76 @@ def fig_gradcam():
 def fig_mechanism():
     """The chain from class-conditional sourcing to external failure.
 
-    Laid out 4 + 3 across the page rather than as a vertical column: every
-    figure is emitted full-width, so a tall narrow diagram is scaled up until
-    it cannot be placed.  The boxes are the general mechanism; the grey line
-    under each is this paper's measurement of that step on the case study.
+    Laid out 4 + 3 across the page and emitted as a two-column banner.  Label
+    text is kept short so that it can be set near IEEE body size: the figure is
+    cropped tight and then scaled to \\textwidth, roughly a 1.27x upscale, so
+    the nominal sizes below render at about 11.4, 9.6 and 9.4 pt on the page.
+    The boxes are the general mechanism; the grey line under each is this
+    paper's measurement of that step on the case study.
     """
-    fig, ax = plt.subplots(figsize=(7.2, 2.62))
+    fig, ax = plt.subplots(figsize=(7.2, 3.75))
     ax.set_xlim(0, 100)
-    ax.set_ylim(0, 100)
+    ax.set_ylim(0, 108)
     ax.axis("off")
     ax.grid(False)
 
     BLUE, AQUA, RED = "#2a78d6", "#1baf7a", "#d03b3b"
     STEPS = [
-        ("Class-conditional@sourcing", "the two classes are@obtained by "
-         "different@procedures", BLUE, "#f4f7fc",
-         "counterfeit = screen capture,@authentic = downloaded photo"),
-        ("Two acquisition@pipelines", "format, encoder, resolution,@lighting "
-         "and backdrop differ@by class", BLUE, "#f4f7fc",
-         "PNG vs JPEG; 405 vs 223 px;@339 vs 6 kB"),
+        ("Class-conditional@sourcing", "two classes, two@collection routes",
+         BLUE, "#f4f7fc", "counterfeit = screenshot@authentic = photo"),
+        ("Two acquisition@pipelines", "format, size and@lighting differ@by class",
+         BLUE, "#f4f7fc", "PNG vs JPEG@405 vs 223 px@339 vs 6 kB"),
         ("Acquisition predicts@the label",
          r"$I(Y;A)>0$; complete@when $H(Y{\mid}A)=0$" + "@ ", AQUA, "#eefaf5",
-         "format alone: 510/510;@header model: 1.000"),
-        ("Every partition@inherits it", "stratified, grouped and@cross-"
-         "validated alike@ ", BLUE, "#f4f7fc",
-         "9/480 groups leak; removing@them moves accuracy 0.3 pt"),
-        ("High in-distribution@accuracy", "which cannot separate@packaging "
-         "semantics from@provenance", BLUE, "#f4f7fc",
-         "0.919 on the leakage-free@test partition"),
-        ("A new acquisition@pipeline", "evaluation on images the@authors did "
-         "not collect@ ", RED, "#fdf1f1",
-         "150 external authentic@photographs (Split C)"),
-        ("Failure", "the shortcut the model@relies on is absent@ ", RED,
-         "#fdf1f1", "3.3% correct"),
+         "format alone: 510/510@header model: 1.000"),
+        ("Every partition@inherits it", "stratified and@grouped alike@ ",
+         BLUE, "#f4f7fc", "9/480 groups leak@0.3 pt varied alone"),
+        ("High in-distribution@accuracy", "cannot separate@packaging from@provenance",
+         BLUE, "#f4f7fc", "0.919 on the@leakage-free test set"),
+        ("A new acquisition@pipeline", "images the authors@did not collect@ ",
+         RED, "#fdf1f1", "150 external authentic@photographs (Split C)"),
+        ("Failure", "the shortcut is@absent@ ", RED, "#fdf1f1",
+         "9/150 correct (6.0%)"),
     ]
 
     w, gap = 22.0, 4.0
-    rows = [(STEPS[:4], 96.0), (STEPS[4:], 45.0)]
-    box_h, note_h = 26.0, 15.0
+    rows = [(STEPS[:4], 104.0), (STEPS[4:], 46.0)]
+    box_h, note_h = 30.0, 18.0
     for group, top in rows:
         for i, (title, sub, ec, fc, note) in enumerate(group):
             x = i * (w + gap)
             y = top - box_h
             ax.add_patch(FancyBboxPatch((x, y), w, box_h,
                                         boxstyle="round,pad=0,rounding_size=2",
-                                        linewidth=1.4 if ec == AQUA else 0.9,
+                                        linewidth=1.6 if ec == AQUA else 1.0,
                                         edgecolor=ec, facecolor=fc, zorder=2))
-            ax.text(x + w / 2, y + box_h * 0.70, title.replace("@", chr(10)),
-                    ha="center", va="center", fontsize=6.6, fontweight="600",
-                    color=INK, zorder=3, linespacing=1.3)
-            ax.text(x + w / 2, y + box_h * 0.26, sub.replace("@", chr(10)),
-                    ha="center", va="center", fontsize=5.4, color=INK2,
-                    zorder=3, linespacing=1.35)
-            ax.text(x + w / 2, y - 2.0, note.replace("@", chr(10)), ha="center",
-                    va="top", fontsize=5.3, color=MUTED, linespacing=1.35,
+            ax.text(x + w / 2, y + box_h * 0.76, title.replace("@", chr(10)),
+                    ha="center", va="center", fontsize=9.0, fontweight="600",
+                    color=INK, zorder=3, linespacing=1.28)
+            ax.text(x + w / 2, y + box_h * 0.30, sub.replace("@", chr(10)),
+                    ha="center", va="center", fontsize=7.6, color=INK2,
+                    zorder=3, linespacing=1.32)
+            ax.text(x + w / 2, y - 2.4, note.replace("@", chr(10)), ha="center",
+                    va="top", fontsize=7.4, color=MUTED, linespacing=1.32,
                     zorder=3)
             if i < len(group) - 1:
                 ax.add_patch(FancyArrowPatch((x + w, y + box_h / 2),
                                              (x + w + gap, y + box_h / 2),
-                                             arrowstyle="-|>", mutation_scale=6,
-                                             linewidth=0.85, color=MUTED,
+                                             arrowstyle="-|>", mutation_scale=8,
+                                             linewidth=1.0, color=MUTED,
                                              zorder=1))
 
     # the wrap from the end of the first row to the start of the second
-    ax.add_patch(FancyArrowPatch((3 * (w + gap) + w / 2, 96.0 - box_h - note_h),
-                                 (w / 2, 45.0),
-                                 arrowstyle="-|>", mutation_scale=6,
-                                 linewidth=0.85, color=MUTED, zorder=1,
+    ax.add_patch(FancyArrowPatch((3 * (w + gap) + w / 2, 104.0 - box_h - note_h),
+                                 (w / 2, 46.0),
+                                 arrowstyle="-|>", mutation_scale=8,
+                                 linewidth=1.0, color=MUTED, zorder=1,
                                  connectionstyle="angle,angleA=-90,angleB=0,"
                                                  "rad=6"))
-    ax.text(2 * (w + gap) + w / 2, 96.0 - box_h - note_h + 2.0,
+    ax.text(2 * (w + gap) + w / 2, 104.0 - box_h - note_h + 1.5,
             "detectable here," + chr(10) + "before any model is trained",
-            ha="center", va="top", fontsize=5.6, color=AQUA, fontweight="600",
-            linespacing=1.35, zorder=4)
+            ha="center", va="top", fontsize=7.8, color=AQUA, fontweight="600",
+            linespacing=1.32, zorder=4)
     save(fig, "fig15_mechanism")
 
 

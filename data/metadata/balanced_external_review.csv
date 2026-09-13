@@ -1,0 +1,439 @@
+candidate_id,sheet,cell,commons_title,decision,exclusion_code,reason
+BA_000001,sheet_01,r0c0,"File:""Buy a bottle of Adamson's Balsam for that cough"" (back).jpg",exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000002,sheet_01,r0c1,"File:""Buy a bottle of Adamson's Balsam for that cough"" (front).jpg",exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000003,sheet_01,r0c2,"File:""Duma about Opanas"" by Eduard Bagritsky.png",exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000005,sheet_01,r0c3,"File:""Frog In Your Throat?"" lozenges - DPLA - b063062b634c631b3588ad1ab2321e09 (page 2).jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000006,sheet_01,r0c4,File:'Calpol Suspension' delivery van Wellcome L0034049.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000009,sheet_01,r0c5,File:'Kepler' Cod Liver Oil with Malt Extract Wellcome L0074863.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000010,sheet_01,r1c0,"File:'Laeyson's Odorous Powders', France, 1801-1900 Wellcome L0058940.jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000012,sheet_01,r1c1,File:0.9% Normal Saline 100ml 001.jpg,include,,
+BA_000014,sheet_01,r1c2,File:001 2019 05 27 Augenpflege.jpg,include,,
+BA_000018,sheet_01,r1c3,File:110404-F-AM028-036 packs of IOSAT potassium iodide tablets.jpg,include,,
+BA_000019,sheet_01,r1c4,File:110905-F-XX000-102 (6157605712).jpg,exclude,A_PERSON,a person is the subject
+BA_000021,sheet_01,r1c5,File:12-08-18-tilidin-retard.jpg,include,,
+BA_000022,sheet_01,r2c0,File:120310-F-XC314-001 (6979611329).jpg,exclude,A_PERSON,a person is the subject
+BA_000025,sheet_01,r2c1,File:14418-broken-tamperproof-seal.jpg,exclude,A_AMBIGUOUS,subject could not be determined
+BA_000026,sheet_01,r2c2,File:150624-N-NK134-044 (19337199570).jpg,exclude,A_PERSON,a person is the subject
+BA_000027,sheet_01,r2c3,File:1909 Renault AX (Autoworld).jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000028,sheet_01,r2c4,File:1930s tin of codeine based painkillers by Apoteket Korpen Gothenburg Sweden.jpg,exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000029,sheet_01,r2c5,File:1940s Albyl acetylsalicylic acid tin by Aktiebolaget Leo Helsingborg Sweden.jpg,exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000030,sheet_01,r3c0,File:1950s Albyl acetylsalicylic acid tin by Aktiebolaget Leo Helsingborg Sweden.jpg,exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000031,sheet_01,r3c1,File:1989 Citroen AX GT.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000033,sheet_01,r3c2,File:200mgTramadol.jpg,include,,
+BA_000034,sheet_01,r3c3,File:20100106-Indapamide-DSC00001.jpg,include,,
+BA_000035,sheet_01,r3c4,File:20120127-CefuroximeTablets-from-TKOH-SDC13826.JPG,include,,
+BA_000036,sheet_01,r3c5,File:20130613-IMG 2487 (9291287217).jpg,exclude,A_AMBIGUOUS,subject could not be determined
+BA_000039,sheet_01,r4c0,File:2016-03-05 sáb 182531 - Trimebutina Andrómaco.jpg,include,,
+BA_000040,sheet_01,r4c1,File:2016-08-03 Acofide ® Tablets 100mg （アコファイド®錠100mg、アコチアミド塩酸塩水和物）acotiamide hydrochloride hydrate DSCF5130.jpg,include,,
+BA_000047,sheet_01,r4c2,File:2017-05-31 Pepticol.jpg,exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000048,sheet_01,r4c3,File:2017-05-31 Pharmacy Museum in Kraków 4.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000049,sheet_01,r4c4,"File:2018.11.20 Meningococcal and HPV Vaccines, Washington, DC USA 4269 (45072537995).jpg",include,,
+BA_000050,sheet_01,r4c5,"File:2018.11.20 Meningococcal and HPV Vaccines, Washington, DC USA 4270 (45260286484).jpg",include,,
+BA_000053,sheet_01,r5c0,"File:2018.11.20 Meningococcal and HPV Vaccines, Washington, DC USA 4275 (32113493668).jpg",include,,
+BA_000054,sheet_01,r5c1,File:2019-08-08 Oral-Turinabol tablets.jpg,include,,
+BA_000055,sheet_01,r5c2,File:20190311 庆大霉素、参苓健脾胃.jpg,include,,
+BA_000056,sheet_01,r5c3,File:20190311 庆大霉素反面.jpg,include,,
+BA_000057,sheet_01,r5c4,File:20190311 阿莫西林胶囊.jpg,include,,
+BA_000058,sheet_01,r5c5,File:2020-05-20 Levocetirizine Hydrochloride レボセチリジン塩酸塩錠 ザイザル.jpg,include,,
+BA_000059,sheet_02,r0c0,File:2020-05-20 d-Chlorpheniramine Maleate d-クロルフェニラミンマレイン酸塩製剤(ポララミン).jpg,include,,
+BA_000060,sheet_02,r0c1,File:2020-06-15 TSU128、OHNES ST オーネス ST 配合錠.jpg,include,,
+BA_000061,sheet_02,r0c2,File:2020-06-18 越婢加朮湯（エッピカジュツトウ）.jpg,include,,
+BA_000063,sheet_02,r0c3,File:2020-07-10 Anchu-san 安中散（コタロー安中散エキスカプセル）DSCF1998.jpg,include,,
+BA_000064,sheet_02,r0c4,File:2020-07-10 Anchu-san 安中散（コタロー安中散エキスカプセル）DSCF2001.jpg,include,,
+BA_000068,sheet_02,r0c5,File:2025-01-04 Betahistine（ベタヒスチン） DSCF5667.jpg,include,,
+BA_000069,sheet_02,r1c0,File:2025-01-04 Betahistine（ベタヒスチン）DSCF5669.jpg,include,,
+BA_000071,sheet_02,r1c1,"File:3 boites de lorazépam 2,5.jpg",include,,
+BA_000072,sheet_02,r1c2,File:30mg Vyvanse capsules.JPG,include,,
+BA_000080,sheet_02,r1c3,File:50mgtramadolhclakyma.jpg,include,,
+BA_000082,sheet_02,r1c4,"File:6 boites de normison 7 + 1 boite de Victan + 1 boite de nordaz 7,5.jpg",include,,
+BA_000090,sheet_02,r1c5,File:A Sight For Sore Heads - Flickr - Bonio.jpg,include,,
+BA_000099,sheet_02,r2c0,File:A blister pack of Androcur 50mg tablets in Turkey (obverse).jpg,include,,
+BA_000100,sheet_02,r2c1,File:A blister pack of Androcur 50mg tablets in Turkey (reverse).jpg,include,,
+BA_000102,sheet_02,r2c2,File:A bottle of Valerian capsules.jpg,include,,
+BA_000103,sheet_02,r2c3,File:A bottle of a generic version of Truvada.jpg,include,,
+BA_000104,sheet_02,r2c4,File:A chemist gives a demonstration involving arsenic Wellcome V0011761.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000107,sheet_02,r2c5,File:A convalescing woman trying in vain to rouse her slumbering Wellcome V0011149.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000109,sheet_02,r3c0,"File:A decrepit man screaming in pain from gout, rheumatism and c Wellcome V0011163.jpg",exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000110,sheet_02,r3c1,"File:A disgruntled gouty man with all limbs bandaged, a table cov Wellcome V0011165.jpg",exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000111,sheet_02,r3c2,File:A disgruntled ill man taking a large dose of medicine. Colou Wellcome V0011161.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000113,sheet_02,r3c3,File:A doctor kicking his rival out Wellcome L0008691.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000115,sheet_02,r3c4,File:A doctor visiting a patient whose wife queries the dose. Woo Wellcome V0011463.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000116,sheet_02,r3c5,File:A grimacing invalid seated before a bowl Wellcome V0011191.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000117,sheet_02,r4c0,File:A grimacing invalid seated before a bowl having received an Wellcome V0011187.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000118,sheet_02,r4c1,File:A grimacing invalid seated before a bowl having received an Wellcome V0011188.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000119,sheet_02,r4c2,File:A grimacing invalid seated before a bowl having received an Wellcome V0011189.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000120,sheet_02,r4c3,File:A grimacing invalid seated before a bowl having received an Wellcome V0011190EL.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000121,sheet_02,r4c4,File:A grimacing invalid seated before a bowl having received an Wellcome V0011191EL.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000152,sheet_02,r4c5,File:A summary of the role of uterine natural killer (uNK) cells on the events entailed in successful embryo implantation and maintenance of a pregnancy.png,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000154,sheet_02,r5c0,File:A vial of Moderna COVID-19 vaccine 201229-F-ZB805-0008Y.jpg,include,,
+BA_000156,sheet_02,r5c1,File:A-DATA 2 x 2GB DDR2 IMG 1775.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000159,sheet_02,r5c2,File:AC USB adapters jeh.JPG,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000163,sheet_02,r5c3,File:AMALAR.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000164,sheet_02,r5c4,File:AN-APS-3 PV-2 NAN4-46.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000165,sheet_02,r5c5,File:ARRIERE.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000168,sheet_03,r0c0,File:AX 1909.JPG,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000169,sheet_03,r0c1,File:AX GTi ar.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000170,sheet_03,r0c2,File:AX GTi av.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000171,sheet_03,r0c3,File:AX Sport ar.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000172,sheet_03,r0c4,File:AX Sport av.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000180,sheet_03,r0c5,"File:Account of expenses for construction of Tholos, AM of Epidaruos, 202577.jpg",exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000181,sheet_03,r1c0,"File:Account of expenses for construction of Tholos, AM of Epidaruos, 202578.jpg",exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000185,sheet_03,r1c1,File:Acetylcystein as effervescent tablet branded ACC by Sandoz.jpg,include,,
+BA_000221,sheet_03,r1c2,"File:Airbus A320-251N (c-n 7576, TF-PPD) 2024-10-11 Andre Gerwing Collection ID 022199.jpg",exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000233,sheet_03,r1c3,File:Alinamin A.jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_000234,sheet_03,r1c4,File:Alka Seltzer (27862968001).jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_000235,sheet_03,r1c5,File:Alka Seltzer Energy Boost tablet.jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_000238,sheet_03,r2c0,File:Alka-Seltzer Plus Cold and Cough Pill (5788678904).jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_000243,sheet_03,r2c1,File:Alka-Seltzer dissolving progression 3 - sinking 2.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000274,sheet_03,r2c2,File:Alkaline AA batteries.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000275,sheet_03,r2c3,File:AllegraFX.jpg,include,,
+BA_000279,sheet_03,r2c4,File:Allergic exanthema amoxicillin.jpg,exclude,A_PERSON,a person is the subject
+BA_000282,sheet_03,r2c5,File:Alnagon - Spofa - krabička a blistr.JPG,include,,
+BA_000284,sheet_03,r3c0,File:Alnagon - Spofa.JPG,include,,
+BA_000290,sheet_03,r3c1,"File:Alprazolam orally disintegrating tablets, blister packs.jpg",include,,
+BA_000298,sheet_03,r3c2,File:American journal of pharmacy (1829) (14596396880).jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000313,sheet_03,r3c3,File:Amoksicilin 500 091208.jpg,include,,
+BA_000314,sheet_03,r3c4,File:Amoksiklav.jpg,include,,
+BA_000315,sheet_03,r3c5,File:Amoxi-drops and amoxi-tabs.jpg,include,,
+BA_000318,sheet_03,r4c0,File:Amoxicillin 500mg capsules on a plate (Sandoz).jpg,include,,
+BA_000321,sheet_03,r4c1,File:Amoxicillin pill.jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_000322,sheet_03,r4c2,File:Amoxicillin rash 11 hours after 17th dose.JPG,exclude,A_PERSON,a person is the subject
+BA_000323,sheet_03,r4c3,File:Amoxicillin rash 26 hours after 17th dose.JPG,exclude,A_PERSON,a person is the subject
+BA_000324,sheet_03,r4c4,File:Amoxicillin rash 3 hours after 17th dose.JPG,exclude,A_PERSON,a person is the subject
+BA_000325,sheet_03,r4c5,File:Amoxicillin substance photo.jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_000333,sheet_03,r5c0,File:Amoxicilline Mylan 1g.jpg,include,,
+BA_000335,sheet_03,r5c1,File:Amoxiclav Sandoz Mylan.JPG,include,,
+BA_000336,sheet_03,r5c2,File:Amoxin.jpg,include,,
+BA_000338,sheet_03,r5c3,File:Ampoule prefilled JPN.jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_000339,sheet_03,r5c4,"File:An Angolan women holds a box of Coartem, an anti-malarial drug.jpg",exclude,A_PERSON,a person is the subject
+BA_000352,sheet_03,r5c5,File:Anesthesia medications.JPG,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_000355,sheet_04,r0c0,File:Anna Pabst 1896-1935 (30794405487).jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000360,sheet_04,r0c1,"File:Anterone (cyproterone acetate) tablets in Australia, with three blister packs.jpg",include,,
+BA_000361,sheet_04,r0c2,"File:Anterone (cyproterone acetate) tablets in Australia, with two obverse and one reverse blister packs.jpg",include,,
+BA_000364,sheet_04,r0c3,File:Antibiotic pills.jpg,include,,
+BA_000436,sheet_04,r0c4,File:Assorted pharmaceuticals by LadyofProcrastination.jpg,include,,
+BA_000437,sheet_04,r0c5,File:Astamocil.jpg,include,,
+BA_000438,sheet_04,r1c0,File:Astra Zeneca COVID-19 vaccines in package.jpg,include,,
+BA_000441,sheet_04,r1c1,File:AstraZeneca COVID-19 vaccine vials (4ml).jpg,include,,
+BA_000442,sheet_04,r1c2,File:AstraZeneca Oxford University COVID-19 Vaccine 4ml vials.jpg,include,,
+BA_000457,sheet_04,r1c3,File:Automated Postal Center and new Priority Mail box display (5115759015).jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000466,sheet_04,r1c4,File:Ax-les-Thermes - 53230478005.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000467,sheet_04,r1c5,File:Ax-les-Thermes - panoramio.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000468,sheet_04,r2c0,File:Ax-les-Thermes Mairie.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000470,sheet_04,r2c1,File:Ax-les-Thermes.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000518,sheet_04,r2c2,"File:Bangkok Airways, HS-PPD, Airbus A320-232 (40696867833).jpg",exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000522,sheet_04,r2c3,File:Barros inaugura linha de produção da vacina de febre amarela (26025962128).jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000523,sheet_04,r2c4,File:Barros inaugura linha de produção da vacina de febre amarela (26025964458).jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000524,sheet_04,r2c5,File:Barros inaugura linha de produção da vacina de febre amarela (28118409009).jpg,include,,
+BA_000525,sheet_04,r3c0,File:Barros inaugura linha de produção da vacina de febre amarela (28118410229).jpg,include,,
+BA_000526,sheet_04,r3c1,File:Barros inaugura linha de produção da vacina de febre amarela (28118412859).jpg,exclude,A_PERSON,a person is the subject
+BA_000527,sheet_04,r3c2,File:Barros inaugura linha de produção da vacina de febre amarela (39899292221).jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000529,sheet_04,r3c3,File:Bayer Aspirin and store-brand generic on Canadian drugstore shelf.jpg,include,,
+BA_000553,sheet_04,r3c4,File:Bimmuge-Hepatitis B Vaccines.jpg,include,,
+BA_000554,sheet_04,r3c5,File:Bio Threats- FDA's A-Team (6304) (9806908675).jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000555,sheet_04,r4c0,File:Bio Threats- FDA's A-Team (6306) (9806933446).jpg,exclude,A_PERSON,a person is the subject
+BA_000556,sheet_04,r4c1,File:Bio Threats- FDA's A-Team (6309) (9806913284).jpg,exclude,A_PERSON,a person is the subject
+BA_000560,sheet_04,r4c2,File:BioNTech COVID-19 Vaccine.jpg,include,,
+BA_000569,sheet_04,r4c3,File:Blister 1 (fcm).jpg,include,,
+BA_000570,sheet_04,r4c4,File:Blister 2 (fcm).jpg,include,,
+BA_000571,sheet_04,r4c5,File:Blister 3 (fcm).jpg,include,,
+BA_000598,sheet_04,r5c0,File:Boston register and business directory (1922) (14580853977).jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000604,sheet_04,r5c1,"File:Bottle of 'Camoquin' tablets, England, 1947-1960 Wellcome L0058545.jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000611,sheet_04,r5c2,"File:Bottle of Super-D oil capsules, London, England, 1940-1945 Wellcome L0057855.jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000616,sheet_04,r5c3,"File:Bottle of quinine hydrochloride tablets, London, England, 19 Wellcome L0058217.jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000617,sheet_04,r5c4,"File:Bottle of tetanus antitoxin, Germany. Full view, graduated g Wellcome L0058962 (cropped).jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000618,sheet_04,r5c5,"File:Bottle of tetanus antitoxin, Germany. Full view, graduated g Wellcome L0058962.jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000638,sheet_05,r0c0,"File:Bottle, medical (AM 1962.96-1).jpg",exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000639,sheet_05,r0c1,"File:Bottle, medical (AM 1962.96-10).jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000640,sheet_05,r0c2,"File:Bottle, medical (AM 1962.96-2).jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000641,sheet_05,r0c3,"File:Bottle, medical (AM 1962.96-3).jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000642,sheet_05,r0c4,"File:Bottle, medical (AM 1962.96-4).jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000644,sheet_05,r0c5,"File:Bottle, medical (AM 1962.96-6).jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000645,sheet_05,r1c0,"File:Bottle, medical (AM 1962.96-7).jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000646,sheet_05,r1c1,"File:Bottle, medical (AM 1962.96-8).jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000647,sheet_05,r1c2,"File:Bottle, medical (AM 1962.96-9).jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000651,sheet_05,r1c3,"File:Bottle, medicine (AM 604099-1).jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000653,sheet_05,r1c4,"File:Bottle, medicine (AM 604099-3).jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000666,sheet_05,r1c5,"File:Boundary stone (horos) of Athena in Ag. Dionysios at Palechora, Aigina - IGIV(2)794 = IGI3 1488 (bottom).jpg",exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000667,sheet_05,r2c0,"File:Boundary stone (horos) of Athena in Ag. Dionysios at Palechora, Aigina - IGIV(2)794 = IGI3 1488 (full view).jpg",exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000668,sheet_05,r2c1,"File:Boundary stone (horos) of Athena in Ag. Dionysios at Palechora, Aigina - IGIV(2)794 = IGI3 1488 (middle).jpg",exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000669,sheet_05,r2c2,"File:Boundary stone (horos) of Athena in Ag. Dionysios at Palechora, Aigina - IGIV(2)794 = IGI3 1488 (top).jpg",exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000731,sheet_05,r2c3,File:Btx-Museum 1 mupid Btx-Decoder C2D mit Tastatur C2D-Keyboard 07.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000732,sheet_05,r2c4,File:Btx-Museum 1 mupid Btx-Decoder C2D mit Tastatur C2D-Keyboard 11.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000733,sheet_05,r2c5,File:Btx-Museum 19 Blaupunkt Btx-Decoder DC 36 01 (cropped).jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000734,sheet_05,r3c0,File:Btx-Museum 19 Blaupunkt Btx-Decoder DC 36 01.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000735,sheet_05,r3c1,File:Btx-Museum 19 Blaupunkt Btx-Decoder DC 36 02.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000736,sheet_05,r3c2,File:Btx-Museum 19 Blaupunkt Btx-Decoder DC 36 03.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000737,sheet_05,r3c3,File:Btx-Museum 19 Blaupunkt Btx-Decoder DC 36 04.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000738,sheet_05,r3c4,File:Btx-Museum 19 Blaupunkt Btx-Decoder DC 36 07.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000739,sheet_05,r3c5,File:Btx-Museum 19 Blaupunkt Btx-Decoder DC 36 08.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000741,sheet_05,r4c0,File:Btx-Museum 20-1+2 Nordmende Btx-Decoder BTX DC 1000-1 mit Infrarot-Fernbedienung BTX KP 1000 01.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000742,sheet_05,r4c1,File:Btx-Museum 20-1+2 Nordmende Btx-Decoder BTX DC 1000-1 mit Infrarot-Fernbedienung BTX KP 1000 02.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000743,sheet_05,r4c2,File:Btx-Museum 20-1+2 Nordmende Btx-Decoder BTX DC 1000-1 mit Infrarot-Fernbedienung BTX KP 1000 03.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000744,sheet_05,r4c3,File:Btx-Museum 20-1+2 Nordmende Btx-Decoder BTX DC 1000-1 mit Infrarot-Fernbedienung BTX KP 1000 04.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000745,sheet_05,r4c4,File:Btx-Museum 20-1+2 Nordmende Btx-Decoder BTX DC 1000-1 mit Infrarot-Fernbedienung BTX KP 1000 05.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000746,sheet_05,r4c5,File:Btx-Museum 20-1+2 Nordmende Btx-Decoder BTX DC 1000-1 mit Infrarot-Fernbedienung BTX KP 1000 06.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000747,sheet_05,r5c0,File:Btx-Museum 20-1+2 Nordmende Btx-Decoder BTX DC 1000-1 mit Infrarot-Fernbedienung BTX KP 1000 07.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000748,sheet_05,r5c1,File:Btx-Museum 20-1+2 Nordmende Btx-Decoder BTX DC 1000-1 mit Infrarot-Fernbedienung BTX KP 1000 08.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000749,sheet_05,r5c2,File:Btx-Museum 20-1+2 Nordmende Btx-Decoder BTX DC 1000-1 mit Infrarot-Fernbedienung BTX KP 1000 09.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000750,sheet_05,r5c3,File:Btx-Museum 20-1+2 Nordmende Btx-Decoder BTX DC 1000-1 mit Infrarot-Fernbedienung BTX KP 1000 10.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000751,sheet_05,r5c4,File:Btx-Museum 20-1+2 Nordmende Btx-Decoder BTX DC 1000-1 mit Infrarot-Fernbedienung BTX KP 1000 11.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000752,sheet_05,r5c5,File:Btx-Museum 20-1+2 Nordmende Btx-Decoder BTX DC 1000-1 mit Infrarot-Fernbedienung BTX KP 1000 12.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000804,sheet_06,r0c0,File:CBP at JFK Seizes Cocaine in Beef Patties (32380740861).jpg,include,,
+BA_000814,sheet_06,r0c1,File:COVID 19 box 2024-25.jpg,include,,
+BA_000815,sheet_06,r0c2,File:COVID-19 AstraZeneca Vaccine vial and NHS record card.jpg,include,,
+BA_000816,sheet_06,r0c3,File:COVID-19 Vaccine vial and syringe - US Census.jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_000817,sheet_06,r0c4,"File:COVID-19 vaccination center, fair grounds Cologne, 1st vaccination-8230.jpg",exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_000819,sheet_06,r0c5,File:COVID-19 vaccine AstraZeneca Jan 2021 (vial).jpg,include,,
+BA_000820,sheet_06,r1c0,File:COVID-19 vaccine AstraZeneca Jan 2021.jpg,include,,
+BA_000823,sheet_06,r1c1,File:COVID-19 vaccine vial AstraZenaca 2021 (UK).jpg,include,,
+BA_000859,sheet_06,r1c2,"File:Carton of 'Purgen-The New Aperient' tablets, London, England Wellcome L0058220.jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000911,sheet_06,r1c3,File:Citroen AX 2023.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000912,sheet_06,r1c4,File:Citroen AX white 1.JPG,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000914,sheet_06,r1c5,File:Citroën AX First.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000915,sheet_06,r2c0,File:Citroën AX Wikimedia1.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000916,sheet_06,r2c1,File:Citroën AX Wikimedia2.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000917,sheet_06,r2c2,File:Citroën AX Wikimedia3.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000918,sheet_06,r2c3,File:Citroën AX half parked on grass.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_000930,sheet_06,r2c4,"File:Clear glass shop round for Quinine, England, 1801-1850 Wellcome L0058514.jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_000955,sheet_06,r2c5,File:Combiart drug.jpg,include,,
+BA_000960,sheet_06,r3c0,File:Comirnaty (2021) D.jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_000962,sheet_06,r3c1,File:Comirnaty Omicron XBB.1.5 vial and influenza vaccine 2023.jpg,include,,
+BA_000964,sheet_06,r3c2,File:Comirnaty Omicron XBB.1.5 vials 2023.jpg,include,,
+BA_000968,sheet_06,r3c3,File:Comirnaty.Phiole.unverduennt.P1127598.jpg,include,,
+BA_000971,sheet_06,r3c4,File:Computer immunoglobulin.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_000993,sheet_06,r3c5,File:Corminaty (2021) A.jpg,include,,
+BA_000995,sheet_06,r4c0,File:Corminaty (2021) C.jpg,exclude,A_PERSON,a person is the subject
+BA_000996,sheet_06,r4c1,File:Corona antibody test.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001008,sheet_06,r4c2,File:Covishield (2021) A.jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_001009,sheet_06,r4c3,File:Covishield (2021) B.jpg,exclude,A_PERSON,a person is the subject
+BA_001010,sheet_06,r4c4,File:Covishield (2021) C.jpg,exclude,A_PERSON,a person is the subject
+BA_001011,sheet_06,r4c5,File:Covishield (2021) D.jpg,exclude,A_PERSON,a person is the subject
+BA_001012,sheet_06,r5c0,File:Covishield (2021) E.jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_001013,sheet_06,r5c1,File:Covishield (2021) F.jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_001016,sheet_06,r5c2,File:Covishield (2021) I.jpg,exclude,A_PERSON,a person is the subject
+BA_001017,sheet_06,r5c3,File:Covishield (2021) J.jpg,exclude,A_PERSON,a person is the subject
+BA_001018,sheet_06,r5c4,File:Covishield (2021) K.jpg,exclude,A_PERSON,a person is the subject
+BA_001019,sheet_06,r5c5,File:Covishield (2021) L.jpg,exclude,A_PERSON,a person is the subject
+BA_001020,sheet_07,r0c0,File:Covishield (2021) M.jpg,exclude,A_PERSON,a person is the subject
+BA_001022,sheet_07,r0c1,File:Covishield (2021) N.jpg,exclude,A_PERSON,a person is the subject
+BA_001023,sheet_07,r0c2,File:Covishield (2021) O.jpg,exclude,A_PERSON,a person is the subject
+BA_001061,sheet_07,r0c3,File:Delivery of Covishield COVID-19 vaccine from India to Brazil (2021) C.jpg,exclude,A_AMBIGUOUS,subject could not be determined
+BA_001062,sheet_07,r0c4,File:Delivery of Covishield COVID-19 vaccine from India to Brazil (2021) D.jpg,exclude,A_PERSON,a person is the subject
+BA_001095,sheet_07,r0c5,File:Dextromethorphan Tablet-15.jpg,include,,
+BA_001098,sheet_07,r1c0,File:Dexzopiclone Tablets.jpg,include,,
+BA_001105,sheet_07,r1c1,File:Diazepam 10mg-2ml vials white background.jpg,include,,
+BA_001106,sheet_07,r1c2,File:Diazepam 10mg-2ml vials yellow background.jpg,include,,
+BA_001107,sheet_07,r1c3,File:Diazepam 10mg.jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_001108,sheet_07,r1c4,File:Diazepam Ampulle ratiopharm 10 mg. 2 ml.JPG,include,,
+BA_001111,sheet_07,r1c5,File:Diazepam stock bottle 10mg tabs.jpg,include,,
+BA_001116,sheet_07,r2c0,"File:Diazepam, strips 10 mg (Valium).jpg",include,,
+BA_001120,sheet_07,r2c1,File:Diazepam.png,include,,
+BA_001121,sheet_07,r2c2,File:Diazepam2mgand5mgtablets.JPG,include,,
+BA_001160,sheet_07,r2c3,File:Dispensing pot for powdered quinine 4.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001161,sheet_07,r2c4,"File:Dispensing pot for powdered quinine, Italy, 1801-1830 Wellcome L0057459.jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_001193,sheet_07,r2c5,"File:Dr. Mae C. Jemison, First African-American Woman in Space - Flickr - NASA on The Commons.jpg",exclude,A_PERSON,a person is the subject
+BA_001195,sheet_07,r3c0,File:Drogues anesthésie.jpg,include,,
+BA_001218,sheet_07,r3c1,File:Dubyna 1901.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_001220,sheet_07,r3c2,File:Dukoral package inside.jpg,include,,
+BA_001222,sheet_07,r3c3,File:Dukoral package.jpg,include,,
+BA_001227,sheet_07,r3c4,File:Duphalac 200 ml.jpg,include,,
+BA_001232,sheet_07,r3c5,"File:Dülmen, Merfeld, Volvo PV 544 B18 -- 2021 -- 0075-9.jpg",exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001242,sheet_07,r4c0,File:Ebivol.jpg,include,,
+BA_001290,sheet_07,r4c1,File:Engerix B (Hepatitis B) vaccine.jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_001318,sheet_07,r4c2,File:Etizest-1 MD Blister Pill opened.jpeg,include,,
+BA_001347,sheet_07,r4c3,File:Fake Viagara Pills (22399093799).jpg,include,,
+BA_001350,sheet_07,r4c4,File:Fara PV maks2009.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001352,sheet_07,r4c5,File:Favipill 800 - Favipiravir Tablets 800 mg - Howrah 2023-05-15 9871.jpg,include,,
+BA_001356,sheet_07,r5c0,File:Fenobarbital receta.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001357,sheet_07,r5c1,File:Fenobarbital.jpg,include,,
+BA_001383,sheet_07,r5c2,File:Flickr - Israel Defense Forces - Expired Medicine Unloaded Off Gaza Flotillas (1).jpg,exclude,A_AMBIGUOUS,subject could not be determined
+BA_001384,sheet_07,r5c3,File:Flickr - Israel Defense Forces - Expired Medicine Unloaded Off Gaza Flotillas (2).jpg,include,,
+BA_001386,sheet_07,r5c4,File:Flickr - Israel Defense Forces - Expired Medicine Unloaded Off Gaza Flotillas (4).jpg,exclude,A_AMBIGUOUS,subject could not be determined
+BA_001395,sheet_07,r5c5,File:Fluothane packaging 01.jpg,include,,
+BA_001404,sheet_08,r0c0,File:Forxiga dapagliflozin.jpg,include,,
+BA_001427,sheet_08,r0c1,File:GER — BY — München — Dokumentation Drei Impfungen gegen COVID-19 Anno 2021 Mattes.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001431,sheet_08,r0c2,File:GT-Oxycodon-Sicherheitsblister.jpg,include,,
+BA_001438,sheet_08,r0c3,File:Gardenal.JPG,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_001462,sheet_08,r0c4,"File:Glass pharmacy jar for powdered quinine, Europe, 1601-1700 Wellcome L0057596.jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_001490,sheet_08,r0c5,File:HK 葵青區 Kwai Tsing MTR 青衣站 Tsing Yi Station stand up banners directory signs April 2022 Px3 01.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001491,sheet_08,r1c0,File:HS-PPD (12627852323).jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001492,sheet_08,r1c1,File:HS-PPD (21411688723).jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001493,sheet_08,r1c2,File:HS-PPD (8876680741).jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001513,sheet_08,r1c3,File:Health Minister Zahid Maleque administering Vitamin A Plus capsule to child during campaign Dhaka Shishu Hospital 2019-06-22 (PID-0038147).jpg,exclude,A_PERSON,a person is the subject
+BA_001514,sheet_08,r1c4,"File:Health and Family Welfare Minister Zahid Maleque receiving Remdesivir, 2020-05-21 (PID-0033428).jpg",exclude,A_PERSON,a person is the subject
+BA_001523,sheet_08,r1c5,File:Hepatitis-B virions.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001533,sheet_08,r2c0,File:Hib for infanrix hexa.jpg,include,,
+BA_001559,sheet_08,r2c1,"File:Hypodermic syringe set, for quinine injection, with Record s Wellcome L0057254.jpg",exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001616,sheet_08,r2c2,File:IMAG0466.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001639,sheet_08,r2c3,File:Ilaç dolu sepet.jpg,include,,
+BA_001665,sheet_08,r2c4,File:Infanrix hexa vaccine.jpg,include,,
+BA_001676,sheet_08,r2c5,File:Inicio de la vacunación contra la COVID-19 en Costa Rica usando la dosis de AstraZeneca 02.jpg,include,,
+BA_001677,sheet_08,r3c0,File:Inicio de la vacunación contra la COVID-19 en Costa Rica usando la dosis de AstraZeneca 03.jpg,include,,
+BA_001678,sheet_08,r3c1,File:Inicio de la vacunación contra la COVID-19 en Costa Rica usando la dosis de AstraZeneca 04.jpg,include,,
+BA_001679,sheet_08,r3c2,File:Inicio de la vacunación contra la COVID-19 en Costa Rica usando la dosis de AstraZeneca 05.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001683,sheet_08,r3c3,File:Integrated PV rooftop Alphen aan den Rijn Netherlands.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001686,sheet_08,r3c4,"File:Interior of quinine extraction factory, Mangpoo. Wellcome M0001619.jpg",exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001689,sheet_08,r3c5,File:International Certificate of Vaccination or Prophylaxis (Netherlands) - proof of vaccination against COVID-19.png,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001704,sheet_08,r4c0,File:Ipswich trolleybus PV 8270 at East Anglia Transport Musuem.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001719,sheet_08,r4c1,File:JA Connexion PPD 529.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001723,sheet_08,r4c2,File:JS Shirataka (PG-829) 01.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001731,sheet_08,r4c3,File:Januvia sitagliptin.jpg,include,,
+BA_001734,sheet_08,r4c4,"File:Japanese female scientist wearing plastic gloves holding syringe and vial, researching a coronavirus vaccine (50739007612).jpg",exclude,A_PERSON,a person is the subject
+BA_001738,sheet_08,r4c5,"File:Jardiance 10mg box, angle view.jpg",include,,
+BA_001739,sheet_08,r5c0,"File:Jardiance 10mg box, front view.jpg",include,,
+BA_001741,sheet_08,r5c1,File:Jext300-Autoinjektor+Box.jpg,include,,
+BA_001749,sheet_08,r5c2,"File:Journal of ophthalmology, otology and laryngology (1913) (14765663901).jpg",exclude,A_PERSON,a person is the subject
+BA_001779,sheet_08,r5c3,File:Keppra 100 mg-ml.jpg,include,,
+BA_001798,sheet_08,r5c4,File:Kravchenko 1903.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_001803,sheet_08,r5c5,File:LABEL; Orange Quinine Wine. Prepared accord Wellcome L0031626.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_001808,sheet_09,r0c0,File:LOVION Chocolate with Ginseng Carton back (55077022979).jpg,include,,
+BA_001809,sheet_09,r0c1,File:LOVION Chocolate with Ginseng Carton front (55077023024).jpg,include,,
+BA_001831,sheet_09,r0c2,"File:Layers of glycerine, propylene glycol, ethylene glycol and water.jpg",exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001855,sheet_09,r0c3,File:Lexotan.jpg,include,,
+BA_001859,sheet_09,r0c4,File:Liquigen.jpg,include,,
+BA_001866,sheet_09,r0c5,"File:Lockheed PV-1 Ventura in flight, circa in late 1943 (NH 94917).jpg",exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001873,sheet_09,r1c0,File:Lok 19 PV Villablino.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001874,sheet_09,r1c1,File:Lok 19 PV rangiert IMG 0706.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_001892,sheet_09,r1c2,File:Loxapine.jpg,include,,
+BA_001940,sheet_09,r1c3,File:Maaloxx New package.JPG,include,,
+BA_001941,sheet_09,r1c4,File:Maaloxx Old Package.JPG,include,,
+BA_002023,sheet_09,r1c5,File:Meg Donnelly in 2018.jpg,exclude,A_PERSON,a person is the subject
+BA_002026,sheet_09,r2c0,File:Meg Hillier.jpg,exclude,A_PERSON,a person is the subject
+BA_002028,sheet_09,r2c1,File:Meg Medina (11591).jpg,exclude,A_PERSON,a person is the subject
+BA_002029,sheet_09,r2c2,File:Meg Meyers - 15318857471.jpg,exclude,A_PERSON,a person is the subject
+BA_002030,sheet_09,r2c3,File:Meg Meyers.jpg,exclude,A_PERSON,a person is the subject
+BA_002033,sheet_09,r2c4,File:Meg Rosoff.jpg,exclude,A_PERSON,a person is the subject
+BA_002034,sheet_09,r2c5,File:Meg Thalken.jpg,exclude,A_PERSON,a person is the subject
+BA_002049,sheet_09,r3c0,File:Meitar Collection (997008136729205171).jpg,exclude,A_PERSON,a person is the subject
+BA_002050,sheet_09,r3c1,File:Meitar Collection (997008136729305171).jpg,exclude,A_PERSON,a person is the subject
+BA_002055,sheet_09,r3c2,File:Men decathlon PV French Athletics Championships 2013 t141910a.jpg,exclude,A_PERSON,a person is the subject
+BA_002056,sheet_09,r3c3,File:Men decathlon PV French Athletics Championships 2013 t141910b.jpg,exclude,A_PERSON,a person is the subject
+BA_002057,sheet_09,r3c4,File:Men decathlon PV French Athletics Championships 2013 t141910c.jpg,exclude,A_PERSON,a person is the subject
+BA_002058,sheet_09,r3c5,File:Men decathlon PV French Athletics Championships 2013 t141911a.jpg,exclude,A_PERSON,a person is the subject
+BA_002060,sheet_09,r4c0,File:MenB Vaccine Rollout Queue.jpg,exclude,A_PERSON,a person is the subject
+BA_002061,sheet_09,r4c1,File:MenQuadfi box.jpg,include,,
+BA_002062,sheet_09,r4c2,File:MenQuadfi vial.jpg,include,,
+BA_002066,sheet_09,r4c3,File:Meningococcal B vaccine.jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_002072,sheet_09,r4c4,File:Menitorix.jpg,include,,
+BA_002091,sheet_09,r4c5,File:Microbiologist 01.jpg,exclude,A_PERSON,a person is the subject
+BA_002094,sheet_09,r5c0,File:Midol Modern Packaging 2023.jpg,include,,
+BA_002096,sheet_09,r5c1,File:Miles Nervine Effervescent Tablets.jpg,exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_002119,sheet_09,r5c2,File:Moderna COVID-19 vaccine (2020) B.jpg,exclude,A_PERSON,a person is the subject
+BA_002120,sheet_09,r5c3,File:Moderna COVID-19 vaccine (2021) (cropped).jpg,exclude,A_PERSON,a person is the subject
+BA_002121,sheet_09,r5c4,File:Moderna COVID-19 vaccine (2021) C.jpg,exclude,A_PERSON,a person is the subject
+BA_002146,sheet_09,r5c5,File:Myrhorod Independence Str. 2 Memorial Table of Founder of Myrhorod Local History Museum - Opanas Slastion (YDS 6989).jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_002151,sheet_10,r0c0,File:Médicament̠ coartem contre paludisme (Malaria) 01.jpg,include,,
+BA_002152,sheet_10,r0c1,File:Médicament̠ coartem contre paludisme (Malaria) 02.jpg,include,,
+BA_002153,sheet_10,r0c2,File:Médicament̠ coartem contre paludisme (Malaria) 03.jpg,include,,
+BA_002154,sheet_10,r0c3,File:Médicament̠ coartem contre paludisme (Malaria) 04.jpg,include,,
+BA_002155,sheet_10,r0c4,File:Médicament̠ coartem contre paludisme (Malaria) 05.jpg,include,,
+BA_002156,sheet_10,r0c5,File:Médicament̠ coartem contre paludisme (Malaria) 06.jpg,include,,
+BA_002176,sheet_10,r1c0,File:National Vitamin A Plus Campaign 2020 Children's Hospital Dhaka 2020-01-11 (PID-0034826).jpg,exclude,A_PERSON,a person is the subject
+BA_002188,sheet_10,r1c1,File:New adjutant general visits the 192nd Fighter Wing 140607-Z-VT953-118.jpg,exclude,A_PERSON,a person is the subject
+BA_002191,sheet_10,r1c2,File:Nimenrix (Pfizer).jpg,include,,
+BA_002192,sheet_10,r1c3,File:Nimenrix.jpg,include,,
+BA_002336,sheet_10,r1c4,File:OnyNorm förpackning.jpg,include,,
+BA_002339,sheet_10,r1c5,File:Opana Radar Site.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_002345,sheet_10,r2c0,File:Open Wide (Explored) - Flickr - Carol (vanhookc).jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_002371,sheet_10,r2c1,File:Oxford AstraZeneca COVID-19 vaccine (2021) A.jpeg,exclude,A_PERSON,a person is the subject
+BA_002373,sheet_10,r2c2,File:Oxford AstraZeneca COVID-19 vaccine (2021) B.jpeg,include,,
+BA_002374,sheet_10,r2c3,File:Oxford AstraZeneca COVID-19 vaccine (2021) C.jpeg,exclude,A_PERSON,a person is the subject
+BA_002375,sheet_10,r2c4,File:Oxford AstraZeneca COVID-19 vaccine (2021) D.jpeg,include,,
+BA_002376,sheet_10,r2c5,File:Oxford AstraZeneca COVID-19 vaccine (2021) E.jpeg,include,,
+BA_002377,sheet_10,r3c0,File:Oxford AstraZeneca COVID-19 vaccine (2021) F.jpeg,include,,
+BA_002378,sheet_10,r3c1,File:Oxford AstraZeneca COVID-19 vaccine (2021) G.jpeg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_002381,sheet_10,r3c2,File:Oxford AstraZeneca COVID-19 vaccine (2021) I.jpg,include,,
+BA_002382,sheet_10,r3c3,File:Oxford AstraZeneca COVID-19 vaccine (2021) J.jpg,exclude,A_PERSON,a person is the subject
+BA_002383,sheet_10,r3c4,File:Oxford AstraZeneca COVID-19 vaccine (2021) K.jpg,exclude,A_PERSON,a person is the subject
+BA_002384,sheet_10,r3c5,File:Oxford AstraZeneca COVID-19 vaccine (2021) L.jpg,exclude,A_PERSON,a person is the subject
+BA_002385,sheet_10,r4c0,File:Oxford AstraZeneca COVID-19 vaccine (2021) M.jpg,include,,
+BA_002386,sheet_10,r4c1,File:Oxford AstraZeneca COVID-19 vaccine (2021) N.jpg,exclude,A_PERSON,a person is the subject
+BA_002387,sheet_10,r4c2,File:Oxford AstraZeneca COVID-19 vaccine (2021) O.jpg,include,,
+BA_002388,sheet_10,r4c3,File:Oxford AstraZeneca COVID-19 vaccine (2021) P.jpg,exclude,A_PERSON,a person is the subject
+BA_002389,sheet_10,r4c4,File:Oxford AstraZeneca COVID-19 vaccine (2021) Q.jpg,include,,
+BA_002391,sheet_10,r4c5,File:Oxford AstraZeneca COVID-19 vaccine (2021) T.jpg,exclude,A_PERSON,a person is the subject
+BA_002431,sheet_10,r5c0,File:OxyContin branded oxycodone 10mg (OC side).jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_002433,sheet_10,r5c1,File:OxyContin setup.jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_002436,sheet_10,r5c2,File:Oxycodone (40139364063).jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_002440,sheet_10,r5c3,File:Oxycodone Pill (cropped).jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_002442,sheet_10,r5c4,File:Oxycodone Prescription Bottle with Pills Spilling Out. (39390810310).jpg,include,,
+BA_002443,sheet_10,r5c5,File:Oxycodone Prescription Bottle with Pills Spilling Out. (41201105871).jpg,include,,
+BA_002444,sheet_11,r0c0,File:Oxycodone Syrup 10mg per ml.jpg,include,,
+BA_002445,sheet_11,r0c1,File:Oxycodone Teva 5 mg .jpg,include,,
+BA_002465,sheet_11,r0c2,File:Ozempic (53899794358).jpg,include,,
+BA_002466,sheet_11,r0c3,File:Ozempic Semaglutide 0.5mg.jpg,include,,
+BA_002467,sheet_11,r0c4,File:Ozempic® 3ml.jpg,include,,
+BA_002468,sheet_11,r0c5,File:P ALAXIN TS TABLET.jpg,include,,
+BA_002517,sheet_11,r1c0,File:Pacific Partnership 2024-2 in Yap (8634078).jpg,exclude,A_PERSON,a person is the subject
+BA_002544,sheet_11,r1c1,"File:Pandemic Preparedness- examples of High-Priority ""Prototype Pathogens"" (left to right)- hantavirus, yellow fever virus, Nipah virus, picornavirus, and Chikungunya - 1.jpg",exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_002638,sheet_11,r1c2,File:Pfizer COVID-19 vaccine for ages 5 to 11 years.jpg,include,,
+BA_002643,sheet_11,r1c3,File:Pfizer-BioNTech COVID-19 vaccine (2020) A.jpg,include,,
+BA_002646,sheet_11,r1c4,File:Pfizer-BioNTech COVID-19 vaccine (2020) C-beschnitten.jpg,include,,
+BA_002648,sheet_11,r1c5,File:Pfizer-BioNTech COVID-19 vaccine (2020) D (cropped).jpg,include,,
+BA_002652,sheet_11,r2c0,File:Pfizer-BioNTech COVID-19 vaccine (2020) G (cropped).jpg,include,,
+BA_002780,sheet_11,r2c1,File:Pneumovax 23.jpg,include,,
+BA_002783,sheet_11,r2c2,File:Pofol.JPG,include,,
+BA_002795,sheet_11,r2c3,File:Posto de vacinação da febre amarela.jpg,exclude,A_PERSON,a person is the subject
+BA_002824,sheet_11,r2c4,File:President Trump meets with the Gilead CEO (49854752361).jpg,exclude,A_PERSON,a person is the subject
+BA_002825,sheet_11,r2c5,File:President Trump meets with the Gilead CEO (49854752376).jpg,exclude,A_PERSON,a person is the subject
+BA_002826,sheet_11,r3c0,File:President Trump meets with the Gilead CEO (49855054497).jpg,exclude,A_PERSON,a person is the subject
+BA_002845,sheet_11,r3c1,File:Propofol 01.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_002847,sheet_11,r3c2,File:Propofol 03.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_002853,sheet_11,r3c3,File:Propofol 09.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_002854,sheet_11,r3c4,File:Propofol 10.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_002895,sheet_11,r3c5,File:Provody na Sich.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_002914,sheet_11,r4c0,File:Quenching of Quinine fluorescence by chloride ions.JPG,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_002926,sheet_11,r4c1,File:Quinine Advertisement.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_002928,sheet_11,r4c2,File:Quinine INH Gennadius.jpg,exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_002934,sheet_11,r4c3,File:Quinine specialists of the 19th century. Wellcome V0027531.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_002936,sheet_11,r4c4,"File:Quinine sulphate bottle, London, England, 1860-1910 Wellcome L0058980.jpg",exclude,A_HISTORICAL,"antique or museum object, not a current retail package"
+BA_002953,sheet_11,r4c5,File:RADM Childs Japan.jpg,exclude,A_PERSON,a person is the subject
+BA_002987,sheet_11,r5c0,File:Remdesivir.jpg,include,,
+BA_003030,sheet_11,r5c1,File:Rybelsus 14mg bottle angle view.jpg,include,,
+BA_003031,sheet_11,r5c2,File:Rybelsus 14mg bottle front view.jpg,include,,
+BA_003032,sheet_11,r5c3,File:Rybelsus 14mg box angle view.jpg,include,,
+BA_003033,sheet_11,r5c4,File:Rybelsus 14mg box front view.jpg,include,,
+BA_003034,sheet_11,r5c5,File:Rybelsus 3mg 7mg.jpg,include,,
+BA_003035,sheet_12,r0c0,File:Rybelsus 3mg bottle angle view.jpg,include,,
+BA_003036,sheet_12,r0c1,File:Rybelsus 3mg box angle view.jpg,include,,
+BA_003038,sheet_12,r0c2,File:Rybelsus 7mg bottle front view.jpg,include,,
+BA_003040,sheet_12,r0c3,File:Rybelsus 7mg box front view.jpg,include,,
+BA_003066,sheet_12,r0c4,File:Sandoz.Methylprednisolone.4mg.jpg,include,,
+BA_003071,sheet_12,r0c5,File:Sardar Md. Sakhawat Hossain administering Vitamin A capsules at Vitamin A Plus Campaign inauguration in Dhaka 2026-06-28.jpg,exclude,A_PERSON,a person is the subject
+BA_003078,sheet_12,r1c0,File:Sea buckthorn seed oil gel.JPEG,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_003096,sheet_12,r1c1,File:Seoul National University Hospital Morning Patient Meal Covered.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_003119,sheet_12,r1c2,"File:Sinopharm BBIBP-CorV COVID-19 vaccine vial from Nikli, Bangladesh.jpg",include,,
+BA_003120,sheet_12,r1c3,File:Sinopharm Star Shark VE Soft Capsules.jpg,include,,
+BA_003126,sheet_12,r1c4,File:Slastion-Bandurist Samiylo Yasnij.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_003131,sheet_12,r1c5,File:Slastion-Kobzar Hovtvan.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_003132,sheet_12,r2c0,File:Slastion-Kobzar P. Tkachenko.jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_003146,sheet_12,r2c1,File:Sofosbuvir-Taraz.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_003181,sheet_12,r2c2,File:Southern medicine and surgery (serial) (1942) (14579348097).jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_003182,sheet_12,r2c3,File:Sovaldi 400mg.jpg,exclude,A_NO_PACKAGE,loose dose form with no packaging in the frame
+BA_003184,sheet_12,r2c4,File:Soviet International Certificate of Vaccination or Revaccination Against Yellow Fever.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_003185,sheet_12,r2c5,File:Sovodak.jpg,include,,
+BA_003190,sheet_12,r3c0,File:Stamaril (Yellow fever vaccine).jpg,include,,
+BA_003191,sheet_12,r3c1,File:Stamaril FIN.jpg,include,,
+BA_003192,sheet_12,r3c2,File:Stamaril.jpg,include,,
+BA_003320,sheet_12,r3c3,File:Tanzania issued yellow fever certificate.jpg,exclude,A_NOT_PRODUCT,no medical product in the frame
+BA_003337,sheet_12,r3c4,File:The Canadian nurse (1939) (14584765199).jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_003338,sheet_12,r3c5,File:The Canadian nurse (1939) (14584775149).jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_003339,sheet_12,r4c0,File:The Canadian nurse (1939) (14769100424).jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_003367,sheet_12,r4c1,"File:The Secretary, Ministry of Health and Family Welfare, Shri Prasanna Hota at the Launch of Tyfex Vaccine for Typhoid and Hivac-B vaccine for Hepatitis-B, in New Delhi on October 30, 2006.jpg",exclude,A_PERSON,a person is the subject
+BA_003368,sheet_12,r4c2,File:The World almanac and encyclopedia (1915) (14596556437).jpg,exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_003428,sheet_12,r4c3,File:Tube de lysopaine.jpg,include,,
+BA_003434,sheet_12,r4c4,File:Twinrix GlaxoSmithKline - i-hepA & r-hepB-S-Ag - doos Terumo-naald spuiten.JPG,include,,
+BA_003435,sheet_12,r4c5,File:Twinrix.jpg,include,,
+BA_003454,sheet_12,r5c0,"File:U.S. Army medical researchers take part in World Malaria Day 2010, Kisumu, Kenya April 25, 2010.jpg",exclude,A_PERSON,a person is the subject
+BA_003455,sheet_12,r5c1,File:UK Government urges business to boost vaccines effort.jpg,exclude,A_PERSON,a person is the subject
+BA_003456,sheet_12,r5c2,File:US Navy 050602-N-0555B-006 Hospital Corpsman 3rd Class Natasha Wooden administers a Hepatitis-B vaccine to a Sailors aboard the Nimitz class aircraft carrier USS Ronald Reagan (CVN 76).jpg,exclude,A_PERSON,a person is the subject
+BA_003457,sheet_12,r5c3,"File:US Navy 070406-N-5627R-326 Airman Sandra Valdovinos, from Delano, Calif., administers Airman Adam Helton, from Mesa, Ariz., a Hepatitis B vaccine.jpg",exclude,A_PERSON,a person is the subject
+BA_003504,sheet_12,r5c4,File:Vaccin infections invasives à méningocoque.jpg,include,,
+BA_003505,sheet_12,r5c5,File:Vaccines UK 16 weeks 2022.jpg,include,,
+BA_003506,sheet_13,r0c0,File:Vacina febreamarela.jpg,include,,
+BA_003526,sheet_13,r0c1,"File:Vitamin A Capsule Feeding Program Inauguration, Bauphal Upazila, Patuakhali, 2016-07-16.jpg",exclude,A_PERSON,a person is the subject
+BA_003527,sheet_13,r0c2,File:Vitamin B12 B-komplex.jpg,include,,
+BA_003545,sheet_13,r0c3,"File:Vue de l'Hostel de Mr. le Mareschal Daumont, du costé du Jardin a Paris, G.435(2).jpg",exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_003546,sheet_13,r0c4,"File:Vue de l'Hostel de Mr. le Mareschal Daumont, du costé du Jardin a Paris, G.435(3).jpg",exclude,A_NOT_PHOTOGRAPH,"diagram, rendering or illustration, not a photograph"
+BA_003575,sheet_13,r0c5,File:Wegovy - Semaglutide.jpg,include,,

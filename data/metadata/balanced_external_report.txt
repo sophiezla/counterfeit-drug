@@ -1,0 +1,30 @@
+FLATNESS CALIBRATION
+  artwork positives (step 25 X_NOT_PHOTOGRAPH): 8
+  photograph negatives (Split E accepted):      150
+  near_white_frac      artwork [0.3651, 0.4899]  photo p5=0 p95=0.1159   Youden J 0.980
+  grad                 artwork [0.01966, 0.02254]  photo p5=0.01072 p95=0.03962   Youden J 0.473
+  quantized_colours    artwork [198, 867]  photo p5=339.8 p95=2230   Youden J 0.620
+  selected axis: near_white_frac (hi), threshold 0.3196, Youden J 0.980
+  on the calibration data: 8/8 artwork caught, 3/150 photographs wrongly caught
+
+BRIGHTNESS SUPPORT of the 46 counterfeit representatives: [0.341, 0.714]
+
+INDEPENDENCE
+  reference set: 7283 images, every image under data/raw (Kaggle, Roboflow, Mendeley C/D, iphone11pro, synthetic, Split E)
+  threshold: 8/64 bits, as 03_dedup.py, step 07 and step 25
+  candidates matching the pool within threshold: 0 of 449
+  closest approach: Hamming 10 (BA_000021 vs iphone_11_pro_(81).JPG)
+  eligible after every screen: 438
+
+AUTOMATED SCREEN OUTCOME (authentic candidates)
+  downloaded: 672
+    (passes every automated screen)    438
+    A_ACQUISITION_OUT_OF_BAND          173
+    A_NOT_PHOTOGRAPH                   50
+    A_NEAR_DUPLICATE_WITHIN            11
+  eligible, pending subject-matter review: 438
+  contact sheets: 13
+
+NEXT: record a subject-matter decision per candidate in
+  data/metadata/balanced_external_review.csv
+then run scripts/33_apply_review_and_build.py.

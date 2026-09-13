@@ -88,7 +88,7 @@ PREAMBLE = r"""%% Supplementary material -- GENERATED FILE, DO NOT EDIT.
 \history{Supplementary material.}
 \doi{10.1109/ACCESS.2026.DOI}
 
-\title{Supplementary Material: Auditing Class-Conditional Provenance
+\title{Supplementary Material: Auditing Provenance
 Confounding in Image Authenticity Classification: A Counterfeit-Medicine
 Case Study}
 

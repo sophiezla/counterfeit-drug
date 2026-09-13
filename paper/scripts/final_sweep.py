@@ -129,18 +129,38 @@ if _abs:
     check(_n <= 250, "paper.md: abstract within the journal's 250-word limit",
           f"{_n} words")
 
-# Section V-A rules that nothing computed on Splits C and D is an accuracy,
-# because both hold authentic images only. On 2026-09-02 the manuscript, the
-# supplement and two figure axis labels broke that rule in 31 places, including
-# Table 6's own caption, while every other gate passed. It is a core
-# methodological distinction, so it gets a gate. The one licensed use is Section
-# III-E, which names the rejected term in order to reject it.
+# Section III-D rules that nothing computed on the ONE-SIDED external sets is an
+# accuracy: conditions C and D hold authentic images only and the regulatory
+# counterfeit source holds counterfeit images only, so the first two can yield
+# only a specificity and the third only a recall. On 2026-09-02 the manuscript,
+# the supplement and two figure axis labels broke that rule in 31 places,
+# including a table caption, while every other gate passed. It is a core
+# methodological distinction, so it gets a gate.
+#
+# Widened 2026-09-09 for the balanced external test, which is two-class and
+# equal-count and on which an accuracy IS defined -- that being the whole reason
+# it was built. The rule is therefore about the one-sided sets, not about the
+# word "external", and the gate has to be able to tell the two apart. It does so
+# by requiring the phrase to be unqualified: "balanced external accuracy" is
+# licensed and bare "external accuracy" is not. Two further exceptions are
+# named: Section III-E, which quotes the rejected term in order to reject it,
+# and this rule's own statement.
+#
+# The licence list is matched case-insensitively. It was not, on the first
+# version of this widening, and the gate then failed on Table 4's own column
+# heading -- "Balanced external accuracy" -- while passing the identical phrase
+# in running prose. A rule about a phrase should not depend on whether the
+# phrase begins a sentence or a table column.
+_LICENSED = ('rather than "external accuracy"', "balanced external accuracy",
+             "balanced external test accuracy", "balanced-external accuracy")
 for _name, _p in (("paper.md", MAIN_MD), ("supplementary.md", SUP_MD),
                   ("make_figures.py", ROOT / "paper" / "scripts" / "make_figures.py")):
     _t = read(_p)
-    _hits = [m for m in re.findall(r"[^.]*?(?:external|Split [CD]) accurac(?:y|ies)[^.]*", _t)
-             if 'rather than "external accuracy"' not in m]
-    check(not _hits, f"{_name}: no Split C/D quantity called an accuracy (Section V-A)",
+    _hits = [m for m in re.findall(
+        r"[^.]*?(?:external|Split [CDE]|condition [CD]) accurac(?:y|ies)[^.]*", _t)
+        if not any(lic.lower() in m.lower() for lic in _LICENSED)]
+    check(not _hits,
+          f"{_name}: no one-sided external quantity called an accuracy (Section III-D)",
           f"{[h.strip()[:70] for h in _hits[:2]]}")
 
 print("\nBUILT ARTEFACTS")
@@ -208,6 +228,15 @@ try:
     title = re.search(r"^#\s+(.*)$", main, re.M).group(1)
     check(re.sub(r"\s+", "", title) in squashed,
           "PDF title matches paper.md's title")
+    # The title lives in three places -- paper.md line 1, supplementary.md
+    # line 3 and build_supplement.py's PREAMBLE -- and until 2026-09-13 only
+    # the first was checked. The supplement then shipped for twelve days under
+    # the pre-2026-09-01 title, "Class-Conditional" and all, with every gate
+    # green. The compiled supplement's first page must carry the manuscript's
+    # title verbatim after its "Supplementary Material:" prefix.
+    sup_page1 = re.sub(r"\s+", "", sp[0].get_text())
+    check(re.sub(r"\s+", "", title) in sup_page1,
+          "supplement PDF title matches paper.md's title")
     for label, needle in (("author name", "SOPHIE ZHU"),
                           ("affiliation", "Mira Costa High School"),
                           ("author e-mail", "sophiezhu2028@gmail.com"),
@@ -231,6 +260,70 @@ try:
           f"found: {leftovers}")
 except Exception as exc:                                  # noqa: BLE001
     check(False, "PDF/docx inspection", str(exc))
+
+# ---------------------------------------------------------------------------
+# SUPPLEMENT TABLES AGAINST THE CSV OF RECORD
+# On 2026-09-13 Table S9's M4 rows still described the pre-checkpoint run
+# (26 epochs, best 23, val accuracy 1.000) that Section S-I-G itself says was
+# superseded by an 18-epoch run, and Table S3 carried two rounding slips.
+# Every gate was green, because every gate reads structure and none reads a
+# number. The tables below are transcriptions of a committed CSV, so they can
+# be checked cell by cell; a table that is a transcription and disagrees with
+# its source is a defect, whatever the prose around it says.
+print("\nSUPPLEMENT TABLES AGAINST THE CSV OF RECORD")
+try:
+    import csv
+
+    def md_table(text, caption_prefix):
+        i = text.index(caption_prefix)
+        rows = []
+        for ln in text[i:].split("\n")[1:]:
+            if ln.startswith("|"):
+                cells = [c.strip().replace("**", "") for c in ln.strip("|").split("|")]
+                if not all(set(c) <= set("-: ") for c in cells):
+                    rows.append(cells)
+            elif rows:
+                break
+        return rows[1:]  # drop the header
+
+    def num(s):
+        return float(re.match(r"[-+−]?\d+(?:\.\d+)?", s.replace("−", "-")).group(0))
+
+    sup = read(SUP_MD)
+    # Table S9 <- paper/tables/table_training_curves.csv
+    rec = {(r["model"], r["split"][0]): r for r in
+           csv.DictReader(open(ROOT / "paper/tables/table_training_curves.csv", encoding="utf-8"))}
+    bad = []
+    for row in md_table(sup, "**TABLE S9.**"):
+        model, split = row[0].split()[0], row[1]
+        r = rec[(model, split)]
+        want = [int(r["epochs_run"]), int(r["best_epoch"]),
+                round(float(r["best_val_loss"]), 3), round(float(r["best_val_acc"]), 3)]
+        got = [int(num(row[2])), int(num(row[3])), num(row[4]), num(row[5])]
+        if want != got:
+            bad.append(f"{model}/{split}: table {got} vs record {want}")
+    check(not bad, "Table S9 agrees with table_training_curves.csv", "; ".join(bad))
+
+    # Table S3 <- paper/tables/table_performance_full.csv
+    rec = {(r["model"], r["split"][0]): r for r in
+           csv.DictReader(open(ROOT / "paper/tables/table_performance_full.csv", encoding="utf-8"))}
+    cols = ["tp", "fp", "fn", "tn", "accuracy", "precision", "recall_sensitivity",
+            "specificity", "f1", "balanced_accuracy", "mcc", "roc_auc", "pr_auc"]
+    bad = []
+    for row in md_table(sup, "**TABLE S3.**"):
+        model, split = row[0].split()[0], row[1]
+        r = rec[(model, split)]
+        for col, cell in zip(cols, row[3:]):
+            want, got = round(float(r[col]), 3), num(cell)
+            if abs(want - got) > 5e-4:
+                bad.append(f"{model}/{split} {col}: table {got} vs record {want}")
+        lo, hi = re.search(r"\[(\d\.\d+), (\d\.\d+)\]", row[7]).groups()
+        for col, cell in (("accuracy_ci_lo", lo), ("accuracy_ci_hi", hi)):
+            if abs(round(float(r[col]), 3) - float(cell)) > 5e-4:
+                bad.append(f"{model}/{split} {col}: table {cell} vs record {round(float(r[col]), 3)}")
+    check(not bad, "Table S3 agrees with table_performance_full.csv", "; ".join(bad))
+except Exception as exc:                                  # noqa: BLE001
+    check(False, "supplement tables against the CSV of record", str(exc))
 
 print("\nRESULT")
 if fails:

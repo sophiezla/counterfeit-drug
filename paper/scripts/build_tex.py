@@ -561,7 +561,10 @@ def render_body(blocks):
             out.append(r"\subsection{"
                        + inline(HEAD_NUM_RE.sub("", str(payload))) + "}")
         elif kind == "h4":
-            out.append(r"\subsubsection{" + inline(str(payload)) + "}")
+            # ieeeaccess.cls numbers \subsubsection itself as "1)", so the
+            # markdown's own "1) " prefix would print twice ("1) 1) ...").
+            out.append(r"\subsubsection{"
+                       + inline(re.sub(r"^\d+\)\s+", "", str(payload))) + "}")
         elif kind == "para":
             text = str(payload)
             if consumed_note:
@@ -713,10 +716,7 @@ PREAMBLE = r"""%% IEEE Access manuscript -- GENERATED FILE, DO NOT EDIT.
             (e-mail: sophiezhu2028@gmail.com; ORCID: 0009-0004-2403-910X)}
 
 \tfootnote{This work received no specific grant from any funding agency in the
-public, commercial, or not-for-profit sectors. The manuscript and the
-accompanying code were prepared with the assistance of Claude, an AI assistant
-developed by Anthropic; see the generative-AI disclosure in the Ethics
-section.}
+public, commercial, or not-for-profit sectors.}
 
 \corresp{Corresponding author: Sophie Zhu (e-mail: sophiezhu2028@gmail.com).}
 

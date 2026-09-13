@@ -30,6 +30,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 PAPER = ROOT / "paper" / "paper.md"
+# The supplement is prose by the same author and is read by the same
+# reviewers, so it has to hold the same house style. Before it was added
+# here the two documents disagreed with each other -- paper.md had 12
+# "centre" against the supplement's 12 "center" -- and each was internally
+# mixed as well.
+SUPPLEMENT = ROOT / "paper" / "supplementary.md"
 GENERATORS = [
     ROOT / "paper" / "scripts" / "make_figures.py",
     ROOT / "paper" / "scripts" / "build_poster.py",
@@ -177,7 +183,7 @@ def run(path, check):
 
 def main():
     check = "--check" in sys.argv
-    targets = [PAPER]
+    targets = [PAPER, SUPPLEMENT]
     if "--all" in sys.argv:
         targets += [p for p in GENERATORS if p.exists()]
     total = sum(run(p, check) for p in targets)

@@ -1,0 +1,58 @@
+image_id,manifest_label,decision,exclusion_code,panel_composite,label_crop,reviewer,review_date,reason
+PC_000001,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified Botox carton.
+PC_000002,FALSIFIED,include,,yes,yes,claude_first_pass,2026-09-07,Two-panel crop of carton label and hologram; both panels photographic and same class.
+PC_000003,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,Three-panel montage of carton faces; photographic and same class; no burned-in caption.
+PC_000004,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified vial.
+PC_000005,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified vial.
+PC_000006,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified vial.
+PC_000007,AUTHENTIC,exclude,X_NOT_PHOTOGRAPH,no,no,claude_first_pass,2026-09-07,Flat vector carton artwork supplied as a reference image of the genuine label; not a photograph of a physical product.
+PC_000008,AUTHENTIC,exclude,X_NOT_PHOTOGRAPH,no,no,claude_first_pass,2026-09-07,Flat vector carton artwork; not a photograph.
+PC_000009,AUTHENTIC,exclude,X_NOT_PHOTOGRAPH,no,no,claude_first_pass,2026-09-07,Flat vector carton artwork; not a photograph.
+PC_000010,AUTHENTIC,exclude,X_NOT_PHOTOGRAPH,no,no,claude_first_pass,2026-09-07,Flat vector carton artwork; not a photograph.
+PC_000011,AUTHENTIC,exclude,X_NOT_PHOTOGRAPH,no,no,claude_first_pass,2026-09-07,Flat vector carton artwork; not a photograph.
+PC_000012,AUTHENTIC,exclude,X_NOT_PHOTOGRAPH,no,no,claude_first_pass,2026-09-07,Flat vector carton artwork; not a photograph.
+PC_000013,AUTHENTIC,exclude,X_NOT_PHOTOGRAPH,no,no,claude_first_pass,2026-09-07,Flat vector carton artwork; not a photograph.
+PC_000014,AUTHENTIC,exclude,X_NOT_PHOTOGRAPH,no,no,claude_first_pass,2026-09-07,Flat vector carton artwork; not a photograph.
+PC_000015,AUTHENTIC,exclude,X_CLASS_TOO_SMALL,no,no,claude_first_pass,2026-09-07,Genuine photograph of an authentic vial and the only authentic-class image to survive the other screens; one image is not a class. Retained in the manifest and excluded from the evaluation set so that Split E is reported honestly as falsified-only.
+PC_000016,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified vial.
+PC_000017,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified vial.
+PC_000018,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified carton.
+PC_000019,FALSIFIED,include,,no,yes,claude_first_pass,2026-09-07,"Photographic close-up of a printed carton panel (lot/MFG/EXP block). Reclassified from X_TEXT_ONLY on 2026-09-07: that code covers rendered tables with no photographic content, and applying it here contradicted the harvest screen's treatment of identical label crops."
+PC_000020,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified vaccine carton.
+PC_000021,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified vial and ampoule tray.
+PC_000022,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified carton back panel.
+PC_000023,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified carton panel.
+PC_000024,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified bottle.
+PC_000025,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified bottle.
+PC_000026,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified bottle.
+PC_000027,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified bottle.
+PC_000028,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of three falsified containers.
+PC_000029,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of falsified tablets in dishes.
+PC_000030,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,Two-panel montage of label and tablets against a scale rule; photographic and same class.
+PC_000031,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of two falsified containers.
+PC_000032,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified container.
+PC_000033,UNVERIFIED,exclude,X_MIXED_CLASS,yes,no,claude_first_pass,2026-09-07,"Regulator comparison figure captioned ""Authentic Ozempic Images | Counterfeit Images""; one frame contains both classes and cannot carry a binary label."
+PC_000034,UNVERIFIED,exclude,X_ANNOTATED,yes,no,claude_first_pass,2026-09-07,Label crops with red and yellow ellipses drawn on by the regulator; the markup is a class-specific artifact absent from every authentic image.
+PC_000035,UNVERIFIED,exclude,X_ANNOTATED,no,yes,claude_first_pass,2026-09-07,Label crop with regulator markup drawn on.
+PC_000036,UNVERIFIED,exclude,X_MIXED_CLASS,yes,no,claude_first_pass,2026-09-07,"Two-panel figure captioned ""Authentic Ozempic Needle | Counterfeit Needle""; both classes in one frame."
+PC_000037,UNVERIFIED,exclude,X_MIXED_CLASS,yes,no,claude_first_pass,2026-09-07,Comparison figure with both classes and a burned-in bulleted key.
+PC_000038,UNVERIFIED,exclude,X_LABEL_UNVERIFIED,no,no,claude_first_pass,2026-09-07,Manifest label is UNVERIFIED; the FDA alert is a consumer alert about a dietary supplement rather than a falsified-medicine determination.
+PC_000039,UNVERIFIED,exclude,X_LABEL_UNVERIFIED,no,no,claude_first_pass,2026-09-07,Manifest label is UNVERIFIED; dietary supplement rather than a medicine.
+PC_000040,UNVERIFIED,exclude,X_LABEL_UNVERIFIED,no,no,claude_first_pass,2026-09-07,Manifest label is UNVERIFIED; dietary supplement rather than a medicine.
+PC_000041,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,Three-panel montage of falsified bottles; photographic and same class; no burned-in caption.
+PC_000042,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,Three-panel montage of falsified bottles; no burned-in caption.
+PC_000043,FALSIFIED,exclude,X_BANNER_COMPOSITE,yes,no,claude_first_pass,2026-09-07,"Carries the burned-in banner ""PHOTOGRAPHS OF CONFIRMED FALSIFIED ICLUSIG PRODUCTS""; the banner is rendered text present only in the falsified class and is a trivially learnable cue."
+PC_000044,FALSIFIED,exclude,X_BANNER_COMPOSITE,yes,no,claude_first_pass,2026-09-07,Burned-in numbered caption identifying the product as falsified.
+PC_000045,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,Two-panel montage of a falsified test kit; no burned-in caption.
+PC_000046,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified test-kit carton.
+PC_000047,FALSIFIED,include,,no,no,claude_first_pass,2026-09-07,Single photograph of a falsified test-kit pouch.
+PC_000048,UNVERIFIED,exclude,X_TEXT_ONLY,no,no,claude_first_pass,2026-09-07,Rendered data table of product name/lot/expiry; no product depicted.
+PC_000049,FALSIFIED,exclude,X_BANNER_COMPOSITE,yes,no,claude_first_pass,2026-09-07,Burned-in banner declaring the products falsified.
+PC_000050,UNVERIFIED,exclude,X_TEXT_ONLY,no,no,claude_first_pass,2026-09-07,Rendered data table; no product depicted.
+PC_000051,FALSIFIED,exclude,X_BANNER_COMPOSITE,yes,no,claude_first_pass,2026-09-07,Burned-in banner declaring the products falsified.
+PC_000052,FALSIFIED,exclude,X_BANNER_COMPOSITE,yes,no,claude_first_pass,2026-09-07,Burned-in banner declaring the products falsified.
+PC_000053,FALSIFIED,exclude,X_BANNER_COMPOSITE,yes,no,claude_first_pass,2026-09-07,Burned-in caption declaring the products falsified.
+PC_000054,FALSIFIED,exclude,X_BANNER_COMPOSITE,yes,no,claude_first_pass,2026-09-07,Burned-in banner declaring the products falsified.
+PC_000055,FALSIFIED,exclude,X_NOT_PRODUCT,no,no,claude_first_pass,2026-09-07,The World Health Organization corporate logo. Labeled FALSIFIED in the manifest. No medical product is depicted; this is a manifest labeling error rather than a borderline call.
+PC_000056,FALSIFIED,include,,yes,no,claude_first_pass,2026-09-07,Three-panel montage of a falsified vial held in hand; no burned-in caption.
+PC_000057,FALSIFIED,exclude,X_BANNER_COMPOSITE,yes,no,claude_first_pass,2026-09-07,"Burned-in caption ""COVISHIELD falsificado, Lote 4121Z940""."
