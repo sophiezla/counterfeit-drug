@@ -113,7 +113,10 @@ def main():
     main_words = len(" ".join(p.get_text() for p in mp).split())
     commit = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT,
                             capture_output=True, text=True).stdout.strip()
-    dirty = subprocess.run(["git", "status", "--porcelain"], cwd=ROOT,
+    # The bundle itself is excluded from the dirtiness check, or assembling
+    # it would always report the tree dirty.
+    dirty = subprocess.run(["git", "status", "--porcelain", "--", ".",
+                            ":!ieee-submission"], cwd=ROOT,
                            capture_output=True, text=True).stdout.strip()
     title = (PAPER / "paper.md").read_text(encoding="utf-8").splitlines()[0].lstrip("# ").strip()
 
