@@ -62,7 +62,7 @@ def release():
     cff = yaml.safe_load((ROOT / "CITATION.cff").read_text(encoding="utf-8"))
     ver = cff["version"]
     doi = next((i["value"] for i in cff.get("identifiers", [])
-                if f"v{ver}" in i.get("description", "")), None)
+                if i.get("description", "").startswith(f"DOI of v{ver},")), None)
     return f"v{ver}" + (f", doi:{doi}" if doi else " (Zenodo DOI pending)")
 
 

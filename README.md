@@ -13,9 +13,8 @@ The case study is a public counterfeit-medicine dataset. The manuscript is
 built from `paper/paper.md`; see `paper/` and Appendix C for reproduction.
 
 **Archived release.** The manuscript reports
-[v1.4.1](https://github.com/sophiezla/counterfeit-drug/releases/tag/v1.4.1)
-(archived on Zenodo under the concept DOI above; the version DOI is recorded
-here once minted), which is the exact
+[v1.4.1](https://doi.org/10.5281/zenodo.22739272)
+(doi:10.5281/zenodo.22739272), which is the exact
 state of the code that produced every number in it, together with the
 `ieee-submission/` bundle. The badge above is the
 version-independent concept DOI and always resolves to the latest release;

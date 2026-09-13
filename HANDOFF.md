@@ -42,7 +42,8 @@ wording); `paper/latex/README.md` is generated from a template in
 `build_tex.py` and still claimed no TeX distribution existed here -- the
 template is fixed, not the file. **v1.4.1** re-archives the code so that the
 availability statement ("the exact state of the code that produced every
-number") stays literally true; no number changed.
+number") stays literally true; no number changed. Zenodo minted
+**doi:10.5281/zenodo.22739272** for it; the concept DOI resolves to it.
 
 ## Submission pass, 2026-09-13 -- references verified, supplement brought level with the paper, v1.4.0 cut
 
