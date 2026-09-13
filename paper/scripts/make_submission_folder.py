@@ -55,6 +55,17 @@ def sha256(path):
     return h.hexdigest()
 
 
+def release():
+    """Version and version-DOI from CITATION.cff, which names the release the
+    manuscript reports; read there rather than typed here so the two agree."""
+    import yaml
+    cff = yaml.safe_load((ROOT / "CITATION.cff").read_text(encoding="utf-8"))
+    ver = cff["version"]
+    doi = next((i["value"] for i in cff.get("identifiers", [])
+                if f"v{ver}" in i.get("description", "")), None)
+    return f"v{ver}" + (f", doi:{doi}" if doi else " (Zenodo DOI pending)")
+
+
 def freshness():
     problems = []
     for tex, md, pdf in (("paper.tex", "paper.md", MAIN_PDF),
@@ -143,7 +154,7 @@ def main():
         "",
         "Both documents pass `paper/scripts/verify_crossrefs.py` and",
         "`paper/scripts/final_sweep.py` at this commit. The code release the",
-        "manuscript reports is v1.4.0, doi:10.5281/zenodo.22739071.",
+        f"manuscript reports is {release()}.",
         "",
         "## Checksums (SHA-256)",
         "",

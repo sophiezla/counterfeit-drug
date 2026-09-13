@@ -2,7 +2,7 @@
 
 **Auditing Provenance Confounding in Image Authenticity Classification: A Counterfeit-Medicine Case Study**
 
-Assembled 2026-09-13 from commit `48026fc` (clean working tree) by `paper/scripts/make_submission_folder.py`. Every file is a copy of a
+Assembled 2026-09-13 from commit `80b1242` (working tree had uncommitted changes) by `paper/scripts/make_submission_folder.py`. Every file is a copy of a
 build artefact under `paper/`; nothing here is hand-edited. Regenerate the
 bundle rather than editing it.
 
@@ -18,7 +18,7 @@ bundle rather than editing it.
 
 Both documents pass `paper/scripts/verify_crossrefs.py` and
 `paper/scripts/final_sweep.py` at this commit. The code release the
-manuscript reports is v1.4.0, doi:10.5281/zenodo.22739071.
+manuscript reports is v1.4.1, doi:10.5281/zenodo.22739071.
 
 ## Checksums (SHA-256)
 

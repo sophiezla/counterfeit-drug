@@ -13,12 +13,16 @@ The case study is a public counterfeit-medicine dataset. The manuscript is
 built from `paper/paper.md`; see `paper/` and Appendix C for reproduction.
 
 **Archived release.** The manuscript reports
-[v1.4.0](https://doi.org/10.5281/zenodo.22739071)
-(doi:10.5281/zenodo.22739071), which is the exact
-state of the code that produced every number in it. The badge above is the
+[v1.4.1](https://github.com/sophiezla/counterfeit-drug/releases/tag/v1.4.1)
+(archived on Zenodo under the concept DOI above; the version DOI is recorded
+here once minted), which is the exact
+state of the code that produced every number in it, together with the
+`ieee-submission/` bundle. The badge above is the
 version-independent concept DOI and always resolves to the latest release;
 cite it unless you need to pin a specific version. Earlier releases are
 superseded and do not correspond to the current manuscript:
+v1.4.0 (doi:10.5281/zenodo.22739071) carries the same results and predates
+the submission bundle and four rendering fixes,
 v1.3.1 (doi:10.5281/zenodo.22239515) predates the regulatory counterfeit
 source (Split E) and the balanced external test (Table 4),
 v1.3.0 (doi:10.5281/zenodo.22238929) predates the length pass and four
