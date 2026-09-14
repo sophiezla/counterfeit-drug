@@ -133,6 +133,8 @@ def main():
     cap = (PAPER / "graphical_abstract_caption.txt").read_text(encoding="utf-8")
     assert len(cap.split()) <= 60, f"graphical abstract caption is {len(cap.split())} words; limit 60"
     shutil.copy2(PAPER / "graphical_abstract_caption.txt", OUT / "05_graphical_abstract_caption.txt")
+    # ScholarOne asks for a label (<= 30 chars) and description (<= 1000 chars) for the supplementary file.
+    shutil.copy2(PAPER / "supplementary_submission_fields.txt", OUT / "02_supplementary_material_fields.txt")
     if NOTES is not None:
         shutil.copy2(NOTES, OUT / NOTES.name)
 
@@ -164,6 +166,7 @@ def main():
         "|---|---|---|",
         f"| `01_manuscript.pdf` | Main manuscript, review copy | {mp.page_count} pages, {main_words:,} words as rendered |",
         f"| `02_supplementary_material.pdf` | Supplementary material | {sp.page_count} pages |",
+        "| `02_supplementary_material_fields.txt` | Supplementary label and description | for the ScholarOne form; 30 / 1000 character limits |",
         "| `03_manuscript.docx` | Main manuscript, Word rendering | same Markdown source; maths flattened, floats inline |",
         "| `04_latex_source/` | LaTeX source | `paper.tex`, `supplementary.tex`, `ieeeaccess.cls` and its assets, fonts, `figures/`; compiles as-is with pdflatex |",
         "| `04_latex_source.zip` | The same, zipped | for the source-file upload |",

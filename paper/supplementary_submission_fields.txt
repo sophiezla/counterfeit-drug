@@ -1,0 +1,5 @@
+Label:
+Supplementary Material (PDF)
+
+Description:
+Supplementary material for the manuscript (37 pages; shares its reference list). Section S-I is the complete experimental record: manual quality and modality review, synthetic counterfeit proxy, environment and training protocol, four disclosed reproducibility defects, full in-distribution metrics with McNemar tests and power analysis, attribution audits (Grad-CAM, occlusion), calibration, ablations of the exploratory normalization by axis, constant and composition order, train-only axis derivation, a taxonomy of provenance defects, five-seed sensitivity, the paired near-duplicate leakage experiment, the provenance audit on six further archives, and the near-duplicate threshold sweep. Section S-II expands every limitation. Appendices give the full ablation record, exclusion rules, reproduction commands, image sources used by prior work, the train-only operator, the regulatory counterfeit source's eligibility screen, and the construction and audit of the balanced external test.
