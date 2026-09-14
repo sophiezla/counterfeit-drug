@@ -4,6 +4,21 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## READY TO SUBMIT, 2026-09-14 -- final pass done
+
+`ieee-submission-final/` at commit `c0eada7` is the package. A last full
+read of the rendered PDF found two duplicated sentences (the metrics
+convention stated twice in III-D; "Two of Table 2's rows ... Third" in
+IV-A) -- fixed. A 16-point readiness checklist run against the bundle
+itself passes: 20 pages, abstract 240 words, PDF metadata, supplement
+title parity, no placeholders, Claude named only in the Acknowledgment, no
+stale table refs, no split letters in Results/Discussion, citations 1-32
+all present and all cited, AI disclosure present, graphical abstract
+present, docx abstract identical, zip complete, manifest checksums, v1.4.3
+DOI in the manifest. **Nothing is blocking submission.** What remains is
+the author's own actions on ScholarOne: cover letter, suggested reviewers,
+and confirming the funding/COI fields match the paper.
+
 ## Cut to 20 pages, 2026-09-14 -- v1.4.3, `ieee-submission-final/` regenerated
 
 Zenodo minted **doi:10.5281/zenodo.22758850** for v1.4.3; the concept DOI
