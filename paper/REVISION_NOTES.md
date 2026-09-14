@@ -1,7 +1,8 @@
-# Revision notes — reviewer-concern pass, 2026-09-13
+# Revision notes — reviewer-concern pass and final pass, 2026-09-13
 
-This version of the manuscript (`ieee-submission-v2/`) revises the submission
-state in `ieee-submission/` in response to a pre-submission review. Every
+This version of the manuscript (`ieee-submission-final/`) revises the earlier
+submission state in `ieee-submission/` in response to a pre-submission review,
+followed by a final pass of five targeted changes (listed at the end). Every
 number, table, figure and experiment is unchanged; every limitation stated in
 the earlier version is still stated. What changed is the framing of the
 contribution, the scope of the generalization language, the prominence of
@@ -188,3 +189,41 @@ article was used.
 Both gates (`verify_crossrefs.py`, `final_sweep.py`) pass; the abstract is
 246 words; the manuscript is 22 pages and the supplement 37; the LaTeX
 source in this folder compiles standalone to text-identical PDFs.
+
+## Final pass (five targeted changes)
+
+1. **Novelty claim.** Already stated as *formalize and operationalize*; no
+   sentence in the paper now presents the audit as a new ML technique.
+2. **Central result impossible to miss.** A bold paragraph in Section I
+   ("The central result is easily stated. ... all 510 labels are
+   predictable from container format alone ... High internal classifier
+   performance on this dataset therefore cannot be interpreted as evidence
+   of object-level authentication") and the same two sentences open
+   Section IV-A.
+3. **External-validation limitations explicit.** Section III-D now carries a
+   side-by-side table of the three evaluations — classes held, what shifts,
+   what is standardized, how labels are established (regulator-confirmed
+   vs labeled-not-verified vs authentic-only), and what each can measure —
+   followed by one sentence stating that the balanced test and the
+   acquisition-shift test are not two versions of one experiment.
+4. **Defensive language.** A further round of cuts: the seed-sensitivity
+   caveat is stated once (IV-D) rather than in III-B as well; the leakage
+   summary in IV-B no longer restates the previous paragraph; V-B no
+   longer restates the outer-region finding of IV-E; V-D no longer has two
+   "most consequential" gaps; a duplicated "not a property of the
+   photographed object" was removed from Table 3's caption. The manuscript
+   is about 1,200 words shorter than the original submission state at the
+   same page count.
+5. **Normalization and Grad-CAM secondary.** The Grad-CAM equation and its
+   description were moved out of Section III-G (one sentence remains,
+   pointing to Section S-I-J), the Grad-CAM paragraph closing Section IV-E
+   was removed (its content is in Section S-I-J), and the exact-logit
+   decomposition is now Eq. (9). Nothing in the main text presents the
+   normalization as a proposed solution; Sections III-F, IV-E and V-B each
+   say it is an instrument.
+
+The whole manuscript was then read once more in its rendered form; two
+slips found in that read (a dangling "It" in the availability statement and
+one remaining "photographic surround" in Table 8) were fixed. Both gates
+pass; 22 pages; abstract 247 words.
+
