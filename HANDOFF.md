@@ -4,6 +4,51 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Reviewer-concern revision, 2026-09-13 (evening) -- branch `reviewer-revision`, `ieee-submission-v2/`
+
+**Two candidate submissions now exist, and the author chooses.**
+`ieee-submission/` (on `main`, v1.4.1) is the earlier state and is untouched.
+`ieee-submission-v2/` (on branch `reviewer-revision`, not merged) is a
+text-only revision answering eleven concerns from a pre-submission review;
+`paper/REVISION_NOTES.md` (copied into the folder) maps each concern to
+the change. **No number, table, figure or experiment changed**; both gates
+pass; 22 + 37 pages; abstract 247 words; the zipped source compiles
+standalone to text-identical PDFs.
+
+**What changed, in one line each.** Contribution stated as *formalize and
+operationalize* an audit + case study, never "a new methodology" (abstract,
+I para 3, I-B, II-C now "Position of this work", VI). I-B is an IEEE-style
+contributions list + "organized as follows" paragraph. Generality softened
+everywhere ("plausible and supported by examples, not established at
+population level"). The unverified authentic class is "the principal
+limitation of Table 4" (III-D-1, IV-C, V-D, Table 8). The unmeasured cell
+(both classes x acquisition shift) is V-D's first limitation, drawn as a
+2x2 matrix (uncaptioned, so no table renumbering). Outer-region, never
+backdrop (IV-E-2 heading, Table 8). Normalization subordinated: numbers out
+of the abstract, IV-E-1 cut from six paragraphs to three, V-B retitled
+"What the audit settles, and what it does not". No architecture ranked:
+"best"/"strongest"/"leads" -> point-estimate wording, and V-D says which
+statement forms are licensed. "AI-assisted eligibility screening is not
+ground-truth labeling" is its own V-D limitation, with the selection-bias
+argument (labels come from the source; brightness matching removes the one
+statistic the screen could shift; the 0.620 audit bounds the rest); the
+Acknowledgment disclosure says the screen assigned no label. About 600
+words of restated qualification cut, each limitation kept once.
+
+**If v2 is the one submitted:** merge `reviewer-revision` into `main` and
+cut **v1.4.2** so the availability statement ("the exact state of the code
+that produced every number") stays literally true -- the code is
+identical, but the archived manuscript source is not. Regenerate the
+folder afterwards so its manifest names the release.
+
+**Style model.** One IEEE Access article (Ben Ahmed et al., 2022, doi:
+10.1109/ACCESS.2022.3193700) was read for structure only -- contributions
+list, organization paragraph, plain topic sentences, results paragraphs
+that lead with the finding. Nothing was copied.
+
+**Gate note.** `make_submission_folder.py` takes `--out` and `--notes`;
+its dirty-tree check excludes whichever folder it is writing.
+
 ## Submission bundle, 2026-09-13 (later the same day) -- ieee-submission/ and v1.4.1
 
 **`ieee-submission/` is the package to upload**, built by

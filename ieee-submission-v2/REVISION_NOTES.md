@@ -1,0 +1,190 @@
+# Revision notes — reviewer-concern pass, 2026-09-13
+
+This version of the manuscript (`ieee-submission-v2/`) revises the submission
+state in `ieee-submission/` in response to a pre-submission review. Every
+number, table, figure and experiment is unchanged; every limitation stated in
+the earlier version is still stated. What changed is the framing of the
+contribution, the scope of the generalization language, the prominence of
+two limitations, the hierarchy between the audit and the exploratory
+normalization, and the amount of qualification prose. The list below maps
+each concern to the change, in the reviewer's numbering.
+
+## 3. Novelty of the "new method"
+
+The contribution is now stated as *formalizing and operationalizing* a
+pre-training provenance audit and demonstrating it through a case study,
+not as proposing a new methodology.
+
+- Abstract: "we ... formalize and operationalize a pre-training provenance
+  audit ... The audit is deliberately simple; a counterfeit-medicine case
+  study shows its value."
+- Section I, paragraph 3: the audit's ingredients are ordinary and it is
+  not presented as a new statistical technique; what the paper specifies is
+  when it runs, on which partition, on which variables, and how the score
+  is read.
+- Section I-B ("Contributions and scope") is rewritten as a bulleted
+  contributions list in descending order of weight, with the audit first
+  and the case-study finding second, and closes with a paragraph on what the
+  study does *not* establish.
+- Section II-C is retitled "Position of this work" and now opens with "The
+  audit's ingredients are not new" before stating precisely what is added
+  (the specification, and the follow-through showing that removing one
+  provenance signal exposes another).
+- Section VI opens with the same modest statement.
+
+## 4. Generalization evidence
+
+The generalization language is tightened throughout so that the mechanism is
+presented as plausible and supported by examples, not established at
+population level.
+
+- Section I-A: "That condition is not peculiar to pharmaceuticals. In any
+  two-class image dataset ..." became "There is no reason to expect that
+  condition to be peculiar to pharmaceuticals. In a two-class image dataset
+  ... typically ..."; "the condition therefore has a nameable population at
+  risk, and it is not one collection" became "the same scarcity is plausible
+  in other authenticity tasks ... while being clear that the direct
+  evidence for the mechanism rests on [the case study]"; "two independent
+  lines of evidence support reading it that way" became "two independent
+  observations support that reading without establishing its generality".
+- Section IV-A: the seven-archive screen is introduced with its sampling
+  limitation in the same sentence, and its interpretation paragraph is now
+  headed "The screen establishes that the audit discriminates, and nothing
+  about prevalence."
+- Section V-D: the limitation is restated in the reviewer's own terms —
+  "The generality of the mechanism is plausible and supported by examples,
+  not established at population level."
+- Section VI, final paragraph: "What this study establishes is a case-study
+  finding and a procedure, not a prevalence."
+- Abstract: "how often the confound occurs is not established."
+
+## 5. The authentic side of the balanced set is not verified
+
+This is now named, in the paper's own words, "the principal limitation of
+Table 4", and it is separated from the central audit result.
+
+- Section III-D-1: the authentic-labeled reference class paragraph ends
+  with "This is the principal limitation of Table 4" and states that the
+  direction of any resulting bias is unknown.
+- Section IV-C: the opening paragraph names the two properties that qualify
+  the table (unverified authentic class; source rather than acquisition
+  shift), and the closing paragraph says the specificity column "measures
+  agreement with a label rather than with ground truth".
+- Section V-D: a standalone limitation, "The authentic class of the
+  balanced set is not verified, and this is the principal limitation of
+  Table 4", which states explicitly that the central audit is unaffected
+  and the balanced classification experiment is what the limitation
+  weakens — the reviewer's own assessment.
+- Table 8: the balanced-set row now reads "Demonstrated against an
+  authentic-labeled, unverified reference class".
+
+## 6. The missing experiment
+
+Two-class performance under acquisition shift was already acknowledged as
+unmeasured; it is now the first limitation in Section V-D and is shown as a
+2 × 2 matrix (classes × acquisition) with the unfilled cell marked, so a
+reader sees which half of the matrix each experiment occupies. Section I-B
+names it among the three things the study does not establish, and Section
+V-C's next-steps paragraph points at the matrix.
+
+## 7. Outer-region vs backdrop
+
+The cautious terminology is retained and made explicit. Section IV-E-2's
+interpretation paragraph is now headed "What this establishes is
+outer-region dependence, not backdrop dependence." Table 8's row reads
+"depend on the outer region of the frame ... which property of that region
+is not isolated" (previously "the photographic surround"). In the
+supplement, "a backdrop-matching rule" became "a surround-based rule".
+
+## 8. The normalization experiment as a distraction
+
+The normalization is subordinated to the audit textually and structurally.
+
+- The 86% / 81% figures are removed from the abstract; the abstract states
+  only that the normalization "removes the audited statistics and leaves
+  both corrected backbones depending on the outer region of the frame".
+- Section I-B's exploratory bullet gives no percentages and states the
+  normalization's role: to show that a correction is itself dataset
+  construction.
+- Section IV-E opens by saying both exploratory analyses "serve the audit",
+  and Section IV-E-1 is cut from six paragraphs to three, with the
+  composition-order and in-distribution-cost discussion reduced to one
+  sentence each and the ablation detail left to the supplement.
+- Section V-B is retitled "What the audit settles, and what it does not"
+  and now opens with the audit; the normalization discussion is one
+  paragraph within it.
+- Section III-F's exploratory-status paragraph states that the operator is
+  "an instrument rather than a proposal".
+
+## 9. Defensive prose
+
+Qualification language was cut wherever the same limitation was stated in
+more than one place, with each limitation kept once — in Section V-D or
+Table 8 — and stated plainly there. Examples of cuts: the one-sided-rule
+paragraph in III-D, the fine-tuning discussion in III-C (now two sentences,
+with the full statement in V-D), the monotonicity paragraph in III-E, the
+exploratory-status paragraph in III-F, the tier discussion at the head of
+IV, the "not a survey" paragraphs in IV-A, "What Table 4 does and does not
+establish" in IV-C, the seed-42 paragraph in IV-D, three of the six
+paragraphs of IV-E-1, the first two paragraphs of V-B, the "No published
+two-class set" paragraph of V-D (background restated from III-D), and the
+"What the external evidence establishes is correspondingly narrow"
+paragraph of V-D (restated from IV-C/IV-D). The manuscript is about 600
+words shorter than the earlier version at the same page count, with the
+contributions list, the organization paragraph and the matrix added.
+
+## 10. Size relative to the central contribution
+
+The introduction now carries the five-step argument in order (Section I-B:
+acquisition pipelines → metadata predicts the label → in-distribution
+accuracy cannot establish authentication → external failure → removing one
+confound reveals another), a contributions list, and an organization
+paragraph. The exploratory material is shorter in the main text (see 8) and
+its detail remains in the supplement.
+
+## 11. Statistical power and ranking language
+
+No architecture is ranked. "The best in-distribution model", "the strongest
+model", "M2 leads", "M4 leads" and "the one that looked best" are replaced
+with point-estimate statements ("the model with the highest in-distribution
+accuracy", "has the highest point estimate here"). Section IV-C now states
+that no pair of models in Table 4 is separated by more than sampling noise,
+"so the table supports statements about point estimates and about chance,
+not a ranking of architectures". Section V-D's power limitation says which
+statement forms are supported and which are not. The supplement's three
+ranking phrases were changed the same way.
+
+## 12. AI-assisted screening
+
+Section V-D now carries a limitation headed "AI-assisted eligibility
+screening is not ground-truth labeling", stating that the screen decided one
+thing only (is this a photograph, of a medicine package, of a current retail
+product), that every class label comes from its source, that selection bias
+from the screen could act only through which photographs survive and not
+through their labels, that the brightness matching after the screen removes
+the one acquisition statistic it could shift, and that the audit on the
+finished set (0.620) bounds what remains. The counterfeit side's
+corresponding single-reviewer screen is stated in the same paragraph. The
+Acknowledgment disclosure adds: "That screen decided whether a candidate was
+a photograph of a retail medicine package; it assigned no class label and
+made no authenticity judgement." Section S-IX-B of the supplement says the
+same.
+
+## 13. Title
+
+Unchanged: "Auditing Provenance Confounding in Image Authenticity
+Classification: A Counterfeit-Medicine Case Study".
+
+## Style
+
+The introduction follows the IEEE Access convention of a contributions list
+and an "organized as follows" paragraph; section openers state what a
+section establishes before the evidence; results paragraphs lead with the
+finding and follow with the qualification once. No text from any other
+article was used.
+
+## Verification
+
+Both gates (`verify_crossrefs.py`, `final_sweep.py`) pass; the abstract is
+246 words; the manuscript is 22 pages and the supplement 37; the LaTeX
+source in this folder compiles standalone to text-identical PDFs.
