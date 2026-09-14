@@ -4,6 +4,43 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## FINAL SUBMISSION STATE, 2026-09-13 (night) -- `ieee-submission-final/`, v1.4.2
+
+**`ieee-submission-final/` is the folder to upload.** `reviewer-revision`
+was merged into `main`; v1.4.2 cut and archived; `ieee-submission-v2/`
+removed (superseded; in git history); `ieee-submission/` kept as the
+pre-review text for the record. Gates green, 22 + 37 pages, abstract 247
+words, ~19,230 rendered words (was ~19,900 at v1.4.1).
+
+**The five targeted changes of the final pass** (on top of the evening's
+reviewer-concern revision): (1) novelty stated as *formalize and
+operationalize* -- verified nothing says "propose"; (2) the central result
+-- 510/510 from container format, so internal accuracy is not evidence of
+object-level authentication -- in bold in Section I and opening IV-A; (3)
+a side-by-side table of the three evaluations in III-D (classes / what
+shifts / what is standardized / how labels are established / what each can
+measure), so no reader hunts for "balanced test != acquisition-shift test",
+"counterfeit regulator-confirmed, authentic labeled-not-verified",
+"acquisition-shift authentic-only"; (4) another round of repeated-
+qualification cuts (III-B seed caveat, IV-B leakage summary, V-B outer-
+region restatement, the second "most consequential gap" in V-D, Table 3
+caption); (5) Grad-CAM equation and closing paragraph out of the main text
+(S-I-J has both), so the exact logit decomposition is **Eq. (9)** now --
+the supplement's own equations are S1--S5 and unaffected.
+
+**The full rendered PDF was read once more** and two slips fixed: a
+dangling "It" in the availability statement (now "The release holds...")
+and one "photographic surround" left in Table 8.
+
+**Equation renumbering note.** `build_tex` labels equations by their
+markdown `\tag{n}`, LaTeX numbers them in order, and "Eq. (n)" becomes
+`\eqref` -- so removing an equation requires renumbering the later tags
+AND their "Eq. (n)" references in the markdown, or the docx (which prints
+the tag literally) and the PDF disagree. Done here for (10) -> (9).
+
+**Zenodo minted doi:10.5281/zenodo.22741063 for v1.4.2**; the concept DOI
+resolves to it; README.md and CITATION.cff record it.
+
 ## Reviewer-concern revision, 2026-09-13 (evening) -- branch `reviewer-revision`, `ieee-submission-v2/`
 
 **Two candidate submissions now exist, and the author chooses.**
