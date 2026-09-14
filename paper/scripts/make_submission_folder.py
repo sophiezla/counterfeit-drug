@@ -129,6 +129,10 @@ def main():
                  OUT / "05_graphical_abstract.png")
     shutil.copy2(PAPER / "figures" / "author_photo.jpeg",
                  OUT / "06_author_photo.jpeg")
+    # ScholarOne requires a caption (<= 60 words) alongside the graphical abstract.
+    cap = (PAPER / "graphical_abstract_caption.txt").read_text(encoding="utf-8")
+    assert len(cap.split()) <= 60, f"graphical abstract caption is {len(cap.split())} words; limit 60"
+    shutil.copy2(PAPER / "graphical_abstract_caption.txt", OUT / "05_graphical_abstract_caption.txt")
     if NOTES is not None:
         shutil.copy2(NOTES, OUT / NOTES.name)
 
@@ -164,6 +168,7 @@ def main():
         "| `04_latex_source/` | LaTeX source | `paper.tex`, `supplementary.tex`, `ieeeaccess.cls` and its assets, fonts, `figures/`; compiles as-is with pdflatex |",
         "| `04_latex_source.zip` | The same, zipped | for the source-file upload |",
         "| `05_graphical_abstract.png` | Graphical abstract | Fig. 1, the mechanism diagram |",
+        "| `05_graphical_abstract_caption.txt` | Graphical abstract caption | required by ScholarOne; 60-word limit |",
         "| `06_author_photo.jpeg` | Author photograph | as used in the biography |",
     ] + ([f"| `{NOTES.name}` | Revision notes | what changed in this version and why, for the cover letter |"] if NOTES else []) + [
         "",
