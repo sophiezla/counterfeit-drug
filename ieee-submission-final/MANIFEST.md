@@ -2,7 +2,7 @@
 
 **Auditing Provenance Confounding in Image Authenticity Classification: A Counterfeit-Medicine Case Study**
 
-Assembled 2026-09-14 from commit `c0eada7` (clean working tree) by `paper/scripts/make_submission_folder.py`. Every file is a copy of a
+Assembled 2026-09-14 from commit `2df411a` (clean working tree) by `paper/scripts/make_submission_folder.py`. Every file is a copy of a
 build artefact under `paper/`; nothing here is hand-edited. Regenerate the
 bundle rather than editing it.
 
@@ -14,6 +14,7 @@ bundle rather than editing it.
 | `04_latex_source/` | LaTeX source | `paper.tex`, `supplementary.tex`, `ieeeaccess.cls` and its assets, fonts, `figures/`; compiles as-is with pdflatex |
 | `04_latex_source.zip` | The same, zipped | for the source-file upload |
 | `05_graphical_abstract.png` | Graphical abstract | Fig. 1, the mechanism diagram |
+| `05_graphical_abstract_caption.txt` | Graphical abstract caption | required by ScholarOne; 60-word limit |
 | `06_author_photo.jpeg` | Author photograph | as used in the biography |
 | `REVISION_NOTES.md` | Revision notes | what changed in this version and why, for the cover letter |
 
@@ -25,9 +26,9 @@ manuscript reports is v1.4.3, doi:10.5281/zenodo.22758850.
 
 | File | SHA-256 |
 |---|---|
-| `01_manuscript.pdf` | `04963ba013185dc5b88b3be977a9e97feee641ff4a14d111c37e8cd23e5cc2cb` |
-| `02_supplementary_material.pdf` | `d24493c0dcd595c419e7516ee6f3fb202ab5c371c23455d545eb83380154a8af` |
-| `03_manuscript.docx` | `3007e46c31038b1d2fb673c6690815fbd988f810a58a952923937af689d5123c` |
+| `01_manuscript.pdf` | `4549a8efff231f3b63ff79d076485f20009f540dc64bcfbb42749df7632daee4` |
+| `02_supplementary_material.pdf` | `f3fd5b572ec65ef0c0d2e67cf88c7806f7d51c6e33e9478e7f17b876b10e048d` |
+| `03_manuscript.docx` | `3dd268c1d6e7e706d15b4b3855eb8d28df245c0133cde82b6ab3716a229db4cb` |
 | `04_latex_source/bullet.png` | `754772e36aab389556f98c14f5deeb4031e792b68a766dc5f9766e76e114fffc` |
 | `04_latex_source/figures/author_photo.jpeg` | `1eb4c1916ef51d117b28b765e5c8a9d3d39d5987745084ae747cc5176eaf403a` |
 | `04_latex_source/figures/fig01_workflow.pdf` | `d1aba767a20969bf20c57df47dc86a963f905c71380506688659ed69cfc06079` |
@@ -93,7 +94,8 @@ manuscript reports is v1.4.3, doi:10.5281/zenodo.22758850.
 | `04_latex_source/t1giovannistd.fd` | `e071d747b940f03a238ee82c85b84be9991086ed2a487e4e6293a2185c0fc0a3` |
 | `04_latex_source/t1helvetica.fd` | `5ee12b5ba0ac6ad044218568bc38a9d706e3d1b842559dd3c4c625b0cfbf7012` |
 | `04_latex_source/t1times.fd` | `257f290ea4e57bd9bcbaf22bdfeb1b17ada22d92e4b543d56625044302708e3b` |
-| `04_latex_source.zip` | `7d2f01a8afacc2c415fdcc549cec1abae10f0684ab17863f0de10e6bde5951b8` |
+| `04_latex_source.zip` | `409bb10b13d42bdf6295a6750278c372e0a648e899a1022aa866db61fa32acf8` |
 | `05_graphical_abstract.png` | `d5d7e89ab29719bf74e78cab62a32108ec64cc12538d802d5edbd6041b27ac91` |
+| `05_graphical_abstract_caption.txt` | `5f98372d3616d1e9258d44f75938b77fe120d4e4518f9ee6327294ea2b216a1a` |
 | `06_author_photo.jpeg` | `1eb4c1916ef51d117b28b765e5c8a9d3d39d5987745084ae747cc5176eaf403a` |
 | `REVISION_NOTES.md` | `3789c1d926703b97b6504f9e742adc790b8d2d635f1fb2054cfb5d79a941ae6a` |
