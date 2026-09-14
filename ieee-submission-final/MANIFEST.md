@@ -2,7 +2,7 @@
 
 **Auditing Provenance Confounding in Image Authenticity Classification: A Counterfeit-Medicine Case Study**
 
-Assembled 2026-09-14 from commit `15b829c` (clean working tree) by `paper/scripts/make_submission_folder.py`. Every file is a copy of a
+Assembled 2026-09-14 from commit `3060d1c` (clean working tree) by `paper/scripts/make_submission_folder.py`. Every file is a copy of a
 build artefact under `paper/`; nothing here is hand-edited. Regenerate the
 bundle rather than editing it.
 
@@ -10,6 +10,7 @@ bundle rather than editing it.
 |---|---|---|
 | `01_manuscript.pdf` | Main manuscript, review copy | 20 pages, 17,719 words as rendered |
 | `02_supplementary_material.pdf` | Supplementary material | 37 pages |
+| `02_supplementary_material_fields.txt` | Supplementary label and description | for the ScholarOne form; 30 / 1000 character limits |
 | `03_manuscript.docx` | Main manuscript, Word rendering | same Markdown source; maths flattened, floats inline |
 | `04_latex_source/` | LaTeX source | `paper.tex`, `supplementary.tex`, `ieeeaccess.cls` and its assets, fonts, `figures/`; compiles as-is with pdflatex |
 | `04_latex_source.zip` | The same, zipped | for the source-file upload |
@@ -28,6 +29,7 @@ manuscript reports is v1.4.3, doi:10.5281/zenodo.22758850.
 |---|---|
 | `01_manuscript.pdf` | `4549a8efff231f3b63ff79d076485f20009f540dc64bcfbb42749df7632daee4` |
 | `02_supplementary_material.pdf` | `f3fd5b572ec65ef0c0d2e67cf88c7806f7d51c6e33e9478e7f17b876b10e048d` |
+| `02_supplementary_material_fields.txt` | `226da3338ce94fd173567fcf0178fd2d7b8debaa1fc1481c45c9e9f9d6affb58` |
 | `03_manuscript.docx` | `3dd268c1d6e7e706d15b4b3855eb8d28df245c0133cde82b6ab3716a229db4cb` |
 | `04_latex_source/bullet.png` | `754772e36aab389556f98c14f5deeb4031e792b68a766dc5f9766e76e114fffc` |
 | `04_latex_source/figures/author_photo.jpeg` | `1eb4c1916ef51d117b28b765e5c8a9d3d39d5987745084ae747cc5176eaf403a` |
