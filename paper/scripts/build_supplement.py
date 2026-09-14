@@ -30,6 +30,7 @@ _spec.loader.exec_module(bt)
 
 # S-aware caption patterns, replacing build_tex's digit-only ones.
 bt.TABLE_CAP_RE = re.compile(r"^\*\*TABLE\s+S?(\d+)\.\*\*\s*(.*)$", re.S)
+bt.WIDE_UNCAPTIONED_AS_FLOAT = True   # see render_table; the S-IX tables need the full width
 bt.FIG_RE = re.compile(
     r"^\*\*FIGURE\s+S?(\d+)\.\*\*\s*`([^`]+)`\s*[—-]\s*(.*)$", re.S)
 

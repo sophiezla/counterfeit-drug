@@ -121,7 +121,7 @@ def fig_workflow():
     ax.set_ylim(0, 105)
     ax.axis("off")
 
-    def box(x, w, y, h, text, fc="#f4f7fc", ec="#2a78d6", fs=6.6, weight="normal"):
+    def box(x, w, y, h, text, fc="#f4f7fc", ec="#2a78d6", fs=6.0, weight="normal"):
         # argument order is (x, width, y, height) so the row definitions below
         # can splat the shared COLS entries, which are (x, width) pairs.
         ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0,rounding_size=1.2",
@@ -145,7 +145,7 @@ def fig_workflow():
 
     # ---- row 1: raw sources
     y1, h1 = 84, 14
-    box(*COLS[0], y1, h1, "Roboflow\nCounterfeit_med_detection v4\n4 260 images", "#fdf3ee", ORANGE)
+    box(*COLS[0], y1, h1, "Roboflow\nCounterfeit_med_detection\nv4, 4,260 images", "#fdf3ee", ORANGE)
     box(*COLS[1], y1, h1, "Kaggle\nFake vs Real Medicine\n661 images", "#f4f7fc", BLUE)
     box(*COLS[2], y1, h1, "Mendeley bjy2svvmn8.1\nMobile-captured packages\n150 photos (Huawei CN)", "#eefaf5", AQUA)
     box(*COLS[3], y1, h1, "Synthetic proxy negatives\n150 perturbed copies of\nthose same 150 photos", "#f2f0fa", VIOLET)
@@ -153,15 +153,15 @@ def fig_workflow():
     # ---- row 2: audit / verification
     y2, h2 = 64, 15
     box(1, 22, y2, h2, "Exclusion audit\n180 FDA-bulletin graphics\n52 contradictory labels\n→ 2 usable counterfeits", "#fdf3ee", ORANGE)
-    box(25.5, 22, y2, h2, "Exclusion audit (56 files)\n47 watermarked · 4 non-medicine\n5 no packaging in frame\n→ 605 files retained", "#f4f7fc", BLUE)
+    box(25.5, 22, y2, h2, "Exclusion audit (56 files)\n47 watermarked\n4 non-medicine, 5 no packaging\n→ 605 files retained", "#f4f7fc", BLUE)
     box(50, 23.5, y2, h2, "pHash independence check\nrotation-aware, 4 orientations\n0/150 matched the pool\nnearest d = 10/64", "#eefaf5", AQUA)
     box(76.5, 22.5, y2, h2, "Confound re-check\nbrightness 0.162 vs 0.153\nresolution identical\n(same source photos)", "#f2f0fa", VIOLET)
 
     # ---- row 3: dedup + pool
     y3, h3 = 47, 12
     box(1, 46.5, y3, h3,
-        "Rotation-aware pHash de-duplication → product_identity groups\n"
-        "229 clusters span both sources (44% of Kaggle ≈ Roboflow)\n"
+        "Rotation-aware pHash de-duplication → near-duplicate groups\n"
+        "202 clusters span both sources (42.3% of the Kaggle pool)\n"
         "Modeling pool = Kaggle only: 510 images, 480 groups",
         "#f4f7fc", BLUE, weight="normal")
 
@@ -169,17 +169,17 @@ def fig_workflow():
     y4, h4 = 29, 13
     box(1, 22, y4, h4, "Split A\nnaive, image level\n70:15:15\n9/480 groups leak", "#fafaf8", BASELINE)
     box(25.5, 22, y4, h4, "Split B\nproduct-group level\n70:15:15 + 5-fold CV\n0 group overlap", "#f4f7fc", BLUE, weight="600")
-    box(50, 23.5, y4, h4, "Split C — real\n150 external authentic\nphotographs\n(specificity)", "#eefaf5", AQUA)
+    box(50, 23.5, y4, h4, "Condition C (Split C)\n150 external authentic\nphotographs\n(specificity)", "#eefaf5", AQUA)
     box(76.5, 22.5, y4, h4, "Split C — synthetic\n150 authentic +\n150 perturbed\n(stress-test proxy)", "#f2f0fa", VIOLET)
 
     # ---- row 5: models
     y5, h5 = 10, 12
     box(1, 98, y5, h5,
         "Four model families, identical protocol (seed 42, Adam, class-weighted loss, early stopping)\n"
-        "M1 color histogram + LogReg   ·   M2 small CNN with GAP head   ·   "
-        "M3 MobileNetV3-Small (frozen)   ·   M4 EfficientNet-B0 (frozen)\n"
-        "3-way capture normalization (resolution → brightness → JPEG) applied identically to every partition",
-        "#fff9ec", "#eda100", fs=6.8)
+        "M1 color histogram + LogReg  ·  M2 small CNN with GAP head  ·  "
+        "M3 MobileNetV3-Small (frozen)  ·  M4 EfficientNet-B0 (frozen)\n"
+        "3-way normalization (resolution → brightness → JPEG) applied identically to every partition",
+        "#fff9ec", "#eda100", fs=6.2)
 
     for (x, w) in COLS:
         down(x + w / 2, y1, y2 + h2)              # source → audit

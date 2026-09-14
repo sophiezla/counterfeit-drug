@@ -304,6 +304,17 @@ def greek_free(text):
     return text
 
 
+# An uncaptioned table is set inline in ONE column. When it has several
+# prose columns that is too narrow: cells with hyphenation disabled cannot
+# break a long word, so words ran into the neighbouring column in the
+# supplement's S-IX tables (five prose columns in 3.45 in). The supplement
+# builder sets this flag so that such tables become an uncaptioned full-width
+# table* -- no \caption, so the table counter does not move -- while short
+# tables stay inline. The manuscript keeps the flag off: its two uncaptioned
+# tables are narrow enough, and one of them follows a colon.
+WIDE_UNCAPTIONED_AS_FLOAT = False
+
+
 def render_table(lines, number, caption, note=None):
     rows = [r for r in ([c.strip() for c in ln.strip().strip("|").split("|")]
                         for ln in lines)
@@ -416,9 +427,15 @@ def render_table(lines, number, caption, note=None):
             + "}",
         ]
     if number is None:
-        # An uncaptioned table in the source. It must NOT become a float:
-        # \caption would advance the table counter and shift every later
-        # number away from the "Table n" the manuscript and the .docx use.
+        # An uncaptioned table in the source. It must NOT get a \caption:
+        # that would advance the table counter and shift every later number
+        # away from the "Table n" the manuscript and the .docx use.
+        wide = any(wrap) and (ncols >= 4 or max(widest) > 60)
+        if WIDE_UNCAPTIONED_AS_FLOAT and wide:
+            core_full = [ln.replace(r"{\columnwidth}", r"{\textwidth}")
+                         for ln in core]
+            return "\n".join([r"\begin{table*}[!t]", r"\centering",
+                               *core_full, r"\end{table*}", ""])
         return "\n".join([r"\begin{center}", *core, r"\end{center}", ""])
 
     return "\n".join([
