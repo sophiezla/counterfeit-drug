@@ -1,0 +1,3 @@
+# Submission bundles are byte-exact copies with checksummed manifests;
+# never normalize their line endings on checkout.
+ieee-submission*/** -text
