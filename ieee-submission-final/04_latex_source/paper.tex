@@ -300,14 +300,14 @@ Throughout, authentic = 0 and {\bfseries counterfeit is the positive class}, so 
 \footnotesize
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.15}
-\begin{tabularx}{\columnwidth}{c>{\hsize=0.827\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=1.327\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=0.846\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\begin{tabularx}{\columnwidth}{c>{\hsize=0.881\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=1.294\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=0.825\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
 \toprule
  & {\bfseries Internal grouped test} & {\bfseries Balanced external test} & {\bfseries Acquisition-shift test} \\
 \midrule
 Classes held & both (35 counterfeit, 39 authentic) & both (46 and 46) & authentic only (150; 149) \\
 What shifts from training & nothing & source: two archives unrelated to the pool & capture: device, lighting, backdrop, country \\
 What is standardized & --- & file-level acquisition (format, encoder, resolution), by construction & --- \\
-How labels are established & dataset's own labels, provenance-confounded & counterfeit: regulator-confirmed; authentic: labeled, not verified & archive's own labels, authentic only \\
+How labels are established & dataset's own labels, which the confound tracks & counterfeit: regulator confirmed; authentic: labeled, not verified & archive's own labels, authentic only \\
 Quantity it can measure & accuracy & accuracy, balanced accuracy, recall, specificity, F1, ROC-AUC & specificity only \\
 \bottomrule
 \end{tabularx}
