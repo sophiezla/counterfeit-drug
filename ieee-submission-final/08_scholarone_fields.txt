@@ -1,0 +1,75 @@
+ScholarOne submission form — recommended entries
+=================================================
+
+Subject Category (2–5)
+  1. Computational and artificial intelligence
+  2. Computers and information processing
+  3. Imaging
+
+Keywords (3–10; all taken from the ScholarOne list)
+  1. Machine learning
+  2. Image classification
+  3. Computer vision
+  4. Convolutional neural networks
+  5. Training data
+  6. Metadata
+  7. Counterfeiting
+  8. Pharmaceuticals
+  9. Reproducibility of results
+  10. Image forensics
+
+Has this manuscript been submitted previously to this journal?
+  No, it wasn't submitted previously
+
+Informed consent — human subjects?
+  No, there were no human subjects
+  (The paper's Ethics section states this: all images are photographs of
+  packaging from public archives; no person is depicted; no personal data.)
+
+Animal subjects
+  There were no animal subjects
+
+Opposed reviewers
+  None (leave blank)
+
+Cover letter / comments
+  Yes — paste 07_cover_letter.txt
+
+Has this manuscript been previously published, in whole or in part?
+  See the note at the end of this file before answering.
+
+Code associated with the manuscript?
+  Yes. All code is public at https://github.com/sophiezla/counterfeit-drug
+  and archived at Zenodo, concept DOI 10.5281/zenodo.21936720 (release
+  v1.4.3, doi:10.5281/zenodo.22758850). Code Ocean upload is optional; the
+  GitHub/Zenodo release already carries a DOI.
+
+Data associated with the manuscript?
+  Yes — derived data only. The same repository/DOI holds per-image
+  statistics, split assignments, the balanced-set candidate manifest with
+  licences and source URLs, per-image screen records and per-image
+  predictions. No images are redistributed (the case-study archive carries
+  no licence grant; 140 of 150 regulatory photographs are metadata-only);
+  the manuscript's Data and Code Availability section explains this.
+
+Manuscript type
+  Research Article
+
+-------------------------------------------------------------------------
+NOTE on "previously published, in whole or in part"
+-------------------------------------------------------------------------
+The manuscript has not been presented at a conference, posted to a
+preprint server, or published anywhere. However, the public GitHub
+repository and its Zenodo archives (v1.0.0 through v1.4.3) contain the
+manuscript sources and compiled PDFs alongside the code, because the paper
+is built from the repository. That is self-archiving of a preprint, which
+IEEE permits, but a reviewer or editor could find it, so it should not be
+left unsaid.
+
+Recommended answer: "No, this manuscript has never been previously
+presented or published" (it has not been published in any venue in the
+policy's sense), AND state the self-archiving explicitly in the cover
+letter — the draft cover letter already does. If you would rather be
+maximally conservative, choose "Yes ... and I can provide the previously
+published files" and upload 01_manuscript.pdf with a one-line note that it
+is the identical self-archived copy.

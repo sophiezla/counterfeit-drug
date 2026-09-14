@@ -2,7 +2,7 @@
 
 **Auditing Provenance Confounding in Image Authenticity Classification: A Counterfeit-Medicine Case Study**
 
-Assembled 2026-09-14 from commit `3060d1c` (clean working tree) by `paper/scripts/make_submission_folder.py`. Every file is a copy of a
+Assembled 2026-09-14 from commit `4b64d07` (clean working tree) by `paper/scripts/make_submission_folder.py`. Every file is a copy of a
 build artefact under `paper/`; nothing here is hand-edited. Regenerate the
 bundle rather than editing it.
 
@@ -17,6 +17,8 @@ bundle rather than editing it.
 | `05_graphical_abstract.png` | Graphical abstract | Fig. 1, the mechanism diagram |
 | `05_graphical_abstract_caption.txt` | Graphical abstract caption | required by ScholarOne; 60-word limit |
 | `06_author_photo.jpeg` | Author photograph | as used in the biography |
+| `07_cover_letter.txt` | Cover letter | optional field on the form |
+| `08_scholarone_fields.txt` | Form entries | subject categories, keywords, and the answer to every yes/no question |
 | `REVISION_NOTES.md` | Revision notes | what changed in this version and why, for the cover letter |
 
 Both documents pass `paper/scripts/verify_crossrefs.py` and
@@ -100,4 +102,6 @@ manuscript reports is v1.4.3, doi:10.5281/zenodo.22758850.
 | `05_graphical_abstract.png` | `d5d7e89ab29719bf74e78cab62a32108ec64cc12538d802d5edbd6041b27ac91` |
 | `05_graphical_abstract_caption.txt` | `9646cef6b131a5225e3d8a43a865ef890a4351a0aaf2d02e5c998844b84c90e2` |
 | `06_author_photo.jpeg` | `1eb4c1916ef51d117b28b765e5c8a9d3d39d5987745084ae747cc5176eaf403a` |
+| `07_cover_letter.txt` | `aa17c9da43741fc92766f5ed91fd57101281b7ac809057d05a69cda77726602d` |
+| `08_scholarone_fields.txt` | `bd91f405bee60ad2776966f6b3f86042fcee3157d4fb8894341b8b336fde2fc5` |
 | `REVISION_NOTES.md` | `3789c1d926703b97b6504f9e742adc790b8d2d635f1fb2054cfb5d79a941ae6a` |
