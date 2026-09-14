@@ -6,6 +6,9 @@ then `paper/paper.md`.
 
 ## Cut to 20 pages, 2026-09-14 -- v1.4.3, `ieee-submission-final/` regenerated
 
+Zenodo minted **doi:10.5281/zenodo.22758850** for v1.4.3; the concept DOI
+resolves to it; README.md and CITATION.cff record it.
+
 **22 -> 20 pages, no number changed.** The author's requested edits were
 applied verbatim (abstract sentences, intro sentences, roadmap paragraph
 removed, I-A/I-B openers, III-A sentences, IV-A opener, Table 4's reading
