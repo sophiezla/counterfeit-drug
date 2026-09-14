@@ -2,7 +2,7 @@
 
 **Auditing Provenance Confounding in Image Authenticity Classification: A Counterfeit-Medicine Case Study**
 
-Assembled 2026-09-14 from commit `f89a6f8` (working tree had uncommitted changes) by `paper/scripts/make_submission_folder.py`. Every file is a copy of a
+Assembled 2026-09-14 from commit `676771b` (clean working tree) by `paper/scripts/make_submission_folder.py`. Every file is a copy of a
 build artefact under `paper/`; nothing here is hand-edited. Regenerate the
 bundle rather than editing it.
 
