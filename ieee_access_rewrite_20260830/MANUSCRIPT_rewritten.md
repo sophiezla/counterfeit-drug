@@ -176,7 +176,7 @@ Throughout, authentic = 0 and **counterfeit is the positive class**, so recall (
 | Classes held | both (35 counterfeit, 39 authentic) | both (46 and 46) | authentic only (150; 149) |
 | What shifts from training | nothing | source: two archives unrelated to the pool | capture: device, lighting, backdrop, country |
 | What is standardized | — | file-level acquisition (format, encoder, resolution), by construction | — |
-| How labels are established | dataset's own labels, provenance-confounded | counterfeit: regulator-confirmed; authentic: labeled, not verified | archive's own labels, authentic only |
+| How labels are established | dataset's own labels, which the confound tracks | counterfeit: regulator confirmed; authentic: labeled, not verified | archive's own labels, authentic only |
 | Quantity it can measure | accuracy | accuracy, balanced accuracy, recall, specificity, F1, ROC-AUC | specificity only |
 
 The balanced external test and the acquisition-shift test are therefore not two versions of one experiment. One holds both classes and standardizes acquisition; the other varies acquisition and holds one class. Neither measures two-class performance under acquisition shift (Section V-D).
