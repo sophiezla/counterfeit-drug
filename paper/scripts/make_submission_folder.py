@@ -135,6 +135,8 @@ def main():
     shutil.copy2(PAPER / "graphical_abstract_caption.txt", OUT / "05_graphical_abstract_caption.txt")
     # ScholarOne asks for a label (<= 30 chars) and description (<= 1000 chars) for the supplementary file.
     shutil.copy2(PAPER / "supplementary_submission_fields.txt", OUT / "02_supplementary_material_fields.txt")
+    shutil.copy2(PAPER / "cover_letter.txt", OUT / "07_cover_letter.txt")
+    shutil.copy2(PAPER / "scholarone_fields.txt", OUT / "08_scholarone_fields.txt")
     if NOTES is not None:
         shutil.copy2(NOTES, OUT / NOTES.name)
 
@@ -173,6 +175,8 @@ def main():
         "| `05_graphical_abstract.png` | Graphical abstract | Fig. 1, the mechanism diagram |",
         "| `05_graphical_abstract_caption.txt` | Graphical abstract caption | required by ScholarOne; 60-word limit |",
         "| `06_author_photo.jpeg` | Author photograph | as used in the biography |",
+        "| `07_cover_letter.txt` | Cover letter | optional field on the form |",
+        "| `08_scholarone_fields.txt` | Form entries | subject categories, keywords, and the answer to every yes/no question |",
     ] + ([f"| `{NOTES.name}` | Revision notes | what changed in this version and why, for the cover letter |"] if NOTES else []) + [
         "",
         "Both documents pass `paper/scripts/verify_crossrefs.py` and",
