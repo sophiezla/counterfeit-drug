@@ -2,13 +2,13 @@
 
 **Auditing Provenance Confounding in Image Authenticity Classification: A Counterfeit-Medicine Case Study**
 
-Assembled 2026-09-13 from commit `1413d0c` (clean working tree) by `paper/scripts/make_submission_folder.py`. Every file is a copy of a
+Assembled 2026-09-14 from commit `aaf60ac` (clean working tree) by `paper/scripts/make_submission_folder.py`. Every file is a copy of a
 build artefact under `paper/`; nothing here is hand-edited. Regenerate the
 bundle rather than editing it.
 
 | File | Purpose | Notes |
 |---|---|---|
-| `01_manuscript.pdf` | Main manuscript, review copy | 22 pages, 19,230 words as rendered |
+| `01_manuscript.pdf` | Main manuscript, review copy | 20 pages, 17,732 words as rendered |
 | `02_supplementary_material.pdf` | Supplementary material | 37 pages |
 | `03_manuscript.docx` | Main manuscript, Word rendering | same Markdown source; maths flattened, floats inline |
 | `04_latex_source/` | LaTeX source | `paper.tex`, `supplementary.tex`, `ieeeaccess.cls` and its assets, fonts, `figures/`; compiles as-is with pdflatex |
@@ -19,15 +19,15 @@ bundle rather than editing it.
 
 Both documents pass `paper/scripts/verify_crossrefs.py` and
 `paper/scripts/final_sweep.py` at this commit. The code release the
-manuscript reports is v1.4.2, doi:10.5281/zenodo.22741063.
+manuscript reports is v1.4.3, doi:10.5281/zenodo.22758850.
 
 ## Checksums (SHA-256)
 
 | File | SHA-256 |
 |---|---|
-| `01_manuscript.pdf` | `0aca5219e7eef579b0b2e46274966ae45023b5a6f0b9b334d4f8591546318a45` |
-| `02_supplementary_material.pdf` | `182640fc6183ab0c1fe3d512752fef389cdb9d4c235ba09d0e6e1e1ada9bb3e5` |
-| `03_manuscript.docx` | `94c39c3bf35a2f2bc4c758d85cf4ab8318fd55cb7e653f554cc8339c0c26a339` |
+| `01_manuscript.pdf` | `928d5ca7b0101b33ccf6ac087f413ac6d8dd6d7e5d4866843dfbef290ec6c4f7` |
+| `02_supplementary_material.pdf` | `bfce93fc7507482c83981364067da0a7f7c2119fa6d267f22afdfa45b21b7b8c` |
+| `03_manuscript.docx` | `ee64e0395568160f472765ff3db1af212f4a379801600e5928efba48d55c5e08` |
 | `04_latex_source/bullet.png` | `754772e36aab389556f98c14f5deeb4031e792b68a766dc5f9766e76e114fffc` |
 | `04_latex_source/figures/author_photo.jpeg` | `1eb4c1916ef51d117b28b765e5c8a9d3d39d5987745084ae747cc5176eaf403a` |
 | `04_latex_source/figures/fig01_workflow.pdf` | `d1aba767a20969bf20c57df47dc86a963f905c71380506688659ed69cfc06079` |
@@ -50,9 +50,9 @@ manuscript reports is v1.4.2, doi:10.5281/zenodo.22741063.
 | `04_latex_source/IEEEtran.cls` | `da751920a317ed318b7b5cd7fa585a6cc7d28502d457856382e9be24b10a3bd7` |
 | `04_latex_source/logo.png` | `7e04ba7f0c579f3765941680e2a19437e15a81b84a138d73c54bd4afead752cd` |
 | `04_latex_source/notaglinelogo.png` | `955e9a07fb35ffbc8a41597b8c6e7ec4cedf6a8652f5c73a33957044aae64900` |
-| `04_latex_source/paper.tex` | `45305a86976650edb5f02ae47745b1c9d18a934b0dedf8a6c3f44d493476f45d` |
+| `04_latex_source/paper.tex` | `f3481a69c3b420e227d824b653cc8cbbfc3d9503bcb2cb46d72a10c249b4f2e8` |
 | `04_latex_source/spotcolor.sty` | `a9c5bacbf5b832e5eac61393bf1b330fc75fa353cbc9cf4319c227de49bfa5fa` |
-| `04_latex_source/supplementary.tex` | `584bcf0ca47e1bf3e331f007c806e9e3b9ee5c55d234570ed34b0f36eb14d579` |
+| `04_latex_source/supplementary.tex` | `8ab9cea8fb9ca1059558320b66cde1f98823926a521b28b11278400666f713b4` |
 | `04_latex_source/t1-formata-bold.pfb` | `85cc7db8dc04090411600cfb2853bb2efe92a8dc3c406e57ba11fd21248e607b` |
 | `04_latex_source/t1-formata-bold.tfm` | `07d3efeaf10af3eb2c15cc00ef16629cee96df315d0551984fce5b7f67cf8ee3` |
 | `04_latex_source/t1-formata-bolditalic.pfb` | `51af5f6d5ae0c69597cf68e4f3f0a1b222ae1f8fe014f248379e3162d783a8da` |
@@ -93,7 +93,7 @@ manuscript reports is v1.4.2, doi:10.5281/zenodo.22741063.
 | `04_latex_source/t1giovannistd.fd` | `e071d747b940f03a238ee82c85b84be9991086ed2a487e4e6293a2185c0fc0a3` |
 | `04_latex_source/t1helvetica.fd` | `5ee12b5ba0ac6ad044218568bc38a9d706e3d1b842559dd3c4c625b0cfbf7012` |
 | `04_latex_source/t1times.fd` | `257f290ea4e57bd9bcbaf22bdfeb1b17ada22d92e4b543d56625044302708e3b` |
-| `04_latex_source.zip` | `2ab836db73e5c4035376cf348b213183ff76c53edf5fea55e93d26d3100eb618` |
+| `04_latex_source.zip` | `d1350b1ee8548c75bd46dbf2a96e03e3ffddea6b22fc3044d3ca5cd9fb34894c` |
 | `05_graphical_abstract.png` | `d5d7e89ab29719bf74e78cab62a32108ec64cc12538d802d5edbd6041b27ac91` |
 | `06_author_photo.jpeg` | `1eb4c1916ef51d117b28b765e5c8a9d3d39d5987745084ae747cc5176eaf403a` |
-| `REVISION_NOTES.md` | `40ce10b45e28b00c929abcb3e75e0e8420befe77f4da9466b292e8a5c7fa20ea` |
+| `REVISION_NOTES.md` | `3789c1d926703b97b6504f9e742adc790b8d2d635f1fb2054cfb5d79a941ae6a` |
