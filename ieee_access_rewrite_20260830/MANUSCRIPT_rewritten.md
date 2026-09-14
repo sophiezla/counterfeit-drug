@@ -181,7 +181,7 @@ Throughout, authentic = 0 and **counterfeit is the positive class**, so recall (
 
 The balanced external test and the acquisition-shift test are therefore not two versions of one experiment. One holds both classes and standardizes acquisition; the other varies acquisition and holds one class. Neither measures two-class performance under acquisition shift (Section V-D).
 
-**The one-sided rule.** An external set holding one class can estimate one thing. The two acquisition-shift conditions hold authentic images only and the regulatory source holds counterfeit images only, so **nothing computed on any of them alone is an accuracy**: the first two yield a specificity and the third a recall. A one-sided figure cannot separate a model applying a decision rule from one that has merely moved its operating point — a classifier calling every image counterfeit scores 0.000 specificity and 1.000 recall, and Section IV-C shows that this describes one of our four models. We therefore write "external specificity" wherever an authentic-only set is reported and reserve *accuracy* for mixed-class sets. The balanced external test exists to escape this limit.
+**The one-sided rule.** An external set holding one class can estimate one thing. The two acquisition-shift conditions hold authentic images only and the regulatory source holds counterfeit images only, so **nothing computed on any of them alone is an accuracy**: the first two yield a specificity and the third a recall. A one-sided figure cannot separate a model applying a decision rule from one that has merely moved its operating point — a classifier calling every image counterfeit scores 0.000 specificity and 1.000 recall, and Section IV-C shows that this describes one of our four models. The balanced external test exists to escape this limit.
 
 #### 1) The balanced external test
 
@@ -297,7 +297,7 @@ The confound is visible in the simplest model's decision function: the near-whit
 | Header LR | size + resolution + aspect ratio | **1.000** [0.952, 1.000] | **1.000** [0.951, 1.000] |
 | Pixel-derived proxy LR | mean brightness | 0.829 [0.729, 0.897] | 0.716 [0.605, 0.806] |
 
-Two of Table 2's rows are stronger than anything the pixel-based models establish. First, **a single scalar that is not an image classifies this dataset perfectly**: encoded file size alone reaches 74/74 on the leakage-free partition, above every trained model including M4 (Table S3). Second, **three header fields reproduce the labels with accuracy 1.000 without even the file extension.**
+Three of Table 2's rows deserve comment, and two are stronger than anything the pixel-based models establish. First, **a single scalar that is not an image classifies this dataset perfectly**: encoded file size alone reaches 74/74 on the leakage-free partition, above every trained model including M4 (Table S3). Second, **three header fields reproduce the labels with accuracy 1.000 without even the file extension.**
 
 Third, **the pixel-derived proxy is the weakest candidate here, not the strongest.** Brightness alone reaches 0.716 on Split B, below resolution (0.946) and file size (1.000), despite having the largest *t*-statistic: the brightness distributions differ in mean but overlap substantially, whereas the file-size distributions barely overlap. Rank candidate confounds by fitting a classifier to each, not by *t*-statistic.
 
