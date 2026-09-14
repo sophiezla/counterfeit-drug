@@ -2,7 +2,7 @@
 
 **Auditing Provenance Confounding in Image Authenticity Classification: A Counterfeit-Medicine Case Study**
 
-Assembled 2026-09-14 from commit `89237e6` (clean working tree) by `paper/scripts/make_submission_folder.py`. Every file is a copy of a
+Assembled 2026-09-14 from commit `15b829c` (clean working tree) by `paper/scripts/make_submission_folder.py`. Every file is a copy of a
 build artefact under `paper/`; nothing here is hand-edited. Regenerate the
 bundle rather than editing it.
 
@@ -96,6 +96,6 @@ manuscript reports is v1.4.3, doi:10.5281/zenodo.22758850.
 | `04_latex_source/t1times.fd` | `257f290ea4e57bd9bcbaf22bdfeb1b17ada22d92e4b543d56625044302708e3b` |
 | `04_latex_source.zip` | `409bb10b13d42bdf6295a6750278c372e0a648e899a1022aa866db61fa32acf8` |
 | `05_graphical_abstract.png` | `d5d7e89ab29719bf74e78cab62a32108ec64cc12538d802d5edbd6041b27ac91` |
-| `05_graphical_abstract_caption.txt` | `26ce66041d0ac141af6c4b3dc26ba9652baa11a6d7f08ff839ac3c8a10965854` |
+| `05_graphical_abstract_caption.txt` | `9646cef6b131a5225e3d8a43a865ef890a4351a0aaf2d02e5c998844b84c90e2` |
 | `06_author_photo.jpeg` | `1eb4c1916ef51d117b28b765e5c8a9d3d39d5987745084ae747cc5176eaf403a` |
 | `REVISION_NOTES.md` | `3789c1d926703b97b6504f9e742adc790b8d2d635f1fb2054cfb5d79a941ae6a` |
