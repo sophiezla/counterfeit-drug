@@ -3,6 +3,7 @@ Assemble ieee-submission/: everything the IEEE Access submission needs, taken
 from the current build tree, verified fresh, and listed with checksums.
 
     python paper/scripts/make_submission_folder.py
+    python paper/scripts/make_submission_folder.py --out ieee-submission-v2 --notes paper/REVISION_NOTES.md
 
 Refuses to run if either generated .tex is older than the Markdown it comes
 from, or either published PDF is older than its .tex -- a stale bundle is the
@@ -36,7 +37,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 PAPER = ROOT / "paper"
 LATEX = PAPER / "latex"
-OUT = ROOT / "ieee-submission"
+OUT = ROOT / "ieee-submission"          # overridden by --out
+NOTES = None                            # optional --notes file copied in as-is
 
 MAIN_PDF = PAPER / "PharmaChecked_v2_manuscript_IEEEAccess.pdf"
 SUP_PDF = PAPER / "PharmaChecked_v2_supplementary_IEEEAccess.pdf"
@@ -81,6 +83,16 @@ def freshness():
 
 
 def main():
+    global OUT, NOTES
+    args = sys.argv[1:]
+    while args:
+        flag = args.pop(0)
+        if flag == "--out":
+            OUT = ROOT / args.pop(0)
+        elif flag == "--notes":
+            NOTES = ROOT / args.pop(0)
+        else:
+            raise SystemExit(f"unknown argument {flag!r}")
     problems = freshness()
     if problems:
         for p in problems:
@@ -117,6 +129,8 @@ def main():
                  OUT / "05_graphical_abstract.png")
     shutil.copy2(PAPER / "figures" / "author_photo.jpeg",
                  OUT / "06_author_photo.jpeg")
+    if NOTES is not None:
+        shutil.copy2(NOTES, OUT / NOTES.name)
 
     # ------------------------------------------------------------ manifest
     import fitz  # PyMuPDF
@@ -127,7 +141,7 @@ def main():
     # The bundle itself is excluded from the dirtiness check, or assembling
     # it would always report the tree dirty.
     dirty = subprocess.run(["git", "status", "--porcelain", "--", ".",
-                            ":!ieee-submission"], cwd=ROOT,
+                            f":!{OUT.name}"], cwd=ROOT,
                            capture_output=True, text=True).stdout.strip()
     title = (PAPER / "paper.md").read_text(encoding="utf-8").splitlines()[0].lstrip("# ").strip()
 
@@ -151,6 +165,7 @@ def main():
         "| `04_latex_source.zip` | The same, zipped | for the source-file upload |",
         "| `05_graphical_abstract.png` | Graphical abstract | Fig. 1, the mechanism diagram |",
         "| `06_author_photo.jpeg` | Author photograph | as used in the biography |",
+    ] + ([f"| `{NOTES.name}` | Revision notes | what changed in this version and why, for the cover letter |"] if NOTES else []) + [
         "",
         "Both documents pass `paper/scripts/verify_crossrefs.py` and",
         "`paper/scripts/final_sweep.py` at this commit. The code release the",
