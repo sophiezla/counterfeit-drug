@@ -476,11 +476,12 @@ The three Grad-CAM scripts obtained their backbone by calling the constructor di
 
 {\bfseries A quantitative attribution audit.} To replace a human judgement on a small sample with a measurement over the whole set, we compute the {\bfseries border mass fraction} of each Grad-CAM map: the share of total attribution mass falling in an outer frame occupying the outer 20\% of each side. It requires no bounding-box annotation, which is what makes it runnable on all 150 external images, and it targets the specific failure the qualitative audit diagnosed --- attribution on backdrop, margins and corners rather than on the product. The border ring covers 0.642 of the frame, so 0.642 is the value for spatially uniform attribution; below it means center-concentrated, above it means the surround is favored. Both conditions run on the same images with matching preprocessing, and the normalized condition loads the production checkpoint, so its Split C specificity reproduces the 0.807 of record exactly (the un-normalized baseline has no checkpoint and is retrained, giving 9/150 against the archived 5/150).
 
-\begin{center}
+\begin{table*}[!t]
+\centering
 \footnotesize
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.15}
-\begin{tabularx}{\columnwidth}{>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xccc}
+\begin{tabularx}{\textwidth}{>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xccc}
 \toprule
 {\bfseries Condition} & {\bfseries Border mass (95\% CI)} & {\bfseries Center mass} & {\bfseries Split C specificity} \\
 \midrule
@@ -490,7 +491,7 @@ Three-way normalized & 0.655 [0.613, 0.697] & 0.165 & 0.807 \\
 Paired change & {\bfseries +0.473 [+0.422, +0.524]} & $-$0.398 & --- \\
 \bottomrule
 \end{tabularx}
-\end{center}
+\end{table*}
 
 
 The result does not flatter the correction, and is the more interesting for it. {\bfseries Normalization does not move attribution onto the product; it makes attribution diffuse.} The un-normalized model is strongly center-concentrated --- 0.563 of its attribution mass in a center box covering 0.161 of the frame, a 3.5-fold over-representation on exactly the region where a centered product sits --- and it classifies 6\% of external images correctly. The normalized model distributes attribution almost exactly uniformly (border 0.655 against a uniform 0.642; center 0.165 against 0.161) and classifies 80.7\% correctly. Across these two conditions, spatial concentration of attribution {\bfseries anti-correlates} with external specificity.
@@ -503,11 +504,12 @@ One conclusion survives under either reading, and it is a caution against a comm
 
 {\bfseries A second attribution method, and the one place it disagrees.} Everything above rests on Grad-CAM: one method, one annotator, forty sampled maps, and a method this subsection has just argued is degraded by the bottleneck it runs behind. \url{modeling/occlusion_sensitivity.py} puts the same question to a method that shares none of those weaknesses. It slides a 64 px occluder over the network's 224 $\times$ 224 input on a 6 $\times$ 6 grid and records how far P(authentic) falls when each region is hidden; a region whose occlusion costs the model its "authentic" answer is a region that answer was resting on. The positive part of that surface is normalized to unit mass and summarized with the border statistic used above, so the two methods are comparable by construction. It needs no annotation, no categorization and no sampling, so it runs on all 150 external images for each model, from the persisted production checkpoints --- and each model reproduces its Split C specificity of record, 0.773 and 0.807, before any attribution number is reported. Where it and Grad-CAM disagree, on M4's correct external answers, neither settles the case; the region-substitution experiment of the main paper's Table~5 does, and in Grad-CAM's direction. Occlusion asks how much hiding one 64 px patch moves the score, which a decision spread over half the frame answers weakly wherever that half is; substitution destroys a whole region at once and is not subject to that.
 
-\begin{center}
+\begin{table*}[!t]
+\centering
 \footnotesize
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.15}
-\begin{tabularx}{\columnwidth}{>{\hsize=0.857\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xcc>{\hsize=1.143\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\begin{tabularx}{\textwidth}{>{\hsize=0.857\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xcc>{\hsize=1.143\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
 \toprule
 {\bfseries Model, by outcome} & {\bfseries Images} & {\bfseries Border mass (95\% CI)} & {\bfseries Images above the 0.642 uniform reference} \\
 \midrule
@@ -517,7 +519,7 @@ M4, called authentic (correct) & 121 & 0.614 [0.585, 0.643] & 55/121 \\
 M4, called counterfeit (wrong) & 29 & {\bfseries 0.803} [0.738, 0.868] & 24/29 \\
 \bottomrule
 \end{tabularx}
-\end{center}
+\end{table*}
 
 
 Three readings, and the third one changes a claim.
@@ -947,11 +949,12 @@ Fig. S13 plots the run of record behind those means.
 
 What could not previously be explained was why the current harness returns different values for the same nominal condition. It can be now, and the explanation is that the archived run was produced by a pipeline carrying the two defects of Section S-I-G, both since fixed. Comparing the archived per-epoch curves against the current harness at seed 42, under nominally identical seeds and hyperparameters:
 
-\begin{center}
+\begin{table*}[!t]
+\centering
 \footnotesize
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.15}
-\begin{tabularx}{\columnwidth}{cccc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\begin{tabularx}{\textwidth}{cccc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
 \toprule
 {\bfseries Model} & {\bfseries Archived epoch 0} & {\bfseries Current epoch 0} & {\bfseries Divergence} & {\bfseries Defect that accounts for it} \\
 \midrule
@@ -960,7 +963,7 @@ M3 MobileNetV3 & 0.4661 / 0.836 & 0.4680 / 0.820 & small & unseeded augmented fe
 M4 EfficientNet-B0 & 0.3821 / 0.871 & 0.3788 / 0.867 & small & unseeded augmented feature passes \\
 \bottomrule
 \end{tabularx}
-\end{center}
+\end{table*}
 
 
 Train loss and train accuracy at the first epoch, before early stopping can differ. The pattern separates the models exactly along the line the two defects predict, and the two groups are disjoint. M2 is the one model whose learning rate the pre-fix external-evaluation script hard-coded, and it is the one model whose trajectory diverges immediately and substantially. M3 and M4 are the two models that consume the K = 3 cached augmented feature passes, which were unseeded before the fix, and their trajectories diverge by an order of magnitude less --- a perturbation of the training features rather than of the optimizer. Neither group shows the other's signature.
@@ -1512,11 +1515,12 @@ The balanced external test's counterfeit class is drawn from 202 regulatory-aler
 
 Each candidate carries a decision, a code and a written reason, published per image alongside the data so the screen can be read and overruled without re-deriving it.
 
-\begin{center}
+\begin{table*}[!t]
+\centering
 \footnotesize
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.15}
-\begin{tabularx}{\columnwidth}{cc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\begin{tabularx}{\textwidth}{cc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
 \toprule
 {\bfseries Code} & {\bfseries n} & {\bfseries What it removes} \\
 \midrule
@@ -1531,7 +1535,7 @@ Each candidate carries a decision, a code and a written reason, published per im
 {\bfseries retained} & {\bfseries 150} &  \\
 \bottomrule
 \end{tabularx}
-\end{center}
+\end{table*}
 
 
 \texttt{X\_NOT\_PHOTOGRAPH} is the code that decides the design. Eight of the nine authentic candidates are artwork rather than photographs, so applying the screen leaves one authentic image and Split E is reported falsified-only rather than as a 150-against-1 two-class set.
@@ -1579,11 +1583,12 @@ Section III-D states what the balanced external test is and why each of its desi
 
 The balanced set needs an authentic class independent of the modeling pool, independent of the counterfeit class's source, and {\bfseries not separable from it by acquisition}. Every source already in this study fails the third condition, and the failures are measured rather than asserted.
 
-\begin{center}
+\begin{table*}[!t]
+\centering
 \footnotesize
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.15}
-\begin{tabularx}{\columnwidth}{>{\hsize=0.886\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xcc>{\hsize=0.687\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=1.428\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\begin{tabularx}{\textwidth}{>{\hsize=0.886\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xcc>{\hsize=0.687\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=1.428\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
 \toprule
 {\bfseries Candidate authentic source} & {\bfseries Mean brightness} & {\bfseries Median short side} & {\bfseries Gap to the regulatory photographs} & {\bfseries Verdict} \\
 \midrule
@@ -1593,7 +1598,7 @@ Condition D (Mendeley, iPhone 11 Pro) & 0.389 & 2419 px & $-$0.169 brightness, 1
 The regulatory photographs themselves & 0.558 & 439 px & --- & The counterfeit class \\
 \bottomrule
 \end{tabularx}
-\end{center}
+\end{table*}
 
 
 The first row is the finding that decided the design and it generalizes beyond this harvest: a regulator publishes {\bfseries photographs of what it seized} and {\bfseries manufacturer artwork of what the genuine article should look like}, so the archive that can supply a counterfeit class structurally cannot supply an acquisition-matched authentic one. The second and third rows are the reason the acquisition-shift conditions stay where they are: pairing either with the regulatory photographs would have opened a class--acquisition gap {\itshape larger} than the one that disqualified the artwork, reproducing this paper's headline defect inside its own external validation.
@@ -1602,11 +1607,12 @@ The first row is the finding that decided the design and it generalizes beyond t
 
 The authentic class was harvested from Wikimedia Commons, a third-party photographic archive unrelated to any source in this study, carrying per-file license and authorship. Candidates were sought by product: the 46 regulatory alerts name their products in their titles, and those names --- brand names, INNs, and the drug class where an alert names a class rather than a product --- became 42 search terms, supplemented by five category trees walked to depth 2.
 
-\begin{center}
+\begin{table*}[!t]
+\centering
 \footnotesize
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.15}
-\begin{tabularx}{\columnwidth}{>{\hsize=0.383\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xc>{\hsize=1.617\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\begin{tabularx}{\textwidth}{>{\hsize=0.383\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xc>{\hsize=1.617\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
 \toprule
 {\bfseries Stage} & {\bfseries Remaining} & {\bfseries Removed, and why} \\
 \midrule
@@ -1619,7 +1625,7 @@ Subject-matter review & {\bfseries 174} & 99 \texttt{A\_\allowbreak{}NOT\_\allow
 Brightness-matched selection & {\bfseries 46} & across 29 distinct product search terms \\
 \bottomrule
 \end{tabularx}
-\end{center}
+\end{table*}
 
 
 {\bfseries The artwork rule is calibrated, not asserted.} The screen that matters most is the one that separates photographs from flat carton artwork, since that is the rule that removed 8 of 9 authentic candidates on the regulatory side. Rather than choose a threshold by eye, it is fitted on labeled data this project already holds: the 8 regulatory candidates the screen of Section S-VIII judged \texttt{X\_NOT\_PHOTOGRAPH} as positives, and the 150 accepted regulatory photographs as negatives. Three candidate axes are scored and the best single one is taken.
@@ -1646,11 +1652,12 @@ Only the near-white fraction separates the two classes; on the other two the art
 
 {\bfseries The subject-matter review is the screen no statistic replaces.} Commons, searched by drug name, returns a great deal that is not a photograph of a medicine package. The 438 eligible candidates were laid out on 13 numbered contact sheets and each was given a decision, a code and a written reason:
 
-\begin{center}
+\begin{table*}[!t]
+\centering
 \footnotesize
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.15}
-\begin{tabularx}{\columnwidth}{cc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\begin{tabularx}{\textwidth}{cc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
 \toprule
 {\bfseries Code} & {\bfseries n} & {\bfseries What it removes} \\
 \midrule
@@ -1663,7 +1670,7 @@ Only the near-white fraction separates the two classes; on the other two the art
 {\bfseries accepted} & {\bfseries 174} &  \\
 \bottomrule
 \end{tabularx}
-\end{center}
+\end{table*}
 
 
 {\bfseries Who performed it, and what it decided.} This review was carried out by the AI assistant named in the Acknowledgment, working to the codes above under the author's protocol; it is not a human reviewer's pass and no inter-rater agreement was measured. Its rubric is subject matter only --- is this a photograph, of a medicine package, of a current retail product --- and it is an eligibility screen, not a labeling step: every class label in the set comes from its source. {\bfseries It makes no authenticity judgement}, and could not: nothing visible in a photograph establishes that the contents of a carton were made by the manufacturer named on it. The authentic side of this set is therefore an {\itshape authentic-labeled} reference class, not a verified one, and Section V-D states the consequence. It is published per image with its reason, and the contact sheets are regenerated by committed code, so any call can be checked and overruled. Section V-D records this as a limitation alongside the corresponding one on the counterfeit side.
@@ -1682,11 +1689,12 @@ Two consequences are worth stating rather than leaving to be discovered. {\bfser
 
 Section III-E's procedure, run on the finished 92 images:
 
-\begin{center}
+\begin{table*}[!t]
+\centering
 \footnotesize
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.15}
-\begin{tabularx}{\columnwidth}{ccc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\begin{tabularx}{\textwidth}{ccc>{\hsize=1.000\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
 \toprule
 {\bfseries Axis} & {\bfseries Kind} & {\bfseries Balanced accuracy} & {\bfseries Reference} \\
 \midrule
@@ -1698,7 +1706,7 @@ Mean brightness & $A_{\mathrm{mix}}$ & 0.413 & chance 0.500 \\
 {\bfseries All three jointly} & $A_{\mathrm{mix}}$ & {\bfseries 0.620} & chance 0.500; {\bfseries the case-study pool scores 1.000} \\
 \bottomrule
 \end{tabularx}
-\end{center}
+\end{table*}
 
 
 Between-class mean brightness differs by {\bfseries +0.005}, against the +0.233 that disqualified the regulatory artwork and the $-$0.396 that disqualified condition C. Five-fold stratified cross-validation, logistic regression, seed 42.
