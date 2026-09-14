@@ -25,8 +25,8 @@ authors:
     orcid: "https://orcid.org/0009-0004-2403-910X"
 repository-code: "https://github.com/sophiezla/counterfeit-drug"
 license: MIT
-version: "1.4.2"
-date-released: "2026-09-13"
+version: "1.4.3"
+date-released: "2026-09-14"
 doi: 10.5281/zenodo.21936720
 identifiers:
   - type: doi
@@ -34,7 +34,9 @@ identifiers:
     description: Concept DOI, resolves to the latest release
   - type: doi
     value: 10.5281/zenodo.22741063
-    description: DOI of v1.4.2, the release the manuscript reports
+    description: >-
+      DOI of v1.4.2. Superseded by v1.4.3, which carries the same results
+      with the manuscript cut to 20 pages.
   - type: doi
     value: 10.5281/zenodo.22739272
     description: >-

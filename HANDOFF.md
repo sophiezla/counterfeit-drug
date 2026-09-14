@@ -4,6 +4,40 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Cut to 20 pages, 2026-09-14 -- v1.4.3, `ieee-submission-final/` regenerated
+
+**22 -> 20 pages, no number changed.** The author's requested edits were
+applied verbatim (abstract sentences, intro sentences, roadmap paragraph
+removed, I-A/I-B openers, III-A sentences, IV-A opener, Table 4's reading
+conventions into its caption, V-D as an active-voice bulleted list absorbing
+V-B's caveats). The pages came from structure, as HANDOFF has always said
+they must: the cross-domain summary table left the main text (its numbers
+are in prose; S18/S20 hold it), the five-seed table moved to S-I-U
+**uncaptioned** (captioning it as S29 fails `final_sweep`'s sequential-
+caption gate, because S-I-U sits between S15 and S16), and the metric-terms
+and evidence-tier tables became prose. ~1,000 words of restatement cut.
+
+**TABLES RENUMBERED, AND THE MAP IS NOT A SHIFT.** Old 3 (cross-domain) ->
+gone (cite Tables S18/S20 or Section S-I-W); old 4 (balanced) -> **3**; old
+5 (acquisition shift) -> **4**; old 6 (five-seed) -> **Section S-I-U**; old
+7 (region substitution) -> **5**; old 8 (evidence status) -> **6**. Both
+documents done; every reference listed and read by hand afterwards.
+
+**THE RENUMBERING BUG THAT BIT.** A descending chain of regex substitutions
+(7->6, 6->5, 5->4, 4->3) collides: each step consumes the numbers the
+previous step just produced, and everything collapsed to "Table 3" in both
+documents. **Renumber ascending (4->3 first), or go through placeholders.**
+Recovery was by hand from context, one occurrence at a time -- 24 in the
+main paper, 29 in the supplement -- and then verified in a full listing.
+
+**A 19th page** would need Fig. 1 or the V-C checklist removed, or ~600
+more words of substantive text; page 20 is references + biography with
+about half a column free. Not taken.
+
+**Style note.** "Eq. (n)" renders as "(n)" mid-sentence in the PDF -- the
+builder emits `\eqref` -- and as "Equation (n)" only at sentence start.
+That is pre-existing and IEEE-conventional.
+
 ## FINAL SUBMISSION STATE, 2026-09-13 (night) -- `ieee-submission-final/`, v1.4.2
 
 **`ieee-submission-final/` is the folder to upload.** `reviewer-revision`

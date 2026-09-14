@@ -2,7 +2,7 @@
 
 This version of the manuscript (`ieee-submission-final/`) revises the earlier
 submission state in `ieee-submission/` in response to a pre-submission review,
-followed by a final pass of five targeted changes (listed at the end). Every
+followed by a final pass of five targeted changes and a cut pass to 20 pages (both listed at the end). Table numbers below are the final ones: the balanced test is Table 3, the acquisition-shift test Table 4, region substitution Table 5 and the evidence-status table Table 6. Every
 number, table, figure and experiment is unchanged; every limitation stated in
 the earlier version is still stated. What changed is the framing of the
 contribution, the scope of the generalization language, the prominence of
@@ -62,10 +62,10 @@ population level.
 ## 5. The authentic side of the balanced set is not verified
 
 This is now named, in the paper's own words, "the principal limitation of
-Table 4", and it is separated from the central audit result.
+Table 3", and it is separated from the central audit result.
 
 - Section III-D-1: the authentic-labeled reference class paragraph ends
-  with "This is the principal limitation of Table 4" and states that the
+  with "This is the principal limitation of Table 3" and states that the
   direction of any resulting bias is unknown.
 - Section IV-C: the opening paragraph names the two properties that qualify
   the table (unverified authentic class; source rather than acquisition
@@ -73,10 +73,10 @@ Table 4", and it is separated from the central audit result.
   agreement with a label rather than with ground truth".
 - Section V-D: a standalone limitation, "The authentic class of the
   balanced set is not verified, and this is the principal limitation of
-  Table 4", which states explicitly that the central audit is unaffected
+  Table 3", which states explicitly that the central audit is unaffected
   and the balanced classification experiment is what the limitation
   weakens — the reviewer's own assessment.
-- Table 8: the balanced-set row now reads "Demonstrated against an
+- Table 6: the balanced-set row now reads "Demonstrated against an
   authentic-labeled, unverified reference class".
 
 ## 6. The missing experiment
@@ -92,7 +92,7 @@ V-C's next-steps paragraph points at the matrix.
 
 The cautious terminology is retained and made explicit. Section IV-E-2's
 interpretation paragraph is now headed "What this establishes is
-outer-region dependence, not backdrop dependence." Table 8's row reads
+outer-region dependence, not backdrop dependence." Table 6's row reads
 "depend on the outer region of the frame ... which property of that region
 is not isolated" (previously "the photographic surround"). In the
 supplement, "a backdrop-matching rule" became "a surround-based rule".
@@ -121,11 +121,11 @@ The normalization is subordinated to the audit textually and structurally.
 
 Qualification language was cut wherever the same limitation was stated in
 more than one place, with each limitation kept once — in Section V-D or
-Table 8 — and stated plainly there. Examples of cuts: the one-sided-rule
+Table 6 — and stated plainly there. Examples of cuts: the one-sided-rule
 paragraph in III-D, the fine-tuning discussion in III-C (now two sentences,
 with the full statement in V-D), the monotonicity paragraph in III-E, the
 exploratory-status paragraph in III-F, the tier discussion at the head of
-IV, the "not a survey" paragraphs in IV-A, "What Table 4 does and does not
+IV, the "not a survey" paragraphs in IV-A, "What Table 3 does and does not
 establish" in IV-C, the seed-42 paragraph in IV-D, three of the six
 paragraphs of IV-E-1, the first two paragraphs of V-B, the "No published
 two-class set" paragraph of V-D (background restated from III-D), and the
@@ -149,7 +149,7 @@ No architecture is ranked. "The best in-distribution model", "the strongest
 model", "M2 leads", "M4 leads" and "the one that looked best" are replaced
 with point-estimate statements ("the model with the highest in-distribution
 accuracy", "has the highest point estimate here"). Section IV-C now states
-that no pair of models in Table 4 is separated by more than sampling noise,
+that no pair of models in Table 3 is separated by more than sampling noise,
 "so the table supports statements about point estimates and about chance,
 not a ranking of architectures". Section V-D's power limitation says which
 statement forms are supported and which are not. The supplement's three
@@ -211,7 +211,7 @@ source in this folder compiles standalone to text-identical PDFs.
    summary in IV-B no longer restates the previous paragraph; V-B no
    longer restates the outer-region finding of IV-E; V-D no longer has two
    "most consequential" gaps; a duplicated "not a property of the
-   photographed object" was removed from Table 3's caption. The manuscript
+   photographed object" was removed from the cross-domain table's caption (that table has since moved to the supplement). The manuscript
    is about 1,200 words shorter than the original submission state at the
    same page count.
 5. **Normalization and Grad-CAM secondary.** The Grad-CAM equation and its
@@ -224,6 +224,34 @@ source in this folder compiles standalone to text-identical PDFs.
 
 The whole manuscript was then read once more in its rendered form; two
 slips found in that read (a dangling "It" in the availability statement and
-one remaining "photographic surround" in Table 8) were fixed. Both gates
+one remaining "photographic surround" in Table 6) were fixed. Both gates
 pass; 22 pages; abstract 247 words.
+
+## Cut pass to 20 pages (final)
+
+Requested edits applied verbatim or nearly so: the two abstract sentences;
+"This literature's methodology motivates our approach"; "Missing is a
+pre-training check, run solely on the files..."; the "organized as follows"
+paragraph removed; "This asymmetric class availability is not peculiar to
+pharmaceuticals"; "Let $A$ represent file acquisition variables, divided into
+two types"; the narrative opening of I-B replaced by "We evaluated how much
+reported accuracy survives methodological correction using..."; "Two
+verifiable properties of the primary source must be noted"; the Roboflow
+paragraph condensed to the modality-confound finding; the IV-A opener
+"All 510 labels are predictable from container format alone: 272/272
+authentic files are .jpg photographs and 238/238 counterfeit files are .png
+screenshots"; the Table 4 reading conventions moved into its caption;
+Section V-D rewritten as a bulleted list in active voice ("This study does
+not measure two-class performance under acquisition shift"), absorbing the
+caveats that had been in V-B.
+
+Structural cuts that paid for the pages: the cross-domain summary table
+(formerly Table 3) left the main text — its numbers are quoted in prose and
+it lives in the supplement as Tables S18 and S20; the five-seed table
+(formerly Table 6) moved to Section S-I-U; the metric-terms table and the
+evidence-tier table became prose. Prose trims of restatement in II-A, II-B,
+II-C, III-C, III-D, III-E, IV-A, IV-B, IV-D, IV-E, V-A, the Acknowledgment
+and the availability statement. The manuscript is 20 pages (17,700 rendered
+words, from 19,900 at v1.4.1); a 19th page would require removing Fig. 1 or
+the practitioner checklist, or about 600 further words of substantive text.
 
