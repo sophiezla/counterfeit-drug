@@ -225,11 +225,14 @@ def inline(text, do_crossrefs=True):
             # \texttt cannot break a long token, so URLs and the long file
             # paths this manuscript cites run off the column. \url breaks at
             # the characters listed in \UrlBreaks in the preamble.
-            breakable = ("://" in code
-                         or re.match(r"https?://|www\.", code)
-                         or (len(code) > 16 and ("/" in code or "_" in code)))
+            is_url = bool("://" in code or re.match(r"https?://|www\.", code))
+            breakable = is_url or (len(code) > 16 and ("/" in code or "_" in code))
             if breakable and "%" not in code and "#" not in code:
-                out.append(r"\url{" + code + "}")
+                # A file path or code identifier is not a link: \nolinkurl
+                # keeps the breaking behaviour without hyperref's blue, which
+                # had made long identifiers such as X_BANNER_COMPOSITE look
+                # clickable while shorter ones beside them stayed black.
+                out.append((r"\url{" if is_url else r"\nolinkurl{") + code + "}")
             else:
                 out.append(r"\texttt{" + esc(code) + "}")
         elif part.startswith("$") and part.endswith("$"):
@@ -304,15 +307,15 @@ def greek_free(text):
     return text
 
 
-# An uncaptioned table is set inline in ONE column. When it has several
-# prose columns that is too narrow: cells with hyphenation disabled cannot
-# break a long word, so words ran into the neighbouring column in the
-# supplement's S-IX tables (five prose columns in 3.45 in). The supplement
-# builder sets this flag so that such tables become an uncaptioned full-width
-# table* -- no \caption, so the table counter does not move -- while short
-# tables stay inline. The manuscript keeps the flag off: its two uncaptioned
-# tables are narrow enough, and one of them follows a colon.
-WIDE_UNCAPTIONED_AS_FLOAT = False
+# An uncaptioned table is set inline in ONE column (3.45 in), where it stays
+# beside the sentence that introduces it. That width is the constraint on
+# the SOURCE: keep such tables to three or four columns and keep cells
+# short; a five-column prose table cannot be made to fit and must be
+# restructured (S-IX-A was, 2026-09-14). The renderer allows hyphenation and
+# uses \scriptsize for these, which is what lets four wrapped columns fit.
+# Two alternatives were tried and rejected: an uncaptioned table* floats to
+# the top of a LATER page, away from its sentence (the last one landed on a
+# page of its own), and cuted's strip overflowed the page bottom.
 
 
 def render_table(lines, number, caption, note=None):
@@ -325,6 +328,7 @@ def render_table(lines, number, caption, note=None):
     rows = [r + [""] * (ncols - len(r)) for r in rows]
     size = r"\scriptsize" if ncols > 7 else r"\footnotesize"
     caption = greek_free(caption)
+    inline_table = number is None
 
     # Column types are chosen from the content, because a fixed "lccc..."
     # overflows the text block whenever a cell holds prose. Any column whose
@@ -353,12 +357,17 @@ def render_table(lines, number, caption, note=None):
             if wrap[c]:
                 # \hsize multipliers must average 1 across the X columns
                 factor = n_wrap * widest[c] / total
-                # No hyphenation inside a cell: a ragged-right column is
-                # already loose, and a word broken across lines in a narrow
-                # cell reads as a typo ("re-derive" split mid-word).
+                # No hyphenation inside a cell of a full-width table: a
+                # ragged-right column is already loose, and a word broken
+                # across lines reads as a typo ("re-derive" split mid-word).
+                # An inline table sits in ONE column, where a 20-character
+                # word in a fifth-width cell has nowhere to go but into the
+                # next cell (S-IX-A, 2026-09-14); there hyphenation stays on.
+                hyph = ("" if inline_table else
+                        r"\hyphenpenalty=10000\exhyphenpenalty=10000")
                 parts.append(r">{\hsize=" + f"{factor:.3f}"
                              + r"\hsize\raggedright\arraybackslash"
-                             + r"\hyphenpenalty=10000\exhyphenpenalty=10000}X")
+                             + hyph + "}X")
             else:
                 parts.append("c")
         spec = "".join(parts)
@@ -407,6 +416,8 @@ def render_table(lines, number, caption, note=None):
         # text, the full block inside a table* float.
         grid = ([r"\resizebox{\ifdim\width>\linewidth\linewidth"
                  r"\else\width\fi}{!}{%"] + grid + ["}"])
+    if inline_table and any(wrap):
+        size = r"\scriptsize"          # one column: see the note above
     core = [
         size,
         # Wrapping tables give the saved padding back to the text, which is
@@ -429,13 +440,8 @@ def render_table(lines, number, caption, note=None):
     if number is None:
         # An uncaptioned table in the source. It must NOT get a \caption:
         # that would advance the table counter and shift every later number
-        # away from the "Table n" the manuscript and the .docx use.
-        wide = any(wrap) and (ncols >= 4 or max(widest) > 60)
-        if WIDE_UNCAPTIONED_AS_FLOAT and wide:
-            core_full = [ln.replace(r"{\columnwidth}", r"{\textwidth}")
-                         for ln in core]
-            return "\n".join([r"\begin{table*}[!t]", r"\centering",
-                               *core_full, r"\end{table*}", ""])
+        # away from the "Table n" the manuscript and the .docx use. It is set
+        # in place, in one column; see the note above render_table.
         return "\n".join([r"\begin{center}", *core, r"\end{center}", ""])
 
     return "\n".join([

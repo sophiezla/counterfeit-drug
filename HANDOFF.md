@@ -4,6 +4,34 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## Supplement layout, 2026-09-14 -- uncaptioned tables stay in place, and how not to fix them
+
+**Symptom:** words colliding inside the supplement's uncaptioned tables
+(S-IX-A worst: five prose columns in one 3.45 in column, hyphenation
+disabled in cells) and Fig. S1's box text spilling out of its boxes.
+Fig. S1 also carried a **stale cluster count (229, 44%)** against the
+paper's 202 / 42.3% -- rendered figure text is invisible to every gate, as
+HANDOFF has said since 2026-09-02.
+
+**Two fixes tried and reverted, both worth not repeating.** (1) Uncaptioned
+`table*[!t]`: a table* can only land at the top of a LATER page, so every
+one of the eight tables left the sentence that introduces it and the last
+one landed alone on a new page 37. (2) cuted's `strip`: in-place in
+principle, but it overflowed the page bottom on page 34. **Kept:**
+uncaptioned tables stay inline in one column; the renderer now allows
+hyphenation inside their cells and sets them `\scriptsize` when a column
+wraps; and the SOURCE is kept narrow -- S-IX-A was restructured from five
+columns to three. The constraint on the source is the rule: an uncaptioned
+table gets at most four columns and short cells.
+
+Also: long code identifiers were being emitted as `\url{}` for
+breakability and hyperref painted them blue as if clickable
+(`X_BANNER_COMPOSITE` blue beside `X_NOT_PRODUCT` black); non-URL tokens
+now use `\nolinkurl{}`. A word-box scan of every line in both PDFs is the
+check that found and cleared all of this (0 overlapping pairs, 0 words past
+the text edge); it is in this session's history and worth adding to
+`final_sweep`. Supplement is 36 pages.
+
 ## READY TO SUBMIT, 2026-09-14 -- final pass done
 
 `ieee-submission-final/` at commit `c0eada7` is the package. A last full

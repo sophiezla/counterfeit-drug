@@ -198,7 +198,7 @@ What this paper adds is therefore procedural rather than technical: a specificat
 
 \section{Materials and Methods}
 
-The pipeline is deterministic (fixed seed 42 throughout) and idempotent: re-running under the committed environment and fixed seeds reproduces the reported outputs, and three consecutive re-runs of the most expensive model produced byte-identical training curves and metric files (Section S-I-G). Fig. S1 diagrams the provenance, splitting and evaluation design; Section S-I-C records the software environment, including why \url{torch.use_deterministic_algorithms} is left off, and Section S-V the commands that reproduce each table.
+The pipeline is deterministic (fixed seed 42 throughout) and idempotent: re-running under the committed environment and fixed seeds reproduces the reported outputs, and three consecutive re-runs of the most expensive model produced byte-identical training curves and metric files (Section S-I-G). Fig. S1 diagrams the provenance, splitting and evaluation design; Section S-I-C records the software environment, including why \nolinkurl{torch.use_deterministic_algorithms} is left off, and Section S-V the commands that reproduce each table.
 
 \subsection{Dataset}
 
@@ -265,7 +265,7 @@ P(y = 1 \mid x) = \sigma\big(\mathbf{w}^\top \phi(x) + b\big), \\[2pt]
 \end{equation}
 
 
-with \url{class_weight="balanced"} and L2 regularization at scikit-learn's default strength. This model answers one question: how much of the reported accuracy is available to a classifier that cannot see spatial structure at all?
+with \nolinkurl{class_weight="balanced"} and L2 regularization at scikit-learn's default strength. This model answers one question: how much of the reported accuracy is available to a classifier that cannot see spatial structure at all?
 
 {\bfseries M2 --- Small CNN with a global-average-pooling (GAP) head (23,938 trainable parameters).} Three convolutional blocks with a conventional channel progression (16 $\rightarrow$ 32 $\rightarrow$ 64; each block Conv3$\times$3 $\rightarrow$ BatchNorm $\rightarrow$ ReLU $\rightarrow$ MaxPool2$\times$2), with a GAP head rather than the flatten-then-dense head small-dataset CNN work commonly uses:
 
@@ -288,7 +288,7 @@ A probe cannot say what end-to-end fine-tuning would learn. Adaptable features m
 
 Training-partition augmentation for M2--M4 is rotation $\pm$12$^\circ$, brightness and contrast jitter ($\pm$0.25), mild \texttt{RandomResizedCrop} (scale 0.85--1.0), and slight Gaussian blur (kernel 3, $\sigma$ $\in$ [0.1, 0.8]). {\bfseries No horizontal or vertical flip} is used, because mirroring produces printed packaging text that cannot occur in deployment. M1 is excluded from augmentation by design: rotation and cropping are near-invariances of a color histogram, while brightness and contrast jitter would perturb the only feature this model observes, acting as label noise rather than as the spatial-filter regularizer they are for a CNN.
 
-Table S2 gives every training setting, and nothing in it varies by split, condition or experiment: Adam at 1 $\times$ 10\textsuperscript{-}\textsuperscript{3} for M2--M4, selected on Split A train/val alone; batch 32; class-weighted cross-entropy; a 50-epoch cap with early stopping on validation loss; the best-validation-loss state persisted as a checkpoint; a 0.5 decision threshold; and seed 42 fixed before every run, fold and augmented extraction pass, with sensitivity at 42--46 (Section S-I-U). M1 is fitted by \url{LogisticRegression(max_iter=2000, class_weight="balanced")} with neither augmentation nor the normalization operator. All runs are CPU-only.
+Table S2 gives every training setting, and nothing in it varies by split, condition or experiment: Adam at 1 $\times$ 10\textsuperscript{-}\textsuperscript{3} for M2--M4, selected on Split A train/val alone; batch 32; class-weighted cross-entropy; a 50-epoch cap with early stopping on validation loss; the best-validation-loss state persisted as a checkpoint; a 0.5 decision threshold; and seed 42 fixed before every run, fold and augmented extraction pass, with sensitivity at 42--46 (Section S-I-U). M1 is fitted by \nolinkurl{LogisticRegression(max_iter=2000, class_weight="balanced")} with neither augmentation nor the normalization operator. All runs are CPU-only.
 
 \subsection{External evaluation}
 
@@ -297,10 +297,10 @@ Throughout, authentic = 0 and {\bfseries counterfeit is the positive class}, so 
 {\bfseries Three evaluations, named for what they measure.} The study runs one internal and two external evaluations, and this paper names them by what they are rather than by a letter: the {\bfseries internal grouped test} (Split B's held-out partition, Section III-B), the {\bfseries balanced external test}, and the {\bfseries external acquisition-shift test}. The technical split labels are kept in this section, in the reproduction appendix and in the supplement, where a reader rebuilding the pipeline needs them. The three evaluations differ in what they hold, what they vary and how their labels are established, and those differences govern what each can show:
 
 \begin{center}
-\footnotesize
+\scriptsize
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.15}
-\begin{tabularx}{\columnwidth}{c>{\hsize=0.881\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=1.294\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X>{\hsize=0.825\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\begin{tabularx}{\columnwidth}{c>{\hsize=0.881\hsize\raggedright\arraybackslash}X>{\hsize=1.294\hsize\raggedright\arraybackslash}X>{\hsize=0.825\hsize\raggedright\arraybackslash}X}
 \toprule
  & {\bfseries Internal grouped test} & {\bfseries Balanced external test} & {\bfseries Acquisition-shift test} \\
 \midrule
@@ -701,10 +701,10 @@ The limitations below are stated once each; Section S-II gives the evidence for 
 {\bfseries This study does not measure two-class performance under acquisition shift.} The two external evaluations occupy different halves of one matrix --- the balanced test holds both classes but standardizes file-level acquisition; the acquisition-shift experiment varies capture but holds one class --- and neither fills the cell the central thesis is about:
 
 \begin{center}
-\footnotesize
+\scriptsize
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.15}
-\begin{tabularx}{\columnwidth}{>{\hsize=1.114\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}Xc>{\hsize=0.886\hsize\raggedright\arraybackslash\hyphenpenalty=10000\exhyphenpenalty=10000}X}
+\begin{tabularx}{\columnwidth}{>{\hsize=1.114\hsize\raggedright\arraybackslash}Xc>{\hsize=0.886\hsize\raggedright\arraybackslash}X}
 \toprule
  & {\bfseries Both classes} & {\bfseries Authentic only} \\
 \midrule
@@ -791,7 +791,7 @@ This list is shared with the supplementary material, which cites it by the same 
 \bibitem{ref16} S. M. Lundberg and S.-I. Lee, "A unified approach to interpreting model predictions," in {\itshape Advances in Neural Information Processing Systems (NeurIPS)}, 2017, arXiv:1705.07874.
 \bibitem{ref17} A. Paszke, S. Gross, F. Massa, et al., "PyTorch: An imperative style, high-performance deep learning library," in {\itshape Advances in Neural Information Processing Systems (NeurIPS)}, 2019.
 \bibitem{ref18} F. Pedregosa, G. Varoquaux, A. Gramfort, et al., "Scikit-learn: Machine learning in Python," {\itshape Journal of Machine Learning Research}, vol. 12, pp. 2825--2830, 2011.
-\bibitem{ref19} S. K. Jha, "Fake vs Real Medicine Dataset (images)," Kaggle, dataset \url{surajkumarjha1/fake-vs-real-medicine-datasets-images}, last updated 13 Oct. 2025, license stated as "Unknown". [Online]. Available: https://www.kaggle.com/datasets/surajkumarjha1/fake-vs-real-medicine-datasets-images.
+\bibitem{ref19} S. K. Jha, "Fake vs Real Medicine Dataset (images)," Kaggle, dataset \nolinkurl{surajkumarjha1/fake-vs-real-medicine-datasets-images}, last updated 13 Oct. 2025, license stated as "Unknown". [Online]. Available: https://www.kaggle.com/datasets/surajkumarjha1/fake-vs-real-medicine-datasets-images.
 \bibitem{ref20} E. Abdelmaksoud, A. Gadallah, and A. Asad, "Mobile-captured pharmaceutical medication packages," Mendeley Data, V1, 2022, doi: 10.17632/bjy2svvmn8.1, CC BY 4.0.
 \bibitem{ref21} Harshini T. G. R., "Counterfeit\_med\_detection," Roboflow Universe, version 4 (multiclass export), Nov. 2022, CC BY 4.0. Accessed: Aug. 28, 2026. [Online]. Available: https://universe.roboflow.com/harshini-t-g-r/counterfeit\_med\_detection.
 \bibitem{ref22} Q. McNemar, "Note on the sampling error of the difference between correlated proportions or percentages," {\itshape Psychometrika}, vol. 12, no. 2, pp. 153--157, 1947.

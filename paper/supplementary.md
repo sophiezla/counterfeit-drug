@@ -1085,12 +1085,12 @@ independent of the counterfeit class's source, and **not separable from it by
 acquisition**. Every source already in this study fails the third condition,
 and the failures are measured rather than asserted.
 
-| Candidate authentic source | Mean brightness | Median short side | Gap to the regulatory photographs | Verdict |
-|---|---|---|---|---|
-| Regulatory archives' own authentic-labeled images | — | — | **+0.233** brightness, within the manifest | 8 of 9 are flat vector carton artwork; rejected by the screen of Section S-VIII |
-| Condition C (Mendeley) | 0.162 | 2448 px | **−0.396** brightness, 2009 px resolution | Rejected: a larger gap than the artwork's |
-| Condition D (Mendeley, iPhone 11 Pro) | 0.389 | 2419 px | −0.169 brightness, 1980 px resolution | Rejected on the same grounds |
-| The regulatory photographs themselves | 0.558 | 439 px | — | The counterfeit class |
+| Candidate authentic source | Brightness; short side | Gap to the regulatory photographs, and verdict |
+|---|---|---|
+| Regulatory archives' own authentic-labeled images | —; — | **+0.233** brightness within the manifest; 8 of 9 are flat carton artwork, rejected by the screen of Section S-VIII |
+| Condition C (Mendeley) | 0.162; 2448 px | **−0.396** brightness, 2009 px resolution; rejected, a larger gap than the artwork's |
+| Condition D (Mendeley, iPhone 11 Pro) | 0.389; 2419 px | −0.169 brightness, 1980 px resolution; rejected on the same grounds |
+| The regulatory photographs themselves | 0.558; 439 px | — (the counterfeit class) |
 
 The first row is the finding that decided the design and it generalizes beyond
 this harvest: a regulator publishes **photographs of what it seized** and
