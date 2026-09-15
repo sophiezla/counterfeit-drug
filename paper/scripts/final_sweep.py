@@ -182,6 +182,31 @@ try:
           f"{mp.page_count} pages")
     print(f"  [note] supplement: {sp.page_count} pages")
 
+    # Layout: no two words on one line may overlap, and no word may sit past
+    # the text block's right edge. On 2026-09-14 the supplement's uncaptioned
+    # tables had cells running into their neighbours and Fig. S1's box text
+    # spilled out of its boxes, and every gate above was green -- they read
+    # structure, not geometry. This reads the rendered word boxes.
+    def layout_defects(doc, right_edge=542):
+        overlaps, past_edge = [], []
+        for pno, page in enumerate(doc, 1):
+            lines = {}
+            for w in page.get_text("words"):
+                lines.setdefault(round(w[3]), []).append(w)
+                if w[2] > right_edge:
+                    past_edge.append((pno, w[4]))
+            for ws in lines.values():
+                ws.sort(key=lambda w: w[0])
+                overlaps += [(pno, a[4], b[4]) for a, b in zip(ws, ws[1:])
+                             if b[0] < a[2] - 1.5]
+        return overlaps, past_edge
+    for label, doc in (("main paper", mp), ("supplement", sp)):
+        ov, pe = layout_defects(doc)
+        check(not ov, f"{label}: no overlapping words on any line",
+              f"{ov[:3]}")
+        check(not pe, f"{label}: no word past the text block's right edge",
+              f"{pe[:3]}")
+
     pdf_text = "\n".join(p.get_text() for p in mp)
     from docx import Document
     d = Document(DOCX)

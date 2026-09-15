@@ -4,6 +4,14 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## v1.4.4, 2026-09-14 -- the archive matches the submitted PDFs
+
+Cut so that the Zenodo copy of the supplement is the corrected one; Zenodo
+minted **doi:10.5281/zenodo.22759781**. `final_sweep` now carries the
+word-box layout gate (no overlapping words on a line, none past the text
+edge) for both PDFs. A 22-point readiness checklist run against
+`ieee-submission-final/` passes in full.
+
 ## Supplement layout, 2026-09-14 -- uncaptioned tables stay in place, and how not to fix them
 
 **Symptom:** words colliding inside the supplement's uncaptioned tables
