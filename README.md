@@ -13,13 +13,16 @@ The case study is a public counterfeit-medicine dataset. The manuscript is
 built from `paper/paper.md`; see `paper/` and Appendix C for reproduction.
 
 **Archived release.** The manuscript reports
-[v1.4.3](https://doi.org/10.5281/zenodo.22758850)
-(doi:10.5281/zenodo.22758850), which is the exact state of the code that produced every
+[v1.4.4](https://github.com/sophiezla/counterfeit-drug/releases/tag/v1.4.4)
+(archived on Zenodo under the concept DOI above; the version DOI is recorded
+here once minted), which is the exact state of the code that produced every
 number in it, together with the `ieee-submission-final/` bundle (the earlier
 `ieee-submission/` bundle is the pre-review text and is kept for the record). The badge above is the
 version-independent concept DOI and always resolves to the latest release;
 cite it unless you need to pin a specific version. Earlier releases are
 superseded and do not correspond to the current manuscript:
+v1.4.3 (doi:10.5281/zenodo.22758850) carries the same results with the
+pre-layout-fix supplement,
 v1.4.2 (doi:10.5281/zenodo.22741063) carries the same results at 22 pages,
 v1.4.1 (doi:10.5281/zenodo.22739272) carries the same results with the
 pre-review manuscript text,
@@ -47,7 +50,7 @@ archives. See [`LICENSE`](LICENSE) for the third-party terms.
 
 The manuscript (`paper/PharmaChecked_v2_manuscript_IEEEAccess.pdf`, 20 pages)
 and its supplement (`paper/PharmaChecked_v2_supplementary_IEEEAccess.pdf`,
-37 pages) are the record; both build from `paper/paper.md` and
+36 pages) are the record; both build from `paper/paper.md` and
 `paper/supplementary.md` and pass `paper/scripts/verify_crossrefs.py` and
 `paper/scripts/final_sweep.py`. `HANDOFF.md` is the revision log, newest
 section first. In brief:
