@@ -36,8 +36,13 @@ identifiers:
     value: 10.5281/zenodo.21936720
     description: Concept DOI, resolves to the latest release
   - type: doi
+    value: 10.5281/zenodo.23005674
+    description: DOI of v1.5.0, the release the Journal of Imaging manuscript reports
+  - type: doi
     value: 10.5281/zenodo.22759781
-    description: DOI of v1.4.4, the release the manuscript reports
+    description: >-
+      DOI of v1.4.4, the state of the IEEE Access bundle. Superseded by v1.5.0,
+      which adds the baseline-model analyses and the Journal of Imaging package.
   - type: doi
     value: 10.5281/zenodo.22758850
     description: >-

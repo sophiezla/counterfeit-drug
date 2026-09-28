@@ -4,6 +4,10 @@ Rewritten 2026-07-30. Supersedes the previous version entirely, which
 described a framing the paper no longer uses. Read this, then `README.md`,
 then `paper/paper.md`.
 
+## v1.5.0 released, 2026-09-27 -- J. Imaging package is the submission state
+
+Committed (8db3eb7, no AI trailers) and released as **v1.5.0** on GitHub; Zenodo archives it (version DOI recorded in README.md and CITATION.cff). Author confirmed: no dual submission; cover letter dated 27 September 2026. `.gitignore` now excludes `mdpi-*/_latex_build/`, `__pycache__/`, `_build_*`; draft backups `mdpi-*/_pre_*` are excluded locally via `.git/info/exclude`. The DAS, README and `.zenodo.json` now say the repo redistributes no dataset images apart from CC BY 4.0 Mendeley photographs in Figures S10 and S13 (first time photo-based figures are in the repo). Nothing blocks submission.
+
 ## J. Imaging final review pass, 2026-09-27 (late night)
 
 Author's 12-item review applied (retrospective-audit wording, other-archive paragraph out of Results, normalization/region compressed, "authentic-labeled" throughout the balanced set, "consistent with" for model reliance, paired leakage and seed sentence to supplement, frozen-backbone limitation to supplement only, "externally acquired" defined once and used throughout). **Bootstrap verified** against an independent re-implementation (different RNG, sklearn metrics, 20k resamples): points identical, limits within one resampling step; no label-mixed near-duplicate groups; Split B has 0 cross-partition groups.

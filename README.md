@@ -16,14 +16,16 @@ The *Journal of Imaging* version is built from `mdpi-jimaging/manuscript_src.md`
 its baseline-model results and intervals come from
 `modeling/revision_baseline_analyses.py`.
 
-**Archived release.** The manuscript reports
-[v1.4.4](https://doi.org/10.5281/zenodo.22759781)
-(doi:10.5281/zenodo.22759781), which is the exact state of the code that produced every
-number in it, together with the `ieee-submission-final/` bundle (the earlier
-`ieee-submission/` bundle is the pre-review text and is kept for the record). The badge above is the
-version-independent concept DOI and always resolves to the latest release;
-cite it unless you need to pin a specific version. Earlier releases are
-superseded and do not correspond to the current manuscript:
+**Archived release.** The *Journal of Imaging* manuscript reports
+[v1.5.0](https://doi.org/10.5281/zenodo.23005674)
+(doi:10.5281/zenodo.23005674), the exact state of the code that produced every
+number in it, together with the `mdpi-jimaging/submission_jimaging/` package.
+v1.4.4 (doi:10.5281/zenodo.22759781) is the state of the `ieee-submission-final/`
+bundle; it reports the same normalized-model results but predates the
+baseline-model analyses of `modeling/revision_baseline_analyses.py`. The badge
+above is the version-independent concept DOI and always resolves to the latest
+release; cite it unless you need to pin a specific version. Earlier releases are
+superseded:
 v1.4.3 (doi:10.5281/zenodo.22758850) carries the same results with the
 pre-layout-fix supplement,
 v1.4.2 (doi:10.5281/zenodo.22741063) carries the same results at 22 pages,
