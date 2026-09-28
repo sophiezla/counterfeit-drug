@@ -1,0 +1,7 @@
+model_a,model_b,a_only_correct,b_only_correct,p_exact,p_holm
+M1 hist+LR,M3 MobileNetV3,4,12,0.0768,0.4609
+M2 CNN,M3 MobileNetV3,3,9,0.146,0.73
+M3 MobileNetV3,M4 EfficientNet-B0,3,0,0.25,1.0
+M1 hist+LR,M4 EfficientNet-B0,6,11,0.3323,1.0
+M2 CNN,M4 EfficientNet-B0,5,8,0.5811,1.0
+M1 hist+LR,M2 CNN,4,6,0.7539,1.0

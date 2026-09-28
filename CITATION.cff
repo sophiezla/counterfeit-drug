@@ -9,13 +9,16 @@ abstract: >-
   image dataset are sourced by different procedures, the label predicts the
   acquisition process rather than the property being labeled, and no
   in-distribution evaluation can detect it. Contains the data pipeline, four
-  model families, a balanced external test (46 regulator-confirmed
-  counterfeits against 46 authentic-labeled photographs, one ingestion
-  pipeline, scored once), an external acquisition-shift test on two capture
-  conditions, a label-free normalization operator with per-axis, per-constant
+  model families evaluated without and with an exploratory normalization,
+  a balanced external test (46 regulator-confirmed falsified against 46
+  authentic-labeled photographs, one ingestion pipeline), an external
+  acquisition-shift test on two capture conditions, cluster-bootstrap
+  intervals, a label-free normalization operator with per-axis, per-constant
   and per-order ablations, region substitution, a five-seed variance sweep,
   calibration and two independent attribution analyses, and a provenance
-  audit run across four application areas. Contains no images.
+  audit run across four application areas. Also contains the Journal of
+  Imaging manuscript package (mdpi-jimaging/). Redistributes no dataset
+  images apart from CC BY 4.0 Mendeley photographs shown in two figures.
 type: software
 authors:
   - family-names: Zhu
@@ -25,8 +28,8 @@ authors:
     orcid: "https://orcid.org/0009-0004-2403-910X"
 repository-code: "https://github.com/sophiezla/counterfeit-drug"
 license: MIT
-version: "1.4.4"
-date-released: "2026-09-14"
+version: "1.5.0"
+date-released: "2026-09-27"
 doi: 10.5281/zenodo.21936720
 identifiers:
   - type: doi

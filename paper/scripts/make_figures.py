@@ -485,9 +485,15 @@ def fig_training_curves():
 # ================================================ Fig 8 external generalization
 def fig_generalisation():
     sc = read("table_split_c_authentic.csv")
-    # pre-normalization Split C numbers, from modeling/README.md's production
-    # baseline table (the run immediately before 3-way normalization).
-    pre = {"M1": 0.0, "M2": 0.0, "M3": 0.693, "M4": 0.033}
+    # Baseline (pre-normalization) Split C specificity from the current
+    # deterministic pipeline, the same k/n that Table 4 prints. This used to be
+    # hard-coded to the archived run (M3 0.693, M4 0.033), which the paper
+    # reports as superseded; the figure therefore disagreed with the table.
+    ext = read("table_external_intervals.csv")
+    pre = {}
+    for t in MODEL_TAGS:
+        row = next(r for r in ext if r["model"].startswith(t + " ") and r["quantity"] == "Split C, baseline")
+        pre[t] = int(row["k"]) / int(row["n"])
     fig, ax = plt.subplots(figsize=(6.6, 2.9))
     x = np.arange(4)
     w = 0.26
@@ -686,7 +692,7 @@ def fig_attribution():
         ax.text(v + 0.0025, b.get_y() + b.get_height() / 2, f"{v:.3f}",
                 va="center", fontsize=7, color=INK)
     ax.set_yticks(range(len(labels))); ax.set_yticklabels(labels, fontsize=7.2)
-    ax.set_xlabel("mean |Shapley value| (exact, linear model)")
+    ax.set_xlabel("mean |logit contribution| (exact, linear model)")
     ax.set_title("b  Attribution, Split B test", loc="left")
     ax.set_xlim(0, max(vals) * 1.22)
     ax.grid(axis="x"); ax.yaxis.grid(False)

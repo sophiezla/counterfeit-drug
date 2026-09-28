@@ -1,0 +1,22 @@
+model,condition,set,k,n,specificity,lo,hi
+M1 hist+LR,baseline,split_c,0,150,0.0,0.0,0.025
+M1 hist+LR,baseline,split_d,0,149,0.0,0.0,0.0251
+M1 hist+LR,baseline,split_b_test,27,39,0.6923,0.5358,0.8143
+M2 CNN,baseline,split_c,0,150,0.0,0.0,0.025
+M2 CNN,normalized,split_c,129,150,0.86,0.7954,0.9066
+M2 CNN,baseline,split_d,15,149,0.1007,0.062,0.1595
+M2 CNN,normalized,split_d,69,149,0.4631,0.385,0.5431
+M2 CNN,baseline,split_b_test,32,39,0.8205,0.6733,0.9102
+M2 CNN,normalized,split_b_test,33,39,0.8462,0.7027,0.9275
+M3 MobileNetV3,baseline,split_c,100,150,0.6667,0.5879,0.7371
+M3 MobileNetV3,normalized,split_c,116,150,0.7733,0.7,0.833
+M3 MobileNetV3,baseline,split_d,90,149,0.604,0.5238,0.679
+M3 MobileNetV3,normalized,split_d,108,149,0.7248,0.6482,0.7902
+M3 MobileNetV3,baseline,split_b_test,38,39,0.9744,0.8682,0.9955
+M3 MobileNetV3,normalized,split_b_test,38,39,0.9744,0.8682,0.9955
+M4 EfficientNet-B0,baseline,split_c,9,150,0.06,0.0319,0.1101
+M4 EfficientNet-B0,normalized,split_c,121,150,0.8067,0.7361,0.8619
+M4 EfficientNet-B0,baseline,split_d,24,149,0.1611,0.1107,0.2285
+M4 EfficientNet-B0,normalized,split_d,124,149,0.8322,0.764,0.8837
+M4 EfficientNet-B0,baseline,split_b_test,35,39,0.8974,0.7642,0.9594
+M4 EfficientNet-B0,normalized,split_b_test,38,39,0.9744,0.8682,0.9955

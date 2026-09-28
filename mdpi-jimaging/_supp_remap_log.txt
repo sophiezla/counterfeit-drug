@@ -1,0 +1,118 @@
+L67 cite [29] -> [31]
+L67 cite [30] -> [32]
+L108 cite [27] -> [29]
+L110 cite [28] -> [30]
+L259 cite [21] -> [26]
+L459 cite [4] -> [14]
+L459 cite [5] -> [15]
+L639 cite [18] -> [21]
+L653 cite [14] -> [9]
+L794 cite [14] -> [9]
+L981 cite [3] -> [13]
+L982 cite [4] -> [14]
+L983 cite [5] -> [15]
+L984 cite [6] -> [16]
+L985 cite [20] -> [22]
+L18 Table 4 -> Table 3
+L282 Table 6 -> Table S34
+L332 Table 4 -> Table 3
+L376 Table 4 -> Table 3
+L378 Table 5 -> Table S31
+L426 Table 4 -> Table 3
+L443 Table 4 -> Table 3
+L443 Table 4 -> Table 3
+L443 Table 4 -> Table 3
+L445 Table 4 -> Table 3
+L449 Table 4 -> Table 3
+L459 Table 3 -> Table 2
+L463 Table 4 -> Table 3
+L501 Table 2 -> Table S33
+L549 Table 4 -> Table 3
+L574 Table 4 -> Table 3
+L588 Table 4 -> Table 3
+L631 Table 2 -> Table S33
+L748 Table 4 -> Table 3
+L765 Table 4 -> Table 3
+L774 Table 3 -> Table 2
+L777 Table 4 -> Table 3
+L778 Table 4 -> Table 3
+L779 Table 6 -> Table S34
+L780 Table 6 -> Table S34
+L781 Table 6 -> Table S34
+L783 Table 5 -> Table S31
+L784 Table 5 -> Table S31
+L790 Table 5 -> Table S31
+L796 Table 2 -> Table S33
+L810 Table 4 -> Table 3
+L900 Table 2 -> Table S33
+L916 Table 6 -> Table S34
+L926 Table 5 -> Table S31
+L993 Table 4 -> Table 3
+L1010 Table 5 -> Table S31
+L1047 Table 5 -> Table S31
+L1047 Table 5 -> Table S31
+L1222 Table 5 -> Table S31
+L1225 Table 5 -> Table S31
+L1267 Tables 4 -> Tables 3
+L1269 Table 5 -> Table S31
+L1270 Table 5 -> Table S31
+Equation (2) -> normalization operator (Section 2.6): 11 occurrences
+Section 3.5.x -> 3.4: 12 occurrences
+L48 Section 2.9 -> Section 2.5
+L77 Section 2.6 -> Section 2.4
+L459 Section 1.1 -> Section 1
+L471 Section 2.10 -> Section 2.6
+L529 Section 2.10 -> Section 2.6
+L535 Section 2.2 -> Section 2.1
+L635 Section 2.2 -> Section 2.1
+L670 Section 2.2 -> Section 2.1
+L686 Section 2.2 -> Section 2.1
+L688 Section 2.2 -> Section 2.1
+L698 Section 2.10 -> Section 2.6
+L763 Section 2.11 -> Section 2.7
+L782 Sections 2.8, 3.5 -> Sections 2.5, 3.4
+L794 Section 1.2 -> Section 1
+L802 Section 2.2 -> Section 2.1
+L832 Section 2.10 -> Section 2.6
+L975 Section 1.1 -> Section 1
+L985 Section 2.2 -> Section 2.1
+L1007 Section 2.9 -> Section 2.5
+L1093 Section 2.9 -> Section 2.5
+L1234 Section 2.4 -> Section 2.2
+header: '*Supplementary Materials for the manuscript submit'
+header: '**Auditing Provenance Confounding in Image Authent'
+header: '**TABLE S3.**In-distribution test performance. Cou'
+header: "**TABLE S5.**Pairwise McNemar's tests on the Split"
+header: 'made by one\nreviewer looking at each image,'
+header: 'What the table does not do is substitute for a sec'
+header: "author's protocol; it is not a human reviewer's pa"
+header: 'Section and\ntable numbers follow the *Diagnostics*'
+header: 'The split comparison, the four-model roster and th'
+header: 'Bracketed intervals are 95% percentile bootstrap ('
+header: 'de-duplicated into product-identity groups'
+header: 'free of **product-identity** leakage'
+header: 'belong to a product-identity group'
+header: 'The pool has 480 product-identity groups'
+header: 'decorrelates product identity and nothing else'
+header: 'does not reproduce Table 3, and the difference is '
+header: "Only Table 3's column is the result of record."
+header: "comparable to M2's production numbers in Table 3"
+header: '0.667 pre-normalization baseline (Table 3)'
+header: '(0.860, Table 3)'
+header: "the main paper's Table 3 is this table's seed-42 d"
+header: "the main paper's Table 3 reports both of its colum"
+header: 'against the 0.807 of Table 3'
+header: '(the un-normalized baseline has no checkpoint and '
+header: 'the region-substitution experiment of the main pap'
+header: 'behind Table S33 of the main paper are plotted in '
+header: '"Figure 1", "the normalization operator (Section 2'
+header: 'M4, reaching 97.4% authentic-class accuracy on its'
+header: '| Normalization removes much of the acquisition si'
+header: 'Demonstrated against an authentic-labeled, unverif'
+header: '| Asymmetric sourcing produces this confound in ge'
+header: 'which is largely set by acquisition and which the '
+header: 'need not have been.** the normalization operator'
+header: 'a different publisher, a different country of orig'
+header: '**aspect ratio alone reaches 0.803**, because scre'
+header: 'The headline figure therefore understates what the'
+appended supp_addendum.md (Section S-X, Tables S30-S32)

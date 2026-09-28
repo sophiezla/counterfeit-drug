@@ -11,6 +11,10 @@ in-distribution evaluation can detect it.
 
 The case study is a public counterfeit-medicine dataset. The manuscript is
 built from `paper/paper.md`; see `paper/` and Appendix C for reproduction.
+The *Journal of Imaging* version is built from `mdpi-jimaging/manuscript_src.md`
+(`python mdpi-jimaging/make_submission.py mdpi-jimaging/mdpi_template/Definitions`);
+its baseline-model results and intervals come from
+`modeling/revision_baseline_analyses.py`.
 
 **Archived release.** The manuscript reports
 [v1.4.4](https://doi.org/10.5281/zenodo.22759781)
@@ -38,7 +42,9 @@ and `paper/scripts/phash_threshold_sweep.py`, both of which produce reported
 results, and v1.0.1 (doi:10.5281/zenodo.22151840) predates the seed-variance
 sweep and the occlusion analysis as well.
 
-**This repository contains no images.** The case-study archive carries no
+**This repository redistributes no dataset images**, apart from CC BY 4.0
+photographs from the Mendeley archive shown, with attribution, in two
+supplementary figures of `mdpi-jimaging/`. The case-study archive carries no
 licence grant, so nothing from it is redistributed here — only derived
 per-image statistics, split assignments and filenames. Grad-CAM overlays and
 the manual-review contact sheets are excluded for the same reason and are

@@ -1,0 +1,8 @@
+model,condition,c_minus_d,lo,hi
+M1 hist+LR,baseline,0.0,-0.0251,0.025
+M2 CNN,baseline,-0.1007,-0.1595,-0.0546
+M2 CNN,normalized,0.3969,0.2941,0.4879
+M3 MobileNetV3,baseline,0.0626,-0.0461,0.1694
+M3 MobileNetV3,normalized,0.0485,-0.0497,0.1457
+M4 EfficientNet-B0,baseline,-0.1011,-0.1741,-0.03
+M4 EfficientNet-B0,normalized,-0.0255,-0.1129,0.0622
